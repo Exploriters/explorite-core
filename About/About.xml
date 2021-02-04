@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-  <packageId>Exploriters.siiftun1857.CentaurTheMagnuassembly</packageId>
-  <name>RimCentaurs</name>
+  <packageId>Exploriters.ExploriteCore</packageId>
+  <name>Explorite Core</name>
   <author>Magnus siiftun1857 Frankline</author>
-  <!-- <targetVersion>1.0</targetVersion> -->
   <supportedVersions>
-    <li>1.0</li>
-    <li>1.1</li>
     <li>1.2</li>
   </supportedVersions>
   <modDependencies>
@@ -50,9 +47,12 @@
 	<li>kentington.saveourship2</li>
 	<li>jecrell.jecstools</li>
   </loadAfter>
-  <loadBefore />
+  <loadBefore>
+	<li>Exploriters.siiftun1857.CentaurTheMagnuassembly</li>
+	<li>Exploriters.Abrel.Sayers</li>
+	<li>Exploriters.AndoRingo.GuoGuo</li>
+  </loadBefore>
   <incompatibleWith />
-  <url>https://github.com/siiftun1857/RimCentaurs</url>
-  <!-- Magnus' Modify. Original author was Zedralan: Published Id 1576793761. -->
-  <description>A genetically engineered solution to anyone's labor problems, a centaur is the obvious choice.</description>
+  <url>https://github.com/Exploriters/explorite-core</url>
+  <description></description>
 </ModMetaData>
