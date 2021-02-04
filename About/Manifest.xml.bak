@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Manifest>
+  <identifier>RimCentaurs</identifier>
+  <version>0.3.0</version>
+  <dependencies>
+		<li>HugsLib</li>
+		<!--<li>HumanoidAlienRaces2.0</li>-->
+  </dependencies>
+  <incompatibleWith />
+  <loadBefore>
+  </loadBefore>
+	<loadAfter>
+		<li>HugsLib</li>
+		<!--<li>HumanoidAlienRaces2.0</li>-->
+	</loadAfter>
+	<suggests>
+	</suggests>
+	<manifestUri>https://raw.githubusercontent.com/siiftun1857/RimCentaurs/master/About/Manifest.xml</manifestUri>
+	<downloadUri>https://github.com/siiftun1857/RimCentaurs</downloadUri>
+</Manifest>

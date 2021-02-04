@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+
+  <Magnuassembly_CompUseEffect_HediffApply_HManipulator_UseReject_AlreadyInstalled>{0} has already installed physic manipulator.</Magnuassembly_CompUseEffect_HediffApply_HManipulator_UseReject_AlreadyInstalled>
+  <Magnuassembly_CompUseEffect_HediffApply_HManipulator_UseReject_NonCentaur>{0} can't operate physic manipulator.</Magnuassembly_CompUseEffect_HediffApply_HManipulator_UseReject_NonCentaur>
+  
+  <Magnuassembly_CompProperties_SelfHealOvertime_detlaHpPerSec_label>Hitpoint change rate</Magnuassembly_CompProperties_SelfHealOvertime_detlaHpPerSec_label>
+  <Magnuassembly_CompProperties_SelfHealOvertime_detlaHpPerSec_description>The rate at which the hitpoint of this item changes overtime. This effect is unaffected by deterioration, and happens anytime anywhere.</Magnuassembly_CompProperties_SelfHealOvertime_detlaHpPerSec_description>
+  
+  <Magnuassembly_AdditionalVerbPatch_CooldownDisableReason>Cooldown remains {0}.</Magnuassembly_AdditionalVerbPatch_CooldownDisableReason>
+  
+  <Magnuassembly_Ability_MassPsychicDeafCentaur_DeafnessCantCast>Can't cast before this effect is gone on self. Cooldown remains {0}.</Magnuassembly_Ability_MassPsychicDeafCentaur_DeafnessCantCast>
+  
+  <Magnuassembly_ScenPart_FillBattery_StaticSummary>All batteries on map will be filled on the game start.</Magnuassembly_ScenPart_FillBattery_StaticSummary>
+  
+  <Magnuassembly_CompRefuelable_PassiveRecharge_ChargeCompleted>{0} has completely charged.</Magnuassembly_CompRefuelable_PassiveRecharge_ChargeCompleted>
+</LanguageData>

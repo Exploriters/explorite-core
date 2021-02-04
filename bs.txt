@@ -1,0 +1,423 @@
+
+identifier:ColonySettler53, title:开拓者/殖民地开拓者, Desc:
+[PAWN_nameDef]是一名新殖民地的开拓者。
+开荒的生活需要一个基础工作方面的多面手。
+
+identifier:UrbworldEntrepreneur14, title:企业家/下层世界企业家, Desc:
+在都市星球上，大部分人都在被压榨着。但是总要有人来管理企业。
+[PAWN_nameDef]掌握了各类贸易技巧——从贿赂到分析。[PAWN_pronoun]就是一部活生生的社交机器。
+
+identifier:DeepSpaceMiner3, title:矿工/深空矿工, Desc:
+[PAWN_nameDef]每天重复干着又脏又累的力气活，使用深空钻井从小行星里开采金属元素。[PAWN_pronoun]每天都要用[PAWN_possessive]行业技能——包括在酒吧打架的时候。
+
+identifier:NavyScientist46, title:科学家/舰队科学家, Desc:
+星际战争依靠科技取胜，帝国舰队在尖端科研上永远处于领先地位。更好的是，他们能最先拿到从外太空搜寻到的超凡世界遗物。
+[PAWN_nameDef]曾在舰队实验室工作。
+
+identifier:MilitaryCommissar49, title:政委/军队政委, Desc:
+[PAWN_nameDef]曾经是一名帝国军队内部的间谍首脑。[PAWN_pronoun]确保士兵们忠诚，并且除非接到命令否则永不撤退。虽然这使得[PAWN_objective]不受士兵们欢迎，这却让[PAWN_pronoun]能够轻易发现任何不忠的迹象。
+
+identifier:Housemate8, title:同居者/同居者, Desc:
+作为一个成年人，当伴侣出门工作时，[PAWN_nameDef]就在家中打扫房间和照顾孩子。
+
+identifier:MedievalDoctor40, title:庸医/中世纪医生, Desc:
+[PAWN_nameDef]是中世纪星球上的一名医生。[PAWN_pronoun]坚定地认为大多数小病小痛都可以用一个小小的放血疗法来治愈。
+[PAWN_pronoun]也是一名麻醉专家，开发出一种特殊的麻醉方式——给脑袋狠狠一击。 
+
+identifier:Inventor6, title:发明家/发明家, Desc:
+[PAWN_nameDef]是[PAWN_possessive]母星上一位比较成功的发明家。 [PAWN_pronoun]开发过一些小型技术。
+
+identifier:Teacher20, title:教师/受欢迎的教师, Desc:
+[PAWN_nameDef]毕业于文学系，并在一所公立学校担任教师。[PAWN_pronoun]非常博学并深受学生们的喜爱。
+
+identifier:GlitterworldSurgeon15, title:外科医生/闪耀世界外科医生, Desc:
+[PAWN_nameDef]在一个没有疾病与人间疾苦的闪耀世界当医生.
+[PAWN_possessive]绝大多数的工作是精心安排的、富有创造力的整容手术。[PAWN_pronoun]在人体仿生方面有很好地造诣，但从未治疗过癌症或是移除一颗子弹。 
+
+identifier:Bartender55, title:酒保/太空站的调酒师, Desc:
+[PAWN_nameDef]在一个老旧太空站上当酒保。这份工作需要一份调酒，一份社交，以及一份头部猛击。
+
+identifier:Evangelist39, title:传教士/福音传教士, Desc:
+在21岁生日时，[PAWN_nameDef]经历了一次信仰的觉醒。[PAWN_pronoun]决定用余生传播神的福音，神的美丽文化以及非凡的医学传统。
+
+identifier:CaveworldIlluminator23, title:启发者/洞穴星球启发者, Desc:
+在隧道居民之中，那些和[PAWN_nameDef]有着同样强大视力的人被尊为圣人。[PAWN_pronoun]会引导众人，用荧光真菌来标记挖掘地点以及警示别人隐藏的危险。
+
+identifier:Herbalist54, title:草药师/草药师, Desc:
+[PAWN_nameDef]居住在村庄附近的森林中。虽然村民大多都很怕[PAWN_objective]，但是生病时都会向[PAWN_objective]购买[PAWN_pronoun]用种在园子中的药草制成的药膏药剂。[PAWN_pronoun]也乐意帮助村民们——当然，不是免费的。
+
+identifier:CivilServant2, title:文员/政府文员, Desc:
+[PAWN_nameDef]在一个濒临崩溃的政府官僚体系中担任低级行政人员。[PAWN_pronoun]大多数时候都在家写复杂的文件和玩玩办公室政治。
+
+identifier:StarshipJanitor33, title:维护工/星际飞船维护工, Desc:
+当其他乘客在低温休眠舱度过星系间的数年旅途时，[PAWN_nameDef]会被定期唤醒，进行例行检查，检查导航系统并为机器人上油。
+
+identifier:Paramedic45, title:军医/急救医生, Desc:
+[PAWN_nameDef]的工作是快速响应紧急抢救。[PAWN_pronoun]经常需要在仅有有限的医疗物资的情况下处理严重的伤情。
+多年以来[PAWN_pronoun]处理了不计其数的枪伤，以至于如今一看到枪就会感到不适。
+
+identifier:LowWageWorker7, title:工人/低薪工人, Desc:
+[PAWN_nameDef]接了很多种兼职来支撑[PAWN_possessive]家庭，因此锻炼了一套基本的动手能力。
+
+identifier:Geologist66, title:地质学家/地质学家, Desc:
+[PAWN_nameDef]与矿工和洞穴挖掘机一同工作，识别岩石种类和自然形态。
+多年的地下工作也让[PAWN_pronoun]获得了一些钻机等机械设备的维修经验。
+
+identifier:Veterinarian8, title:兽医/素食主义兽医, Desc:
+[PAWN_nameDef]靠治疗生病和受伤的动物为生。动物们饱受折磨的样子影响了[PAWN_pronoun]对吃肉的看法。多年来，[PAWN_nameDef]成为一个素食主义者，抵制母星偏好肉类烹饪的传统。
+
+identifier:Drifter67, title:流浪者/流浪的小说家, Desc:
+[PAWN_nameDef]从未想过[PAWN_possessive]人生需要做什么。[PAWN_pronoun]经常旅行，打零工，随遇而安。
+[PAWN_nameDef]也偶尔会拿起笔写一部[PAWN_pronoun]认为一定会畅销的小说，只要能找到一个感兴趣的出版商。
+
+identifier:MachineCollector55, title:收藏家/机器收藏家, Desc:
+[PAWN_nameDef]对老旧的机器和神秘的技术部件非常着迷。[PAWN_pronoun]总是竭尽所能的得到它们，并且喜欢拆开来看它们是怎么运行的。
+[PAWN_nameDef]总是喋喋不休的对人讲述[PAWN_possessive]收藏品，久而久之，[PAWN_pronoun]周围的人已经充耳不闻了。
+
+identifier:Sheriff52, title:城管/城镇治安官, Desc:
+[PAWN_nameDef]是一名偏远工业星球城镇上的执法者。[PAWN_pronoun]因其傲慢的态度和卑鄙的性格而出名。除非是为了金钱、酒精或是复仇，[PAWN_nameDef]连一根手指都懒得动。
+
+identifier:CivilEngineer23, title:工程师/土木工程师, Desc:
+[PAWN_nameDef]是一位著名的土木工程师，工作包括设计及维护石造防御设施。[PAWN_nameDef]用足够多的统计分析来确保头脑敏锐。
+
+identifier:GraphicDesigner99, title:设计师/平面设计师, Desc:
+[PAWN_nameDef]对艺术高度的兴趣使[PAWN_pronoun]成为了一名设计师。尽管[PAWN_nameDef]对于细节的过份要求往往会使[PAWN_pronoun]花费大量时间去完善一件作品，然而对于艺术细节的独特观点使[PAWN_nameDef]理所当然的成为了母星上的著名艺术家。
+
+identifier:MilitaryEngineer45, title:工兵/军事工程兵, Desc:
+[PAWN_nameDef]是殖民地军队中的一名工程兵，不得不去玩弄武器、杀人无人机和其他“有趣”的东西。
+[PAWN_pronoun]善长修理和改造机械体所用的武器，有时候会亲自测试这些新玩具。
+
+identifier:SpaceResearcher56, title:研究员/太空研究员, Desc:
+[PAWN_nameDef]继承了父母的飞船并且继续他们的研究。
+尽管大多数时间都孤独的在太空中渡过，但是与多个文明接触的童年经历，使[PAWN_pronoun]保持着善良的天性。
+
+identifier:Reporter51, title:记者/爱爆料的记者, Desc:
+[PAWN_nameDef]担任了很多年的调查记者，曾因发布了一些引起混乱的海外报道而声名狼藉。
+虽然被批评者所轻视，但经过长期的调查，[PAWN_pronoun]还是设法爆出了几个引人瞩目的新闻。
+
+identifier:UnstableButcher98, title:屠夫/失常的屠夫, Desc:
+[PAWN_nameDef]产生幻觉，感觉所有的动物都在议论和羞辱[PAWN_pronoun]。[PAWN_pronoun]憎恨它们，最终杀死了这些毛茸茸的朋友。为了和人交流，[PAWN_nameDef]开始卖肉。
+
+identifier:Archaeologist85, title:探险家/不甘寂寞的考古学家, Desc:
+[PAWN_nameDef]不甘于被平庸的生活所困。一天，[PAWN_pronoun]跳上一艘星际飞船，开始学习考古学并接触到宇宙。
+[PAWN_pronoun]掌握了生存之道。[PAWN_pronoun]也开始了解他人，虽然相比生者，[PAWN_pronoun]更懂死者。
+
+identifier:EngineeredPilot9, title:飞行员/空军工程师, Desc:
+在所属区域被邻敌围困之后，[PAWN_nameDef]主动提出参加通用改进计划——这项计划为[PAWN_pronoun]主持开发的战机培养飞行员。参加计划使[PAWN_pronoun]可以驾驶自己开发的飞船，但也使[PAWN_pronoun]无法专注于周围的人。
+在那时候，人们称呼[PAWN_pronoun]"松鼠"。
+
+identifier:Gigolo99, title:牛郎/职业牛郎, Desc:
+为了购买爆炸鼠披萨，[PAWN_nameDef]自愿成为奴隶。[PAWN_pronoun]随后被贩卖到Zeglar殖民地，成为一名专业男妓。
+一次偶然的机会，[PAWN_pronoun]设法加入了劫持飞船的奴隶，和他们一起逃跑。在船上，[PAWN_pronoun]为了争夺最后一块爆炸鼠披萨而挑战船长。之后，[PAWN_pronoun]被塞进逃生舱发射了出去。
+
+identifier:SpaceHumanitarian9, title:慈善家/太空慈善家, Desc:
+在亲眼见过都市星球底层拥挤的居住环境和越来越严重的贫困之后，[PAWN_nameDef]决定致力于社会活动，帮助那些不幸的人。在这个过程中，[PAWN_pronoun]学会了如何照顾病人和饥民。
+
+identifier:StateEngineer18, title:工程师/国家工程师, Desc:
+[PAWN_nameDef]参加了[PAWN_possessive]国家的武器研究计划。
+期间[PAWN_pronoun]工作出色，[PAWN_pronoun]狂热的测试[PAWN_possessive]发明导致意外伤害到同事,于是大家认为[PAWN_pronoun]是不适合相处的人。
+
+identifier:CombatNegotiator47, title:枪手/战争谈判专家, Desc:
+逃离家乡后，[PAWN_nameDef]的技能得到了发挥。
+[PAWN_pronoun]选择成为雇佣枪手，为各种反叛组织、被奴役的群体和商贸聚集地服务。[PAWN_possessive]专长是用手中的武器进行各种“谈判”。
+
+identifier:SpaceHunter67, title:猎手/星际猎手, Desc:
+做为一个熟练的猎人和射手，[PAWN_nameDef]渴望更多。[PAWN_pronoun]离开了母星，前往广袤的星系中寻找新的猎物和探索未知的世界。
+
+identifier:ArmyScientist35, title:科学家/军队科学家, Desc:
+[PAWN_nameDef]为一支行星军队做科学研究。[PAWN_pronoun]研究战争场景并设计武器系统，以帮助军队以最小代价赢得胜利。
+
+identifier:FelineScientist97, title:专家/猫科专家, Desc:
+[PAWN_nameDef]成为猫科动物领域的著名专家。[PAWN_pronoun]想要为心爱的动物进行优化配种，以培育出更好的下一代。为此[PAWN_pronoun]在星系中飞行以寻找最佳的猫咪繁殖地。
+
+identifier:Mercenary40, title:雇佣兵/雇佣兵, Desc:
+[PAWN_nameDef]从年轻的时候就是一名雇佣兵，干着刀口舔血的事情。[PAWN_pronoun]身材高大，可怕，极具威胁性，让他人的内心充满恐惧，[PAWN_pronoun]想要干掉的任何目标都会变成尸体。
+
+identifier:Microbiologist35, title:生物学家/微生物学家, Desc:
+一场瘟疫袭击了[PAWN_nameDef]所居住的都市行星，[PAWN_nameDef]和其他研究人员发现，这种疾病是一种生物武器，但是人民把矛头指向他们，强烈的指责他们这些研究人员开发出这种生物武器造成了重大伤亡。
+[PAWN_nameDef]最终在整颗星球被这种生物武器毁灭前独自逃离了。
+
+identifier:AceFighterPilot38, title:王牌飞行员/王牌战斗飞行员, Desc:
+[PAWN_nameDef]带着优异的成绩和荣耀从星际学院毕业，先后三次击败先进外星文明入侵，成为舰队的王牌飞行员。
+然而最近一次恶战，[PAWN_possessive]母舰被击毁,[PAWN_pronoun]也深陷险境无处可去。[PAWN_pronoun]只好启动休眠仓,期待好运降临。
+
+identifier:Brigand68, title:强盗/太空强盗, Desc:
+[PAWN_nameDef]带着一群被[PAWN_objective]称为朋友的强盗飞来飞去。[PAWN_pronoun]甚至拥有一艘飞船——粪便无赖2000型。
+
+identifier:ParamilitaryAgent11, title:间谍/军事间谍, Desc:
+不再从事各种见不得光的工作后，[PAWN_nameDef]加入了一个大型准军事集团，参与母星的战争。[PAWN_pronoun]的主要任务是深入敌后收集情报。
+
+identifier:InformationBroker77, title:掮客/情报商人, Desc:
+[PAWN_nameDef]抓住前往其他星系的机会，开始了[PAWN_possessive]旅行和学习生活，从各式各样的人身上收集到大量的知识和情报。
+[PAWN_pronoun]学到如何出售这些情报和知识的方法并获得了大量的利润，[PAWN_nameDef]因此成为了知名的情报商人。
+
+identifier:HiredMuscle8, title:打手/凶残的雇佣打手, Desc:
+深知贫穷的滋味，[PAWN_nameDef]选择作为警察混日子。然而，一个棘手的案子以[PAWN_pronoun]将嫌疑人殴打致死而告终。
+那次事件后，[PAWN_nameDef]因背弃职责而名誉扫地，同时被解雇。之后[PAWN_pronoun]利用人脉和技能重新上岗，成为一名雇佣打手。
+
+identifier:MedicalScientist25, title:医学研究者/医学研究者, Desc:
+[PAWN_nameDef]在路过的科研飞船上成功应聘为一名医生。与一大船的异种人类船员和异星鸟类一起漫游星际，[PAWN_pronoun]遇到了一个庞大的外星人和异星鸟类的生物群，[PAWN_pronoun]对这些动物进行了生物研究。[PAWN_pronoun]和其中一只异星鸟类发展了深厚的情谊，直到船长赶走了所有鸟类他们才被迫分离。
+
+identifier:VoidRaider45, title:掠袭者/虚空掠袭者, Desc:
+渴望冒险与荣耀，[PAWN_nameDef]跟随掠袭团穿越虚空，以自己的荣誉发誓永不背叛团队和兄弟，并用自己手中的刀与枪将荣耀洒向星河。
+
+identifier:CoreWorldJeweler59, title:珠宝商/核心世界珠宝商, Desc:
+完成所有手术之后，[PAWN_nameDef]花费更多时间在感兴趣的事情上，比如制作各种特色饰品。[PAWN_pronoun]花了数年的时间完善自己的艺术品并成为一名珠宝商，然后离开母星，通过星际轨道贸易出售[PAWN_possessive]作品。
+
+identifier:StarKnight54, title:骑士/星际骑士, Desc:
+[PAWN_nameDef]被从中世纪母星被绑架走，后来通过一手惊人的剑术逃脱。
+在逃生舱中时，有一瞬间，童年时成为星辰间的骑士的梦想是那么真实。随后，[PAWN_pronoun]迫降成功了。
+
+identifier:SpaceshipSalesman6, title:推销员/飞船销售员, Desc:
+[PAWN_nameDef]尝试过各种工作，包括建造太空兔子窝到担任突变小麦的研究员。最后[PAWN_pronoun]终于找到一份真正适合[PAWN_possessive]工作，太空船推销员。专门从事民用休閒太空船的贩售，[PAWN_pronoun]健谈和迷人的笑容带给[PAWN_pronoun]不少的订单。
+
+identifier:SlaveChemist84, title:药剂师/被奴役的药物学家, Desc:
+[PAWN_nameDef] 是一名有天赋的药物科学家，但是被海盗补获成为奴隶。[PAWN_pronoun]被出售给一个军阀，负责对其他奴隶进行新药物测试。这让[PAWN_pronoun]对科技和医学伦理产生严重的困惑。
+
+identifier:RocketEngineer31, title:工程师/火箭工程师, Desc:
+[PAWN_nameDef]赢得一笔顶尖学校的奖学金，并且获得火箭工程学位。经过几年在太空矿业公司的工作后，[PAWN_pronoun]离开了公司前往宇宙各处旅行。
+
+identifier:CombatEngineer4, title:工兵/战斗工兵, Desc:
+[PAWN_nameDef]成为一名战斗工兵。[PAWN_pronoun]为军队建造基地，修理枪械和载具——当[PAWN_pronoun]不进行战斗时，就是这样。
+
+identifier:Guardian55, title:守护者/觉醒的守护者, Desc:
+在领悟到生命中真正重要的东西后，[PAWN_nameDef]变得比以前更好。[PAWN_pronoun]学会了努力工作，保护重要的存在——并非金钱与物质，而是亲人与朋友。
+[PAWN_pronoun]成为一名专业的守护者。
+
+identifier:UrbworldSergeant71, title:警长/下层世界警长, Desc:
+[PAWN_nameDef]对所有和军事有关的事物充满热情，直到成年后[PAWN_pronoun]加入了当地警队，很快的[PAWN_pronoun]就晋升为警长。
+
+identifier:Castaway87, title:幸存者/空难幸存者, Desc:
+[PAWN_nameDef]是一艘星际运输飞船上的乘客。飞船被毁后，[PAWN_nameDef]作为幸存者在一个无人居住的星球上住了几年。
+
+identifier:EnergyResearcher67, title:研究员/能源研究员, Desc:
+[PAWN_nameDef]正在研究长距离能源传递技术，实验过程中的失误毁了[PAWN_possessive]实验室和大部分城市。为了躲过政府当局的追捕，[PAWN_pronoun]逃离了母星。
+
+identifier:BountyHunter22, title:赏金猎人/再就业的战士, Desc:
+内战结束后，[PAWN_nameDef]需要一个利用[PAWN_possessive]战斗技能养活自己的谋生手段。[PAWN_pronoun]最终决定靠追捕战犯来赚取赏金。[PAWN_pronoun]很快发现自己爱上了利用各种手段抓捕目标的生活。
+
+identifier:LoneTraveler95, title:旅行家/孤独的旅行家, Desc:
+通过临时装配的飞船逃离[PAWN_possessive]家园后，[PAWN_nameDef]旅行到新的世界去体验新世界的美丽。
+[PAWN_pronoun]加入了抵抗团体，并运用了在[PAWN_possessive]家园的学习到的技能。 [PAWN_pronoun]经常警告别人他在小时候看到的核恐怖。
+
+identifier:HiredAssassin2, title:刺客/被雇佣的刺客, Desc:
+[PAWN_nameDef]是一个老练的小偷，主要工作就是组织犯罪。随着时间的推移，[PAWN_pronoun]把自己的业务转向为其他人有偿的“去除”威胁。
+
+identifier:Engineer47, title:工程师/修理工程师, Desc:
+[PAWN_nameDef]在贸易行星伊瑞瑟的交易中心找到一份修补的工作，通过和奸诈的当地贸易商交易，[PAWN_pronoun]学到了谈判技巧。销售翻新的武器和工具让[PAWN_pronoun]获利不少。
+
+identifier:ArtificerRampant24, title:发明家/疯狂的发明家, Desc:
+带着狂妄自大的态度和对新发现的热情，[PAWN_nameDef]不断提出改进现有设备的新发明，甚至为此不惜违反星际法律和风俗。[PAWN_pronoun]组织了一个团体来为[PAWN_pronoun]收集材料─并处理外界的干扰。
+
+identifier:NeuroScientist84, title:科学家/神经科学家, Desc:
+[PAWN_nameDef]长期针对人类大脑进行研究。
+在成功完成对整个大脑脑映射研究后，[PAWN_nameDef]加入了对异种生物大脑研究的科研团队。
+
+identifier:HedgeFundManager85, title:银行经理/对冲基金经理, Desc:
+[PAWN_nameDef]是一名在拥挤的都市行星上的顶级对冲基金经理，[PAWN_pronoun]利用诱人的声音和狡猾的诈术迷惑客户，使得[PAWN_pronoun]负责的投资快速增长。当这个交易被发现不可能被执行时，[PAWN_pronoun]逃离了行星以躲避为了选赏而追杀[PAWN_pronoun]的人。
+在星际旅程中，[PAWN_pronoun]发现自己对艺术的热情，使[PAWN_pronoun]可以创作出适合上流社会顾客的杰作。
+
+identifier:ExiledResearcher68, title:流放者/流放的研究员, Desc:
+[PAWN_nameDef]对于机器的喜爱使得[PAWN_pronoun]不被[PAWN_pronoun]所属的帝国所接受，一个高度科技恐惧的帝国。最终帝国的高级红衣主教驱逐了[PAWN_pronoun]，并且永远不得返回。
+
+identifier:SpaceNavyDoctor72, title:医生/太空海军医生, Desc:
+[PAWN_nameDef]多次在一个拥有少数战舰的巡逻队中以医生的身份服役来保护[PAWN_possessive]家园。[PAWN_pronoun]藉由偶尔参与入侵海盗船舰的机会，学到了战斗技巧。[PAWN_pronoun]成为了处理严重作战创伤的专家。
+
+identifier:SpaceRaider65, title:袭击者/太空袭击者, Desc:
+[PAWN_nameDef]是一群宇宙海盗的头子，游荡在边境世界间。[PAWN_pronoun]成为了许多殖民地最担心的敌人。
+
+identifier:Spy58, title:间谍/政府间谍, Desc:
+[PAWN_nameDef]接受政府指派，参加与渗透和间谍工作有关的训练。[PAWN_pronoun]学会了如何保持冷静和在紧急状况下靠三寸不烂之舌脱身。当嘴炮不管用时，[PAWN_pronoun]会采取更暴力和直接的方法。
+
+identifier:VeteranSoldier42, title:老兵/久经沙场的战士, Desc:
+在漫长的服役期里，[PAWN_nameDef]多次参与对抗海盗、叛军和外星人的战斗。[PAWN_pronoun]见证了战争的荣耀和恐怖。
+在经历了不计其数的演习和战斗，身上遍布疤痕后，[PAWN_nameDef]因为殖民地的防卫换血政策而被迫退伍。之后的日子里，[PAWN_pronoun]花了很多时间整理自己的勋章，因为这些荣誉证明[PAWN_pronoun]没有让家族蒙羞。
+
+identifier:FrontierMarshal26, title:执法官/坚定的边境执法官, Desc:
+[PAWN_nameDef]是[PAWN_possessive]殖民地的执法官。[PAWN_pronoun]努力捍卫法律的尊严，但腐败的地方市长杀了[PAWN_possessive]家人并把[PAWN_pronoun]留下等死。
+恢复健康后，[PAWN_nameDef]将市长绳之以法。之后，[PAWN_pronoun]离开家园，开始新的生活，并努力在宇宙中发挥作用。
+
+identifier:CriminalSurgeon99, title:医生/罪犯中的外科医生, Desc:
+当身边的犯罪同伙受伤时，[PAWN_nameDef]尝试照顾和治疗他们。
+虽然很多人最终死去，但[PAWN_pronoun]也学会如何熟练的运用手术刀。
+
+identifier:SanitationCaptain28, title:技工/维修队长, Desc:
+在军官训练学校毕业后, [PAWN_nameDef]分配到"雷霆之子"的主战甲板工作。一年后，在"殷勤"的努力下，[PAWN_pronoun]加入了维修团队。
+因为不知疲劳的双腿，团队队友给[PAWN_pronoun]起了个"桌腿"的绰号。
+
+identifier:GameTester90, title:测试员/游戏测试员, Desc:
+核战争后，[PAWN_nameDef]在一个几乎不宜居的星球上重新开始生活，[PAWN_pronoun]能用父亲借来的钱实现愿望。[PAWN_pronoun]对一个特别的殖民地模拟游戏情有独钟。在游戏中，[PAWN_pronoun]最喜欢做的事情是建造精致的医院。[PAWN_nameDef]沉迷其中，这令[PAWN_pronoun]忘却战争的恐惧，失去复仇之心。
+
+identifier:MutinousCaptain52, title:船长/叛变的船长, Desc:
+[PAWN_nameDef]所在的部落被拥有先进武器的奴隶贩子袭击而毁灭，[PAWN_pronoun]也被奴隶贩子带到这个星系。这些年来，[PAWN_pronoun]学会了奴隶贩子的语言，最后成为他们的翻译和外交官。最后，[PAWN_nameDef]终于抓住时机，以叛变的形式复仇，让奴隶贩子头目明白[PAWN_pronoun]真正的狡猾。
+
+identifier:CorpResearcher93, title:研究员/首席公司研究员, Desc:
+[PAWN_nameDef]是一家庞大的太空探索公司的首席研究员。
+
+identifier:AWOLSoldier20, title:士兵/躲避战争的逃兵, Desc:
+[PAWN_nameDef]是一名步兵。
+当[PAWN_pronoun]知道自己要被派往参加帝奴雅与札德札之间的战争时，[PAWN_pronoun]决定不再当兵。最后，[PAWN_pronoun]用军用太空穿梭机成功逃脱。
+
+identifier:Explorer28, title:勘探者/边缘世界勘探者, Desc:
+[PAWN_nameDef]采集样本、故事和研究，从一个行星到另一个行星。[PAWN_pronoun]希望有一天能编纂一个收录已知空间所有动植物、矿物、机械设备的《边缘世界旅行完全指南》
+
+identifier:StarshipDoctor82, title:医生/飞船医生, Desc:
+[PAWN_nameDef]是一名飞船上医生。[PAWN_pronoun]是一名出色的外科医生并且独自进行研究工作。然而，他非常孤僻并且从来没有最好临床习惯。
+
+identifier:BountyHunter41, title:赏金猎人/专业的赏金猎人, Desc:
+[PAWN_nameDef]是一个巨大的闪耀世界的赏金猎人。[PAWN_pronoun]为那些极为富有的客户做一些见不得光的勾当，并且因为毫无声息地完成任务和从未失手而出名。
+
+identifier:OrbitalReservist22, title:预备役/轨道预备役, Desc:
+政府宣布加强军事防御后，[PAWN_nameDef]被征召入军队训练。
+[PAWN_pronoun]驻扎在轨道基地，操纵防御系统，并在极端情况下通过登陆舰空投到地面。
+
+identifier:ParticlePhysicist78, title:物理学家/粒子物理学家, Desc:
+[PAWN_nameDef]是最尖端的物理研究学者。[PAWN_pronoun]想要创造一个更加美好的未来。
+
+identifier:ProstheticSurgeon0, title:外科医生/假肢外科医生, Desc:
+[PAWN_nameDef]运用[PAWN_pronoun]在假肢方面的才能，使用以金属和电子器件制作的替代肢体和器官来使他人变得更“先进”。
+
+identifier:StilettoAssassin50, title:刺客/短剑刺客, Desc:
+因为[PAWN_possessive]技能，[PAWN_nameDef]产生了优越感。随着时间的推移，她失去了同情心。她经常打架，发现杀死一个人很容易。
+她意识到自己的天赋后，她成了一个系统中最有效的杀手。
+
+identifier:ExoticChef96, title:大厨/异域大厨, Desc:
+[PAWN_nameDef]总是对异域的食材和菜谱充满兴趣。
+[PAWN_pronoun]总是会在当地的动物和植物中取材。
+
+identifier:Blacksmith7, title:铁匠/中世纪铁匠, Desc:
+作为一个中世纪世界的铁匠, [PAWN_nameDef]因为其高品质的武器而出名。[PAWN_pronoun]使用武器的技术也不错。
+
+identifier:PoliticalActivist61, title:活动家/政治活动家, Desc:
+[PAWN_nameDe加入了一个极端反政府的政治组织。
+ 在那里，[PAWN_pronoun]得到游击战术训练，战斗技能得到提高, 也意味着[PAWN_pronoun]对自己的信仰进行了妥协。
+
+identifier:Flaneur69, title:漫步者/自由漫步者, Desc:
+[PAWN_nameDef]漫步在街道与咖啡店，品尝咖啡，追求自由，没有任何牵绊。
+久而久之，[PAWN_pronoun]不信任别人，也从不采纳别人的建议。
+
+identifier:AddictionCounsel60, title:治疗师/上瘾治疗师, Desc:
+[PAWN_nameDef]成功戒掉乐丝后, 采用非暴力的生活方式，并发誓要帮助他人。
+通过社区交流，[PAWN_pronoun]用药, 艺术和手工帮助其他成瘾者。
+
+identifier:MercenaryLeader28, title:雇佣兵/雇佣兵首领, Desc:
+独自一人，[PAWN_nameDef]开始重建他父亲的事业。[PAWN_pronoun]挑战一个小佣兵领袖并控制了他，然后命令队伍，为他劫持商船和偷贵重货物。
+[PAWN_pronoun]被叛变。[PAWN_pronoun]被遗弃，被逮捕，并被判处死刑。
+
+identifier:BattleMechanic27, title:机械工/战争机械工, Desc:
+在早期核融合时期的系统中，[PAWN_nameDef]是一位痴迷于技术的雇佣兵。
+[PAWN_pronoun]异常痴迷于收集合适的零件，并经常定制修改，打造属于自己的设备。
+
+identifier:DischargedSoldier56, title:士兵/被开除的士兵, Desc:
+[PAWN_nameDef]通过卖身来筹集吸毒的资金。为了躲债，[PAWN_pronoun]加入军队并学会了战斗。
+在军队里，由于太聪明，[PAWN_pronoun]经常不服从命令，最终导致被开除军籍。[PAWN_possessive]肩膀上也留下了不光彩的印记。
+
+identifier:Chemist73, title:化学家/化学研究家, Desc:
+[PAWN_nameDef]是一名化学研究家。 [PAWN_pronoun]每天和化学品打交道：从药品和炸药到新的化合物和疗法。
+
+identifier:MechanicsEngineer64, title:工程师/机械工程师, Desc:
+[PAWN_nameDef]喜欢解决问题，[PAWN_pronoun]凭着良好的声誉和稳健的双手找到了一份机械工程师的工作。[PAWN_pronoun]重新设计和制造了各种大小的设备。
+慢慢的，[PAWN_pronoun]已经达到了可以选择自己客户的境界。[PAWN_pronoun]交了富有的朋友，也和有权的人结了仇。
+
+identifier:NetworkEngineer83, title:工程师/网络工程师, Desc:
+[PAWN_nameDef]倾注全部心力钻研电脑网络系统。
+[PAWN_pronoun]不问世事 - 只在乎回应时间和丢包。
+
+identifier:Caravaneer53, title:队长/远行队长, Desc:
+[PAWN_nameDef]是一位远行队的首领。[PAWN_pronoun]要负责远行队的安全，同时也是各种交易的首席谈判代表。
+通过远行贸易，[PAWN_pronoun]和[PAWN_possessive]人发了大财。但他们经常要和因财富招来的强盗和混混作斗争。
+
+identifier:MilitaryGunsmith27, title:枪支制造师/军事枪支制造师, Desc:
+当[PAWN_possessive]世界被卷入冲突，[PAWN_nameDef]与许多同行一同被征召加入了撕裂星球的大战之中。
+凭借着专业知识，[PAWN_pronoun]幸运的得到了武器制造师的职位而不必前往前线。
+
+identifier:Aromatherapist80, title:治疗师/香薰治疗师, Desc:
+[PAWN_nameDef]精通芳香疗法，从土生土长的植物中提取精华。
+
+identifier:SpaceBartender0, title:调酒师/太空调酒师, Desc:
+[PAWN_nameDef]成为了空间站上的一名调酒师。[PAWN_pronoun]和许多陌生人接触且交友甚广。
+随着时间的推移，[PAWN_nameDef]利用草药方面的知识给[PAWN_possessive]雇主制作独门的奇怪药剂。
+
+identifier:ShockTrooper15, title:突击兵/突击尖兵, Desc:
+[PAWN_nameDef]曾隶属于深空突击部队，在数场战争中被部署到星球。
+在一次危险的突袭中，[PAWN_possessive]整个部队都被歼灭。没有人知道那天战场上发生了什么，但作为幸存者，[PAWN_nameDef]会永远背负着这份沉重。
+
+identifier:PirateDoctor0, title:庸医/为海盗治病的医生, Desc:
+[PAWN_nameDef]对医学有热情，但从不去为学位努力。只有缺乏资金的海盗和恐怖分子才会请[PAWN_pronoun]提供医疗服务，而接受手术的患者大概只有50%的存活率。
+除此之外，乐观的态度驱使[PAWN_objective]不断尝试治疗那些有需要的人们，只要他们预付了钱。
+
+identifier:BloodyDentist9, title:牙医/嗜血的牙医, Desc:
+在一所著名大学毕业后，愤怒的上司和呻吟的病人最终压垮了[PAWN_nameDef]脆弱的人格。[PAWN_pronoun]成为一名秘密杀人狂，杀掉所有被[PAWN_objective]盯上的人。
+在一次追捕后，[PAWN_pronoun]最终逃离了[PAWN_possessive]星球前往新的世界。
+
+identifier:MasterChef48, title:前大厨/被陷害的顶级厨师, Desc:
+[PAWN_nameDef]来到闪耀世界，找到了一份在高级餐厅洗盘子的工作，然后步步攀升，最终成为大厨。
+几年后的一天，有人在[PAWN_pronoun]给市长准备的菜肴中下毒，而[PAWN_pronoun]受到牵连，丢掉了工作。之后，[PAWN_pronoun]再次开始了星际探险。
+
+identifier:WarshipCaptain67, title:舰长/战舰舰长, Desc:
+多年的担任先进小型护卫舰的指挥官教会了[PAWN_nameDef]领导的艺术、高等工程的技术，以及面对试图杀死你的敌人时如何保持冷静。
+不幸的是，[PAWN_nameDef]很少接触到大自然。
+
+identifier:RunawayDancer35, title:舞者/逃亡舞者, Desc:
+因科学而生，为科学而生，[PAWN_nameDef]放弃了。相反，[PAWN_pronoun]想要穿梭在不同的世界中为人们跳舞，从迷人的闪耀世界再到危险的边缘世界。
+这样的工作需要的是面带微笑与装束下的手枪。
+
+identifier:ProstituteIdol28, title:名妓/娼妓偶像, Desc:
+父亲被辞退后，为了维持生计，[PAWN_nameDef]凭借自身的美丽进入色情行业。
+经过多年高难度的医学改造，[PAWN_possessive]身体变得暂时不会衰老，之后被卖到一家轨道妓院。在那里，[PAWN_pronoun]受到热捧，来自全球各地的客户络绎不绝。
+
+identifier:TheaterTechnician98, title:灯光师/舞台灯光师, Desc:
+[PAWN_nameDef]是著名剧院的灯光师，每天在幕后尽心尽力。[PAWN_pronoun]的工作是搭建背景，编辑灯光，并监控相关机组。
+下班后，[PAWN_pronoun]会和演员们交流，通过观看演出提高沟通和操控他人的能力。
+
+identifier:ArmySergeant1, title:中士/陆军中士, Desc:
+[PAWN_nameDef]在国家军事部门任职，作为一名士官领导一支小部队。
+[PAWN_pronoun]擅长在困难的环境下制定合理的作战计划。
+
+identifier:StellarPirate99, title:海盗/恒星海盗, Desc:
+[PAWN_nameDef]是一艘海盗船的船长。[PAWN_pronoun]和[PAWN_possessive]船员靠掠夺偏离轨道的商人为生。
+[PAWN_pronoun]会以平衡方式解决问题，根据需要选择开发、谈判或者战斗，并因此而闻名。
+
+identifier:LostSoldier13, title:失败品/失败的士兵, Desc:
+[PAWN_nameDef]童年的士兵养成失败，实验停止。[PAWN_pronoun]成了无意义的存在，被抛弃，无依无靠。
+最终，[PAWN_nameDef]在重体力劳动中得到了慰藉。[PAWN_pronoun]格外喜欢建造房屋和制作重甲。
+
+identifier:LanguageAnalyst27, title:语言学家/语言分析师, Desc:
+母星的战争爆发后，[PAWN_nameDef]应征入伍并成为一名语言学家。[PAWN_pronoun]的日子都在空间站度过。在那里，[PAWN_pronoun]负责破译敌人的通讯信息和照料水培作物。
+后来空间站因为陨石撞击而受损，[PAWN_pronoun]被迫进入休眠仓等待救援。
+
+identifier:MadAccountant61, title:会计师/疯狂的会计, Desc:
+作为一名会计师，[PAWN_nameDef]经常与同事一起参加社交活动，并结交了很多高层人士。
+一天，[PAWN_nameDef]发现[PAWN_possessive]老板涉及一些贪污丑闻。汇报后，[PAWN_pronoun]被解雇。为了将那些应该负责的罪人绳之以法，[PAWN_pronoun]进行了一场大规模的谋杀狂欢。
+
+identifier:Philosopher97, title:智者/善于思考的人, Desc:
+[PAWN_nameDef]对考古技术知识的渴望使[PAWN_objective]花了数年时间调查废弃的数据中心和研究古代编码语言。
+[PAWN_pronoun]声称自己是少数能将过去的悲剧拼凑起来并指明前进道路的人之一。
+
+identifier:CasketBuilder76, title:建造师/休眠舱建造师, Desc:
+[PAWN_nameDef]对低温休眠十分迷恋，毕生都在学习机械与生命支持。
+作为一名中寰世界的汇编工程师，[PAWN_nameDef]利用废弃零件建造了一个实验性的原型仓。不幸的是，当[PAWN_pronoun]在寻找最后的组件时，[PAWN_possessive]家被炸弹夷为平地。
+
+identifier:Fugitive32, title:逃亡者/逃亡者, Desc:
+[PAWN_nameDef]反对[PAWN_pronoun]所供职的公司，但失败了，[PAWN_pronoun]被迫逃走。
+[PAWN_pronoun]不断逃亡，把一切威胁都甩在身后。[PAWN_pronoun]试图寻找一起行动的支持者，但由于社交能力差而失败。
+
+identifier:GunDealer14, title:军火商/军火商人, Desc:
+[PAWN_nameDef]将高科技武器同时卖给交战的双方。
+随着时间推移，[PAWN_pronoun]在产品演示和讨价还价方面驾轻就熟。
+
+identifier:DeepSpaceSurveyor87, title:测量师/深空测量师, Desc:
+[PAWN_nameDef]是一位深空测量师。[PAWN_pronoun]致力于研究哪些星球适合殖民化。
+探险中，[PAWN_pronoun]遇到过充满敌意的土著，绿色皮肤的星际女战士，以及希腊众神的崇拜者。经过多次交战，[PAWN_pronoun]学会了建造基本的车床和岩石大炮来御敌。
+
+identifier:RenownedProfessor51, title:教授/知名教授, Desc:
+[PAWN_nameDef]的无尽慈悲和对知识的热爱，使[PAWN_objective]走上了教书育人的道路。在充满泡沫的地下世界学术界，[PAWN_pronoun]成为最著名的人物之一。
+[PAWN_possessive]全息讲座广受推崇，而[PAWN_pronoun]在研讨会上认同的少数学生则广泛地谈到[PAWN_possessive]的善良与耐心。
+
+identifier:SpaceMarineMedic10, title:军医/星际陆战队医生, Desc:
+[PAWN_nameDef]加入殖民地远征军并成为一名军医。而随着殖民者中有人感染了丧尸病毒，任务变得十分糟糕。[PAWN_pronoun]且战且退，坚持了数日。
+[PAWN_pronoun]被感染者逼入绝境，消耗了整整四个机枪弹鼓来倾泻足够多的弹药，同时认识到大容量武器的价值。而拥有绰号“菜鸟”的[PAWN_pronoun]从那天开始就麻烦不断。
+
+identifier:ShadowMarine63, title:领航员/暗影突击队员, Desc:
+掌握探路者的技能后，[PAWN_nameDef]离开所在单位，成为星际领航员。
+[PAWN_pronoun]利用熟悉轨道交易路线的优势，能够在不被发现的情况下进出各大行星。
