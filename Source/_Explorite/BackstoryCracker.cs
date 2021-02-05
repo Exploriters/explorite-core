@@ -19,13 +19,16 @@ namespace Explorite
         public static BackstorySlot backstorySlot = BackstorySlot.Adulthood;
         static BackstoryCracker()
         {
-            //CentaurCivilRetro.spawnCategories.Add("CentaurCivil");
-            CentaurCivilRetro.shuffleable = true;
-            CentaurCivilMayinas.shuffleable = false;
-            //AddExtraPrefixViaTag();
-            //ExportBackstoriesToLog();
-            //TestforIncorrectChildhood();
-            THE_ULTRA_FLOOD();
+            if (InstelledMods.RimCentaurs)
+            {
+                //CentaurCivilRetro.spawnCategories.Add("CentaurCivil");
+                CentaurCivilRetro.shuffleable = true;
+                CentaurCivilMayinas.shuffleable = false;
+                //AddExtraPrefixViaTag();
+                //ExportBackstoriesToLog();
+                //TestforIncorrectChildhood();
+                THE_ULTRA_FLOOD();
+            }
         }
         /**
          * <summary>
@@ -199,7 +202,7 @@ namespace Explorite
                 solved += $"{str}, ";
                 solvedBackstoryCount++;
             }
-            Log.Message($"[Magnuassembly]Solved CentaurAdulthoodCivil: {(solved+"&").Replace(", &",".")}");
+            Log.Message($"[Magnuassembly]Solved CentaurAdulthoodCivil: {(solved + "&").Replace(", &", ".")}");
             stopwatch.Stop();
             Log.Message($"[Magnuassembly]Backstory flood complete, solved total {solvedBackstoryCount} backstories, in {stopwatch.ElapsedMilliseconds}ms.");
 
@@ -219,7 +222,7 @@ namespace Explorite
             string solved = "";
             Pawn tempPawn;
             List<Backstory> backstories = new List<Backstory>();
-            for (int i = 0 ; i < 2000; i++)
+            for (int i = 0; i < 2000; i++)
             {
                 tempPawn = PawnGenerator.GeneratePawn(CentaurColonistDef, Faction.OfPlayer);
                 if (tempPawn != null && tempPawn.story.childhood != CentaurCivilRetro && !backstories.Contains(tempPawn.story.adulthood))
@@ -231,7 +234,7 @@ namespace Explorite
                 }
             }
 
-            Log.Message($"[Magnuassembly]Problem : {(solved+"&").Replace(", &",".")}");
+            Log.Message($"[Magnuassembly]Problem : {(solved + "&").Replace(", &", ".")}");
             stopwatch.Stop();
             Log.Message($"[Magnuassembly]Backstory testing complete, detected total {solvedBackstoryCount} backstories, result length {solved.Length}, in {stopwatch.ElapsedMilliseconds}ms.");
         }
@@ -265,8 +268,8 @@ namespace Explorite
                     && (
                         Bs.Value.spawnCategories.Contains("Civil")
                         || Bs.Value.spawnCategories.Contains("Offworld")
-                        //|| Bs.Value.spawnCategories.Contains("Outlander")
-                        //|| Bs.Value.spawnCategories.Contains("Outsider")
+                    //|| Bs.Value.spawnCategories.Contains("Outlander")
+                    //|| Bs.Value.spawnCategories.Contains("Outsider")
                     )
                     )
                 {

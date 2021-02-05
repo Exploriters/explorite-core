@@ -10,24 +10,13 @@ using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
-    /**
-     * <summary>
-     * 对人物生成器的补丁。
-     * </summary>
-     */
-    [StaticConstructorOnStartup]
-    internal static class PawnGeneratorPatch
+    internal static partial class ExploriteMiscPatches
     {
-        // ReSharper disable once InconsistentNaming
-        private static readonly Type patchType = typeof(PawnGeneratorPatch);
-
-        static PawnGeneratorPatch()
-        {
-            //Harmony harmonyInstance = new Harmony(id: "Explorite.rimworld.mod.PawnGeneratorPatch");
-
-            harmonyInstance.Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new[] { typeof(PawnGenerationRequest) }),
-                postfix: new HarmonyMethod(patchType, nameof(GeneratePawnPostfix) ));
-        }
+        /**
+         * <summary>
+         * 对人物生成器的补丁。
+         * </summary>
+         */
         [HarmonyPostfix]
         public static void GeneratePawnPostfix(ref Pawn __result)
         {
@@ -44,7 +33,7 @@ namespace Explorite
 
                     foreach (SkillRecord sr in __result.skills.skills)
                     {
-                        sr.Level = 
+                        sr.Level =
                             __result.story.childhood.skillGainsResolved.TryGetValue(sr.def) +
                             __result.story.adulthood.skillGainsResolved.TryGetValue(sr.def);
                         if (sr.passion == Passion.None)
@@ -65,7 +54,12 @@ namespace Explorite
                 ).RandomElement();
             }
         }
-        /*
+    }
+
+    /*
+    [HarmonyPatch(typeof(PawnGenerator), "GenerateBodyType")]
+    public static class Patch_PawnGenerator_GenerateBodyType
+    {
         public static bool GenerateBodyTypePostfix(Pawn pawn)
         {
             BodyTypeDef bodyGlobal;
@@ -123,70 +117,7 @@ namespace Explorite
             }
             return false;
         }
-        */
     }
-    
-    /*
-    [HarmonyPatch(typeof(PawnGenerator), "GenerateBodyType")]
-    public static class Patch_PawnGenerator_GenerateBodyType
-    {
-        public static bool Prefix(Pawn pawn)
-        {
-            BodyTypeDef bodyGlobal;
-            BodyTypeDef bodyMale;
-            BodyTypeDef bodyFemale;
-            float randBodyType;
-            if (pawn.story.adulthood != null)
-            {
-                bodyGlobal = pawn.story.adulthood.BodyTypeFor(Gender.None);
-                bodyMale = pawn.story.adulthood.BodyTypeFor(Gender.Male);
-                bodyFemale = pawn.story.adulthood.BodyTypeFor(Gender.Female);
-            }
-            else
-            {
-                bodyGlobal = pawn.story.childhood.BodyTypeFor(Gender.None);
-                bodyMale = pawn.story.childhood.BodyTypeFor(Gender.Male);
-                bodyFemale = pawn.story.childhood.BodyTypeFor(Gender.Female);
-            }
-            if (bodyGlobal != null)
-            {
-                pawn.story.bodyType = bodyGlobal;
-            }
-            else if ((bodyMale == BodyTypeDefOf.Male && pawn.gender == Gender.Male)
-              || (bodyFemale == BodyTypeDefOf.Female && pawn.gender == Gender.Female))
-            {
-                randBodyType = Rand.Value;
-                if (randBodyType < 0.05)
-                {
-                    pawn.story.bodyType = BodyTypeDefOf.Hulk;
-                }
-                else if (randBodyType < 0.1)
-                {
-                    pawn.story.bodyType = BodyTypeDefOf.Fat;
-                }
-                else if (randBodyType < 0.5)
-                {
-                    pawn.story.bodyType = BodyTypeDefOf.Thin;
-                }
-                else if (pawn.gender == Gender.Female)
-                {
-                    pawn.story.bodyType = BodyTypeDefOf.Female;
-                }
-                else
-                {
-                    pawn.story.bodyType = BodyTypeDefOf.Male;
-                }
-            }
-            else if (pawn.gender == Gender.Female)
-            {
-                pawn.story.bodyType = bodyFemale;
-            }
-            else
-            {
-                pawn.story.bodyType = bodyMale;
-            }
-            return false;
-        }
-    }*/
+    */
 
 }

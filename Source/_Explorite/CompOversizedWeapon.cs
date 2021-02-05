@@ -20,7 +20,7 @@ namespace Explorite
      */
     public class CompProperties_OversizedWeapon : CompProperties
     {
-        public CompProperties_OversizedWeapon() : base( typeof(CompOversizedWeapon) )
+        public CompProperties_OversizedWeapon() : base(typeof(CompOversizedWeapon))
         { }
     }
     /**
@@ -61,7 +61,8 @@ namespace Explorite
     }
 
     [StaticConstructorOnStartup]
-    internal static class HarmonyCompOversizedWeapon
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE1006")]
+    internal static partial class HarmonyCompOversizedWeapon
     {
         static HarmonyCompOversizedWeapon()
         {

@@ -38,7 +38,7 @@ namespace Explorite
             base.CompTick();
             if (!valid)
                 return;
-            if (lastHealTick < 0 || InGameTick >= lastHealTick + ticksBetweenHeal )
+            if (lastHealTick < 0 || InGameTick >= lastHealTick + ticksBetweenHeal)
             {
                 List<Thing> DamagedThings = new List<Thing>();
                 List<Apparel> WornApparel = pawn.apparel.WornApparel;
@@ -65,7 +65,7 @@ namespace Explorite
                 }
                 else
                 {
-                    lastHealTick = InGameTick - ticksBetweenHeal / 20 - ( ticksBetweenHeal % 20 >= 1 ? 1:0 );
+                    lastHealTick = InGameTick - ticksBetweenHeal / 20 - (ticksBetweenHeal % 20 >= 1 ? 1 : 0);
                 }
             }
         }

@@ -49,10 +49,10 @@ namespace Explorite
         }
         public override string CompInspectStringExtra()
         {
-            return 
-                $"{"ChargesRemaining".Translate()}: {Math.Floor(fuelWithFragment/displayFragment)} / {Math.Floor(fuelCapacity/displayFragment)}"
-                +"\n"+
-                $"{"CanFireIn".Translate()}: {FormattingTickTime((fuelCapacity - fuelWithFragment)/fuelPreSec)}"
+            return
+                $"{"ChargesRemaining".Translate()}: {Math.Floor(fuelWithFragment / displayFragment)} / {Math.Floor(fuelCapacity / displayFragment)}"
+                + "\n" +
+                $"{"CanFireIn".Translate()}: {FormattingTickTime((fuelCapacity - fuelWithFragment) / fuelPreSec)}"
                 ;
         }
         public override void CompTick()

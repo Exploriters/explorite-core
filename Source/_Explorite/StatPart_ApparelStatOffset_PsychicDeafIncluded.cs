@@ -20,15 +20,15 @@ namespace Explorite
         {
             try
             {
-                if (req.HasThing && (((Pawn)req.Thing)?.health?.hediffSet?.HasHediff(DefDatabase<HediffDef>.GetNamed("PsychicDeafCentaur")))==true)
+                if (req.HasThing && (((Pawn)req.Thing)?.health?.hediffSet?.HasHediff(DefDatabase<HediffDef>.GetNamed("PsychicDeafCentaur"))) == true)
                 {
                     return true;
                 }
             }
-            catch(NullReferenceException)
+            catch (NullReferenceException)
             {
             }
-            catch(InvalidCastException)
+            catch (InvalidCastException)
             {
             }
             catch

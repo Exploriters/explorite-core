@@ -24,42 +24,42 @@ namespace Explorite
             //Harmony harmonyInstance = new Harmony("Explorite.rimworld.mod.AdditionalVerbPatch");
             //if (!Harmony.HasAnyPatches("Explorite.rimworld.mod.AdditionalVerbPatch"))
             //{
-                /*
-                //harmonyInstance.Patch(AccessTools.Method(typeof(Command_VerbTarget), "GizmoOnGUI", null, null), null, new HarmonyMethod(patchType, "GizmoOnGUIPostfix", null));
-                //harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "GetTargetingVerb", null, null), new HarmonyMethod(patchType, "GetTargetingVerbPrefix", null));
+            /*
+            //harmonyInstance.Patch(AccessTools.Method(typeof(Command_VerbTarget), "GizmoOnGUI", null, null), null, new HarmonyMethod(patchType, "GizmoOnGUIPostfix", null));
+            //harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "GetTargetingVerb", null, null), new HarmonyMethod(patchType, "GetTargetingVerbPrefix", null));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_EquipmentTracker), "GetGizmos", null, null), null, new HarmonyMethod(patchType, "GetGizmosPostfix", null));
+            harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_EquipmentTracker), "GetGizmos", null, null), null, new HarmonyMethod(patchType, "GetGizmosPostfix", null));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "BeginTargeting", new Type[] { typeof(ITargetingSource), typeof(ITargetingSource) }), new HarmonyMethod(patchType, "BeginTargetingPrefix", null));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "OrderPawnForceTarget"), null, new HarmonyMethod(patchType, "OrderPawnForceTargetPostfix", null));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "StopTargeting", null, null), new HarmonyMethod(patchType, "StopTargetingPrefix", null));
+            harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "BeginTargeting", new Type[] { typeof(ITargetingSource), typeof(ITargetingSource) }), new HarmonyMethod(patchType, "BeginTargetingPrefix", null));
+            harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "OrderPawnForceTarget"), null, new HarmonyMethod(patchType, "OrderPawnForceTargetPostfix", null));
+            harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "StopTargeting", null, null), new HarmonyMethod(patchType, "StopTargetingPrefix", null));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(VerbTracker), "CreateVerbTargetCommand", null, null), new HarmonyMethod(patchType, "CreateVerbTargetCommandPrefix", null));
-                harmonyInstance.Patch(AccessTools.Property(typeof(VerbTracker), "PrimaryVerb").GetGetMethod(), new HarmonyMethod(patchType, "PrimaryVerbPrefix", null));
+            harmonyInstance.Patch(AccessTools.Method(typeof(VerbTracker), "CreateVerbTargetCommand", null, null), new HarmonyMethod(patchType, "CreateVerbTargetCommandPrefix", null));
+            harmonyInstance.Patch(AccessTools.Property(typeof(VerbTracker), "PrimaryVerb").GetGetMethod(), new HarmonyMethod(patchType, "PrimaryVerbPrefix", null));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(VerbProperties), "AdjustedAccuracy", null, null), null, new HarmonyMethod(patchType, "AdjustedAccuracyPostfix", null));
+            harmonyInstance.Patch(AccessTools.Method(typeof(VerbProperties), "AdjustedAccuracy", null, null), null, new HarmonyMethod(patchType, "AdjustedAccuracyPostfix", null));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(TooltipUtility), "ShotCalculationTipString", null, null), new HarmonyMethod(patchType, "ShotCalculationTipStringPrefix", null));
-                */
-                harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_EquipmentTracker), "GetGizmos", null, null), null, new HarmonyMethod(patchType, "GetGizmosPostfix", null));
+            harmonyInstance.Patch(AccessTools.Method(typeof(TooltipUtility), "ShotCalculationTipString", null, null), new HarmonyMethod(patchType, "ShotCalculationTipStringPrefix", null));
+            */
+            harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_EquipmentTracker), "GetGizmos", null, null), null, new HarmonyMethod(patchType, "GetGizmosPostfix", null));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "BeginTargeting", new Type[] { typeof(ITargetingSource), typeof(ITargetingSource) }), new HarmonyMethod(patchType, "BeginTargetingPrefix", null));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "OrderPawnForceTarget"), null, new HarmonyMethod(patchType, "OrderPawnForceTargetPostfix", null));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "StopTargeting", null, null), new HarmonyMethod(patchType, "StopTargetingPrefix", null));
+            harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "BeginTargeting", new Type[] { typeof(ITargetingSource), typeof(ITargetingSource) }), new HarmonyMethod(patchType, "BeginTargetingPrefix", null));
+            harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "OrderPawnForceTarget"), null, new HarmonyMethod(patchType, "OrderPawnForceTargetPostfix", null));
+            harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "StopTargeting", null, null), new HarmonyMethod(patchType, "StopTargetingPrefix", null));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(VerbTracker), "CreateVerbTargetCommand", null, null), new HarmonyMethod(patchType, "CreateVerbTargetCommandPrefix", null));
-                harmonyInstance.Patch(AccessTools.Property(typeof(CompEquippable), "PrimaryVerb").GetGetMethod(), new HarmonyMethod(patchType, "PrimaryVerbPrefix", null));
+            harmonyInstance.Patch(AccessTools.Method(typeof(VerbTracker), "CreateVerbTargetCommand", null, null), new HarmonyMethod(patchType, "CreateVerbTargetCommandPrefix", null));
+            harmonyInstance.Patch(AccessTools.Property(typeof(CompEquippable), "PrimaryVerb").GetGetMethod(), new HarmonyMethod(patchType, "PrimaryVerbPrefix", null));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(VerbProperties), "AdjustedAccuracy", null, null), null, new HarmonyMethod(patchType, "AdjustedAccuracyPostfix", null));
+            harmonyInstance.Patch(AccessTools.Method(typeof(VerbProperties), "AdjustedAccuracy", null, null), null, new HarmonyMethod(patchType, "AdjustedAccuracyPostfix", null));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(TooltipUtility), "ShotCalculationTipString", null, null), new HarmonyMethod(patchType, "ShotCalculationTipStringPrefix", null));
-                /*LongEventHandler.ExecuteWhenFinished
-                (
-                    delegate
-                    {
-                        currentCommandTexture = ContentFinder<Texture2D>.Get("UI/Commands/Select");
-                    }
-                );*/
+            harmonyInstance.Patch(AccessTools.Method(typeof(TooltipUtility), "ShotCalculationTipString", null, null), new HarmonyMethod(patchType, "ShotCalculationTipStringPrefix", null));
+            /*LongEventHandler.ExecuteWhenFinished
+            (
+                delegate
+                {
+                    currentCommandTexture = ContentFinder<Texture2D>.Get("UI/Commands/Select");
+                }
+            );*/
             //}
         }
         //public static Texture2D currentCommandTexture;
@@ -546,7 +546,7 @@ namespace Explorite
             }
             if (verbs.Count == 0)
             {
-                Log.ErrorOnce("[Magnuassembly]CurrVerbReset Error: verbs contains no verb, at comp: " + comp + ", verbs:"+ verbs + ".", 41423);
+                Log.ErrorOnce("[Magnuassembly]CurrVerbReset Error: verbs contains no verb, at comp: " + comp + ", verbs:" + verbs + ".", 41423);
                 return;
             }
             if (currentVerb != null)
@@ -748,7 +748,7 @@ namespace Explorite
             return SuccessedOnce;
         }
     }
-    
+
     public class Verb_Shoot_Rainbow2 : Verb_Shoot
     {
         protected int lastFireTick = -1;
@@ -759,17 +759,17 @@ namespace Explorite
             base.ExposeData();
             Scribe_Values.Look(ref lastFireTick, "lastFireTick", -1);
         }
-        public override ThingDef Projectile 
+        public override ThingDef Projectile
         {
             get
             {
-                if (lastFireTick >= 0 && lastFireTick + Math.Max(0, (ShotsPerBurst-1) * verbProps.ticksBetweenBurstShots) >= InGameTick)
+                if (lastFireTick >= 0 && lastFireTick + Math.Max(0, (ShotsPerBurst - 1) * verbProps.ticksBetweenBurstShots) >= InGameTick)
                 {
                     return SecondaryProjectile;
                 }
                 else
                 {
-                    return base.Projectile; 
+                    return base.Projectile;
                 }
             }
         }

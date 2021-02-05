@@ -12,7 +12,7 @@ namespace Explorite
     {
         public override void OnIntervalPassed(Pawn pawn, Hediff cause)
         {
-            if(!pawn.health.hediffSet.HasHediff(hediff))
+            if (!pawn.health.hediffSet.HasHediff(hediff))
                 TryApply(pawn);
         }
     }

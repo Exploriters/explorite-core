@@ -14,7 +14,7 @@ namespace Explorite
             Log.Message("[SayersMOD]Is it working? Did you see me? OuO");
 
             //LoadedModManager
-            InstelledMods.UpdateStatus();
+            //InstelledMods.UpdateStatus();
         }
     }
 }

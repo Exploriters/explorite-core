@@ -27,7 +27,7 @@ namespace Explorite
      */
     public class CompUnbreakableViaDamage : ThingComp
     {
-        
+
         public override void PostPreApplyDamage(DamageInfo dinfo, out bool absorbed)
         {
             base.PostPreApplyDamage(dinfo, out absorbed);
@@ -36,7 +36,7 @@ namespace Explorite
 
             if (parent.HitPoints - dmgamount <= 2)
             {
-                dmgamount = Math.Max(0f,parent.HitPoints - 2);
+                dmgamount = Math.Max(0f, parent.HitPoints - 2);
                 if (dmgamount == 0f)
                     absorbed = true;
                 dinfo.SetAmount(dmgamount);

@@ -138,19 +138,19 @@ namespace Explorite
      */
     public class CompUsable_IgnoreManipulation : CompUsable
     {
-		private bool CanBeUsedBy(Pawn p, out string failReason)
-		{
-			List<ThingComp> allComps = parent.AllComps;
-			for (int i = 0; i < allComps.Count; i++)
-			{
+        private bool CanBeUsedBy(Pawn p, out string failReason)
+        {
+            List<ThingComp> allComps = parent.AllComps;
+            for (int i = 0; i < allComps.Count; i++)
+            {
                 if (allComps[i] is CompUseEffect compUseEffect && !compUseEffect.CanBeUsedBy(p, out failReason))
                 {
                     return false;
                 }
             }
-			failReason = null;
-			return true;
-		}
+            failReason = null;
+            return true;
+        }
         public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn myPawn)
         {
             if (!CanBeUsedBy(myPawn, out string failReason))

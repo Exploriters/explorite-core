@@ -67,7 +67,7 @@ namespace Explorite
 
         public bool overkilled = false;
         public float fragemntPerCharge => EnergyGainPerSec;
-        public float chargePrecent => Math.Min(1, Math.Max(0, pendingCharge /EnergyGainPerSec ));
+        public float chargePrecent => Math.Min(1, Math.Max(0, pendingCharge / EnergyGainPerSec));
         public float energyPrecent => Math.Min(1, Math.Max(0, energy / EnergyMax));
 
         public int ticksToReset = -1;
@@ -198,8 +198,8 @@ namespace Explorite
             }*/
             if (
                     dinfo.Def.isRanged
-                ||  dinfo.Def.isExplosive
-                ||  dinfo.Def == DamageDefOf.EMP
+                || dinfo.Def.isExplosive
+                || dinfo.Def == DamageDefOf.EMP
                 )
             {
                 if (dinfo.Def.isRanged || dinfo.Def.isExplosive)
@@ -248,7 +248,7 @@ namespace Explorite
         {
             float overkill = Math.Min(EnergyMax * 10 / 3, -energy);
             if (overkill >= fragemntPerCharge)
-            { 
+            {
                 SoundDefOf.EnergyShield_Broken.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
                 MoteMaker.MakeStaticMote(parent.TrueCenter(), parent.Map, ThingDefOf.Mote_ExplosionFlash, 12f);
                 overkilled = true;
@@ -313,7 +313,7 @@ namespace Explorite
         private static readonly Texture2D EmptyShieldBarTex = SolidColorMaterials.NewSolidColorTexture(Color.clear);
         public bool valid => !shield.invalid;
         public Gizmo_EnergyShieldStatusPawn() => order = -2000f;
-        public override float GetWidth(float maxWidth)=> valid?140f:0f;
+        public override float GetWidth(float maxWidth) => valid ? 140f : 0f;
 
         public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth)
         {

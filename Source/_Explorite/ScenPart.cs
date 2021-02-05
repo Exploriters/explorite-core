@@ -151,7 +151,7 @@ namespace Explorite
                 {
                     Thing tribattery = ThingMaker.MakeThing(DefDatabase<ThingDef>.GetNamed("TriBattery"));
                     tribattery?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
-                    ((DropPodIncoming)thing).Contents.innerContainer.TryAdd(tribattery,1);
+                    ((DropPodIncoming)thing).Contents.innerContainer.TryAdd(tribattery, 1);
                     break;
                 }
             }
@@ -209,7 +209,7 @@ namespace Explorite
                     {
                         if (thingInDroppod?.def?.race?.Humanlike == true)
                         {
-                            if(target == null)
+                            if (target == null)
                                 target = (Pawn)thingInDroppod;
                         }
                         else if (thingInDroppod?.def?.alwaysHaulable == true)
@@ -224,7 +224,7 @@ namespace Explorite
                 bool equipped = target.equipment.Primary != null;
                 foreach (ThingAndOwner tno in queuedThings)
                 {
-                    if(tno.thing.TryGetComp<CompForbiddable>() != null)
+                    if (tno.thing.TryGetComp<CompForbiddable>() != null)
                         tno.thing.TryGetComp<CompForbiddable>().Forbidden = false;
 
                     if (!equipped && tno.thing.TryGetComp<CompEquippable>() != null)

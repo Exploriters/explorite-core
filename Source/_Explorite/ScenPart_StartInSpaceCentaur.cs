@@ -130,7 +130,7 @@ namespace Explorite
             }*/
             List<Thing> things = spaceMap.listerThings.AllThings;
             Thing targetTorpedo = null;
-            IntVec3 torpedoToLocation = new IntVec3(0,0,0);
+            IntVec3 torpedoToLocation = new IntVec3(0, 0, 0);
             foreach (Thing thing in things)
             {
                 try
@@ -142,7 +142,7 @@ namespace Explorite
                         {
                             thingInside?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
                         }
-                    } 
+                    }
                     if (thing?.TryGetComp<CompForbiddable>() != null)
                     {
                         thing.TryGetComp<CompForbiddable>().Forbidden = false;
@@ -158,9 +158,9 @@ namespace Explorite
                     }
                     if (thing?.TryGetComp<CompRefuelable>() != null)
                     {
-                    //thing.def == DefDatabase<ThingDef>.GetNamed("Ship_Engine_Small") ||
-                    //thing.def == DefDatabase<ThingDef>.GetNamed("Ship_Engine") ||
-                    //thing.def == DefDatabase<ThingDef>.GetNamed("Ship_Engine_Large") 
+                        //thing.def == DefDatabase<ThingDef>.GetNamed("Ship_Engine_Small") ||
+                        //thing.def == DefDatabase<ThingDef>.GetNamed("Ship_Engine") ||
+                        //thing.def == DefDatabase<ThingDef>.GetNamed("Ship_Engine_Large") 
                         CompRefuelable fuelTarget = thing?.TryGetComp<CompRefuelable>();
                         fuelTarget?.Refuel(fuelTarget.Props.fuelCapacity);
                     }
@@ -228,13 +228,13 @@ namespace Explorite
                     {
                         //Log.Message("[Magnuassembly]Patching stack.");
                         thing.stackCount = thing.def.stackLimit;
-                        
+
                         foreach (Thing thingInGrid in spaceMap.thingGrid.ThingsAt(thing.Position))
                         {
                             if (thingInGrid.def == DefDatabase<ThingDef>.GetNamed("Shelf"))
                             {
                                 ((Building_Storage)thingInGrid).settings.filter.SetDisallowAll();
-                                ((Building_Storage)thingInGrid).settings.filter.SetAllow(thing.def,true);
+                                ((Building_Storage)thingInGrid).settings.filter.SetAllow(thing.def, true);
                             }
 
                         }
@@ -256,7 +256,7 @@ namespace Explorite
                         {
                             targetTorpedo = thing;
                         }
-                        else if(thing.Position.z > targetTorpedo.Position.z)
+                        else if (thing.Position.z > targetTorpedo.Position.z)
                         {
                             targetTorpedo = thing;
                         }
@@ -286,12 +286,12 @@ namespace Explorite
             Thing InterplanetaryEngineL = ThingMaker.MakeThing(ThingDef.Named("Blueprint_Ship_Engine_Interplanetary"));
             InterplanetaryEngineL.SetFaction(Faction.OfPlayer);
             //((Blueprint_Build)InterplanetaryEngineL).;
-            GenSpawn.Spawn(InterplanetaryEngineL, new IntVec3(-18,0,-28), spaceMap);
+            GenSpawn.Spawn(InterplanetaryEngineL, new IntVec3(-18, 0, -28), spaceMap);
 
             Thing InterplanetaryEngineR = ThingMaker.MakeThing(ThingDef.Named("Blueprint_Ship_Engine_Interplanetary"));
             InterplanetaryEngineR.SetFaction(Faction.OfPlayer);
-            GenSpawn.Spawn(InterplanetaryEngineR, new IntVec3(18,0,-28), spaceMap);
-            
+            GenSpawn.Spawn(InterplanetaryEngineR, new IntVec3(18, 0, -28), spaceMap);
+
 
             /*
             List<Building> thingsRocket = spaceMap.listerBuildings.allBuildingsColonist;
