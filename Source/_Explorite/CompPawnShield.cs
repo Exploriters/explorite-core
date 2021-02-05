@@ -30,6 +30,7 @@ namespace Explorite
      * 护盾值需要由其他属性提供。若无，则护盾不可用。
      * </summary>
      */
+    [StaticConstructorOnStartup]
     public class CompPawnShield : ThingComp
     {
         Color currentColor = new Color(0.5f, 0.5f, 0.5f);
@@ -304,6 +305,7 @@ namespace Explorite
      * 显示生物护盾的界面UI
      * </summary>
      */
+    [StaticConstructorOnStartup]
     public class Gizmo_EnergyShieldStatusPawn : Gizmo
     {
         public CompPawnShield shield;
