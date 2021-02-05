@@ -12,7 +12,6 @@ namespace Explorite
     /**
      * <summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />不继承自<seealso cref = "Building_Battery" />，因该类并未有独有方法，且部分行为不可被覆盖。</summary>
      */
-    [StaticConstructorOnStartup]
     public class Building_TriBattery : Building//_Battery
     {
         private int ticksToExplode;
@@ -38,27 +37,27 @@ namespace Explorite
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look<int>(ref this.ticksToExplode, "ticksToExplode", 0, false);
+            Scribe_Values.Look(ref ticksToExplode, "ticksToExplode", 0, false);
         }
 
         public override void Draw()
         {
             base.Draw();
-            CompPowerBattery comp = base.GetComp<CompPowerBattery>();
-            GenDraw.FillableBarRequest r = default(GenDraw.FillableBarRequest);
-            r.center = this.DrawPos + Vector3.up * 0.1f;
-            r.size = Building_TriBattery.BarSize;
+            CompPowerBattery comp = GetComp<CompPowerBattery>();
+            GenDraw.FillableBarRequest r = default;
+            r.center = DrawPos + Vector3.up * 0.1f;
+            r.size = BarSize;
             r.fillPercent = comp.StoredEnergy / comp.Props.storedEnergyMax;
-            r.filledMat = Building_TriBattery.BatteryBarFilledMat;
-            r.unfilledMat = Building_TriBattery.BatteryBarUnfilledMat;
+            r.filledMat = BatteryBarFilledMat;
+            r.unfilledMat = BatteryBarUnfilledMat;
             r.margin = 0.15f;
-            Rot4 rotation = base.Rotation;
+            Rot4 rotation = Rotation;
             rotation.Rotate(RotationDirection.Clockwise);
             r.rotation = rotation;
             GenDraw.DrawFillableBar(r);
-            if (this.ticksToExplode > 0 && base.Spawned)
+            if (ticksToExplode > 0 && Spawned)
             {
-                base.Map.overlayDrawer.DrawOverlay(this, OverlayTypes.BurningWick);
+                Map.overlayDrawer.DrawOverlay(this, OverlayTypes.BurningWick);
             }
         }
 
@@ -66,23 +65,23 @@ namespace Explorite
         {
             base.Tick();
             //BackstoryCracker.TestforIncorrectChildhood();
-            if (this.ticksToExplode > 0)
+            if (ticksToExplode > 0)
             {
-                if (this.wickSustainer == null)
+                if (wickSustainer == null)
                 {
-                    this.StartWickSustainer();
+                    StartWickSustainer();
                 }
                 else
                 {
-                    this.wickSustainer.Maintain();
+                    wickSustainer.Maintain();
                 }
-                this.ticksToExplode--;
-                if (this.ticksToExplode == 0)
+                ticksToExplode--;
+                if (ticksToExplode == 0)
                 {
                     IntVec3 randomCell = this.OccupiedRect().RandomCell;
                     float radius = Rand.Range(0.5f, 1f) * 3f * 1.7320508075688772935274463415059f;
-                    GenExplosion.DoExplosion(randomCell, base.Map, radius, DamageDefOf.Flame, null, -1, -1f, null, null, null, null, null, 0f, 1, false, null, 0f, 1, 0f, false);
-                    base.GetComp<CompPowerBattery>().DrawPower(400f);
+                    GenExplosion.DoExplosion(randomCell, Map, radius, DamageDefOf.Flame, null, -1, -1f, null, null, null, null, null, 0f, 1, false, null, 0f, 1, 0f, false);
+                    GetComp<CompPowerBattery>().DrawPower(400f);
                 }
             }
         }
@@ -90,22 +89,20 @@ namespace Explorite
         public override void PostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
         {
             base.PostApplyDamage(dinfo, totalDamageDealt);
-            if (!base.Destroyed && this.ticksToExplode == 0 && dinfo.Def == DamageDefOf.Flame && Rand.Value < 0.05f && base.GetComp<CompPowerBattery>().StoredEnergy > 500f)
+            if (!Destroyed && ticksToExplode == 0 && dinfo.Def == DamageDefOf.Flame && Rand.Value < 0.05f && GetComp<CompPowerBattery>().StoredEnergy > 500f)
             {
-                this.ticksToExplode = Rand.Range(70, 150);
-                this.StartWickSustainer();
+                ticksToExplode = Rand.Range(70, 150);
+                StartWickSustainer();
             }
         }
 
         private void StartWickSustainer()
         {
             SoundInfo info = SoundInfo.InMap(this, MaintenanceType.PerTick);
-            this.wickSustainer = SoundDefOf.HissSmall.TrySpawnSustainer(info);
+            wickSustainer = SoundDefOf.HissSmall.TrySpawnSustainer(info);
         }
 
         // Note: this type is marked as 'beforefieldinit'.
-        static Building_TriBattery()
-        {
-        }
+        //static Building_TriBattery() { }
     }
 }

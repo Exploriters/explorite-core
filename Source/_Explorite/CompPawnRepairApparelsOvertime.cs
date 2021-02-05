@@ -1,33 +1,37 @@
-﻿using System;
-using System.Text;
+﻿/**
+ * 使生物持续修复身上的衣物。
+ * 
+ * 被半人马使用。
+ * --siiftun1857
+ */
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using RimWorld;
-//using Harmony;
-using HarmonyLib;
-using UnityEngine;
-using Verse.AI;
 using Verse;
-using Verse.Sound;
 using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
-    class CompProperties_PawnRepairApparelsOvertime : CompProperties
+    /**
+     * <summary>为<see cref = "CompPawnRepairApparelsOvertime" />接收参数。</summary>
+     */
+    public class CompProperties_PawnRepairApparelsOvertime : CompProperties_Healer
     {
-        public int ticksBetweenHeal = -1;
         public CompProperties_PawnRepairApparelsOvertime()
         {
-            this.compClass = typeof(CompPawnRepairApparelsOvertime);
+            compClass = typeof(CompPawnRepairApparelsOvertime);
         }
     }
-    [StaticConstructorOnStartup]
+    /**
+     * <summary>使生物持续修复身上的衣物。</summary>
+     */
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE1006")]
     public class CompPawnRepairApparelsOvertime : ThingComp
     {
         public int lastHealTick = -1;
+
         public int ticksBetweenHeal => ((CompProperties_PawnRepairApparelsOvertime)props).ticksBetweenHeal;
         public bool valid => ticksBetweenHeal >= 0;
+
         public Pawn pawn => (Pawn)parent;
         public override void CompTick()
         {

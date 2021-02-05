@@ -4,14 +4,11 @@
  * TODO: 应当改为补丁，而不是子类。
  * --siiftun1857
  */
-//using Harmony;
 using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using Verse;
 using static Explorite.ExploriteCore;
 //[assembly: IgnoresAccessChecksTo("RimWorld.Recipe_RemoveBodyPart")]
@@ -34,7 +31,7 @@ namespace System.Runtime.CompilerServices
 namespace Explorite
 {
     [StaticConstructorOnStartup]
-    public static class PatchCentaurRecipe
+    internal static class PatchCentaurRecipe
     {
         static PatchCentaurRecipe()
         {
@@ -186,10 +183,10 @@ namespace Explorite
         public override void ApplyOnPawn(Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients, Bill bill)
         {
             bool flag = MedicalRecipesUtility.IsClean(pawn, part);
-            bool flag2 = this.IsViolationOnPawn(pawn, part, Faction.OfPlayer);
+            bool flag2 = IsViolationOnPawn(pawn, part, Faction.OfPlayer);
             if (billDoer != null)
             {
-                if (base.CheckSurgeryFail(billDoer, pawn, ingredients, part, bill))
+                if (CheckSurgeryFail(billDoer, pawn, ingredients, part, bill))
                 {
                     return;
                 }

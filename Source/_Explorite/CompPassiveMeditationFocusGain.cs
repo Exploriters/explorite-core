@@ -1,36 +1,33 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using RimWorld;
-//using Harmony;
-using HarmonyLib;
-using UnityEngine;
-using Verse.AI;
+﻿/**
+ * 使生物持续获取精神力。
+ * --siiftun1857
+ */
 using Verse;
-using Verse.Sound;
-using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
-    class CompProperties_PassiveMeditationFocusGain : CompProperties
+    /**
+     * <summary>为<see cref = "CompPassiveMeditationFocusGain" />接收参数。</summary>
+     */
+    public class CompProperties_PassiveMeditationFocusGain : CompProperties
     {
         public float focusPerDay = 0f;
         public CompProperties_PassiveMeditationFocusGain()
         {
-            this.compClass = typeof(CompPassiveMeditationFocusGain);
+            compClass = typeof(CompPassiveMeditationFocusGain);
         }
     }
 
-    [StaticConstructorOnStartup]
+    /**
+     * <summary>使生物持续获取精神力。</summary>
+     */
     public class CompPassiveMeditationFocusGain : ThingComp
     {
-        public float FocusPerRate => ((CompProperties_PassiveMeditationFocusGain)props).focusPerDay;
+        public float FocusPerTick => ((CompProperties_PassiveMeditationFocusGain)props).focusPerDay / 60000;
         public override void CompTick()
         {
             base.CompTick();
-            //((Pawn)parent).psychicEntropy.
+            ((Pawn)parent).psychicEntropy.OffsetPsyfocusDirectly(FocusPerTick);
         }
     }
 }

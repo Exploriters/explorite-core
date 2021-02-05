@@ -8,7 +8,7 @@ using System;
 namespace Explorite
 {
     /**
-     * <summary>为<see cref = "Explorite.CompHealWearedOvertime" />接收参数。<br /></summary>
+     * <summary>为<see cref = "CompHealWearedOvertime" />接收参数。<br /></summary>
      */
     public class CompProperties_HealWearedOvertime : CompProperties_Healer
     {
@@ -22,7 +22,7 @@ namespace Explorite
     /// <summary>
     /// 持续治疗身上穿戴和装备的物品，适用于装备。<br />
     /// 实现尚未完工。<br />
-    /// 勿与<see cref = "Explorite.CompPawnRepairApparelsOvertime" />混淆，后者为种族能力。
+    /// 勿与<see cref = "CompPawnRepairApparelsOvertime" />混淆，后者为种族能力。
     /// </summary>
     public class CompHealWearedOvertime : ThingComp
     {

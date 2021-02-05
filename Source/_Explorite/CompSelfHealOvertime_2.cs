@@ -1,4 +1,8 @@
-﻿using System;
+﻿/**
+ * 使物品的生命值随着时间逐渐恢复的Comp类。
+ * --siiftun1857
+ */
+using System;
 using Verse;
 
 namespace Explorite
@@ -6,7 +10,7 @@ namespace Explorite
     /**
      * <summary>
      * 使物品的生命值随着时间逐渐恢复，该实现使用了浮点数。<br />
-     * 另请参阅: <seealso cref = "Explorite.CompSelfHealOvertime1" />，完全基于整型的实现。
+     * 另请参阅: <seealso cref = "CompSelfHealOvertime1" />，完全基于整型的实现。
      * </summary>
      */
     public class CompSelfHealOvertime2 : CompSelfHealOvertime

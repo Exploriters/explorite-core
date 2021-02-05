@@ -2,11 +2,8 @@
  * 该文件包含多个弹射物。
  * --siiftun1857
  */
-using RimWorld;
 using System;
-using System.Collections.Generic;
 using Verse;
-using Verse.AI;
 using static Explorite.ExploriteCore;
 
 namespace Explorite
@@ -74,7 +71,7 @@ namespace Explorite
      */
     public class Projectile_Explosive_Waggingshot : Projectile_Explosive
     {
-        static Random Randy = new Random();
+        static readonly Random Randy = new Random();
         public override void Tick()
         {
             base.Tick();

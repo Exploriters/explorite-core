@@ -3,17 +3,9 @@
  * --siiftun1857
  */
 using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using RimWorld;
-//using Harmony;
 using HarmonyLib;
-using UnityEngine;
-using Verse.AI;
 using Verse;
-using Verse.Sound;
 using static Explorite.ExploriteCore;
 
 namespace Explorite
@@ -24,14 +16,14 @@ namespace Explorite
      * </summary>
      */
     [StaticConstructorOnStartup]
-    public static class PawnGeneratorPatch
+    internal static class PawnGeneratorPatch
     {
         // ReSharper disable once InconsistentNaming
         private static readonly Type patchType = typeof(PawnGeneratorPatch);
 
         static PawnGeneratorPatch()
         {
-            Harmony harmonyInstance = new Harmony(id: "Explorite.rimworld.mod.PawnGeneratorPatch");
+            //Harmony harmonyInstance = new Harmony(id: "Explorite.rimworld.mod.PawnGeneratorPatch");
 
             harmonyInstance.Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new[] { typeof(PawnGenerationRequest) }),
                 postfix: new HarmonyMethod(patchType, nameof(GeneratePawnPostfix) ));

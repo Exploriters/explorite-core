@@ -3,11 +3,6 @@
  * 已弃用。
  * --siiftun1857
  */
-using HarmonyLib;
-using RimWorld;
-using System;
-using Verse;
-using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
@@ -22,7 +17,7 @@ namespace Explorite
 
         static FoodPoisonImmuneForSayersPatch()
         {
-            Harmony harmonyInstance = new Harmony(id: "Explorite.rimworld.mod.FoodPoisonImmuneForSayersPatch");
+            //Harmony harmonyInstance = new Harmony(id: "Explorite.rimworld.mod.FoodPoisonImmuneForSayersPatch");
 
             harmonyInstance.Patch(AccessTools.Method(typeof(FoodUtility), nameof(FoodUtility.AddFoodPoisoningHediff), new[] { typeof(Pawn), typeof(Thing), typeof(FoodPoisonCause) }),
                 prefix: new HarmonyMethod(patchType, nameof(AddFoodPoisoningHediffPrefix)));

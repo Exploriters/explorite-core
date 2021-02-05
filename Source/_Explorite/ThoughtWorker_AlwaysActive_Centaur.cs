@@ -5,7 +5,6 @@
 using Verse;
 using RimWorld;
 using static Explorite.ExploriteCore;
-//using AbilityUser;
 
 namespace Explorite
 {

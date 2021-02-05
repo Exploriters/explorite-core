@@ -1,31 +1,32 @@
-﻿using System;
-using System.Text;
+﻿/**
+ * 高速恢复燃料的CompRefuelable变种。
+ */
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using RimWorld;
-//using Harmony;
-using HarmonyLib;
-using UnityEngine;
-using Verse.AI;
 using Verse;
-using Verse.Sound;
 using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
-    class CompProperties_Refuelable_PassiveRecharge : CompProperties_Refuelable
+    /**
+     * <summary>为<see cref = "CompRefuelable_PassiveRecharge" />接收参数。</summary>
+     */
+    public class CompProperties_Refuelable_PassiveRecharge : CompProperties_Refuelable
     {
         public CompProperties_Refuelable_PassiveRecharge()
         {
-            this.compClass = typeof(CompRefuelable_PassiveRecharge);
+            compClass = typeof(CompRefuelable_PassiveRecharge);
         }
 
         public float fuelGenFragment;
         public float displayFragment;
         public int fuelGenFragmentTicks;
     }
-    class CompRefuelable_PassiveRecharge : CompRefuelable
+    /**
+     * <summary>高速恢复燃料的<see cref = "CompRefuelable" />变种。</summary>
+     */
+    public class CompRefuelable_PassiveRecharge : CompRefuelable
     {
         public bool messageSignal = false;
 

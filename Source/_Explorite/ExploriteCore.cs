@@ -2,47 +2,53 @@
  * 常量包以及常用函数。
  * --siiftun1857
  */
-using System.Linq;
-using System.Text;
 using Verse;
-using System.Diagnostics;
 using System;
 using UnityEngine;
 using RimWorld;
-//using AbilityUser;
+using HarmonyLib;
 
 namespace Explorite
 {
-    /*public class FilthWithComps : ThingWithComps, Filth
-    { 
-    
-    }*/
-    ///<summary>三射弓研究项目，阻止其在特定情况下被研究。<br />未实现。</summary>
-    public class Trishot_ResearchProjectDef : ResearchProjectDef
-    {
-        /*public override bool CanStartNow {
-            get {
-                return false;
-            }
-        }*/
-    }
-    ///<summary>Explorite Core核心静态类。</summary>
     public static partial class ExploriteCore
     {
-        public static readonly ThingDef AlienSayersDef = DefDatabase<ThingDef>.GetNamed("Alien_Sayers");
-        public static readonly ThingDef AlienFlowerBorhAnimalDef = DefDatabase<ThingDef>.GetNamed("Alien_FlowerBorhAnimal");
+        public static readonly Harmony harmonyInstance = new Harmony(id: "Explorite.rimworld.mod.HarmonyPatches");
 
-        public static readonly HediffDef HyperManipulatorHediffDef = DefDatabase<HediffDef>.GetNamed("HyperManipulator");
-        public static readonly BodyPartDef CentaurScapularDef = DefDatabase<BodyPartDef>.GetNamed("CentaurScapular");
-        public static readonly ThingDef AlienCentaurDef = DefDatabase<ThingDef>.GetNamed("Alien_Centaur");
-        public static readonly PawnKindDef CentaurColonistDef = DefDatabase<PawnKindDef>.GetNamed("CentaurColonist");
+        public static readonly ThingDef AlienSayersDef = DefDatabase<ThingDef>.GetNamed("Alien_Sayers", errorOnFail:false);
+        public static readonly ThingDef AlienFlowerBorhAnimalDef = DefDatabase<ThingDef>.GetNamed("Alien_FlowerBorhAnimal", errorOnFail: false);
+
+        public static readonly HediffDef HyperManipulatorHediffDef = DefDatabase<HediffDef>.GetNamed("HyperManipulator", errorOnFail: false);
+        public static readonly BodyPartDef CentaurScapularDef = DefDatabase<BodyPartDef>.GetNamed("CentaurScapular", errorOnFail: false);
+        public static readonly ThingDef AlienCentaurDef = DefDatabase<ThingDef>.GetNamed("Alien_Centaur", errorOnFail: false);
+        public static readonly PawnKindDef CentaurColonistDef = DefDatabase<PawnKindDef>.GetNamed("CentaurColonist", errorOnFail: false);
+
         public static readonly Backstory CentaurCivilRetro = BackstoryDatabase.allBackstories.TryGetValue("CentaurCivil_Retro");
         public static readonly Backstory CentaurCivilMayinas = BackstoryDatabase.allBackstories.TryGetValue("Backstory_Mayinas_Exploriter");
 
 
+        public static class InstelledMods
+        {
+            public static bool RimCentaurs = false;
+            public static bool Sayers = false;
+            public static bool GuoGuo = false;
+
+            public static bool SoS2 = false;
+
+            public static void UpdateStatus()
+            {
+                //ExploriteCore = ModLister.GetActiveModWithIdentifier("Exploriters.ExploriteCore") != null;
+                RimCentaurs = ModLister.GetActiveModWithIdentifier("Exploriters.siiftun1857.CentaurTheMagnuassembly") != null;
+                Sayers = ModLister.GetActiveModWithIdentifier("Exploriters.Abrel.Sayers") != null;
+                GuoGuo = ModLister.GetActiveModWithIdentifier("Exploriters.AndoRingo.GuoGuo") != null;
+
+                SoS2 = ModLister.GetActiveModWithIdentifier("kentington.saveourship2") != null;
+            }
+        }
+
         //public static readonly AbilityDef AbilityTrishot_TrishotDef = DefDatabase<AbilityDef>.GetNamed("AbilityTrishot_Trishot");
         //public static readonly AbilityDef AbilityTrishot_IcoshotDef = DefDatabase<AbilityDef>.GetNamed("AbilityTrishot_Icoshot");
         //public static readonly AbilityDef AbilityTrishot_OneshotDef = DefDatabase<AbilityDef>.GetNamed("AbilityTrishot_Oneshot");
+
         public static int InGameTick => Find.TickManager.TicksGame;
         public static int InGameTickAbs => Find.TickManager.TicksAbs;
         /**
@@ -184,6 +190,8 @@ namespace Explorite
         }*/
         public static Texture2D FloodingTexture(Texture2D inputtex, float range)
         {
+            if (range == 0f) { }
+
             return inputtex;
 
             /*if (range <= 0f)

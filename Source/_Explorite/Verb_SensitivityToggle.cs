@@ -4,10 +4,6 @@
  * 未实现。
  * --siiftun1857
  */
-using UnityEngine;
-using Verse;
-using RimWorld;
-using static Explorite.ExploriteCore;
 
 namespace Explorite
 {

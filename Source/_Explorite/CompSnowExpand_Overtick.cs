@@ -1,7 +1,14 @@
-﻿using RimWorld;
+﻿/**
+ * 高速产生积雪的Comp类。
+ * --siiftun1857
+ */
+using RimWorld;
 
 namespace Explorite
 {
+    /**
+     * <summary>以极高速率在地面上产生积雪。</summary>
+     */
     public class CompSnowExpand_Overtick : CompSnowExpand
     {
         public override void CompTick()

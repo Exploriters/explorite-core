@@ -5,7 +5,6 @@
  * --siiftun1857
  */
 using Verse;
-//using AbilityUser;
 
 namespace Explorite
 {

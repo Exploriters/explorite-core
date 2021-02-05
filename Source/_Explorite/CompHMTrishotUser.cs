@@ -1,7 +1,9 @@
-﻿using static Explorite.ExploriteCore;
-using Verse;
-using RimWorld;
-//using AbilityUser;
+﻿/**
+ * 半人马直接取得三射弓能力的实现。
+ * 
+ * 未实现的特性。
+ * --siiftun1857
+ */
 
 namespace Explorite
 {

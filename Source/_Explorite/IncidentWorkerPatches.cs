@@ -4,18 +4,11 @@
  * --siiftun1857
  */
 using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using RimWorld;
-//using Harmony;
 using HarmonyLib;
-using UnityEngine;
-using Verse.AI;
 using Verse;
-using Verse.Sound;
 using static Explorite.ExploriteCore;
+using SaveOurShip2;
 
 namespace Explorite
 {
@@ -25,7 +18,7 @@ namespace Explorite
      * </summary>
      */
     [StaticConstructorOnStartup]
-    public static class IncidentWorkerPatches
+    internal static class IncidentWorkerPatches
     {
         // NoWandererJoinForCentaurs
         // IncidentWorker_WandererJoinTransportPod
@@ -34,17 +27,56 @@ namespace Explorite
 
         static IncidentWorkerPatches()
         {
-            Harmony harmonyInstance = new Harmony(id: "Explorite.rimworld.mod.IncidentWorkerPatches");
+            //Harmony harmonyInstance = new Harmony(id: "Explorite.rimworld.mod.IncidentWorkerPatches");
 
             harmonyInstance.Patch(AccessTools.Method(typeof(IncidentWorker_WandererJoin), "CanFireNowSub", new[] { typeof(IncidentParms) }),
                 postfix: new HarmonyMethod(patchType, nameof(WandererJoin_CanFireNowPostfix)));
         }
 
         [HarmonyPostfix]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0060")]
         public static void WandererJoin_CanFireNowPostfix(IncidentParms parms, ref bool __result)
         {
             if (Faction.OfPlayer.def.defName == "CentaurPlayerColony")
                 __result = false;
+        }
+
+    }
+    /**
+     * <summary>
+     * 使半人马可以在太空中靠动力装甲存活。
+     * </summary>
+     */
+    [StaticConstructorOnStartup]
+    internal static class HasSpaceSuitSlowPatches
+    {
+        // NoWandererJoinForCentaurs
+        // IncidentWorker_WandererJoinTransportPod
+        // ReSharper disable once InconsistentNaming
+        private static readonly Type patchType = typeof(HasSpaceSuitSlowPatches);
+
+        static HasSpaceSuitSlowPatches()
+        {
+            if (!InstelledMods.SoS2)
+                return;
+            harmonyInstance.Patch(AccessTools.Method(typeof(ShipInteriorMod2), "HasSpaceSuitSlow", new[] { typeof(Pawn) }),
+                postfix: new HarmonyMethod(patchType, nameof(HasSpaceSuitSlowPostfix)));
+        }
+
+        [HarmonyPostfix]
+        public static void HasSpaceSuitSlowPostfix(Pawn pawn, ref bool __result)
+        {
+            if (pawn.def == AlienCentaurDef)
+            {
+                foreach (Apparel app in pawn.apparel.WornApparel)
+                {
+                    if (app.def.apparel.tags.Contains("EVA"))
+                    {
+                        __result = true;
+                        break;
+                    }
+                }
+            }
         }
 
     }

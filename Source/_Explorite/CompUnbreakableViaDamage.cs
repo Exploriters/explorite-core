@@ -4,19 +4,13 @@
  * 效果目前不可用。
  * --siiftun1857
  */
-using RimWorld;
 using System;
-using System.Collections.Generic;
-using UnityEngine;
 using Verse;
-using Verse.AI;
-using Verse.Sound;
-using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
     /**
-     * <summary>为<see cref = "Explorite.CompUnbreakableViaDamage" />接收参数。</summary>
+     * <summary>为<see cref = "CompUnbreakableViaDamage" />接收参数。</summary>
      */
     public class CompProperties_UnbreakableViaDamage : CompProperties_Healer
     {

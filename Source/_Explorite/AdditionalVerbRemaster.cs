@@ -5,28 +5,23 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using RimWorld;
-//using Harmony;
 using HarmonyLib;
 using UnityEngine;
-using Verse.AI;
 using Verse;
-using Verse.Sound;
 using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
     [StaticConstructorOnStartup]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("", "IDE0060")]
-    public static class AdditionalVerbPatch
+    internal static class AdditionalVerbPatch
     {
         private static readonly Type patchType = typeof(AdditionalVerbPatch);
         static AdditionalVerbPatch()
         {
             //HarmonyInstance harmonyInstance = HarmonyInstance.Create("Explorite.rimworld.mod.AdditionalVerbPatch");
-            Harmony harmonyInstance = new Harmony("Explorite.rimworld.mod.AdditionalVerbPatch");
+            //Harmony harmonyInstance = new Harmony("Explorite.rimworld.mod.AdditionalVerbPatch");
             //if (!Harmony.HasAnyPatches("Explorite.rimworld.mod.AdditionalVerbPatch"))
             //{
                 /*
@@ -106,9 +101,9 @@ namespace Explorite
             int count = 0;
             foreach (Gizmo g in __result)
             {
-                if (g is Command)
+                if (g is Command command)
                 {
-                    ((Command)g).hotKey = count switch
+                    command.hotKey = count switch
                     {
                         0 => KeyBindingDefOf.Misc1,
                         1 => KeyBindingDefOf.Misc3,
@@ -128,14 +123,13 @@ namespace Explorite
         }
         public static void BeginTargetingPrefix(ITargetingSource source)
         {
-            Verb verb = source as Verb;
-            if (verb == null)
+            if (!(source is Verb verb))
             {
                 return;
             }
-            if (verb.verbTracker != null && verb.verbTracker.directOwner != null && verb.DirectOwner is CompEquippable)
+            if (verb.verbTracker != null && verb.verbTracker.directOwner != null && verb.DirectOwner is CompEquippable equippable)
             {
-                Comp_VerbSaveable comp = ((CompEquippable)verb.DirectOwner).parent.GetComp<Comp_VerbSaveable>();
+                Comp_VerbSaveable comp = equippable.parent.GetComp<Comp_VerbSaveable>();
                 if (comp != null)
                 {
                     comp.tempVerb = verb;
@@ -144,14 +138,13 @@ namespace Explorite
         }
         public static void OrderPawnForceTargetPostfix(Targeter __instance, ITargetingSource targetingSource)
         {
-            Verb verb = targetingSource as Verb;
-            if (verb == null)
+            if (!(targetingSource is Verb verb))
             {
                 return;
             }
-            if (verb.verbTracker != null && verb.verbTracker.directOwner != null && verb.DirectOwner is CompEquippable)
+            if (verb.verbTracker != null && verb.verbTracker.directOwner != null && verb.DirectOwner is CompEquippable equippable)
             {
-                Comp_VerbSaveable comp = ((CompEquippable)verb.DirectOwner).parent.GetComp<Comp_VerbSaveable>();
+                Comp_VerbSaveable comp = equippable.parent.GetComp<Comp_VerbSaveable>();
                 if (comp != null)
                 {
                     if (!(Traverse.Create(__instance).Method("CurrentTargetUnderMouse", true).GetValue<LocalTargetInfo>().IsValid))
@@ -169,15 +162,13 @@ namespace Explorite
         }
         public static void StopTargetingPrefix(Verb ___targetingSource)
         {
-            Verb verb = ___targetingSource as Verb;
-            if (verb == null)
+            if (!(___targetingSource is Verb verb))
             {
                 return;
             }
             if (verb.verbTracker != null && verb.verbTracker.directOwner != null)
             {
-                CompEquippable compEquip = verb.DirectOwner as CompEquippable;
-                if (compEquip != null && compEquip.parent != null)
+                if (verb.DirectOwner is CompEquippable compEquip && compEquip.parent != null)
                 {
                     Comp_VerbSaveable compVerbSave = compEquip.parent.GetComp<Comp_VerbSaveable>();
                     if (compVerbSave != null)
@@ -619,11 +610,10 @@ namespace Explorite
         }
     }
 
-    interface IVerbPropertiesCustom
+    public interface IVerbPropertiesCustom
     {
     }
 
-    [StaticConstructorOnStartup]
     public class VerbProperties_Custom : VerbProperties
     {
         public string desc;
@@ -762,7 +752,7 @@ namespace Explorite
     public class Verb_Shoot_Rainbow2 : Verb_Shoot
     {
         protected int lastFireTick = -1;
-        public ThingDef secondaryProjectile => ((VerbProperties_Custom)verbProps).secondaryProjectile;
+        public ThingDef SecondaryProjectile => ((VerbProperties_Custom)verbProps).secondaryProjectile;
 
         public override void ExposeData()
         {
@@ -775,7 +765,7 @@ namespace Explorite
             {
                 if (lastFireTick >= 0 && lastFireTick + Math.Max(0, (ShotsPerBurst-1) * verbProps.ticksBetweenBurstShots) >= InGameTick)
                 {
-                    return secondaryProjectile;
+                    return SecondaryProjectile;
                 }
                 else
                 {

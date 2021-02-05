@@ -8,7 +8,7 @@ namespace Explorite
 {
     /**
      * <summary>治疗类效果参数的基类。<br />
-     * 为<see cref = "Explorite.CompSelfHealOvertime" />，<see cref = "Explorite.CompHealWearedOvertime" />，<see cref = "Explorite.CompPawnRepairApparelsOvertime" />，等类型及其子类接收参数。</summary>
+     * 为<see cref = "CompSelfHealOvertime" />，<see cref = "CompHealWearedOvertime" />，<see cref = "CompPawnRepairApparelsOvertime" />，等类型及其子类接收参数。</summary>
      */
     public class CompProperties_Healer : CompProperties
     {

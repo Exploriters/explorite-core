@@ -8,7 +8,7 @@ using Verse;
 namespace Explorite
 {
     /**
-     * <summary>为<see cref = "Explorite.HediffComp_FactorBySeverity" />接收参数。</summary>
+     * <summary>为<see cref = "HediffComp_FactorBySeverity" />接收参数。</summary>
      */
     public class HediffCompProperties_FactorBySeverity : HediffCompProperties
     {

@@ -4,7 +4,6 @@
  */
 using System;
 using System.Reflection;
-//using Harmony;
 using HarmonyLib;
 using RimWorld;
 using Verse;
@@ -18,12 +17,12 @@ namespace Explorite
      * </summary>
      */
     [StaticConstructorOnStartup]
-    public static class SkillRecordPatch
+    internal static class SkillRecordPatch
     {
         private static readonly Type patchType = typeof(SkillRecordPatch);
         static SkillRecordPatch()
         {
-            Harmony harmonyInstance = new Harmony("Explorite.rimworld.mod.SkillRecordPatch");
+            //Harmony harmonyInstance = new Harmony("Explorite.rimworld.mod.SkillRecordPatch");
 
             harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Learn), new[] { typeof(float), typeof(bool) }),
                 prefix: new HarmonyMethod(patchType, nameof(SkillLearnPrefix)));

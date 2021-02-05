@@ -5,29 +5,22 @@
  * --siiftun1857
  */
 using System;
-using System.Text;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using RimWorld;
-//using Harmony;
-using HarmonyLib;
 using UnityEngine;
-using Verse.AI;
 using Verse;
 using Verse.Sound;
-using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
     /**
-     * <summary>为<see cref = "Explorite.CompPawnShield" />接收参数。</summary>
+     * <summary>为<see cref = "CompPawnShield" />接收参数。</summary>
      */
-    class CompProperties_PawnShield : CompProperties
+    public class CompProperties_PawnShield : CompProperties
     {
         public CompProperties_PawnShield()
         {
-            this.compClass = typeof(CompPawnShield);
+            compClass = typeof(CompPawnShield);
         }
     }
 
@@ -37,7 +30,6 @@ namespace Explorite
      * 护盾值需要由其他属性提供。若无，则护盾不可用。
      * </summary>
      */
-    [StaticConstructorOnStartup]
     public class CompPawnShield : ThingComp
     {
         Color currentColor = new Color(0.5f, 0.5f, 0.5f);
@@ -171,8 +163,10 @@ namespace Explorite
             }
             if (Find.Selector.SingleSelectedThing == parent)
             {
-                Gizmo_EnergyShieldStatusPawn gizmo_EnergyShieldStatus = new Gizmo_EnergyShieldStatusPawn();
-                gizmo_EnergyShieldStatus.shield = this;
+                Gizmo_EnergyShieldStatusPawn gizmo_EnergyShieldStatus = new Gizmo_EnergyShieldStatusPawn
+                {
+                    shield = this
+                };
                 yield return gizmo_EnergyShieldStatus;
             }
         }
@@ -299,7 +293,7 @@ namespace Explorite
                 }
                 float angle = Rand.Range(0, 360);
                 Vector3 s = new Vector3(num, 1f, num);
-                Matrix4x4 matrix = default(Matrix4x4);
+                Matrix4x4 matrix = default;
                 matrix.SetTRS(drawPos, Quaternion.AngleAxis(angle, Vector3.up), s);
                 Graphics.DrawMesh(MeshPool.plane10, matrix, BubbleMat, 0);
             }
@@ -310,7 +304,6 @@ namespace Explorite
      * 显示生物护盾的界面UI
      * </summary>
      */
-    [StaticConstructorOnStartup]
     public class Gizmo_EnergyShieldStatusPawn : Gizmo
     {
         public CompPawnShield shield;

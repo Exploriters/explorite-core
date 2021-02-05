@@ -5,13 +5,10 @@
  * --siiftun1857
  */
 using RimWorld;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
-using Verse.AI;
 using Verse.Sound;
-using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
@@ -579,7 +576,7 @@ namespace Explorite
     [System.Diagnostics.CodeAnalysis.SuppressMessage("", "IDE0044")]
     public abstract class Projectile_Explosive_RoofBypass : Projectile_Explosive
     {
-        private Sustainer ambientSustainer;
+        private Sustainer ambientSustainer = null;
 
         private static List<IntVec3> checkedCells = new List<IntVec3>();
 
@@ -595,45 +592,45 @@ namespace Explorite
         {
             base.ExposeData();
 
-            Scribe_Values.Look<int>(ref this.ticksToDetonation, "ticksToDetonation_MXRemaster", 0, false);
+            Scribe_Values.Look(ref ticksToDetonation, "ticksToDetonation_MXRemaster", 0, false);
         }
         public void BASETick()
         {
-            if (this.landed)
+            if (landed)
             {
                 return;
             }
-            Vector3 exactPosition = this.ExactPosition;
-            this.ticksToImpact--;
-            if (!this.ExactPosition.InBounds(Map))
+            Vector3 exactPosition = ExactPosition;
+            ticksToImpact--;
+            if (!ExactPosition.InBounds(Map))
             {
-                this.ticksToImpact++;
-                Position = this.ExactPosition.ToIntVec3();
-                this.Destroy(DestroyMode.Vanish);
+                ticksToImpact++;
+                Position = ExactPosition.ToIntVec3();
+                Destroy(DestroyMode.Vanish);
                 return;
             }
-            Vector3 exactPosition2 = this.ExactPosition;
-            if (this.CheckForFreeInterceptBetween(exactPosition, exactPosition2))
+            Vector3 exactPosition2 = ExactPosition;
+            if (CheckForFreeInterceptBetween(exactPosition, exactPosition2))
             {
                 return;
             }
-            Position = this.ExactPosition.ToIntVec3();
-            if (this.ticksToImpact == 60 && Find.TickManager.CurTimeSpeed == TimeSpeed.Normal && this.def.projectile.soundImpactAnticipate != null)
+            Position = ExactPosition.ToIntVec3();
+            if (ticksToImpact == 60 && Find.TickManager.CurTimeSpeed == TimeSpeed.Normal && def.projectile.soundImpactAnticipate != null)
             {
-                this.def.projectile.soundImpactAnticipate.PlayOneShot(this);
+                def.projectile.soundImpactAnticipate.PlayOneShot(this);
             }
-            if (this.ticksToImpact <= 0)
+            if (ticksToImpact <= 0)
             {
-                if (this.DestinationCell.InBounds(Map))
+                if (DestinationCell.InBounds(Map))
                 {
-                    Position = this.DestinationCell;
+                    Position = DestinationCell;
                 }
-                this.ImpactSomething();
+                ImpactSomething();
                 return;
             }
-            if (this.ambientSustainer != null)
+            if (ambientSustainer != null)
             {
-                this.ambientSustainer.Maintain();
+                ambientSustainer.Maintain();
             }
         }
 
@@ -651,9 +648,9 @@ namespace Explorite
             }
             if (intVec2.AdjacentToCardinal(intVec))
             {
-                return this.CheckForFreeIntercept(intVec2);
+                return CheckForFreeIntercept(intVec2);
             }
-            if (VerbUtility.InterceptChanceFactorFromDistance(this.origin, intVec2) <= 0f)
+            if (VerbUtility.InterceptChanceFactorFromDistance(origin, intVec2) <= 0f)
             {
                 return false;
             }
@@ -669,7 +666,7 @@ namespace Explorite
                 IntVec3 intVec3 = vector.ToIntVec3();
                 if (!checkedCells.Contains(intVec3))
                 {
-                    if (this.CheckForFreeIntercept(intVec3))
+                    if (CheckForFreeIntercept(intVec3))
                     {
                         break;
                     }
@@ -690,11 +687,11 @@ namespace Explorite
 
         private bool CheckForFreeIntercept(IntVec3 c)
         {
-            if (this.destination.ToIntVec3() == c)
+            if (destination.ToIntVec3() == c)
             {
                 return false;
             }
-            float num = VerbUtility.InterceptChanceFactorFromDistance(this.origin, c);
+            float num = VerbUtility.InterceptChanceFactorFromDistance(origin, c);
             if (num <= 0f)
             {
                 return false;
@@ -704,15 +701,15 @@ namespace Explorite
             for (int i = 0; i < thingList.Count; i++)
             {
                 Thing thing = thingList[i];
-                if (this.CanHit(thing))
+                if (CanHit(thing))
                 {
                     bool flag2 = false;
                     if (thing.def.Fillage == FillCategory.Full)
                     {
                         if (!(thing is Building_Door building_Door) || !building_Door.Open)
                         {
-                            this.ThrowDebugText("int-wall", c);
-                            this.Impact(thing);
+                            ThrowDebugText("int-wall", c);
+                            Impact(thing);
                             return true;
                         }
                         flag2 = true;
@@ -725,7 +722,7 @@ namespace Explorite
                         {
                             num2 *= 0.1f;
                         }
-                        if (this.launcher != null && pawn.Faction != null && this.launcher.Faction != null && !pawn.Faction.HostileTo(this.launcher.Faction))
+                        if (launcher != null && pawn.Faction != null && launcher.Faction != null && !pawn.Faction.HostileTo(launcher.Faction))
                         {
                             num2 *= 0.4f;
                         }
@@ -736,7 +733,7 @@ namespace Explorite
                         {
                             num2 = 0.05f;
                         }
-                        else if (this.DestinationCell.AdjacentTo8Way(c))
+                        else if (DestinationCell.AdjacentTo8Way(c))
                         {
                             num2 = thing.def.fillPercent * 1f;
                         }
@@ -750,18 +747,18 @@ namespace Explorite
                     {
                         if (Rand.Chance(num2))
                         {
-                            this.ThrowDebugText("int-" + num2.ToStringPercent(), c);
-                            this.Impact(thing);
+                            ThrowDebugText("int-" + num2.ToStringPercent(), c);
+                            Impact(thing);
                             return true;
                         }
                         flag = true;
-                        this.ThrowDebugText(num2.ToStringPercent(), c);
+                        ThrowDebugText(num2.ToStringPercent(), c);
                     }
                 }
             }
             if (!flag)
             {
-                this.ThrowDebugText("o", c);
+                ThrowDebugText("o", c);
             }
             return false;
         }
@@ -775,7 +772,7 @@ namespace Explorite
         }
         private void ImpactSomething()
         {
-            if (this.def.projectile.flyOverhead)
+            if (def.projectile.flyOverhead)
             {
                 RoofDef roofDef = Map.roofGrid.RoofAt(Position);
                 if (roofDef != null)
@@ -793,19 +790,19 @@ namespace Explorite
                     }
                 }
             }
-            if (!this.usedTarget.HasThing || !this.CanHit(this.usedTarget.Thing))
+            if (!usedTarget.HasThing || !CanHit(usedTarget.Thing))
             {
                 cellThingsFiltered.Clear();
                 List<Thing> thingList = Position.GetThingList(Map);
                 for (int i = 0; i < thingList.Count; i++)
                 {
                     Thing thing = thingList[i];
-                    if ((thing.def.category == ThingCategory.Building || thing.def.category == ThingCategory.Pawn || thing.def.category == ThingCategory.Item || thing.def.category == ThingCategory.Plant) && this.CanHit(thing))
+                    if ((thing.def.category == ThingCategory.Building || thing.def.category == ThingCategory.Pawn || thing.def.category == ThingCategory.Item || thing.def.category == ThingCategory.Plant) && CanHit(thing))
                     {
                         cellThingsFiltered.Add(thing);
                     }
                 }
-                cellThingsFiltered.Shuffle<Thing>();
+                cellThingsFiltered.Shuffle();
                 for (int j = 0; j < cellThingsFiltered.Count; j++)
                 {
                     Thing thing2 = cellThingsFiltered[j];
@@ -813,13 +810,13 @@ namespace Explorite
                     if (thing2 is Pawn pawn)
                     {
                         num = 0.5f * Mathf.Clamp(pawn.BodySize, 0.1f, 2f);
-                        if (pawn.GetPosture() != PawnPosture.Standing && (this.origin - this.destination).MagnitudeHorizontalSquared() >= 20.25f)
+                        if (pawn.GetPosture() != PawnPosture.Standing && (origin - destination).MagnitudeHorizontalSquared() >= 20.25f)
                         {
                             num *= 0.2f;
                         }
-                        if (this.launcher != null && pawn.Faction != null && this.launcher.Faction != null && !pawn.Faction.HostileTo(this.launcher.Faction))
+                        if (launcher != null && pawn.Faction != null && launcher.Faction != null && !pawn.Faction.HostileTo(launcher.Faction))
                         {
-                            num *= VerbUtility.InterceptChanceFactorFromDistance(this.origin, Position);
+                            num *= VerbUtility.InterceptChanceFactorFromDistance(origin, Position);
                         }
                     }
                     else
@@ -828,22 +825,22 @@ namespace Explorite
                     }
                     if (Rand.Chance(num))
                     {
-                        this.ThrowDebugText("hit-" + num.ToStringPercent(), Position);
-                        this.Impact(cellThingsFiltered.RandomElement<Thing>());
+                        ThrowDebugText("hit-" + num.ToStringPercent(), Position);
+                        Impact(cellThingsFiltered.RandomElement());
                         return;
                     }
-                    this.ThrowDebugText("miss-" + num.ToStringPercent(), Position);
+                    ThrowDebugText("miss-" + num.ToStringPercent(), Position);
                 }
-                this.Impact(null);
+                Impact(null);
                 return;
             }
-            if (this.usedTarget.Thing is Pawn pawn2 && pawn2.GetPosture() != PawnPosture.Standing && (this.origin - this.destination).MagnitudeHorizontalSquared() >= 20.25f && !Rand.Chance(0.2f))
+            if (usedTarget.Thing is Pawn pawn2 && pawn2.GetPosture() != PawnPosture.Standing && (origin - destination).MagnitudeHorizontalSquared() >= 20.25f && !Rand.Chance(0.2f))
             {
-                this.ThrowDebugText("miss-laying", Position);
-                this.Impact(null);
+                ThrowDebugText("miss-laying", Position);
+                Impact(null);
                 return;
             }
-            this.Impact(this.usedTarget.Thing);
+            Impact(usedTarget.Thing);
         }
 
         /*protected virtual void Impact(Thing hitThing)
@@ -854,14 +851,14 @@ namespace Explorite
 
         protected override void Impact(Thing hitThing)
         {
-            if (this.def.projectile.explosionDelay == 0)
+            if (def.projectile.explosionDelay == 0)
             {
-                this.Explode();
+                Explode();
                 return;
             }
-            this.landed = true;
-            this.ticksToDetonation = this.def.projectile.explosionDelay;
-            GenExplosion.NotifyNearbyPawnsOfDangerousExplosive(this, this.def.projectile.damageDef, this.launcher.Faction);
+            landed = true;
+            ticksToDetonation = def.projectile.explosionDelay;
+            GenExplosion.NotifyNearbyPawnsOfDangerousExplosive(this, def.projectile.damageDef, launcher.Faction);
         }
 
         public override void Tick()
@@ -877,12 +874,12 @@ namespace Explorite
                 }
             }
             BASETick();
-            if (this.ticksToDetonation > 0)
+            if (ticksToDetonation > 0)
             {
-                this.ticksToDetonation--;
-                if (this.ticksToDetonation <= 0)
+                ticksToDetonation--;
+                if (ticksToDetonation <= 0)
                 {
-                    this.Explode();
+                    Explode();
                 }
             }
         }

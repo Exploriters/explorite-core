@@ -3,7 +3,6 @@
  * 
  * --siiftun1857
  */
-using System;
 using Verse;
 using RimWorld;
 
@@ -30,11 +29,11 @@ namespace Explorite
         {
             get
             {
-                if (this.authorNameInt.NullOrEmpty())
+                if (authorNameInt.NullOrEmpty())
                 {
                     return "UnknownLower".Translate().CapitalizeFirst();
                 }
-                return this.authorNameInt;
+                return authorNameInt;
             }
         }
 
@@ -42,12 +41,12 @@ namespace Explorite
         {
             get
             {
-                if (this.titleInt.NullOrEmpty())
+                if (titleInt.NullOrEmpty())
                 {
                     Log.Error("CompArt got title but it wasn't configured.", false);
-                    this.titleInt = "Error";
+                    titleInt = "Error";
                 }
-                return this.titleInt;
+                return titleInt;
             }
         }
 
@@ -55,7 +54,7 @@ namespace Explorite
         {
             get
             {
-                return this.taleRef;
+                return taleRef;
             }
         }
 
@@ -63,9 +62,9 @@ namespace Explorite
         {
             get
             {
-                if (this.Props.mustBeFullGrave)
+                if (Props.mustBeFullGrave)
                 {
-                    if (!(this.parent is Building_Grave building_Grave) || !building_Grave.HasCorpse)
+                    if (!(parent is Building_Grave building_Grave) || !building_Grave.HasCorpse)
                     {
                         return false;
                     }
@@ -78,7 +77,7 @@ namespace Explorite
         {
             get
             {
-                return this.taleRef != null;
+                return taleRef != null;
             }
         }
 
@@ -86,87 +85,87 @@ namespace Explorite
         {
             get
             {
-                return (CompProperties_Art)this.props;
+                return (CompProperties_Art)props;
             }
         }
 
         public void InitializeArt(ArtGenerationContext source)
         {
-            this.InitializeArt(null, source);
+            InitializeArt(null, source);
         }
 
         public void InitializeArt(Thing relatedThing)
         {
-            this.InitializeArt(relatedThing, ArtGenerationContext.Colony);
+            InitializeArt(relatedThing, ArtGenerationContext.Colony);
         }
 
         private void InitializeArt(Thing relatedThing, ArtGenerationContext source)
         {
-            if (this.taleRef != null)
+            if (taleRef != null)
             {
-                this.taleRef.ReferenceDestroyed();
-                this.taleRef = null;
+                taleRef.ReferenceDestroyed();
+                taleRef = null;
             }
-            if (this.CanShowArt)
+            if (CanShowArt)
             {
                 if (Current.ProgramState == ProgramState.Playing)
                 {
                     if (relatedThing != null)
                     {
-                        this.taleRef = Find.TaleManager.GetRandomTaleReferenceForArtConcerning(relatedThing);
+                        taleRef = Find.TaleManager.GetRandomTaleReferenceForArtConcerning(relatedThing);
                     }
                     else
                     {
-                        this.taleRef = Find.TaleManager.GetRandomTaleReferenceForArt(source);
+                        taleRef = Find.TaleManager.GetRandomTaleReferenceForArt(source);
                     }
                 }
                 else
                 {
-                    this.taleRef = TaleReference.Taleless;
+                    taleRef = TaleReference.Taleless;
                 }
-                this.titleInt = this.GenerateTitle();
+                titleInt = GenerateTitle();
             }
             else
             {
-                this.titleInt = null;
-                this.taleRef = null;
+                titleInt = null;
+                taleRef = null;
             }
         }
 
         public void JustCreatedBy(Pawn pawn)
         {
-            if (this.CanShowArt)
+            if (CanShowArt)
             {
-                this.authorNameInt = pawn.Name.ToStringFull;
+                authorNameInt = pawn.Name.ToStringFull;
             }
         }
 
         public void Clear()
         {
-            this.authorNameInt = null;
-            this.titleInt = null;
-            if (this.taleRef != null)
+            authorNameInt = null;
+            titleInt = null;
+            if (taleRef != null)
             {
-                this.taleRef.ReferenceDestroyed();
-                this.taleRef = null;
+                taleRef.ReferenceDestroyed();
+                taleRef = null;
             }
         }
 
         public override void PostExposeData()
         {
             base.PostExposeData();
-            Scribe_Values.Look<string>(ref this.authorNameInt, "authorName", null, false);
-            Scribe_Values.Look<string>(ref this.titleInt, "title", null, false);
-            Scribe_Deep.Look<TaleReference>(ref this.taleRef, "taleRef", new object[0]);
+            Scribe_Values.Look(ref authorNameInt, "authorName", null, false);
+            Scribe_Values.Look(ref titleInt, "title", null, false);
+            Scribe_Deep.Look(ref taleRef, "taleRef", new object[0]);
         }
 
         public override string CompInspectStringExtra()
         {
-            if (!this.Active)
+            if (!Active)
             {
                 return null;
             }
-            string text = "Author".Translate() + ": " + this.AuthorName;
+            string text = "Author".Translate() + ": " + AuthorName;
             string text2 = text;
             return string.Concat(new string[]
             {
@@ -174,57 +173,57 @@ namespace Explorite
                 "\n",
                 "Title".Translate(),
                 ": ",
-                this.Title
+                Title
             });
         }
 
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
             base.PostDestroy(mode, previousMap);
-            if (this.taleRef != null)
+            if (taleRef != null)
             {
-                this.taleRef.ReferenceDestroyed();
-                this.taleRef = null;
+                taleRef.ReferenceDestroyed();
+                taleRef = null;
             }
         }
 
         public override string GetDescriptionPart()
         {
-            if (!this.Active)
+            if (!Active)
             {
                 return null;
             }
             string str = string.Empty;
-            str += this.Title;
+            str += Title;
             str += "\n\n";
-            str += this.GenerateImageDescription();
+            str += GenerateImageDescription();
             str += "\n\n";
-            return str + "Author".Translate() + ": " + this.AuthorName;
+            return str + "Author".Translate() + ": " + AuthorName;
         }
 
         public override bool AllowStackWith(Thing other)
         {
-            return !this.Active;
+            return !Active;
         }
 
         public string GenerateImageDescription()
         {
-            if (this.taleRef == null)
+            if (taleRef == null)
             {
-                Log.Error("Did CompArt.GenerateImageDescription without initializing art: " + this.parent, false);
-                this.InitializeArt(ArtGenerationContext.Outsider);
+                Log.Error("Did CompArt.GenerateImageDescription without initializing art: " + parent, false);
+                InitializeArt(ArtGenerationContext.Outsider);
             }
-            return this.taleRef.GenerateText(TextGenerationPurpose.ArtDescription, this.Props.descriptionMaker);
+            return taleRef.GenerateText(TextGenerationPurpose.ArtDescription, Props.descriptionMaker);
         }
 
         private string GenerateTitle()
         {
-            if (this.taleRef == null)
+            if (taleRef == null)
             {
-                Log.Error("Did CompArt.GenerateTitle without initializing art: " + this.parent, false);
-                this.InitializeArt(ArtGenerationContext.Outsider);
+                Log.Error("Did CompArt.GenerateTitle without initializing art: " + parent, false);
+                InitializeArt(ArtGenerationContext.Outsider);
             }
-            return GenText.CapitalizeAsTitle(this.taleRef.GenerateText(TextGenerationPurpose.ArtName, this.Props.nameMaker));
+            return GenText.CapitalizeAsTitle(taleRef.GenerateText(TextGenerationPurpose.ArtName, Props.nameMaker));
         }
     }
 }

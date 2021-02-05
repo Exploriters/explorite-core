@@ -12,14 +12,16 @@ namespace Explorite
     {
         public override void OnIntervalPassed(Pawn pawn, Hediff cause)
         {
-            TryApply(pawn);
+            if(!pawn.health.hediffSet.HasHediff(hediff))
+                TryApply(pawn);
         }
     }
+
     ///<summary>按照几率来持续确保健康状态存在。</summary>
     public class HediffGiver_Overtime : HediffGiver
     {
         public float chancePerTick = 1;
-        public virtual float attemptSuccessChance(float Severity)
+        public virtual float AttemptSuccessChance(float Severity)
         {
             return chancePerTick;
         }
@@ -50,7 +52,7 @@ namespace Explorite
             Random rnd = new Random();
             for (int k = 0; k < doCount; k++)
             {
-                if (rnd.Next(0, 9999) / 10000f < attemptSuccessChance(cause.Severity))
+                if (rnd.Next(0, 9999) / 10000f < AttemptSuccessChance(cause.Severity))
                 {
                     if (doTryApply)
                         TryApply(pawn);
@@ -62,7 +64,7 @@ namespace Explorite
     ///<summary>按照受严重性影响的几率来持续确保健康状态存在。</summary>
     public class HediffGiver_FactorBySeverity : HediffGiver_Overtime
     {
-        public override float attemptSuccessChance(float Severity)
+        public override float AttemptSuccessChance(float Severity)
         {
             return chancePerTick * Severity;
         }

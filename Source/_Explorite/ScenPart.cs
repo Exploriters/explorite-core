@@ -2,19 +2,9 @@
  * 该文件包含多个剧本部件。
  * --siiftun1857
  */
-using System;
-using System.Text;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using RimWorld;
-using HarmonyLib;
-using UnityEngine;
-using Verse.AI;
 using Verse;
-using Verse.Sound;
-using static Explorite.ExploriteCore;
-using RimworldMod.VacuumIsNotFun;
 
 namespace Explorite
 {
@@ -43,16 +33,16 @@ namespace Explorite
     public class ScenPart_FillBattery : ScenPart
     {
         //ModContentPack.PatchOperationFindMod
-        public static string Summary(Scenario scen)
+        public override string Summary(Scenario scen)
         {
             return "Magnuassembly_ScenPart_FillBattery_StaticSummary".Translate();
         }
-        private static void ProcessBattery(ref Thing battery)
+        private static void ProcessBattery(Thing battery)
         {
             //if (battery.def == DefDatabase<ThingDef>.GetNamed("TriBattery"))
             try
             {
-                ((ThingWithComps)battery)?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
+                battery?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
             }
             catch
             { }
@@ -73,7 +63,7 @@ namespace Explorite
                     Thing thingInside = ((MinifiedThing)thing).InnerThing;
                     if (thingInside.TryGetComp<CompPowerBattery>() != null)
                     {
-                        thingInside?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
+                        ProcessBattery(thingInside);
                     }
                 }
                 if (thing.def == ThingDefOf.DropPodIncoming)
@@ -82,14 +72,14 @@ namespace Explorite
                     {
                         if (thing3.TryGetComp<CompPowerBattery>() != null)
                         {
-                            thing3?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
+                            ProcessBattery(thing3);
                         }
                         if (thing3.def == ThingDefOf.MinifiedThing)
                         {
                             Thing thingInside = ((MinifiedThing)thing3).InnerThing;
                             if (thingInside.TryGetComp<CompPowerBattery>() != null)
                             {
-                                thingInside?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
+                                ProcessBattery(thingInside);
                             }
                         }
                     }
@@ -106,7 +96,7 @@ namespace Explorite
     ///<summary>阻止空投舱产生钢渣块。</summary>
     public class ScenPart_WipeoutChunkSlag : ScenPart
     {
-        public static string Summary(Scenario scen) => null;
+        public override string Summary(Scenario scen) => null;
         public override void PostGameStart()
         {
             base.PostGameStart();
@@ -124,7 +114,7 @@ namespace Explorite
     ///<summary>解开空投舱内的打包物品，并且会被直接部署为建筑物。</summary>
     public class ScenPart_UnpackMinified : ScenPart
     {
-        public static string Summary(Scenario scen) => null;
+        public override string Summary(Scenario scen) => null;
         public override void PostGameStart()
         {
             base.PostGameStart();
@@ -150,7 +140,7 @@ namespace Explorite
     ///<summary>填满开局的所有空投舱内三联电池。</summary>
     public class ScenPart_AddFilledTribatteryInPod : ScenPart
     {
-        public static string Summary(Scenario scen) => null;
+        public override string Summary(Scenario scen) => null;
         public override void PostGameStart()
         {
             base.PostGameStart();
@@ -203,7 +193,7 @@ namespace Explorite
                 this.thingOwner = thingOwner;
             }
         }
-        public static string Summary(Scenario scen) => null;
+        public override string Summary(Scenario scen) => null;
         public override void PostGameStart()
         {
             base.PostGameStart();

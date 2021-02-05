@@ -2,13 +2,9 @@
  * 使心灵敏感度属性受到心灵失聪hediff影响。
  * --siiftun1857
  */
-using UnityEngine;
 using Verse;
 using RimWorld;
 using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
@@ -29,10 +25,10 @@ namespace Explorite
                     return true;
                 }
             }
-            catch(NullReferenceException e)
+            catch(NullReferenceException)
             {
             }
-            catch(InvalidCastException e)
+            catch(InvalidCastException)
             {
             }
             catch

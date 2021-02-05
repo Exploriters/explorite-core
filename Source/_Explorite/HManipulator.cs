@@ -3,7 +3,6 @@
  * --siiftun1857
  */
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -114,7 +113,7 @@ namespace Explorite
                 //usedBy.health.AddHediff(hediff, null, null);
                 hediff.Severity = 0.001f;
 
-                this.parent.Destroy();
+                parent.Destroy();
             }
         }
     }
@@ -134,14 +133,14 @@ namespace Explorite
     // TO_NOMORE_DO: Force avaiable Solved
     /**
      * <summary>
-     * 继承自<see cref = "RimWorld.CompUsable" />，但即使人物完全丧失操作能力也可用。
+     * 继承自<see cref = "CompUsable" />，但即使人物完全丧失操作能力也可用。
      * </summary>
      */
     public class CompUsable_IgnoreManipulation : CompUsable
     {
 		private bool CanBeUsedBy(Pawn p, out string failReason)
 		{
-			List<ThingComp> allComps = this.parent.AllComps;
+			List<ThingComp> allComps = parent.AllComps;
 			for (int i = 0; i < allComps.Count; i++)
 			{
                 if (allComps[i] is CompUseEffect compUseEffect && !compUseEffect.CanBeUsedBy(p, out failReason))
@@ -154,18 +153,17 @@ namespace Explorite
 		}
         public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn myPawn)
         {
-            string failReason;;
-            if (!this.CanBeUsedBy(myPawn, out failReason))
+            if (!CanBeUsedBy(myPawn, out string failReason))
             {
-                yield return new FloatMenuOption(this.FloatMenuOptionLabel(myPawn) + ((failReason == null) ? string.Empty : (" (" + failReason + ")")), null, MenuOptionPriority.Default, null, null, 0f, null, null);
+                yield return new FloatMenuOption(FloatMenuOptionLabel(myPawn) + ((failReason == null) ? string.Empty : (" (" + failReason + ")")), null, MenuOptionPriority.Default, null, null, 0f, null, null);
             }
-            else if (!myPawn.CanReach(this.parent, PathEndMode.Touch, Danger.Deadly, false, TraverseMode.ByPawn))
+            else if (!myPawn.CanReach(parent, PathEndMode.Touch, Danger.Deadly, false, TraverseMode.ByPawn))
             {
-                yield return new FloatMenuOption(this.FloatMenuOptionLabel(myPawn) + $" ({"NoPath".Translate()})", null, MenuOptionPriority.Default, null, null, 0f, null, null);
+                yield return new FloatMenuOption(FloatMenuOptionLabel(myPawn) + $" ({"NoPath".Translate()})", null, MenuOptionPriority.Default, null, null, 0f, null, null);
             }
-            else if (!myPawn.CanReserve(this.parent, 1, -1, null, false))
+            else if (!myPawn.CanReserve(parent, 1, -1, null, false))
             {
-                yield return new FloatMenuOption(this.FloatMenuOptionLabel(myPawn) + $" ({"Reserved".Translate()})", null, MenuOptionPriority.Default, null, null, 0f, null, null);
+                yield return new FloatMenuOption(FloatMenuOptionLabel(myPawn) + $" ({"Reserved".Translate()})", null, MenuOptionPriority.Default, null, null, 0f, null, null);
             }
             /*else if (!myPawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
             {
@@ -173,18 +171,18 @@ namespace Explorite
             }*/
             else
             {
-                FloatMenuOption useopt = new FloatMenuOption(this.FloatMenuOptionLabel(myPawn), delegate ()
+                FloatMenuOption useopt = new FloatMenuOption(FloatMenuOptionLabel(myPawn), delegate ()
                 {
-                    if (myPawn.CanReserveAndReach(this.parent, PathEndMode.Touch, Danger.Deadly, 1, -1, null, false))
+                    if (myPawn.CanReserveAndReach(parent, PathEndMode.Touch, Danger.Deadly, 1, -1, null, false))
                     {
-                        foreach (CompUseEffect compUseEffect in this.parent.GetComps<CompUseEffect>())
+                        foreach (CompUseEffect compUseEffect in parent.GetComps<CompUseEffect>())
                         {
                             if (compUseEffect.SelectedUseOption(myPawn))
                             {
                                 return;
                             }
                         }
-                        this.TryStartUseJob(myPawn, null);
+                        TryStartUseJob(myPawn, null);
                     }
                 }, MenuOptionPriority.Default, null, null, 0f, null, null);
                 yield return useopt;
@@ -206,8 +204,8 @@ namespace Explorite
     }
     /**
      * <summary>
-     * 继承自<see cref = "Verse.AI.JobDriver" />，但即使人物完全丧失操作能力也可用。<br />
-     * 由于实现冲突，该类不继承自<see cref = "RimWorld.JobDriver_UseItem" />。
+     * 继承自<see cref = "JobDriver" />，但即使人物完全丧失操作能力也可用。<br />
+     * 由于实现冲突，该类不继承自<see cref = "JobDriver_UseItem" />。
      * </summary>
      */
     public class JobDriver_UseItem_IgnoreManipulation : JobDriver//_UseItem
@@ -216,13 +214,13 @@ namespace Explorite
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look<int>(ref this.useDuration, "useDuration", 0, false);
+            Scribe_Values.Look(ref useDuration, "useDuration", 0, false);
         }
 
         public override void Notify_Starting()
         {
             base.Notify_Starting();
-            this.useDuration = this.job.GetTarget(TargetIndex.A).Thing.TryGetComp<CompUsable>().Props.useDuration;
+            useDuration = job.GetTarget(TargetIndex.A).Thing.TryGetComp<CompUsable>().Props.useDuration;
         }
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
@@ -236,7 +234,7 @@ namespace Explorite
         {
             //this.FailOnIncapable(PawnCapacityDefOf.Manipulation);
             yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch);
-            Toil prepare = Toils_General.Wait(this.useDuration, TargetIndex.None);
+            Toil prepare = Toils_General.Wait(useDuration, TargetIndex.None);
             prepare.WithProgressBarToilDelay(TargetIndex.A, false, -0.5f);
             prepare.FailOnDespawnedNullOrForbidden(TargetIndex.A);
             prepare.FailOnCannotTouch(TargetIndex.A, PathEndMode.Touch);

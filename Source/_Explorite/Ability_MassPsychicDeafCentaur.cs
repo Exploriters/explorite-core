@@ -4,13 +4,8 @@
  * 未被使用的特性。
  * --siiftun1857
  */
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using UnityEngine;
 using Verse;
-using Verse.Sound;
 using RimWorld;
 using static Explorite.ExploriteCore;
 
@@ -75,7 +70,7 @@ namespace Explorite
      */
     public class Command_AbilityMassPsychicDeafCentaur : Command_Ability
     {
-        bool disabledToDeaf = false;
+        //bool disabledToDeaf = false;
         public Command_AbilityMassPsychicDeafCentaur(Ability ability) : base(ability)
         {
         }

@@ -3,17 +3,11 @@
  * --siiftun1857
  */
 using System;
-using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using RimWorld;
-using HarmonyLib;
-using UnityEngine;
-using Verse.AI;
 using Verse;
-using Verse.Sound;
-using static Explorite.ExploriteCore;
 using SaveOurShip2;
 using RimworldMod.VacuumIsNotFun;
 
@@ -51,9 +45,9 @@ namespace Explorite
             Current.ProgramState = ProgramState.MapInitializing;
             SoS2Reflection.GenerateShip(DefDatabase<EnemyShipDef>.GetNamed("CentaursScenarioRetroCruise"), spaceMap, null, Faction.OfPlayer, null, out _);
             Current.ProgramState = ProgramState.Playing;
-            IntVec2 secs = (IntVec2)typeof(MapDrawer).GetProperty("SectionCount", System.Reflection.BindingFlags.NonPublic | BindingFlags.Instance).GetValue(spaceMap.mapDrawer);
+            IntVec2 secs = (IntVec2)typeof(MapDrawer).GetProperty("SectionCount", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(spaceMap.mapDrawer);
             Section[,] secArray = new Section[secs.x, secs.z];
-            typeof(MapDrawer).GetField("sections", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(spaceMap.mapDrawer, secArray);
+            typeof(MapDrawer).GetField("sections", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(spaceMap.mapDrawer, secArray);
             for (int i = 0; i < secs.x; i++)
             {
                 for (int j = 0; j < secs.z; j++)
@@ -80,8 +74,10 @@ namespace Explorite
             List<List<Thing>> list = new List<List<Thing>>();
             foreach (Pawn startingAndOptionalPawn in Find.GameInitData.startingAndOptionalPawns)
             {
-                List<Thing> list2 = new List<Thing>();
-                list2.Add(startingAndOptionalPawn);
+                List<Thing> list2 = new List<Thing>
+                {
+                    startingAndOptionalPawn
+                };
                 list.Add(list2);
             }
             List<Thing> list3 = new List<Thing>();

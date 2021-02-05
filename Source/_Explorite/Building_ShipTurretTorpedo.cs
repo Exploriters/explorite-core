@@ -22,16 +22,16 @@ namespace Explorite
      * <summary>半人马巡洋舰使用的鱼雷脊峰炮台建筑物类，负责绘制舱盖图层和开火效果。</summary>
      */
     [StaticConstructorOnStartup]
-    class Building_ShipTurretTorpedoSpinal : Building_ShipTurret
+    public class Building_ShipTurretTorpedoSpinal : Building_ShipTurret
     {
         public static Graphic torpedoBayDoor = GraphicDatabase.Get(typeof(Graphic_Single), "Things/Building/Ship/SpinalMountBarrel_Missile_Door", ShaderDatabase.Cutout, new Vector2(6, 7), Color.white, Color.white);
         public static Mesh doorOne = MeshMakerPlanes.NewPlaneMesh(new Vector2(5, 7.35f), false, false, false);
         public static Mesh doorTwo = MeshMakerPlanes.NewPlaneMesh(new Vector2(5, 7.35f), true, false, false);
-        float ticksSinceOpen = 0;
-        float TicksToOpenNow = 60;
+        public float ticksSinceOpen = 0;
+        public float TicksToOpenNow = 60;
 
         int timesFired = 0;
-        static Vector3[] TubePos = { new Vector3(-1, 0, -1.5f), new Vector3(1, 0, -1.5f), new Vector3(-1, 0, 0), new Vector3(1, 0, 0), new Vector3(-1, 0, 1.5f), new Vector3(1, 0, 1.5f) };
+        static readonly Vector3[] TubePos = { new Vector3(-1, 0, -1.5f), new Vector3(1, 0, -1.5f), new Vector3(-1, 0, 0), new Vector3(1, 0, 0), new Vector3(-1, 0, 1.5f), new Vector3(1, 0, 1.5f) };
 
         public static Dictionary<Map, List<Building_ShipTurretTorpedoSpinal>> allTubesOnMap = new Dictionary<Map, List<Building_ShipTurretTorpedoSpinal>>();
 
@@ -49,7 +49,7 @@ namespace Explorite
             float d = 0f + 0f * num;
             for (int i = 0; i < 2; i++)
             {
-                Vector3 vector = default(Vector3);
+                Vector3 vector;
                 Mesh mesh;
                 if (i == 0)
                 {

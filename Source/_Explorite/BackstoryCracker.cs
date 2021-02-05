@@ -241,11 +241,13 @@ namespace Explorite
             return $"identifier:{Bs.identifier}, title:{Bs.titleShort}/{Bs.title}, Desc:\"{Bs.baseDesc.Replace("\n", "\\n")}\".\n";
             //return $"identifier:{Bs.identifier}, title:{Bs.titleShort}/{Bs.title}, title:{Bs.spawnCategories}, Desc:\"{Bs.baseDesc.Replace("\n","\\n")}\".\n";
         }
+
+
         ///<summary>对每个背景故事的每个tag逐个复制带有前缀的复制。</summary>
         public static void AddExtraPrefixViaTag()
         {
             uint solvedBackstoryCount = 0;
-            uint solvedTagCount = 0;
+            //uint solvedTagCount = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             Log.Message("[Magnuassembly]Backstory cracker triggered for \"" + targetTag + "\" in \"" + backstorySlot + "\" by \"" + appTagPrefix + "\".");

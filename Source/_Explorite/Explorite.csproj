@@ -23,23 +23,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>8.0</LangVersion>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\1.2\Assemblies\</OutputPath>
+    <OutputPath>..\..\Assemblies\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>0</WarningLevel>
+    <WarningLevel>4</WarningLevel>
     <LangVersion>8.0</LangVersion>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -58,51 +50,43 @@
       <HintPath>..\..\..\..\..\..\workshop\content\294100\1909914131\Assemblies\ShipsHaveInsides.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Core">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Xml.Linq">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Data">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Xml">
-      <Private>False</Private>
-    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\..\RimWorldWin_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\..\..\..\RimWorldWin_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>..\..\..\..\RimWorldWin_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>..\..\..\..\RimWorldWin_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ability_MassPsychicDeafCentaur.cs" />
+    <Compile Include="AdditionalAbility.cs" />
     <Compile Include="AdditionalVerbRemaster.cs" />
-    <Compile Include="BackstoryCracker.cs" />
     <Compile Include="AlienRace.cs" />
-    <Compile Include="Building_ShipTurretTorpedo.cs" />
+    <Compile Include="BackstoryCracker.cs" />
     <Compile Include="Building_TriBattery.cs" />
     <Compile Include="ColorGenerator.cs" />
+    <Compile Include="CompAbilityEffect_GiveHediff_ParasiticStab.cs" />
     <Compile Include="CompAbilityEffect_GiveHediff_WholeMap.cs" />
     <Compile Include="CompAbilityEffect_TogglePsySensitivity.cs" />
+    <Compile Include="CompArt_Qualityless.cs" />
     <Compile Include="CompHealWearedOvertime.cs" />
     <Compile Include="CompHMTrishotUser.cs" />
     <Compile Include="CompOversizedWeapon.cs" />
@@ -110,43 +94,45 @@
     <Compile Include="CompPawnRepairApparelsOvertime.cs" />
     <Compile Include="CompPawnShield.cs" />
     <Compile Include="CompProperties_Healer.cs" />
-    <Compile Include="CompSelfHealOvertime.cs" />
     <Compile Include="CompRefuelable_PassiveRecharge.cs" />
+    <Compile Include="CompSelfHealOvertime.cs" />
     <Compile Include="CompSelfHealOvertime_1.cs" />
     <Compile Include="CompSelfHealOvertime_2.cs" />
     <Compile Include="CompSnowExpand_Overtick.cs" />
     <Compile Include="CompUnbreakableViaDamage.cs" />
     <Compile Include="CompUseEffect_HediffApply.cs" />
     <Compile Include="DamageWorker_Frostbite_LauncherSafe.cs" />
+    <Compile Include="ExploriteCore.cs" />
+    <Compile Include="ExploriteInitializer.cs" />
+    <Compile Include="ExploriteMod.cs" />
+    <Compile Include="FoodPoisonImmuneForSayers.cs" />
     <Compile Include="HediffCompProperties_SeverityFromEntropy_CentarusOnly.cs" />
-    <Compile Include="IncidentWorkerPatches.cs" />
-    <Compile Include="PawnShieldGenerator.cs" />
     <Compile Include="HediffComp_AgeStop.cs" />
     <Compile Include="HediffComp_FactorBySeverity.cs" />
     <Compile Include="HediffGiver.cs" />
     <Compile Include="HManipulator.cs" />
+    <Compile Include="IncidentWorkerPatches.cs" />
     <Compile Include="PatchCentaurRecipe.cs" />
     <Compile Include="PawnGeneratorPatch.cs" />
+    <Compile Include="PawnShieldGenerator.cs" />
     <Compile Include="Projectile.cs" />
     <Compile Include="Projectile_Explosive_RoofBypass.cs" />
     <Compile Include="PsychicEntropyTrackerPatch.cs" />
-    <Compile Include="ExploriteCore.cs" />
-    <Compile Include="CompArt_Qualityless.cs" />
+    <Compile Include="ResearchProjectDef.cs" />
     <Compile Include="ScenPart.cs" />
     <Compile Include="ScenPart_StartInSpaceCentaur.cs" />
     <Compile Include="SkillRecordPatch.cs" />
     <Compile Include="SomeThingBlank.cs" />
     <Compile Include="Sos2Patch.cs" />
-    <Compile Include="SoS2Tester.cs" />
+    <Compile Include="SoS2Reflection.cs" />
     <Compile Include="StatPart_ApparelStatOffset_PsychicDeafIncluded.cs" />
     <Compile Include="ThoughtWorker_AlwaysActive_Centaur.cs" />
     <Compile Include="Verb_DoNothing.cs" />
     <Compile Include="Verb_SensitivityToggle.cs" />
-    <Compile Include="AdditionalAbility.cs" />
-    <Compile Include="CompAbilityEffect_GiveHediff_ParasiticStab.cs" />
-    <Compile Include="FoodPoisonImmuneForSayers.cs" />
-    <Compile Include="Initializer.cs" />
     <Compile Include="_AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,31 +1,31 @@
-﻿/*****************************************
- * Code from 
+﻿/**
+ * 尺寸超出常规大小的武器。
+ * 
+ * 代码参考自
  *      https://github.com/RimWorld-CCL-Reborn/JecsTools
  *      https://github.com/RimWorld-CCL-Reborn/JecsTools/tree/master/Source/AllModdingComponents/CompOversizedWeapon
  * 
- * remaster by siiftun1857
+ * 由siiftun1857重制
  */
-using System;
-using System.Text;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using RimWorld;
-//using Harmony;
 using HarmonyLib;
 using UnityEngine;
-using Verse.AI;
 using Verse;
-using Verse.Sound;
 using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
+    /**
+     * <summary>为<see cref = "CompOversizedWeapon" />接收参数。</summary>
+     */
     public class CompProperties_OversizedWeapon : CompProperties
     {
         public CompProperties_OversizedWeapon() : base( typeof(CompOversizedWeapon) )
         { }
     }
+    /**
+     * <summary>使武器尺寸与其物品渲染设置一致。</summary>
+     */
     public class CompOversizedWeapon : ThingComp
     {
         public CompProperties_OversizedWeapon Props => props as CompProperties_OversizedWeapon;
@@ -65,10 +65,10 @@ namespace Explorite
     {
         static HarmonyCompOversizedWeapon()
         {
-            var harmony = new Harmony("Explorite.rimworld.mod.OversizedWeaponGraphicPatch");
-            harmony.Patch(typeof(PawnRenderer).GetMethod("DrawEquipmentAiming"),
+            //var harmony = new Harmony("Explorite.rimworld.mod.OversizedWeaponGraphicPatch");
+            harmonyInstance.Patch(typeof(PawnRenderer).GetMethod("DrawEquipmentAiming"),
                 new HarmonyMethod(typeof(HarmonyCompOversizedWeapon).GetMethod("DrawEquipmentAimingPreFix")), null);
-            harmony.Patch(AccessTools.Method(typeof(Thing), "get_DefaultGraphic"), null,
+            harmonyInstance.Patch(AccessTools.Method(typeof(Thing), "get_DefaultGraphic"), null,
                 new HarmonyMethod(typeof(HarmonyCompOversizedWeapon), nameof(get_Graphic_PostFix)));
         }
 
@@ -125,9 +125,8 @@ namespace Explorite
 
 
 
-                    var graphic_StackCount = eq.Graphic as Graphic_StackCount;
                     Material matSingle;
-                    if (graphic_StackCount != null)
+                    if (eq.Graphic is Graphic_StackCount graphic_StackCount)
                         matSingle = graphic_StackCount.SubGraphicForStackCount(1, eq.def).MatSingle;
                     else
                         matSingle = eq.Graphic.MatSingle;

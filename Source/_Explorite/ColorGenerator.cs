@@ -4,10 +4,7 @@
  */
 using UnityEngine;
 using Verse;
-using RimWorld;
 using System;
-using static Explorite.ExploriteCore;
-using System.Collections.Generic;
 
 namespace Explorite
 {

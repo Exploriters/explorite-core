@@ -4,15 +4,6 @@
  * 该方法不可靠，已被弃用，由CompPawnShield取代。
  * --siiftun1857
  */
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using UnityEngine;
-using Verse;
-using Verse.Sound;
-using RimWorld;
-
 
 namespace Explorite
 {
