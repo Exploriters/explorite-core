@@ -195,9 +195,9 @@ namespace Explorite
             IEnumerable<FloatMenuOption> preret = base.CompFloatMenuOptions(myPawn);
             foreach (FloatMenuOption fmo in preret)
             {
-                Log.Message("[Magnuassembly]FMO LABEL: " + fmo.Label + ", Disabled: " + fmo.Disabled + ".");
+                Log.Message("[Explorite]FMO LABEL: " + fmo.Label + ", Disabled: " + fmo.Disabled + ".");
                 fmo.Disabled = false;
-                Log.Message("[Magnuassembly]FMO LABEL POST: " + fmo.Label + ", Disabled: " + fmo.Disabled + ".");
+                Log.Message("[Explorite]FMO LABEL POST: " + fmo.Label + ", Disabled: " + fmo.Disabled + ".");
             }
             return preret;
         }*/

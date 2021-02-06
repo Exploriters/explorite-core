@@ -12,50 +12,15 @@ namespace Explorite
 {
     public static partial class ExploriteCore
     {
-        public static readonly Harmony harmonyInstance = new Harmony(id: "Explorite.rimworld.mod.HarmonyPatches");
-
-        public static readonly ThingDef AlienSayersDef = DefDatabase<ThingDef>.GetNamed("Alien_Sayers", errorOnFail: false);
-        public static readonly ThingDef AlienFlowerBorhAnimalDef = DefDatabase<ThingDef>.GetNamed("Alien_FlowerBorhAnimal", errorOnFail: false);
-
-        public static readonly ThingDef AlienCentaurDef = DefDatabase<ThingDef>.GetNamed("Alien_Centaur", errorOnFail: false);
-        public static readonly HediffDef HyperManipulatorHediffDef = DefDatabase<HediffDef>.GetNamed("HyperManipulator", errorOnFail: false);
-        public static readonly BodyPartDef CentaurScapularDef = DefDatabase<BodyPartDef>.GetNamed("CentaurScapular", errorOnFail: false);
-        public static readonly PawnKindDef CentaurColonistDef = DefDatabase<PawnKindDef>.GetNamed("CentaurColonist", errorOnFail: false);
-        public static readonly FactionDef CentaurPlayerColonyDef = DefDatabase<FactionDef>.GetNamed("CentaurPlayerColony", errorOnFail: false);
-
-        //public static readonly AbilityDef AbilityTrishot_TrishotDef = DefDatabase<AbilityDef>.GetNamed("AbilityTrishot_Trishot");
-        //public static readonly AbilityDef AbilityTrishot_IcoshotDef = DefDatabase<AbilityDef>.GetNamed("AbilityTrishot_Icoshot");
-        //public static readonly AbilityDef AbilityTrishot_OneshotDef = DefDatabase<AbilityDef>.GetNamed("AbilityTrishot_Oneshot");
-
-        public static readonly Backstory CentaurCivilRetro = BackstoryDatabase.allBackstories.TryGetValue("CentaurCivil_Retro");
-        public static readonly Backstory CentaurCivilMayinas = BackstoryDatabase.allBackstories.TryGetValue("Backstory_Mayinas_Exploriter");
-
         public static class InstelledMods
         {
-            /*
-            public static bool RimCentaurs = false;
-            public static bool Sayers = false;
-            public static bool GuoGuo = false;
-
-            public static bool SoS2 = false;
-
-            public static void UpdateStatus()
-            {
-                //ExploriteCore = ModLister.GetActiveModWithIdentifier("Exploriters.ExploriteCore") != null;
-                RimCentaurs = ModLister.GetActiveModWithIdentifier("Exploriters.siiftun1857.CentaurTheMagnuassembly") != null;
-                Sayers = ModLister.GetActiveModWithIdentifier("Exploriters.Abrel.Sayers") != null;
-                GuoGuo = ModLister.GetActiveModWithIdentifier("Exploriters.AndoRingo.GuoGuo") != null;
-
-                SoS2 = ModLister.GetActiveModWithIdentifier("kentington.saveourship2") != null;
-            }
-            */
             public static bool RimCentaurs => ModLister.GetActiveModWithIdentifier("Exploriters.siiftun1857.CentaurTheMagnuassembly") != null;
             public static bool Sayers => ModLister.GetActiveModWithIdentifier("Exploriters.Abrel.Sayers") != null;
             public static bool GuoGuo => ModLister.GetActiveModWithIdentifier("Exploriters.AndoRingo.GuoGuo") != null;
             public static bool SoS2 => ModLister.GetActiveModWithIdentifier("kentington.saveourship2") != null;
         }
 
-        /**
+        /*
          * <summary>
          * 检测Def名称与目标是否一致。
          * </summary>
@@ -63,8 +28,7 @@ namespace Explorite
          * <param name="defName">返回值字符串的格式。</param>
          * <returns>是否相等。</returns>
          */
-        public static bool CheckDef(Def def, string defName) => def?.defName == defName;
-        //public static bool operator !=(Def def, string defName) => !CheckDef(def, defName);
+        //public static bool CheckDef(Def def, string defName) => def?.defName == defName;
 
         public static int InGameTick => Find.TickManager.TicksGame;
         public static int InGameTickAbs => Find.TickManager.TicksAbs;
@@ -184,7 +148,7 @@ namespace Explorite
         {
             Texture2D target = duplicateTexture(inputtex);
             //range = new System.Random().Next(0,10000)/10000f;\
-            //Log.Message("[Magnuassembly]Casting " + target + " by " + range + ".", true);
+            //Log.Message("[Explorite]Casting " + target + " by " + range + ".", true);
             if (range <= 0f)
                 return target;
             if (range > 1f)
@@ -202,7 +166,7 @@ namespace Explorite
                     counter++;
                 }
             }
-            //Log.Message("[Magnuassembly]Casted " + counter + " pixels. ", true);
+            //Log.Message("[Explorite]Casted " + counter + " pixels. ", true);
             return target;
         }*/
         public static Texture2D FloodingTexture(Texture2D inputtex, float range)

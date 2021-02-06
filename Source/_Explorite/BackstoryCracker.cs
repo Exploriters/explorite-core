@@ -39,7 +39,7 @@ namespace Explorite
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            Log.Message("[Magnuassembly]Backstory flooder triggered.");
+            Log.Message("[Explorite]Backstory flooder triggered.");
 
             uint solvedBackstoryCount = 0;
             //过时内容
@@ -202,9 +202,9 @@ namespace Explorite
                 solved += $"{str}, ";
                 solvedBackstoryCount++;
             }
-            Log.Message($"[Magnuassembly]Solved CentaurAdulthoodCivil: {(solved + "&").Replace(", &", ".")}");
+            Log.Message($"[Explorite]Solved CentaurAdulthoodCivil: {(solved + "&").Replace(", &", ".")}");
             stopwatch.Stop();
-            Log.Message($"[Magnuassembly]Backstory flood complete, solved total {solvedBackstoryCount} backstories, in {stopwatch.ElapsedMilliseconds}ms.");
+            Log.Message($"[Explorite]Backstory flood complete, solved total {solvedBackstoryCount} backstories, in {stopwatch.ElapsedMilliseconds}ms.");
 
         }
 
@@ -217,7 +217,7 @@ namespace Explorite
             inctested = true;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            Log.Message("[Magnuassembly]Backstory tester triggered.");
+            Log.Message("[Explorite]Backstory tester triggered.");
             uint solvedBackstoryCount = 0;
             string solved = "";
             Pawn tempPawn;
@@ -229,14 +229,14 @@ namespace Explorite
                 {
                     backstories.Add(tempPawn.story.adulthood);
                     solved += ExportBackstoryAsFormattedString(tempPawn.story.adulthood);
-                    Log.Message($"[Magnuassembly]Detected : {ExportBackstoryAsFormattedString(tempPawn.story.adulthood)}");
+                    Log.Message($"[Explorite]Detected : {ExportBackstoryAsFormattedString(tempPawn.story.adulthood)}");
                     solvedBackstoryCount++;
                 }
             }
 
-            Log.Message($"[Magnuassembly]Problem : {(solved + "&").Replace(", &", ".")}");
+            Log.Message($"[Explorite]Problem : {(solved + "&").Replace(", &", ".")}");
             stopwatch.Stop();
-            Log.Message($"[Magnuassembly]Backstory testing complete, detected total {solvedBackstoryCount} backstories, result length {solved.Length}, in {stopwatch.ElapsedMilliseconds}ms.");
+            Log.Message($"[Explorite]Backstory testing complete, detected total {solvedBackstoryCount} backstories, result length {solved.Length}, in {stopwatch.ElapsedMilliseconds}ms.");
         }
         ///<summary>将背景故事变为预设格式的字符串。</summary>
         public static string ExportBackstoryAsFormattedString(Backstory Bs)
@@ -253,10 +253,10 @@ namespace Explorite
             //uint solvedTagCount = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            Log.Message("[Magnuassembly]Backstory cracker triggered for \"" + targetTag + "\" in \"" + backstorySlot + "\" by \"" + appTagPrefix + "\".");
+            Log.Message("[Explorite]Backstory cracker triggered for \"" + targetTag + "\" in \"" + backstorySlot + "\" by \"" + appTagPrefix + "\".");
 
             Dictionary<string, Backstory> DiBs = BackstoryDatabase.allBackstories;
-            Log.Message("[Magnuassembly]Scanning backstory total : " + DiBs.Count);
+            Log.Message("[Explorite]Scanning backstory total : " + DiBs.Count);
             foreach (KeyValuePair<string, Backstory> Bs in DiBs)
             {
                 if (
@@ -273,7 +273,7 @@ namespace Explorite
                     )
                     )
                 {
-                    //Log.Message("[Magnuassembly]Scanning backstory in DiBs[" + Bs.Key + "]" + Bs.Value.identifier + " : " + Bs.Value.title);
+                    //Log.Message("[Explorite]Scanning backstory in DiBs[" + Bs.Key + "]" + Bs.Value.identifier + " : " + Bs.Value.title);
                     /*if (Bs.Value.identifier.StartsWith(appTagPrefix))
                     {
                         Bs.Value.requiredWorkTags = (WorkTags)65535;
@@ -288,7 +288,7 @@ namespace Explorite
                     }
                     foreach (string tag in posttag)
                     {
-                        //Log.Message("[Magnuassembly]Adding \"" + tag + "\" to backstory " + Bs.Value.identifier + " : " + Bs.Value.title);
+                        //Log.Message("[Explorite]Adding \"" + tag + "\" to backstory " + Bs.Value.identifier + " : " + Bs.Value.title);
                         Bs.Value.spawnCategories.Add(tag);
                         solvedTagCount++;
                     }*/
@@ -297,8 +297,8 @@ namespace Explorite
                 }
             }
             stopwatch.Stop();
-            //Log.Message("[Magnuassembly]Backstory crack complete, solved total " + solvedTagCount + " tags in " + solvedBackstoryCount + " backstories, in " + stopwatch.ElapsedMilliseconds + "ms.");
-            Log.Message("[Magnuassembly]Backstory crack complete, solved total " + solvedBackstoryCount + " backstories, in " + stopwatch.ElapsedMilliseconds + "ms.");
+            //Log.Message("[Explorite]Backstory crack complete, solved total " + solvedTagCount + " tags in " + solvedBackstoryCount + " backstories, in " + stopwatch.ElapsedMilliseconds + "ms.");
+            Log.Message("[Explorite]Backstory crack complete, solved total " + solvedBackstoryCount + " backstories, in " + stopwatch.ElapsedMilliseconds + "ms.");
         }
         ///<summary>将背景故事导出到日志中。</summary>
         public static void ExportBackstoriesToLog()
@@ -306,10 +306,10 @@ namespace Explorite
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             Dictionary<string, Backstory> DiBs = BackstoryDatabase.allBackstories;
-            Log.Message("[Magnuassembly]Scanning backstory total : " + DiBs.Count);
+            Log.Message("[Explorite]Scanning backstory total : " + DiBs.Count);
             uint solvedBackstoryCount = 0;
 
-            string result = "[Magnuassembly]Export backstories:\n";
+            string result = "[Explorite]Export backstories:\n";
 
             foreach (KeyValuePair<string, Backstory> Bs in DiBs)
             {
@@ -321,7 +321,7 @@ namespace Explorite
             }
             stopwatch.Stop();
             Log.Message(result);
-            Log.Message($"[Magnuassembly]Backstory export complete, solved total {solvedBackstoryCount} backstories, in {stopwatch.ElapsedMilliseconds}ms.");
+            Log.Message($"[Explorite]Backstory export complete, solved total {solvedBackstoryCount} backstories, in {stopwatch.ElapsedMilliseconds}ms.");
 
         }
     }

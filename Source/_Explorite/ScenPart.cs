@@ -237,7 +237,7 @@ namespace Explorite
             }
             else
             {
-                Log.Error("[Magnuassembly]Null target pawn!");
+                Log.Error("[Explorite]Null target pawn!");
             }
             return;
         }

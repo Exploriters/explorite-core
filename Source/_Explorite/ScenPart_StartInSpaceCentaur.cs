@@ -10,6 +10,7 @@ using RimWorld;
 using Verse;
 using SaveOurShip2;
 using RimworldMod.VacuumIsNotFun;
+using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
@@ -21,7 +22,6 @@ namespace Explorite
             if (SoS2Reflection.inaccessible)
                 return;
 
-            //if (!ModLister.HasActiveModWithName("")) return;
             if (WorldSwitchUtility.SelectiveWorldGenFlag)
                 return;
             ShipCombatManager.CanSalvageEnemyShip = false;
@@ -226,7 +226,7 @@ namespace Explorite
                             )
                         )
                     {
-                        //Log.Message("[Magnuassembly]Patching stack.");
+                        //Log.Message("[Explorite]Patching stack.");
                         thing.stackCount = thing.def.stackLimit;
 
                         foreach (Thing thingInGrid in spaceMap.thingGrid.ThingsAt(thing.Position))
@@ -241,7 +241,7 @@ namespace Explorite
                     }
                     /*if (thing.def == DefDatabase<ThingDef>.GetNamed("ShipTorpedo_HighExplosive"))
                     {
-                        //Log.Message("[Magnuassembly]Patching HE.");
+                        //Log.Message("[Explorite]Patching HE.");
                         thing.stackCount = 1;
                         //thing.def = DefDatabase<ThingDef>.GetNamed("ShipTorpedo_EMP");
                     }*/

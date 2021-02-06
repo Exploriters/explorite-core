@@ -1,5 +1,7 @@
 ﻿/**
  * 使心灵敏感度属性受到心灵失聪hediff影响。
+ * 
+ * 该方案已被弃用。
  * --siiftun1857
  */
 using Verse;
@@ -14,6 +16,7 @@ namespace Explorite
      * </summary>
      * TODO: 改为补丁，而非XML Patch
      */
+    /*
     public class StatPart_ApparelStatOffset_PsychicDeafIncluded : StatPart_ApparelStatOffset
     {
         private bool Blocked(StatRequest req)
@@ -50,7 +53,7 @@ namespace Explorite
             }
         }
     }
-
+    */
 
 
 }

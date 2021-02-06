@@ -35,6 +35,8 @@ namespace Explorite
     {
         static PatchCentaurRecipe()
         {
+            if (!InstelledMods.RimCentaurs)
+                return;
             //AlienCentaurDef.recipes.Remove(DefDatabase<RecipeDef>.GetNamed("RemoveBodyPart"));
             RecipeDef RemoveBodyPart = DefDatabase<RecipeDef>.GetNamed("RemoveBodyPart");
             RecipeDef RemoveBodyPart_ExcludingScapular = DefDatabase<RecipeDef>.GetNamed("RemoveBodyPart_ExcludingScapular");

@@ -536,17 +536,17 @@ namespace Explorite
             List<Verb> verbs = comp.AllVerbs;
             if (comp == null)
             {
-                Log.ErrorOnce("[Magnuassembly]CurrVerbReset Error: comp is null.", 41422);
+                Log.ErrorOnce("[Explorite]CurrVerbReset Error: comp is null.", 41422);
                 return;
             }
             if (verbs == null)
             {
-                Log.ErrorOnce("[Magnuassembly]CurrVerbReset Error: verbs is null, at comp: " + comp + ".", 41421);
+                Log.ErrorOnce("[Explorite]CurrVerbReset Error: verbs is null, at comp: " + comp + ".", 41421);
                 return;
             }
             if (verbs.Count == 0)
             {
-                Log.ErrorOnce("[Magnuassembly]CurrVerbReset Error: verbs contains no verb, at comp: " + comp + ", verbs:" + verbs + ".", 41423);
+                Log.ErrorOnce("[Explorite]CurrVerbReset Error: verbs contains no verb, at comp: " + comp + ", verbs:" + verbs + ".", 41423);
                 return;
             }
             if (currentVerb != null)
@@ -649,7 +649,7 @@ namespace Explorite
                 }
                 if (verbClass == typeof(Verb_Shoot_Cooldown) && cooldownTick <= 0)
                 {
-                    Log.Warning($"[Magnuassembly]Detected cooldownTick {cooldownTick}, which is not more than 0.");
+                    Log.Warning($"[Explorite]Detected cooldownTick {cooldownTick}, which is not more than 0.");
                 }
             });
         }

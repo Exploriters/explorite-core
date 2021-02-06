@@ -108,6 +108,7 @@
     <Compile Include="CompUseEffect_HediffApply.cs" />
     <Compile Include="DamageWorker_Frostbite_LauncherSafe.cs" />
     <Compile Include="ExploriteCore.cs" />
+    <Compile Include="ExploriteDefof.cs" />
     <Compile Include="ExploriteInitializer.cs" />
     <Compile Include="ExploriteMiscPatches.cs" />
     <Compile Include="ExploriteMod.cs" />
@@ -124,10 +125,7 @@
     <Compile Include="Projectile_Explosive_RoofBypass.cs" />
     <Compile Include="ResearchProjectDef.cs" />
     <Compile Include="ScenPart.cs" />
-    <Compile Include="ScenPart_StartInSpaceCentaur.cs" />
     <Compile Include="SomeThingBlank.cs" />
-    <Compile Include="Sos2Patch.cs" />
-    <Compile Include="SoS2Reflection.cs" />
     <Compile Include="StatPart_ApparelStatOffset_PsychicDeafIncluded.cs" />
     <Compile Include="ThoughtWorker_AlwaysActive_Centaur.cs" />
     <Compile Include="Verb_DoNothing.cs" />

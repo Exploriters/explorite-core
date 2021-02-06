@@ -16,7 +16,7 @@ namespace Explorite
     {
         protected override ThoughtState CurrentSocialStateInternal(Pawn p, Pawn otherPawn)
         {
-            Log.Message("[Magnuassembly]Soving CurrentSocialStateInternal between \"" + p.Name.ToStringShort + "(" + p.def.defName + ")\" and " + otherPawn.Name.ToStringShort + "(" + otherPawn.def.defName + ")\".");
+            Log.Message("[Explorite]Soving CurrentSocialStateInternal between \"" + p.Name.ToStringShort + "(" + p.def.defName + ")\" and " + otherPawn.Name.ToStringShort + "(" + otherPawn.def.defName + ")\".");
             if (p.def == AlienCentaurDef && otherPawn.def == AlienCentaurDef)
             {
                 //return base.CurrentSocialStateInternal(p, otherPawn);
