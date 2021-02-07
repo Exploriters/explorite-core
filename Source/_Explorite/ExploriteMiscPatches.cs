@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
 using RimWorld;
-using SaveOurShip2;
 using Verse;
 using static Explorite.ExploriteCore;
 
