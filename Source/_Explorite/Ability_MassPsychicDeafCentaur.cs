@@ -18,7 +18,7 @@ namespace Explorite
      */
     public class Verb_CastAbility_MassPsychicDeafCentaur : Verb_CastAbility
     {
-        public bool ValidToCast => (((Pawn)caster)?.health?.hediffSet.HasHediff(DefDatabase<HediffDef>.GetNamed("PsychicDeafCentaur")) != true);
+        public bool ValidToCast => ((Pawn)caster)?.health?.hediffSet.HasHediff(DefDatabase<HediffDef>.GetNamed("PsychicDeafCentaur")) != true;
         public override bool Available()
         {
             if (!ValidToCast)

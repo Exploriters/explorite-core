@@ -147,7 +147,7 @@ namespace Explorite
                 Comp_VerbSaveable comp = equippable.parent.GetComp<Comp_VerbSaveable>();
                 if (comp != null)
                 {
-                    if (!(Traverse.Create(__instance).Method("CurrentTargetUnderMouse", true).GetValue<LocalTargetInfo>().IsValid))
+                    if (!Traverse.Create(__instance).Method("CurrentTargetUnderMouse", true).GetValue<LocalTargetInfo>().IsValid)
                     {
                         return;
                     }

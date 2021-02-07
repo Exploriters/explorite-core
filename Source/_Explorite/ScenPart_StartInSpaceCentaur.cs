@@ -215,15 +215,13 @@ namespace Explorite
                         }
                     }*/
                     if (
-                            (
-                                thing.def == DefDatabase<ThingDef>.GetNamed("ComponentIndustrial") ||
-                                thing.def == DefDatabase<ThingDef>.GetNamed("ShipTorpedo_HighExplosive") ||
-                                thing.def == DefDatabase<ThingDef>.GetNamed("ShipTorpedo_EMP") ||
-                                thing.def == DefDatabase<ThingDef>.GetNamed("Chemfuel") ||
-                                thing.def == DefDatabase<ThingDef>.GetNamed("ShuttleFuelPods") ||
-                                thing.def == DefDatabase<ThingDef>.GetNamed("WoodLog") ||
-                                thing.def == DefDatabase<ThingDef>.GetNamed("Shell_EMP")
-                            )
+                            thing.def == DefDatabase<ThingDef>.GetNamed("ComponentIndustrial") ||
+                            thing.def == DefDatabase<ThingDef>.GetNamed("ShipTorpedo_HighExplosive") ||
+                            thing.def == DefDatabase<ThingDef>.GetNamed("ShipTorpedo_EMP") ||
+                            thing.def == DefDatabase<ThingDef>.GetNamed("Chemfuel") ||
+                            thing.def == DefDatabase<ThingDef>.GetNamed("ShuttleFuelPods") ||
+                            thing.def == DefDatabase<ThingDef>.GetNamed("WoodLog") ||
+                            thing.def == DefDatabase<ThingDef>.GetNamed("Shell_EMP")
                         )
                     {
                         //Log.Message("[Explorite]Patching stack.");

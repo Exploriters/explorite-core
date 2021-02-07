@@ -86,7 +86,7 @@ namespace Explorite
 
                 Log.Message("[Explorite]Patching RimWorld.IncidentWorker_WandererJoin.CanFireNowSub with postfix WandererJoin_CanFireNowPostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(IncidentWorker_WandererJoin), "CanFireNowSub", new[] { typeof(IncidentParms) }),
-                    postfix: new HarmonyMethod(patchType, nameof(WandererJoin_CanFireNowPostfix)));
+                    postfix: new HarmonyMethod(patchType, nameof(WandererJoinCannotFirePostfix)));
 
                 Log.Message("[Explorite]Patching RimWorld.Need_Outdoors.get_Disabled with postfix NeedOutdoors_DisabledPostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(Need_Outdoors), "get_Disabled", new Type[] { }),
@@ -95,7 +95,6 @@ namespace Explorite
                 Log.Message("[Explorite]Patching RimWorld.MeditationFocusDef.CanPawnUse with postfix MeditationFocusCanPawnUsePostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.CanPawnUse), new Type[] { typeof(Pawn) }),
                     postfix: new HarmonyMethod(patchType, nameof(MeditationFocusCanPawnUsePostfix)));
-
 
                 if (InstelledMods.RimCentaurs)
                 {
@@ -129,8 +128,7 @@ namespace Explorite
         }
 
         ///<summary>阻止半人马的技能衰退。</summary>
-        [HarmonyPrefix]
-        public static void SkillLearnPrefix(SkillRecord __instance, ref float xp)
+        [HarmonyPrefix]public static void SkillLearnPrefix(SkillRecord __instance, ref float xp)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -142,8 +140,7 @@ namespace Explorite
         }
 
         ///<summary>移除半人马每日技能训练上限。</summary>
-        [HarmonyPostfix]
-        public static void SkillIntervalPostfix(SkillRecord __instance)
+        [HarmonyPostfix]public static void SkillIntervalPostfix(SkillRecord __instance)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -155,24 +152,21 @@ namespace Explorite
         }
 
         ///<summary>移除半人马的疼痛带来心灵熵消散增益。</summary>
-        [HarmonyPostfix]
-        public static void NoPainBounsForCentaursPostfix(Pawn_PsychicEntropyTracker __instance, ref float __result)
+        [HarmonyPostfix]public static void NoPainBounsForCentaursPostfix(Pawn_PsychicEntropyTracker __instance, ref float __result)
         {
             if (__instance.Pawn.def == AlienCentaurDef)
                 __result = 1f;
         }
 
         ///<summary>禁用半人马阵营生成流浪者加入事件。</summary>
-        [HarmonyPostfix]
-        public static void WandererJoin_CanFireNowPostfix(IncidentParms parms, ref bool __result)
+        [HarmonyPostfix]public static void WandererJoinCannotFirePostfix(IncidentParms parms, ref bool __result)
         {
             if (Faction.OfPlayer.def == CentaurPlayerColonyDef)
                 __result = false;
         }
 
         ///<summary>使半人马可以在太空中靠动力装甲存活。</summary>
-        [HarmonyPostfix]
-        public static void HasSpaceSuitSlowPostfix(Pawn pawn, ref bool __result)
+        [HarmonyPostfix]public static void HasSpaceSuitSlowPostfix(Pawn pawn, ref bool __result)
         {
             if (pawn.def == AlienCentaurDef)
             {
@@ -188,8 +182,7 @@ namespace Explorite
         }
 
         ///<summary>移除半人马的户外需求。</summary>
-        [HarmonyPostfix]
-        public static void NeedOutdoors_DisabledPostfix(Need_Outdoors __instance, ref bool __result)
+        [HarmonyPostfix]public static void NeedOutdoors_DisabledPostfix(Need_Outdoors __instance, ref bool __result)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -201,8 +194,7 @@ namespace Explorite
         }
 
         ///<summary>使心灵敏感度属性受到心灵失聪hediff影响。</summary>
-        [HarmonyPostfix]
-        public static void PsychicSensitivityPostfix(StatPart_ApparelStatOffset __instance, StatRequest req, ref float val)
+        [HarmonyPostfix]public static void PsychicSensitivityPostfix(StatPart_ApparelStatOffset __instance, StatRequest req, ref float val)
         {
             try
             {
@@ -224,8 +216,7 @@ namespace Explorite
         }
 
         ///<summary>使半人马可以使用任何类型的冥想媒介。</summary>
-        [HarmonyPostfix]
-        public static void MeditationFocusCanPawnUsePostfix(Pawn p, ref bool __result)
+        [HarmonyPostfix]public static void MeditationFocusCanPawnUsePostfix(Pawn p, ref bool __result)
         {
             if (p.def == AlienCentaurDef)
             {
