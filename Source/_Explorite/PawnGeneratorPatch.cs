@@ -46,6 +46,18 @@ namespace Explorite
                     __result.def = ThingDefOf.Human;
                 }
             }
+            if (__result.def == AlienSayersDef)
+            {
+                if (__result.kindDef.race == AlienSayersDef)
+                {
+                    __result.abilities.abilities.Add(new Ability(__result, DefDatabase<AbilityDef>.GetNamed("ParasiticStab_Sayers")));
+                }
+                else
+                {
+                    __result.def = ThingDefOf.Human;
+                }
+            }
+
             if (__result.def == ThingDefOf.Human && __result.story.childhood == CentaurCivilRetro)
             {
                 __result.story.childhood = BackstoryDatabase.ShuffleableBackstoryList(

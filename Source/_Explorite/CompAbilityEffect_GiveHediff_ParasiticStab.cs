@@ -5,6 +5,7 @@
  */
 using RimWorld;
 using Verse;
+using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
@@ -15,7 +16,8 @@ namespace Explorite
     {
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
-            base.Apply(target, dest);
+            if (target.Pawn?.def != AlienSayersDef)
+                base.Apply(target, dest);
 
         }
     }

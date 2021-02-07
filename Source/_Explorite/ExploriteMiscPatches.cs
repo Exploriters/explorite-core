@@ -69,39 +69,44 @@ namespace Explorite
         {
             try
             {
-                Log.Message("[Explorite]Patching Verse.PawnGenerator.GeneratePawn with postfix GeneratePawnPostfix");
+                //Log.Message("[Explorite]Patching Verse.PawnGenerator.GeneratePawn with postfix GeneratePawnPostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new[] { typeof(PawnGenerationRequest) }),
                     postfix: new HarmonyMethod(patchType, nameof(GeneratePawnPostfix)));
 
-                Log.Message("[Explorite]Patching RimWorld.SkillRecord.Learn with prefix SkillLearnPrefix");
+                //Log.Message("[Explorite]Patching RimWorld.SkillRecord.Learn with prefix SkillLearnPrefix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Learn), new[] { typeof(float), typeof(bool) }),
                     prefix: new HarmonyMethod(patchType, nameof(SkillLearnPrefix)));
-                Log.Message("[Explorite]Patching RimWorld.SkillRecord.Interval with postfix SkillIntervalPostfix");
+                //Log.Message("[Explorite]Patching RimWorld.SkillRecord.Interval with postfix SkillIntervalPostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Interval), new Type[] { }),
                     postfix: new HarmonyMethod(patchType, nameof(SkillIntervalPostfix)));
 
-                Log.Message("[Explorite]Patching RimWorld.Pawn_PsychicEntropyTracker.get_PainMultiplier with postfix NoPainBounsForCentaursPostfix");
+                //Log.Message("[Explorite]Patching RimWorld.Pawn_PsychicEntropyTracker.get_PainMultiplier with postfix NoPainBounsForCentaursPostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_PsychicEntropyTracker), "get_PainMultiplier", null),
                     postfix: new HarmonyMethod(patchType, nameof(NoPainBounsForCentaursPostfix)));
 
-                Log.Message("[Explorite]Patching RimWorld.IncidentWorker_WandererJoin.CanFireNowSub with postfix WandererJoin_CanFireNowPostfix");
+                //Log.Message("[Explorite]Patching RimWorld.IncidentWorker_WandererJoin.CanFireNowSub with postfix WandererJoin_CanFireNowPostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(IncidentWorker_WandererJoin), "CanFireNowSub", new[] { typeof(IncidentParms) }),
                     postfix: new HarmonyMethod(patchType, nameof(WandererJoinCannotFirePostfix)));
 
-                Log.Message("[Explorite]Patching RimWorld.Need_Outdoors.get_Disabled with postfix NeedOutdoors_DisabledPostfix");
+                //Log.Message("[Explorite]Patching RimWorld.Need_Outdoors.get_Disabled with postfix NeedOutdoors_DisabledPostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(Need_Outdoors), "get_Disabled", new Type[] { }),
                     postfix: new HarmonyMethod(patchType, nameof(NeedOutdoors_DisabledPostfix)));
 
-                Log.Message("[Explorite]Patching RimWorld.MeditationFocusDef.CanPawnUse with postfix MeditationFocusCanPawnUsePostfix");
+                //Log.Message("[Explorite]Patching RimWorld.MeditationFocusDef.CanPawnUse with postfix MeditationFocusCanPawnUsePostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.CanPawnUse), new Type[] { typeof(Pawn) }),
                     postfix: new HarmonyMethod(patchType, nameof(MeditationFocusCanPawnUsePostfix)));
 
                 if (InstelledMods.RimCentaurs)
                 {
                     // 依赖 HediffDef PsychicDeafCentaur
-                    Log.Message("[Explorite]Patching RimWorld.StatPart_ApparelStatOffset.TransformValue with postfix PsychicSensitivityPostfix");
+                    //Log.Message("[Explorite]Patching RimWorld.StatPart_ApparelStatOffset.TransformValue with postfix PsychicSensitivityPostfix");
                     harmonyInstance.Patch(AccessTools.Method(typeof(StatPart_ApparelStatOffset), nameof(StatPart_ApparelStatOffset.TransformValue)),
                         postfix: new HarmonyMethod(patchType, nameof(PsychicSensitivityPostfix)));
+
+                    // 依赖 HediffDef PsychicDeafCentaur
+                    //Log.Message("[Explorite]Patching RimWorld.StatPart_ApparelStatOffset.TransformValue with postfix PsychicSensitivityPostfix");
+                    harmonyInstance.Patch(AccessTools.Method(typeof(StuffProperties), nameof(StuffProperties.CanMake), new Type[] { typeof(BuildableDef) }),
+                        postfix: new HarmonyMethod(patchType, nameof(StuffCanMakePostfix)));
                 }
                 if (InstelledMods.Sayers)
                 { }
@@ -110,7 +115,7 @@ namespace Explorite
                 if (InstelledMods.SoS2)
                 {
                     // 依赖 类 SaveOurShip2.ShipInteriorMod2
-                    Log.Message("[Explorite]Patching SaveOurShip2.ShipInteriorMod2.HasSpaceSuitSlow with postfix HasSpaceSuitSlowPostfix");
+                    //Log.Message("[Explorite]Patching SaveOurShip2.ShipInteriorMod2.HasSpaceSuitSlow with postfix HasSpaceSuitSlowPostfix");
                     harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("SaveOurShip2.ShipInteriorMod2"), "HasSpaceSuitSlow", new[] { typeof(Pawn) }),
                         postfix: new HarmonyMethod(patchType, nameof(HasSpaceSuitSlowPostfix)));
                 }
@@ -221,6 +226,20 @@ namespace Explorite
             if (p.def == AlienCentaurDef)
             {
                 __result = true;
+            }
+        }
+
+        ///<summary>橙。</summary>
+        [HarmonyPostfix]public static void StuffCanMakePostfix(BuildableDef t, StuffProperties __instance, ref bool __result)
+        {
+            if(__instance.parent.stuffCategories.Contains(OrangiceStuffDef))
+            {
+                if (t?.MadeFromStuff == true ||
+                    DefDatabase<BuildableDef>.GetNamed($"Blueprint_{t.defName}", false) != null
+                    )
+                {
+                    __result = false;
+                }
             }
         }
     }
