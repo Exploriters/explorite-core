@@ -21,7 +21,7 @@ namespace Explorite
 
         public static readonly ThingDef AlienSayersDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("Alien_Sayers");
         public static readonly ThingDef AlienFlowerBorhAnimalDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("Alien_FlowerBorhAnimal");
-        public static readonly ThingDef FleshTreeDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("Plant_TreeAnima");
+        public static readonly ThingDef FleshTreeDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("Plant_BloodyTree");
 
         //public static readonly Def CentaursScenarioRetroCruiseDef = !(InstelledMods.SoS2 && InstelledMods.RimCentaurs) ? null : DefDatabase<EnemyShipDef>.GetNamed("CentaursScenarioRetroCruise");
 
