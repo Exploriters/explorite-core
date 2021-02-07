@@ -102,6 +102,8 @@ namespace Explorite
                     harmonyInstance.Patch(AccessTools.Method(typeof(StatPart_ApparelStatOffset), nameof(StatPart_ApparelStatOffset.TransformValue)),
                         postfix: new HarmonyMethod(patchType, nameof(PsychicSensitivityPostfix)));
 
+                    // 依赖 StuffCategoryDef Orangice
+                    //Log.Message("[Explorite]Patching Verse.StuffProperties.CanMake with postfix StuffCanMakePostfix");
                     //harmonyInstance.Patch(AccessTools.Method(typeof(StuffProperties), nameof(StuffProperties.CanMake), new Type[] { typeof(BuildableDef) }),
                     //    postfix: new HarmonyMethod(patchType, nameof(StuffCanMakePostfix)));
                 }
@@ -225,11 +227,12 @@ namespace Explorite
                 __result = true;
             }
         }
+
         /*
         ///<summary></summary>
         [HarmonyPostfix]public static void StuffCanMakePostfix(BuildableDef t, StuffProperties __instance, ref bool __result)
         {
-            if(__instance.parent.stuffCategories.Contains(OrangiceStuffDef))
+            if(__instance?.parent?.stuffCategories?.Contains(OrangiceStuffDef) == true)
             {
                 if (t?.MadeFromStuff == true ||
                     DefDatabase<BuildableDef>.GetNamed($"Blueprint_{t.defName}", false) != null
@@ -240,5 +243,6 @@ namespace Explorite
             }
         }
         */
+
     }
 }
