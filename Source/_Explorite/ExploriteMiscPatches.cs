@@ -4,6 +4,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using RimWorld;
@@ -94,6 +95,22 @@ namespace Explorite
                 //Log.Message("[Explorite]Patching RimWorld.MeditationFocusDef.CanPawnUse with postfix MeditationFocusCanPawnUsePostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.CanPawnUse), new Type[] { typeof(Pawn) }),
                     postfix: new HarmonyMethod(patchType, nameof(MeditationFocusCanPawnUsePostfix)));
+
+                //Log.Message("[Explorite]Patching RimWorld.CompAssignableToPawn_Throne.AssignedAnything with postfix AssignableThroneToPawnAssignedAnythingPostfix");
+                //harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn_Throne), nameof(CompAssignableToPawn_Throne.AssignedAnything), new Type[] { typeof(Pawn) }),
+                //    postfix: new HarmonyMethod(patchType, nameof(AssignThroneToPawnCandidatesPostfix)));
+
+                //Log.Message("[Explorite]Patching RimWorld.CompAssignableToPawn_Bed.get_AssigningCandidates with postfix AssignBedToPawnCandidatesPostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn), "get_AssigningCandidates"),
+                    postfix: new HarmonyMethod(patchType, nameof(AssignBedToPawnCandidatesPostfix)));
+
+                //Log.Message("[Explorite]Patching RimWorld.CompAssignableToPawn_Bed.get_HasFreeSlot with postfix AssignBedToPawnHasFreeSlotPostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn), "get_HasFreeSlot"),
+                    postfix: new HarmonyMethod(patchType, nameof(AssignBedToPawnHasFreeSlotPostfix)));
+
+                //Log.Message("[Explorite]Patching RimWorld.CompAssignableToPawn_Bed.TryAssignPawn with postfix AssignBedToPawnTryAssignPawnPostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn_Bed), nameof(CompAssignableToPawn_Bed.TryAssignPawn)),
+                    postfix: new HarmonyMethod(patchType, nameof(AssignBedToPawnTryAssignPawnPostfix)));
 
                 if (InstelledMods.RimCentaurs)
                 {
@@ -219,13 +236,84 @@ namespace Explorite
             }
         }
 
-        ///<summary>使半人马可以使用任何类型的冥想媒介。</summary>
-        [HarmonyPostfix]public static void MeditationFocusCanPawnUsePostfix(Pawn p, ref bool __result)
+        ///<summary>使半人马可以使用额外类型的冥想媒介。</summary>
+        [HarmonyPostfix]public static void MeditationFocusCanPawnUsePostfix(MeditationFocusDef __instance, ref bool __result, Pawn p)
         {
-            if (p.def == AlienCentaurDef)
+            if (p.def == AlienCentaurDef&& (
+                    __instance == MeditationFocusDefOf.Natural 
+                    || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Natural")    //自然
+                    || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Artistic")   //艺术
+                    || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Dignified")  //庄严
+                    )
+                )
             {
                 __result = true;
             }
+        }
+
+        /*
+        ///<summary>使半人马始终可以使用王座。</summary>
+        [HarmonyPostfix]public static void AssignThroneToPawnCandidatesPostfix(CompAssignableToPawn_Throne __instance, ref IEnumerable<Pawn> __result)
+        {
+            if (!parent.Spawned)
+            {
+                return Enumerable.Empty<Pawn>();
+            }
+            return from p in parent.Map.mapPawns.FreeColonists
+                   where p.royalty != null && p.royalty.AllTitlesForReading.Any()
+                   orderby CanAssignTo(p).Accepted descending
+                   select p;
+        }*/
+
+        
+        ///<summary>使半人马只能使用双人床。</summary>
+        [HarmonyPostfix]public static void AssignBedToPawnCandidatesPostfix(CompAssignableToPawn __instance, ref IEnumerable<Pawn> __result)
+        {
+            if (__instance is CompAssignableToPawn_Bed &&
+                __instance?.Props?.maxAssignedPawnsCount < 2)
+            {
+                __result =  __result?.Where(pawn => pawn?.def != AlienCentaurDef);
+            }
+        }
+
+        ///<summary>使半人马占满床位。</summary>
+        [HarmonyPostfix]public static void AssignBedToPawnHasFreeSlotPostfix(CompAssignableToPawn __instance, ref bool __result)
+        {
+            if (__result == true &&
+                __instance is CompAssignableToPawn_Bed)
+            {
+                //__result = __instance.AssignedPawns.Count() + __instance.AssignedPawns.Where(pawn => pawn.def == AlienCentaurDef).Count() < __instance.Props.maxAssignedPawnsCount;
+                __result = __instance?.AssignedPawns?.Where(pawn => pawn.def == AlienCentaurDef)?.Count() >= 1;
+            }
+        }
+
+        ///<summary>使半人马不能与他人共用一个床。</summary>
+        [HarmonyPostfix]public static void AssignBedToPawnTryAssignPawnPostfix(CompAssignableToPawn_Bed __instance, Pawn pawn)
+        {
+            List<Pawn> pawnsToRemove = new List<Pawn>();
+            if (pawn?.def == AlienCentaurDef)
+            {
+                foreach (Pawn one_pawn in __instance.AssignedPawns)
+                {
+                    if (one_pawn != pawn)
+                        pawnsToRemove.Add(one_pawn);
+                }
+            }
+            else
+            {
+                foreach (Pawn one_pawn in __instance.AssignedPawns)
+                {
+                    if (one_pawn?.def == AlienCentaurDef)
+                        pawnsToRemove.Add(one_pawn);
+                }
+
+            }
+
+            foreach (Pawn one_pawn in pawnsToRemove)
+            {
+                __instance?.TryUnassignPawn(one_pawn);
+            }
+
         }
 
         /*
