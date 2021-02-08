@@ -108,6 +108,7 @@
     <Compile Include="CompAbilityEffect_GiveHediff_WholeMap.cs" />
     <Compile Include="CompAbilityEffect_TogglePsySensitivity.cs" />
     <Compile Include="CompArt_Qualityless.cs" />
+    <Compile Include="CompEnsureAbility.cs" />
     <Compile Include="CompHealWearedOvertime.cs" />
     <Compile Include="CompHMTrishotUser.cs" />
     <Compile Include="CompOversizedWeapon.cs" />

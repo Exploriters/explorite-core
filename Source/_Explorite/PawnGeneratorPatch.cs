@@ -27,7 +27,7 @@ namespace Explorite
                     __result.story.bodyType = __result.gender == Gender.Female ?
                         DefDatabase<BodyTypeDef>.GetNamed("CentaurFemale") : DefDatabase<BodyTypeDef>.GetNamed("CentaurMale");
 
-                    __result.abilities.abilities.Add(new Ability(__result, DefDatabase<AbilityDef>.GetNamed("MassPsychicDeafCentaur")));
+                    //__result.abilities.abilities.Add(new Ability(__result, DefDatabase<AbilityDef>.GetNamed("MassPsychicDeafCentaur")));
                     __result.ageTracker.AgeBiologicalTicks += 360000000;
                     __result.ageTracker.AgeChronologicalTicks += 360000000;
 
@@ -43,18 +43,20 @@ namespace Explorite
                 }
                 else
                 {
-                    __result.def = ThingDefOf.Human;
+                    //__result.def = ThingDefOf.Human;
+                    __result = PawnGenerator.GeneratePawn(PawnKindDefOf.Villager);
                 }
             }
             if (__result.def == AlienSayersDef)
             {
                 if (__result.kindDef.race == AlienSayersDef)
                 {
-                    __result.abilities.abilities.Add(new Ability(__result, DefDatabase<AbilityDef>.GetNamed("ParasiticStab_Sayers")));
+                    //__result.abilities.abilities.Add(new Ability(__result, DefDatabase<AbilityDef>.GetNamed("ParasiticStab_Sayers")));
                 }
                 else
                 {
-                    __result.def = ThingDefOf.Human;
+                    //__result.def = ThingDefOf.Human;
+                    __result = PawnGenerator.GeneratePawn(PawnKindDefOf.Villager);
                 }
             }
 
@@ -64,6 +66,11 @@ namespace Explorite
                     BackstorySlot.Childhood,
                     new BackstoryCategoryFilter { categories = __result.kindDef.backstoryCategories }
                 ).RandomElement();
+            }
+
+            if (__result?.TryGetComp<CompEnsureAbility>() != null)
+            {
+                __result?.TryGetComp<CompEnsureAbility>().ApplayAbilities();
             }
         }
     }
