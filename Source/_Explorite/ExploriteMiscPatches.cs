@@ -112,6 +112,14 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn_Bed), nameof(CompAssignableToPawn_Bed.TryAssignPawn)),
                     postfix: new HarmonyMethod(patchType, nameof(AssignBedToPawnTryAssignPawnPostfix)));
 
+                //Log.Message("[Explorite]Patching RimWorld.Plant.get_GrowthRateFactor_Temperature with postfix AssignBedToPawnTryAssignPawnPostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_GrowthRateFactor_Temperature"),
+                    postfix: new HarmonyMethod(patchType, nameof(PlantGrowthRateFactorNoTemperaturePostfix)));
+
+                //Log.Message("[Explorite]Patching RimWorld.Plant.get_GrowthRate with postfix PlantGrowthRateFactorEnsurePostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_GrowthRate"),
+                    postfix: new HarmonyMethod(patchType, nameof(PlantGrowthRateFactorEnsurePostfix)));
+
                 if (InstelledMods.RimCentaurs)
                 {
                     // 依赖 HediffDef PsychicDeafCentaur
@@ -314,6 +322,25 @@ namespace Explorite
                 __instance?.TryUnassignPawn(one_pawn);
             }
 
+        }
+
+        ///<summary>使血肉树的生长无视环境温度。</summary>
+        [HarmonyPostfix]public static void PlantGrowthRateFactorNoTemperaturePostfix(Plant __instance, ref float __result)
+        {
+            if (__instance.def == FleshTreeDef)
+            {
+                __result = 1f;
+            }
+        }
+
+        ///<summary>使血肉树的生长至少具有100%速率。</summary>
+        [HarmonyPostfix]public static void PlantGrowthRateFactorEnsurePostfix(Plant __instance, ref float __result)
+        {
+            if (__instance.def == FleshTreeDef
+                && __result < 1f)
+            {
+                __result = 1f;
+            }
         }
 
         /*

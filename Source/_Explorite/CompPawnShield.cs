@@ -10,6 +10,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
+using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
@@ -88,9 +89,9 @@ namespace Explorite
 
         public static readonly Material BubbleMat = MaterialPool.MatFrom("Other/ShieldBubble", ShaderDatabase.Transparent);
 
-        public float EnergyMax => parent.GetStatValue(StatDefOf.EnergyShieldEnergyMax, true);
+        public float EnergyMax => parent.GetStatValue(PawnShieldEnergyMaxDef, true);
 
-        public float EnergyGainPerSec => parent.GetStatValue(StatDefOf.EnergyShieldRechargeRate, true);
+        public float EnergyGainPerSec => parent.GetStatValue(PawnShieldRechargeRateDef, true);
         public float EnergyGainPerTick => EnergyGainPerSec / 60f;
 
         public float Energy => energy;

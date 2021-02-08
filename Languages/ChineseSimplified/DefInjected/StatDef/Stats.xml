@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <PawnShieldEnergyMax.label>护盾能量上限</PawnShieldEnergyMax.label>
+  <PawnShieldEnergyMax.description>人物护盾所能拥有的能量最大值。\n\n越多的能量可以吸收更多的伤害。</PawnShieldEnergyMax.description>
+  
+  <PawnShieldRechargeRate.label>护盾充能速度</PawnShieldRechargeRate.label>
+  <PawnShieldRechargeRate.description>人物护盾不断获得能量的速度。</PawnShieldRechargeRate.description>
+
+</LanguageData>

@@ -121,6 +121,7 @@
     <Compile Include="CompSelfHealOvertime_1.cs" />
     <Compile Include="CompSelfHealOvertime_2.cs" />
     <Compile Include="CompSnowExpand_Overtick.cs" />
+    <Compile Include="CompThingHolder.cs" />
     <Compile Include="CompUnbreakableViaDamage.cs" />
     <Compile Include="CompUseEffect_HediffApply.cs" />
     <Compile Include="DamageWorker_Frostbite_LauncherSafe.cs" />

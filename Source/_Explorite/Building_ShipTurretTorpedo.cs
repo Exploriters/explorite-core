@@ -61,7 +61,7 @@ namespace Explorite
                     vector = new Vector3(0f, 0f, 0f);
                     mesh = doorTwo;
                 }
-                Rot4 rotation = base.Rotation;
+                Rot4 rotation = Rotation;
                 rotation.Rotate(RotationDirection.Clockwise);
                 vector = rotation.AsQuat * vector;
                 Vector3 drawPos = DrawPos;
@@ -69,7 +69,7 @@ namespace Explorite
                 drawPos += vector * d;
                 if (i == 0 || def.size.x > 3)
                 {
-                    Graphics.DrawMesh(mesh, drawPos, base.Rotation.AsQuat, torpedoBayDoor.MatSingle, 0);
+                    Graphics.DrawMesh(mesh, drawPos, Rotation.AsQuat, torpedoBayDoor.MatSingle, 0);
                 }
             }
         }

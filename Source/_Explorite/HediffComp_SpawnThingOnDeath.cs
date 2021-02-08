@@ -36,14 +36,14 @@ namespace Explorite
             base.Notify_PawnDied();
             if (Props.injuryCreatedOnDeath != null)
             {
-                List<BodyPartRecord> list = new List<BodyPartRecord>(base.Pawn.RaceProps.body.AllParts.Where((BodyPartRecord part) => part.coverageAbs > 0f && !base.Pawn.health.hediffSet.PartIsMissing(part)));
+                List<BodyPartRecord> list = new List<BodyPartRecord>(Pawn.RaceProps.body.AllParts.Where((BodyPartRecord part) => part.coverageAbs > 0f && !Pawn.health.hediffSet.PartIsMissing(part)));
                 int num = Mathf.Min(Props.injuryCount.RandomInRange, list.Count);
                 for (int i = 0; i < num; i++)
                 {
                     int index = Rand.Range(0, list.Count);
                     BodyPartRecord part2 = list[index];
                     list.RemoveAt(index);
-                    base.Pawn.health.AddHediff(Props.injuryCreatedOnDeath, part2);
+                    Pawn.health.AddHediff(Props.injuryCreatedOnDeath, part2);
                 }
             }
         }
@@ -53,26 +53,26 @@ namespace Explorite
             base.Notify_PawnKilled();
             //base.Pawn.equipment.DestroyAllEquipment();
             //base.Pawn.apparel.DestroyAll();
-            if (!base.Pawn.Spawned)
+            if (!Pawn.Spawned)
             {
                 return;
             }
             if (Props.mote != null)
             {
-                Vector3 drawPos = base.Pawn.DrawPos;
+                Vector3 drawPos = Pawn.DrawPos;
                 for (int i = 0; i < Props.moteCount; i++)
                 {
                     Vector2 vector = Rand.InsideUnitCircle * Props.moteOffsetRange.RandomInRange * Rand.Sign;
-                    MoteMaker.MakeStaticMote(new Vector3(drawPos.x + vector.x, drawPos.y, drawPos.z + vector.y), base.Pawn.Map, Props.mote);
+                    MoteMaker.MakeStaticMote(new Vector3(drawPos.x + vector.x, drawPos.y, drawPos.z + vector.y), Pawn.Map, Props.mote);
                 }
             }
             if (Props.filth != null)
             {
-                FilthMaker.TryMakeFilth(base.Pawn.Position, base.Pawn.Map, Props.filth, Props.filthCount);
+                FilthMaker.TryMakeFilth(Pawn.Position, Pawn.Map, Props.filth, Props.filthCount);
             }
             if (Props.sound != null)
             {
-                Props.sound.PlayOneShot(SoundInfo.InMap(base.Pawn));
+                Props.sound.PlayOneShot(SoundInfo.InMap(Pawn));
             }
             if (Props.thing != null)
             {

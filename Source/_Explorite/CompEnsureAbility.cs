@@ -21,8 +21,8 @@ namespace Explorite
         }
     }
     /**
-     * <summary>确保人物具有指定技能。</summary>
-     */
+        * <summary>确保人物具有指定技能。</summary>
+        */
     public class CompEnsureAbility : ThingComp
     {
         CompProperties_EnsureAbility Props => (CompProperties_EnsureAbility)props;
