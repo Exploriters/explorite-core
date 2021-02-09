@@ -3,6 +3,7 @@
  * --siiftun1857
  */
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using Verse;
 
@@ -14,13 +15,13 @@ namespace Explorite
         public override void PostGameStart()
         {
             base.PostGameStart();
-            List<Thing> Things = Find.CurrentMap.listerThings.AllThings;
+            List<Thing> Things = Find.CurrentMap.listerThings.AllThings.Where(thing => thing is DropPodIncoming).ToList();
             foreach (Thing thing in Things)
             {
-                if (thing.def == ThingDefOf.DropPodIncoming)
+                if (thing is DropPodIncoming droppod)
                 {
                     ThingDef Filth_SayersMucus = DefDatabase<ThingDef>.GetNamed("Filth_SayersMucus");
-                    ((DropPodIncoming)thing).Contents.innerContainer
+                    droppod.Contents.innerContainer
                         .TryAdd(
                         ThingMaker.MakeThing(Filth_SayersMucus)
                         , 3
@@ -33,13 +34,9 @@ namespace Explorite
     public class ScenPart_FillBattery : ScenPart
     {
         //ModContentPack.PatchOperationFindMod
-        public override string Summary(Scenario scen)
-        {
-            return "Magnuassembly_ScenPart_FillBattery_StaticSummary".Translate();
-        }
+        public override string Summary(Scenario scen) => "Magnuassembly_ScenPart_FillBattery_StaticSummary".Translate();
         private static void ProcessBattery(Thing battery)
         {
-            //if (battery.def == DefDatabase<ThingDef>.GetNamed("TriBattery"))
             try
             {
                 battery?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
@@ -50,33 +47,33 @@ namespace Explorite
         public override void PostGameStart()
         {
             base.PostGameStart();
-            List<Thing> things = Find.CurrentMap.listerThings.AllThings;
+            List<Thing> things = Find.CurrentMap.listerThings.AllThings.Where(thing => thing is DropPodIncoming || thing is MinifiedThing).ToList();
             foreach (Thing thing in things)
             {
-                //if (thing.def == DefDatabase<ThingDef>.GetNamed("TriBattery"))
-                //if (thing.TryGetComp<CompPowerBattery>() != null)
-                //{
-                //    thing?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
-                //}
-                if (thing.def == ThingDefOf.MinifiedThing)
+                //不处理世界中散落的电池
+                /* if (thing.TryGetComp<CompPowerBattery>() != null)
                 {
-                    Thing thingInside = ((MinifiedThing)thing).InnerThing;
+                    thing?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
+                }*/
+                if (thing is MinifiedThing minifiedThing)
+                {
+                    Thing thingInside = minifiedThing.InnerThing;
                     if (thingInside.TryGetComp<CompPowerBattery>() != null)
                     {
                         ProcessBattery(thingInside);
                     }
                 }
-                if (thing.def == ThingDefOf.DropPodIncoming)
+                if (thing is DropPodIncoming droppod)
                 {
-                    foreach (Thing thing3 in ((DropPodIncoming)thing).Contents.innerContainer)
+                    foreach (Thing thing3 in droppod.Contents.innerContainer)
                     {
                         if (thing3.TryGetComp<CompPowerBattery>() != null)
                         {
                             ProcessBattery(thing3);
                         }
-                        if (thing3.def == ThingDefOf.MinifiedThing)
+                        if (thing3 is MinifiedThing minifiedThing2)
                         {
-                            Thing thingInside = ((MinifiedThing)thing3).InnerThing;
+                            Thing thingInside = minifiedThing2.InnerThing;
                             if (thingInside.TryGetComp<CompPowerBattery>() != null)
                             {
                                 ProcessBattery(thingInside);
@@ -96,16 +93,16 @@ namespace Explorite
     ///<summary>阻止空投舱产生钢渣块。</summary>
     public class ScenPart_WipeoutChunkSlag : ScenPart
     {
-        public override string Summary(Scenario scen) => null;
+        public override string Summary(Scenario scen) => "Magnuassembly_ScenPart_WipeoutChunkSlag_StaticSummary".Translate();
         public override void PostGameStart()
         {
             base.PostGameStart();
-            List<Thing> things = Find.CurrentMap.listerThings.AllThings;
+            List<Thing> things = Find.CurrentMap.listerThings.AllThings.Where(thing => thing is DropPodIncoming).ToList();
             foreach (Thing thing in things)
             {
-                if (thing.def == ThingDefOf.DropPodIncoming)
+                if (thing is DropPodIncoming droppod)
                 {
-                    ((DropPodIncoming)thing).Contents.leaveSlag = false;
+                    droppod.Contents.leaveSlag = false;
                 }
             }
             return;
@@ -114,22 +111,21 @@ namespace Explorite
     ///<summary>解开空投舱内的打包物品，并且会被直接部署为建筑物。</summary>
     public class ScenPart_UnpackMinified : ScenPart
     {
-        public override string Summary(Scenario scen) => null;
+        public override string Summary(Scenario scen) => "Magnuassembly_ScenPart_UnpackMinified_StaticSummary".Translate();
         public override void PostGameStart()
         {
             base.PostGameStart();
-            List<Thing> things = Find.CurrentMap.listerThings.AllThings;
-            foreach (Thing thing in things)
+            foreach (Thing thing in Find.CurrentMap.listerThings.AllThings.Where(thing => thing is DropPodIncoming))
             {
-                if (thing.def == ThingDefOf.DropPodIncoming)
+                if (thing is DropPodIncoming droppod)
                 {
-                    foreach (Thing thing2 in ((DropPodIncoming)thing).Contents.innerContainer)
+                    foreach (Thing thing2 in droppod.Contents.innerContainer.Where(thing => thing is MinifiedThing))
                     {
-                        if (thing2.def == ThingDefOf.MinifiedThing && (thing2 as MinifiedThing).InnerThing != null)
+                        if (thing2 is MinifiedThing minifiedThing && minifiedThing.InnerThing != null)
                         {
-                            ((MinifiedThing)thing2).InnerThing.SetFaction(Faction.OfPlayer);
-                            ((MinifiedThing)thing2).GetDirectlyHeldThings().TryTransferAllToContainer(((DropPodIncoming)thing).Contents.innerContainer);
-                            thing2.Destroy();
+                            minifiedThing.InnerThing.SetFaction(Faction.OfPlayer);
+                            minifiedThing.GetDirectlyHeldThings().TryTransferAllToContainer(droppod.Contents.innerContainer);
+                            minifiedThing.Destroy();
                         }
                     }
                 }
@@ -137,52 +133,10 @@ namespace Explorite
             return;
         }
     }
-    ///<summary>填满开局的所有空投舱内三联电池。</summary>
-    public class ScenPart_AddFilledTribatteryInPod : ScenPart
-    {
-        public override string Summary(Scenario scen) => null;
-        public override void PostGameStart()
-        {
-            base.PostGameStart();
-            List<Thing> things = Find.CurrentMap.listerThings.AllThings;
-            foreach (Thing thing in things)
-            {
-                if (thing.def == ThingDefOf.DropPodIncoming)
-                {
-                    Thing tribattery = ThingMaker.MakeThing(DefDatabase<ThingDef>.GetNamed("TriBattery"));
-                    tribattery?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
-                    ((DropPodIncoming)thing).Contents.innerContainer.TryAdd(tribattery, 1);
-                    break;
-                }
-            }
-            return;
-        }
-    }
-    /*
-    public class ScenPart_StartingThingOfPawn_Defined : ScenPart_ThingCount
-    {
-        public override void PostGameStart()
-        {
-            base.PostGameStart();
-            List<Thing> things = Find.CurrentMap.listerThings.AllThings;
-            foreach (Thing thing in things)
-            {
-                foreach (Thing thing2 in ((DropPodIncoming)thing).Contents.innerContainer)
-                {
-                    if (thing2.def.race.intelligence == Intelligence.Humanlike)
-                    {
-                        (thing2 as Pawn).inventory.innerContainer.TryAdd(
-                            ThingMaker.MakeThing(thingDef, stuff),count
-                            );
-                    }
-                }
-            }
-            return;
-        }
-    }*/
     ///<summary>将物品塞入殖民者的背包中。</summary>
     public class ScenPart_DumpThingsToPawnInv : ScenPart
     {
+        public override string Summary(Scenario scen) => "Magnuassembly_ScenPart_DumpThingsToPawnInv_StaticSummary".Translate();
         protected struct ThingAndOwner
         {
             public Thing thing;
@@ -193,19 +147,17 @@ namespace Explorite
                 this.thingOwner = thingOwner;
             }
         }
-        public override string Summary(Scenario scen) => null;
         public override void PostGameStart()
         {
             base.PostGameStart();
-            List<Thing> things = Find.CurrentMap.listerThings.AllThings;
             List<ThingAndOwner> queuedThings = new List<ThingAndOwner>();
             Pawn target = null;
 
-            foreach (Thing thingInWorld in things)
+            foreach (Thing thingInWorld in Find.CurrentMap.listerThings.AllThings.Where(thing => thing is DropPodIncoming))
             {
-                if (thingInWorld.def == ThingDefOf.DropPodIncoming)
+                if (thingInWorld is DropPodIncoming droppod)
                 {
-                    foreach (Thing thingInDroppod in ((DropPodIncoming)thingInWorld).Contents.innerContainer)
+                    foreach (Thing thingInDroppod in droppod.Contents.innerContainer)
                     {
                         if (thingInDroppod?.def?.race?.Humanlike == true)
                         {
@@ -214,7 +166,7 @@ namespace Explorite
                         }
                         else if (thingInDroppod?.def?.alwaysHaulable == true)
                         {
-                            queuedThings.Add(new ThingAndOwner(thingInDroppod, ((DropPodIncoming)thingInWorld).Contents.innerContainer));
+                            queuedThings.Add(new ThingAndOwner(droppod, droppod.Contents.innerContainer));
                         }
                     }
                 }
