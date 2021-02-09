@@ -46,11 +46,6 @@
       <HintPath>..\..\..\..\RimWorldWin_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Explorite_SoS2Lib, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Assemblies\Explorite_SoS2Lib.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="ShipsHaveInsides">
       <HintPath>..\..\..\..\..\..\workshop\content\294100\1909914131\1.2\Assemblies\ShipsHaveInsides.dll</HintPath>
       <Private>False</Private>
@@ -129,7 +124,7 @@
     <Compile Include="ExploriteDefof.cs" />
     <Compile Include="ExploriteDefsCracker.cs" />
     <Compile Include="ExploriteInitializer.cs" />
-    <Compile Include="ExploriteMiscPatches.cs" />
+    <Compile Include="ExploritePatches_Misc.cs" />
     <Compile Include="ExploriteMod.cs" />
     <Compile Include="FoodPoisonImmuneForSayers.cs" />
     <Compile Include="HediffCompProperties_SeverityFromEntropy_CentarusOnly.cs" />
@@ -140,12 +135,13 @@
     <Compile Include="HediffGiver.cs" />
     <Compile Include="HManipulator.cs" />
     <Compile Include="PatchCentaurRecipe.cs" />
-    <Compile Include="PawnGeneratorPatch.cs" />
+    <Compile Include="ExploritePatches_PawnGenerator.cs" />
     <Compile Include="PawnShieldGenerator.cs" />
     <Compile Include="Projectile.cs" />
     <Compile Include="Projectile_Explosive_RoofBypass.cs" />
     <Compile Include="ResearchProjectDef.cs" />
     <Compile Include="ScenPart.cs" />
+    <Compile Include="JobGiver_GetFood_Sayers.cs" />
     <Compile Include="SomeThingBlank.cs" />
     <Compile Include="StatPart_ApparelStatOffset_PsychicDeafIncluded.cs" />
     <Compile Include="ThoughtWorker_AlwaysActive_Centaur.cs" />

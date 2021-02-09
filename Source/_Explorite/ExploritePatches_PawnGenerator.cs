@@ -10,7 +10,7 @@ using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
-    internal static partial class ExploriteMiscPatches
+    internal static partial class ExploritePatches
     {
         /**
          * <summary>

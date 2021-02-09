@@ -9,6 +9,7 @@ using System.Reflection;
 using HarmonyLib;
 using RimWorld;
 using Verse;
+using Verse.AI;
 using static Explorite.ExploriteCore;
 
 namespace Explorite
@@ -22,9 +23,9 @@ namespace Explorite
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0058")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0060")]
     [StaticConstructorOnStartup]
-    internal static partial class ExploriteMiscPatches
+    internal static partial class ExploritePatches
     {
-        internal static readonly Type patchType = typeof(ExploriteMiscPatches);
+        internal static readonly Type patchType = typeof(ExploritePatches);
 
         //TypeInitializationException 未得到解决
         /* 
@@ -65,7 +66,7 @@ namespace Explorite
             incase: InstelledMods.SoS2, 
             postfix:nameof(HasSpaceSuitSlowPostfix));
         */
-        static ExploriteMiscPatches()
+        static ExploritePatches()
         {
             try
             {
@@ -123,6 +124,14 @@ namespace Explorite
                 //Log.Message("[Explorite]Patching RimWorld.Alert_NeedBatteries.NeedBatteries with postfix AlertNeedBatteriesPostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(Alert_NeedBatteries), "NeedBatteries", new Type[] { typeof(Map) }),
                     postfix: new HarmonyMethod(patchType, nameof(AlertNeedBatteriesPostfix)));
+
+                //Log.Message("[Explorite]Patching RimWorld.JobGiver_GetFood.TryGiveJob with postfix GetFoodTryGiveJobPostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(JobGiver_GetFood), "TryGiveJob"),
+                    postfix: new HarmonyMethod(patchType, nameof(GetFoodTryGiveJobPostfix)));
+
+                //Log.Message("[Explorite]Patching Verse.Pawn_HealthTracker.get_InPainShock with postfix PawnHealthTrackerInPainShockPostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_HealthTracker), "get_InPainShock"),
+                    postfix: new HarmonyMethod(patchType, nameof(PawnHealthTrackerInPainShockPostfix)));
 
                 if (InstelledMods.RimCentaurs)
                 {
@@ -352,6 +361,78 @@ namespace Explorite
         {
             if (__result == true &&
                 map.listerBuildings.ColonistsHaveBuilding(thing => thing is Building_TriBattery))
+            {
+                __result = false;
+            }
+        }
+
+        ///<summary>使Sayers优先选择尸体作为食物。</summary>
+        [HarmonyPostfix]public static void GetFoodTryGiveJobPostfix(JobGiver_GetFood __instance, ref Job __result, Pawn pawn)
+        {
+            if (pawn?.def != AlienSayersDef)
+            {
+                return;
+            }
+            if (pawn.Downed)
+            {
+                return;
+            }
+            if (pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Malnutrition)?.Severity > 0.4f)
+            {
+                return;
+            }
+            Need_Food food = pawn.needs.food;
+            if (
+                __instance.GetType().GetField("minCategory", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is HungerCategory minCategory &&
+                __instance.GetType().GetField("maxLevelPercentage", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is float maxLevelPercentage &&
+                (food == null || (int)food.CurCategory < (int)minCategory || food.CurLevelPercentage > maxLevelPercentage))
+            {
+                return;
+            }
+            Thing thing = GenClosest.ClosestThingReachable(
+                root: pawn.Position,
+                map: pawn.Map,
+                thingReq: ThingRequest.ForGroup(ThingRequestGroup.Corpse),
+                peMode: PathEndMode.Touch,
+                traverseParams: TraverseParms.For(pawn),
+                maxDistance: 9999f,
+                validator: delegate (Thing t)
+                {
+                    if (!(t is Corpse))
+                    {
+                        return false;
+                    }
+                    if (t.IsForbidden(pawn))
+                    {
+                        return false;
+                    }
+                    if (!t.IngestibleNow)
+                    {
+                        return false;
+                    }
+                    if (!pawn.RaceProps.CanEverEat(t))
+                    {
+                        return false;
+                    }
+                    return pawn.CanReserve(t);
+                });
+            if (thing == null)
+            {
+                return;
+            }
+
+            Job job = JobMaker.MakeJob(JobDefOf.Ingest, thing);
+            if (job != null)
+                __result = job;
+        }
+
+        ///<summary>阻止半人马疼痛休克。</summary>
+        [HarmonyPostfix]
+        public static void PawnHealthTrackerInPainShockPostfix(Pawn_HealthTracker __instance, ref bool __result)
+        {
+            if (
+                __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                && pawn.def == AlienCentaurDef)
             {
                 __result = false;
             }

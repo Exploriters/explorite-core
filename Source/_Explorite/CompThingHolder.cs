@@ -39,7 +39,7 @@ namespace Explorite
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
             //if(mode != DestroyMode.Vanish)
-            {   
+            {
                 innerContainer.TryDropAll(parent.Position, previousMap, ThingPlaceMode.Near);
             }
         }

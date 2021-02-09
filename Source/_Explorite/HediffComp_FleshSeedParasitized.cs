@@ -37,17 +37,31 @@ namespace Explorite
 
             corpse.Strip();
 
-            if (Props.injuryCreatedOnDeath != null)
+            List<BodyPartRecord> parts =
+                Pawn.RaceProps.body.corePart.parts.Where((BodyPartRecord part) => part.coverageAbs > 0f && !Pawn.health.hediffSet.PartIsMissing(part)).ToList();
+            //parts.Add(Pawn.RaceProps.body.corePart);
+            //foreach (BodyPartRecord part in Pawn.RaceProps.body.AllParts.Where((BodyPartRecord part) => !part.IsCorePart && part.coverageAbs > 0f && !Pawn.health.hediffSet.PartIsMissing(part)))
+            foreach (BodyPartRecord part in parts)
             {
-                List<BodyPartRecord> list = new List<BodyPartRecord>(Pawn.RaceProps.body.AllParts.Where((BodyPartRecord part) => part.coverageAbs > 0f && !Pawn.health.hediffSet.PartIsMissing(part)));
-                int num = Mathf.Min(Props.injuryCount.RandomInRange, list.Count);
-                for (int i = 0; i < num; i++)
-                {
-                    int index = Rand.Range(0, list.Count);
-                    BodyPartRecord part2 = list[index];
-                    list.RemoveAt(index);
-                    Pawn.health.AddHediff(Props.injuryCreatedOnDeath, part2);
-                }
+                Hediff hediff = HediffMaker.MakeHediff(InjectionHediffDef, Pawn, part);
+                
+                hediff.Severity = part.def.hitPoints * 20;
+                Pawn.health.AddHediff(hediff, part, new DamageInfo(
+                        InjectionDamageDef, part.def.hitPoints * 20,
+                        armorPenetration: 2f,
+                        instigator: parent.pawn,
+                        weapon: parent.pawn.def,
+                        hitPart: part
+                        ));
+                /*Pawn.TakeDamage(
+                    new DamageInfo(
+                        InjectionDamageDef, part.def.hitPoints * 20,
+                        armorPenetration: 2f,
+                        instigator: parent.pawn,
+                        weapon: parent.pawn.def,
+                        hitPart: part
+                        )
+                );*/
             }
             if (rott != null &&
                 rott.RotProgress < rott.PropsRot.TicksToDessicated)
