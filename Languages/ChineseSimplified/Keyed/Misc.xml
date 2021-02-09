@@ -12,7 +12,7 @@
   <Magnuassembly_Ability_MassPsychicDeafCentaur_DeafnessCantCast>在自身受到的心灵失聪效果消散前无法再次释放。仍需冷却{0}。</Magnuassembly_Ability_MassPsychicDeafCentaur_DeafnessCantCast>
   
   <Magnuassembly_ScenPart_FillBattery_StaticSummary>地图上所有的电容器都会在游戏开始时被填满。</Magnuassembly_ScenPart_FillBattery_StaticSummary>
-  <Magnuassembly_ScenPart_RemoveChunkSlag_StaticSummary>起始空投舱不再产生钢渣块。</Magnuassembly_ScenPart_RemoveChunkSlag_StaticSummary>
+  <Magnuassembly_ScenPart_WipeoutChunkSlag_StaticSummary>起始空投舱不再产生钢渣块。</Magnuassembly_ScenPart_WipeoutChunkSlag_StaticSummary>
   <Magnuassembly_ScenPart_DumpThingsToPawnInv_StaticSummary>物品将被装入人物背包。</Magnuassembly_ScenPart_DumpThingsToPawnInv_StaticSummary>
   <Magnuassembly_ScenPart_UnpackMinified_StaticSummary>解开空投舱内被打包的建筑物。</Magnuassembly_ScenPart_UnpackMinified_StaticSummary>
   
