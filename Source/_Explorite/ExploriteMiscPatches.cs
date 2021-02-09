@@ -120,6 +120,10 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_GrowthRate"),
                     postfix: new HarmonyMethod(patchType, nameof(PlantGrowthRateFactorEnsurePostfix)));
 
+                //Log.Message("[Explorite]Patching RimWorld.Alert_NeedBatteries.NeedBatteries with postfix AlertNeedBatteriesPostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(Alert_NeedBatteries), "NeedBatteries", new Type[] { typeof(Map) }),
+                    postfix: new HarmonyMethod(patchType, nameof(AlertNeedBatteriesPostfix)));
+
                 if (InstelledMods.RimCentaurs)
                 {
                     // 依赖 HediffDef PsychicDeafCentaur
@@ -340,6 +344,16 @@ namespace Explorite
                 && __result < 1f)
             {
                 __result = 1f;
+            }
+        }
+
+        ///<summary>使三联电池同样被视为<see cref = "Alert_NeedBatteries" />可接受的电池类型。</summary>
+        [HarmonyPostfix]public static void AlertNeedBatteriesPostfix(Alert_NeedBatteries __instance, ref bool __result, Map map)
+        {
+            if (__result == true &&
+                map.listerBuildings.ColonistsHaveBuilding(thing => thing is Building_TriBattery))
+            {
+                __result = false;
             }
         }
 

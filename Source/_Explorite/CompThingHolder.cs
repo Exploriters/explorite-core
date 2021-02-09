@@ -21,6 +21,21 @@ namespace Explorite
             ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, ((IThingHolder)this).GetDirectlyHeldThings());
         }
 
+        public override void CompTick()
+        {
+            base.CompTick();
+            innerContainer.ThingOwnerTick();
+        }
+        public override void CompTickRare()
+        {
+            base.CompTickRare();
+            innerContainer.ThingOwnerTickRare();
+        }
+        public override void CompTickLong()
+        {
+            base.CompTickLong();
+            innerContainer.ThingOwnerTickLong();
+        }
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
             //if(mode != DestroyMode.Vanish)

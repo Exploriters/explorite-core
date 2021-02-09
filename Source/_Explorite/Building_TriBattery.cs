@@ -12,6 +12,7 @@ namespace Explorite
     /**
      * <summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />不继承自<seealso cref = "Building_Battery" />，因该类并未有独有方法，且部分行为不可被覆盖。</summary>
      */
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0051")]
     [StaticConstructorOnStartup]
     public class Building_TriBattery : Building//_Battery
     {

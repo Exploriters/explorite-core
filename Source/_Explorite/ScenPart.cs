@@ -159,14 +159,15 @@ namespace Explorite
                 {
                     foreach (Thing thingInDroppod in droppod.Contents.innerContainer)
                     {
-                        if (thingInDroppod?.def?.race?.Humanlike == true)
+                        if (target == null &&
+                            thingInDroppod is Pawn pawnInDroppod &&
+                            pawnInDroppod?.def?.race?.Humanlike == true)
                         {
-                            if (target == null)
-                                target = (Pawn)thingInDroppod;
+                            target = pawnInDroppod;
                         }
                         else if (thingInDroppod?.def?.alwaysHaulable == true)
                         {
-                            queuedThings.Add(new ThingAndOwner(droppod, droppod.Contents.innerContainer));
+                            queuedThings.Add(new ThingAndOwner(thingInDroppod, droppod.Contents.innerContainer));
                         }
                     }
                 }
