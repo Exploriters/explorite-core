@@ -15,9 +15,12 @@ namespace Explorite
     {
         public ThingOwner<Thing> innerContainer = new ThingOwner<Thing>();
 
-        void IThingHolder.GetChildHolders(List<IThingHolder> outChildren) { }
-
         ThingOwner IThingHolder.GetDirectlyHeldThings() => innerContainer;
+        void IThingHolder.GetChildHolders(List<IThingHolder> outChildren)
+        {
+            ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, ((IThingHolder)this).GetDirectlyHeldThings());
+        }
+
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
             //if(mode != DestroyMode.Vanish)
@@ -29,7 +32,7 @@ namespace Explorite
         public override string CompInspectStringExtra()
         {
             string text = base.CompInspectStringExtra();
-            string str = (innerContainer.Any ? innerContainer.ContentsString : ((string)"UnknownLower".Translate()));
+            string str = innerContainer.Any ? innerContainer.ContentsString : ((string)"NothingLower".Translate());
             if (!text.NullOrEmpty())
             {
                 text += "\n";
