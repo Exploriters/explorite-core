@@ -44,7 +44,7 @@ namespace Explorite
             foreach (BodyPartRecord part in parts)
             {
                 Hediff hediff = HediffMaker.MakeHediff(InjectionHediffDef, Pawn, part);
-                
+
                 hediff.Severity = part.def.hitPoints * 20;
                 Pawn.health.AddHediff(hediff, part, new DamageInfo(
                         InjectionDamageDef, part.def.hitPoints * 20,

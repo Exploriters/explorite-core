@@ -47,7 +47,7 @@ namespace Explorite
             base.Draw();
             CompPowerBattery comp = GetComp<CompPowerBattery>();
             GenDraw.FillableBarRequest r = default;
-            r.center = DrawPos + Vector3.up * 0.1f;
+            r.center = DrawPos + (Vector3.up * 0.1f);
             r.size = BarSize;
             r.fillPercent = comp.StoredEnergy / comp.Props.storedEnergyMax;
             r.filledMat = BatteryBarFilledMat;

@@ -7,6 +7,7 @@ using RimWorld;
 using HarmonyLib;
 using Verse;
 using static Explorite.ExploriteCore;
+using System.Collections.Generic;
 
 namespace Explorite
 {
@@ -18,7 +19,7 @@ namespace Explorite
          * </summary>
          */
         [HarmonyPostfix]
-        public static void GeneratePawnPostfix(ref Pawn __result)
+        public static void GeneratePawnPostfix(ref Pawn __result, PawnGenerationRequest request)
         {
             if (__result.def == AlienCentaurDef)
             {
@@ -30,6 +31,16 @@ namespace Explorite
                     //__result.abilities.abilities.Add(new Ability(__result, DefDatabase<AbilityDef>.GetNamed("MassPsychicDeafCentaur")));
                     __result.ageTracker.AgeBiologicalTicks += 360000000;
                     __result.ageTracker.AgeChronologicalTicks += 360000000;
+
+                    //__result.story.traits.GainTrait(new Trait(TraitDefOf.Asexual, 0, forced: true));
+
+                    /*__result.story.traits.allTraits.Sort(delegate (Trait t1, Trait t2) {
+                        if (t1.def == TraitDefOf.Asexual && t2.def != TraitDefOf.Asexual)
+                        {
+                            return 1;
+                        }
+                        return 0;
+                    });*/
 
                     foreach (SkillRecord sr in __result.skills.skills)
                     {
@@ -44,7 +55,7 @@ namespace Explorite
                 else
                 {
                     //__result.def = ThingDefOf.Human;
-                    __result = PawnGenerator.GeneratePawn(PawnKindDefOf.Villager);
+                    __result = PawnGenerator.GeneratePawn(PawnKindDefOf.Villager, request.Faction);
                 }
             }
             if (__result.def == AlienSayersDef)
@@ -56,7 +67,7 @@ namespace Explorite
                 else
                 {
                     //__result.def = ThingDefOf.Human;
-                    __result = PawnGenerator.GeneratePawn(PawnKindDefOf.Villager);
+                    __result = PawnGenerator.GeneratePawn(PawnKindDefOf.Villager, request.Faction);
                 }
             }
 

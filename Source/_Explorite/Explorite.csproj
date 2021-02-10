@@ -144,6 +144,7 @@
     <Compile Include="JobGiver_GetFood_Sayers.cs" />
     <Compile Include="SomeThingBlank.cs" />
     <Compile Include="StatPart_ApparelStatOffset_PsychicDeafIncluded.cs" />
+    <Compile Include="StatPart_WorkSpeedByMood_Centaur.cs" />
     <Compile Include="ThoughtWorker_AlwaysActive_Centaur.cs" />
     <Compile Include="Verb_DoNothing.cs" />
     <Compile Include="Verb_SensitivityToggle.cs" />

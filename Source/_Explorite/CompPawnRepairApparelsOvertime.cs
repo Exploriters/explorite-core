@@ -65,7 +65,7 @@ namespace Explorite
                 }
                 else
                 {
-                    lastHealTick = InGameTick - ticksBetweenHeal / 20 - (ticksBetweenHeal % 20 >= 1 ? 1 : 0);
+                    lastHealTick = InGameTick - (ticksBetweenHeal / 20) - (ticksBetweenHeal % 20 >= 1 ? 1 : 0);
                 }
             }
         }

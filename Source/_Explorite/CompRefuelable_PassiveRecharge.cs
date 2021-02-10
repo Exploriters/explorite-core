@@ -35,7 +35,7 @@ namespace Explorite
         public float displayFragment => ((CompProperties_Refuelable_PassiveRecharge)Props).displayFragment;
         public int fuelGenFragmentTicks => ((CompProperties_Refuelable_PassiveRecharge)Props).fuelGenFragmentTicks;
         public float fuelCapacity => ((CompProperties_Refuelable_PassiveRecharge)Props).fuelCapacity;
-        public float fuelWithFragment => Fuel + ticksWithoutFuel * fuelGenFragment / fuelGenFragmentTicks;
+        public float fuelWithFragment => Fuel + (ticksWithoutFuel * fuelGenFragment / fuelGenFragmentTicks);
         public float fuelPreSec => fuelGenFragment / (fuelGenFragmentTicks / 60f);
         public override IEnumerable<StatDrawEntry> SpecialDisplayStats()
         {

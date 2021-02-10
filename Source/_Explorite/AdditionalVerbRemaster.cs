@@ -20,27 +20,6 @@ namespace Explorite
         private static readonly Type patchType = typeof(AdditionalVerbPatch);
         static AdditionalVerbPatch()
         {
-            //HarmonyInstance harmonyInstance = HarmonyInstance.Create("Explorite.rimworld.mod.AdditionalVerbPatch");
-            //Harmony harmonyInstance = new Harmony("Explorite.rimworld.mod.AdditionalVerbPatch");
-            //if (!Harmony.HasAnyPatches("Explorite.rimworld.mod.AdditionalVerbPatch"))
-            //{
-            /*
-            //harmonyInstance.Patch(AccessTools.Method(typeof(Command_VerbTarget), "GizmoOnGUI", null, null), null, new HarmonyMethod(patchType, "GizmoOnGUIPostfix", null));
-            //harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "GetTargetingVerb", null, null), new HarmonyMethod(patchType, "GetTargetingVerbPrefix", null));
-
-            harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_EquipmentTracker), "GetGizmos", null, null), null, new HarmonyMethod(patchType, "GetGizmosPostfix", null));
-
-            harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "BeginTargeting", new Type[] { typeof(ITargetingSource), typeof(ITargetingSource) }), new HarmonyMethod(patchType, "BeginTargetingPrefix", null));
-            harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "OrderPawnForceTarget"), null, new HarmonyMethod(patchType, "OrderPawnForceTargetPostfix", null));
-            harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "StopTargeting", null, null), new HarmonyMethod(patchType, "StopTargetingPrefix", null));
-
-            harmonyInstance.Patch(AccessTools.Method(typeof(VerbTracker), "CreateVerbTargetCommand", null, null), new HarmonyMethod(patchType, "CreateVerbTargetCommandPrefix", null));
-            harmonyInstance.Patch(AccessTools.Property(typeof(VerbTracker), "PrimaryVerb").GetGetMethod(), new HarmonyMethod(patchType, "PrimaryVerbPrefix", null));
-
-            harmonyInstance.Patch(AccessTools.Method(typeof(VerbProperties), "AdjustedAccuracy", null, null), null, new HarmonyMethod(patchType, "AdjustedAccuracyPostfix", null));
-
-            harmonyInstance.Patch(AccessTools.Method(typeof(TooltipUtility), "ShotCalculationTipString", null, null), new HarmonyMethod(patchType, "ShotCalculationTipStringPrefix", null));
-            */
             harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_EquipmentTracker), "GetGizmos", null, null), null, new HarmonyMethod(patchType, "GetGizmosPostfix", null));
 
             harmonyInstance.Patch(AccessTools.Method(typeof(Targeter), "BeginTargeting", new Type[] { typeof(ITargetingSource), typeof(ITargetingSource) }), new HarmonyMethod(patchType, "BeginTargetingPrefix", null));

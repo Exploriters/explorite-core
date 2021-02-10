@@ -233,8 +233,8 @@ namespace Explorite
         {
             SoundDefOf.EnergyShield_AbsorbDamage.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
             impactAngleVect = Vector3Utility.HorizontalVectorFromAngle(dinfo.Angle);
-            Vector3 loc = parent.TrueCenter() + impactAngleVect.RotatedBy(180f) * 0.5f;
-            float num = Mathf.Min(10f, 2f + dinfo.Amount / 10f);
+            Vector3 loc = parent.TrueCenter() + (impactAngleVect.RotatedBy(180f) * 0.5f);
+            float num = Mathf.Min(10f, 2f + (dinfo.Amount / 10f));
             MoteMaker.MakeStaticMote(loc, parent.Map, ThingDefOf.Mote_ExplosionFlash, num);
             int num2 = (int)num;
             for (int i = 0; i < num2; i++)
@@ -258,7 +258,7 @@ namespace Explorite
                 SoundDefOf.EnergyShield_AbsorbDamage.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
             for (int i = 0; i < 6; i++)
             {
-                MoteMaker.ThrowDustPuff(parent.TrueCenter() + Vector3Utility.HorizontalVectorFromAngle(Rand.Range(0, 360)) * Rand.Range(0.3f, 0.6f), parent.Map, Rand.Range(0.8f, 1.2f));
+                MoteMaker.ThrowDustPuff(parent.TrueCenter() + (Vector3Utility.HorizontalVectorFromAngle(Rand.Range(0, 360)) * Rand.Range(0.3f, 0.6f)), parent.Map, Rand.Range(0.8f, 1.2f));
             }
             //energy = 0f;
             energy = -Math.Min(EnergyMax * 10 / 3, overkill * 3);
@@ -328,7 +328,7 @@ namespace Explorite
                 Text.Font = GameFont.Tiny;
                 Widgets.Label(rect3, ((Pawn)shield.parent)?.Name?.ToStringShort);
                 Rect rect4 = rect2;
-                rect4.yMin = rect2.y + rect2.height / 2f;
+                rect4.yMin = rect2.y + (rect2.height / 2f);
                 Widgets.FillableBar(rect4, shield.energyPrecent, FullShieldBarTex, EmptyShieldBarTex, doBorder: false);
                 Text.Font = GameFont.Small;
                 Text.Anchor = TextAnchor.MiddleCenter;

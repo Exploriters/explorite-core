@@ -33,7 +33,7 @@ namespace Explorite
             if (Rand.Value < 0.05f)
             {
                 //return new Color(Rand.Value, Rand.Value, Rand.Value);
-                return Color.HSVToRGB(Rand.Value * 360f, (float)Math.Sin(90.0f - Rand.Value * 90.0f), (float)Math.Sin(90.0f - Rand.Value * 90.0f));
+                return Color.HSVToRGB(Rand.Value * 360f, (float)Math.Sin(90.0f - (Rand.Value * 90.0f)), (float)Math.Sin(90.0f - (Rand.Value * 90.0f)));
             }
             if (/*PawnSkinColors.IsDarkSkin(skinColor) || */Rand.Value < 0.5f)
             {
