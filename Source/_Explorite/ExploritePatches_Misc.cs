@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using HarmonyLib;
 using RimWorld;
 using Verse;
@@ -92,10 +93,41 @@ namespace Explorite
                 //Log.Message("[Explorite]Patching RimWorld.Need_Outdoors.get_Disabled with postfix NeedOutdoors_DisabledPostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(Need_Outdoors), "get_Disabled", new Type[] { }),
                     postfix: new HarmonyMethod(patchType, nameof(NeedOutdoors_DisabledPostfix)));
+                //Log.Message("[Explorite]Patching RimWorld.Need_Mood.GetTipString with postfix NeedMood_GetTipStringPostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Mood), nameof(Need_Mood.GetTipString)),
+                    postfix: new HarmonyMethod(patchType, nameof(NeedMood_GetTipStringPostfix)));
+                //Log.Message("[Explorite]Patching RimWorld.StatWorker.GetValue with postfix StatWorker_MentalBreakThreshold_GetValuePostfix");
+                //harmonyInstance.Patch(AccessTools.Method(typeof(StatWorker), nameof(StatWorker.GetValue), new[] { typeof(StatRequest), typeof(bool) }),
+                //    postfix: new HarmonyMethod(patchType, nameof(StatWorker_MentalBreakThreshold_GetValuePostfix)));
+                /* //Log.Message("[Explorite]Patching RimWorld.Need_Mood.DrawOnGUI with postfix NeedMood_DrawOnGUIPostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Mood), nameof(Need_Mood.DrawOnGUI)),
+                    postfix: new HarmonyMethod(patchType, nameof(NeedMood_DrawOnGUIPostfix)));
+                //Log.Message("[Explorite]Patching RimWorld.Need_Comfort.DrawOnGUI with postfix NeedComfort_DrawOnGUIPostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Comfort), nameof(Need_Comfort.DrawOnGUI)),
+                    postfix: new HarmonyMethod(patchType, nameof(NeedComfort_DrawOnGUIPostfix)));
+                //Log.Message("[Explorite]Patching RimWorld.Need_Beauty.DrawOnGUI with postfix NeedBeauty_DrawOnGUIPostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Beauty), nameof(Need_Beauty.DrawOnGUI)),
+                    postfix: new HarmonyMethod(patchType, nameof(NeedBeauty_DrawOnGUIPostfix))); */
+                //Log.Message("[Explorite]Patching RimWorld.Need.DrawOnGUI with postfix Need_DrawOnGUIPostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(Need), nameof(Need.DrawOnGUI)),
+                    postfix: new HarmonyMethod(patchType, nameof(Need_DrawOnGUIPostfix)));
+                //Log.Message("[Explorite]Patching RimWorld.ThoughtWorker_NeedComfort.CurrentStateInternal with postfix ThoughtWorker_NeedComfort_CurrentStateInternalPostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_NeedComfort), "CurrentStateInternal"),
+                    postfix: new HarmonyMethod(patchType, nameof(ThoughtWorker_NeedComfort_CurrentStateInternalPostfix)));
 
                 //Log.Message("[Explorite]Patching RimWorld.MeditationFocusDef.CanPawnUse with postfix MeditationFocusCanPawnUsePostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.CanPawnUse), new Type[] { typeof(Pawn) }),
                     postfix: new HarmonyMethod(patchType, nameof(MeditationFocusCanPawnUsePostfix)));
+
+                //Log.Message("[Explorite]Patching RimWorld.MentalBreaker.get_BreakThresholdMinor with postfix BreakThresholdMinor_BreakThresholdMinorPostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdMinor"),
+                    postfix: new HarmonyMethod(patchType, nameof(MentalBreaker_BreakThresholdMinorPostfix)));
+                //Log.Message("[Explorite]Patching RimWorld.MentalBreaker.get_BreakThresholdMajor with postfix BreakThresholdMajor_BreakThresholdMajorPostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdMajor"),
+                    postfix: new HarmonyMethod(patchType, nameof(MentalBreaker_BreakThresholdMajorPostfix)));
+                //Log.Message("[Explorite]Patching RimWorld.MentalBreaker.get_BreakThresholdExtreme with postfix BreakThresholdExtreme_BreakThresholdExtremePostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdExtreme"),
+                    postfix: new HarmonyMethod(patchType, nameof(MentalBreaker_BreakThresholdExtremePostfix)));
 
                 //Log.Message("[Explorite]Patching RimWorld.CompAssignableToPawn_Throne.AssignedAnything with postfix AssignableThroneToPawnAssignedAnythingPostfix");
                 //harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn_Throne), nameof(CompAssignableToPawn_Throne.AssignedAnything), new Type[] { typeof(Pawn) }),
@@ -104,11 +136,9 @@ namespace Explorite
                 //Log.Message("[Explorite]Patching RimWorld.CompAssignableToPawn_Bed.get_AssigningCandidates with postfix AssignBedToPawnCandidatesPostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn), "get_AssigningCandidates"),
                     postfix: new HarmonyMethod(patchType, nameof(AssignBedToPawnCandidatesPostfix)));
-
                 //Log.Message("[Explorite]Patching RimWorld.CompAssignableToPawn_Bed.get_HasFreeSlot with postfix AssignBedToPawnHasFreeSlotPostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn), "get_HasFreeSlot"),
                     postfix: new HarmonyMethod(patchType, nameof(AssignBedToPawnHasFreeSlotPostfix)));
-
                 //Log.Message("[Explorite]Patching RimWorld.CompAssignableToPawn_Bed.TryAssignPawn with postfix AssignBedToPawnTryAssignPawnPostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn_Bed), nameof(CompAssignableToPawn_Bed.TryAssignPawn)),
                     postfix: new HarmonyMethod(patchType, nameof(AssignBedToPawnTryAssignPawnPostfix)));
@@ -116,7 +146,6 @@ namespace Explorite
                 //Log.Message("[Explorite]Patching RimWorld.Plant.get_GrowthRateFactor_Temperature with postfix AssignBedToPawnTryAssignPawnPostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_GrowthRateFactor_Temperature"),
                     postfix: new HarmonyMethod(patchType, nameof(PlantGrowthRateFactorNoTemperaturePostfix)));
-
                 //Log.Message("[Explorite]Patching RimWorld.Plant.get_GrowthRate with postfix PlantGrowthRateFactorEnsurePostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_GrowthRate"),
                     postfix: new HarmonyMethod(patchType, nameof(PlantGrowthRateFactorEnsurePostfix)));
@@ -132,6 +161,10 @@ namespace Explorite
                 //Log.Message("[Explorite]Patching Verse.Pawn_HealthTracker.get_InPainShock with postfix PawnHealthTrackerInPainShockPostfix");
                 harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_HealthTracker), "get_InPainShock"),
                     postfix: new HarmonyMethod(patchType, nameof(PawnHealthTrackerInPainShockPostfix)));
+
+                //Log.Message("[Explorite]Patching RimWorld.MassUtility.Capacity with postfix MassUtilityCapacityPostfix");
+                harmonyInstance.Patch(AccessTools.Method(typeof(MassUtility), nameof(MassUtility.Capacity)),
+                    postfix: new HarmonyMethod(patchType, nameof(MassUtilityCapacityPostfix)));
 
                 if (InstelledMods.RimCentaurs)
                 {
@@ -223,15 +256,112 @@ namespace Explorite
             }
         }
 
-        ///<summary>移除半人马的户外需求。</summary>
+        ///<summary>移除半人马和Sayers的户外需求。</summary>
         [HarmonyPostfix]public static void NeedOutdoors_DisabledPostfix(Need_Outdoors __instance, ref bool __result)
+        {
+            if (
+                __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                && (pawn.def == AlienCentaurDef || pawn.def == AlienSayersDef)
+                )
+            {
+                __result = true;
+            }
+        }
+
+        ///<summary>移除半人马的心情需求显示精神崩溃阈值描述。</summary>
+        [HarmonyPostfix]public static void NeedMood_GetTipStringPostfix(Need_Mood __instance, ref string __result)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
                 && pawn.def == AlienCentaurDef
                 )
             {
-                __result = true;
+                __result = __instance.LabelCap + ": " + __instance.CurLevelPercentage.ToStringPercent() + "\n" + __instance.def.description;
+            }
+        }
+
+        ///<summary>更改需求显示的分隔符。</summary>
+        [HarmonyPostfix] public static void Need_DrawOnGUIPostfix(Need __instance)
+        {
+            if (
+                __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn &&
+                __instance.GetType().GetField("threshPercents", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is List<float> threshPercents
+                )
+            {
+                //移除半人马的心情需求显示精神崩溃阈值分隔符
+                if (__instance is Need_Mood && pawn.def == AlienCentaurDef)
+                {
+                    threshPercents.Clear();
+                }
+                //移除半人马和Sayers的舒适需求显示第一个分隔符
+                if (__instance is Need_Comfort && (pawn.def == AlienSayersDef || pawn.def == AlienCentaurDef))
+                {
+                    threshPercents.RemoveAll(num => num < 0.5f);
+                }
+                //移除Sayers的美观度需求显示第二个分隔符
+                if (__instance is Need_Beauty && pawn.def == AlienSayersDef)
+                {
+                    threshPercents.RemoveAll(num => num > 0.3f && num < 0.4f);
+                }
+            }
+        }
+
+        ///<summary>移除半人马舒适度需求的负面情绪。</summary>
+        [HarmonyPostfix]public static void ThoughtWorker_NeedComfort_CurrentStateInternalPostfix(ThoughtWorker_NeedComfort __instance, ref ThoughtState __result, Pawn p)
+        {
+            if (
+                p.def == AlienCentaurDef && __result.Active  && __result.StageIndex == 0
+                )
+            {
+                __result = ThoughtState.Inactive;
+            }
+        }
+
+        /*
+        ///<summary>移除半人马精神崩溃阈值。</summary>
+        [HarmonyPostfix]public static void StatWorker_MentalBreakThreshold_GetValuePostfix(StatWorker __instance, ref float __result, StatRequest req)
+        {
+            if (
+                req.Pawn.def == AlienCentaurDef &&
+                __instance.GetType().GetField("stat", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is StatDef stat
+                && stat == StatDefOf.MentalBreakThreshold
+                )
+            {
+                __result = Math.Min(__result, -0.005f);
+            }
+        }
+        */
+        ///<summary>移除半人马精神轻度崩溃阈值。</summary>
+        [HarmonyPostfix]public static void MentalBreaker_BreakThresholdMinorPostfix(MentalBreaker __instance, ref float __result)
+        {
+            if (
+                __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                && pawn.def == AlienCentaurDef
+                )
+            {
+                __result = Math.Min(__result, -0.15f);
+            }
+        }
+        ///<summary>移除半人马精神中度崩溃阈值。</summary>
+        [HarmonyPostfix]public static void MentalBreaker_BreakThresholdMajorPostfix(MentalBreaker __instance, ref float __result)
+        {
+            if (
+                __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                && pawn.def == AlienCentaurDef
+                )
+            {
+                __result = Math.Min(__result, -0.15f);
+            }
+        }
+        ///<summary>移除半人马精神重度崩溃阈值。</summary>
+        [HarmonyPostfix]public static void MentalBreaker_BreakThresholdExtremePostfix(MentalBreaker __instance, ref float __result)
+        {
+            if (
+                __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                && pawn.def == AlienCentaurDef
+                )
+            {
+                __result = Math.Min(__result, -0.15f);
             }
         }
 
@@ -285,7 +415,6 @@ namespace Explorite
                    orderby CanAssignTo(p).Accepted descending
                    select p;
         }*/
-
         
         ///<summary>使半人马只能使用双人床。</summary>
         [HarmonyPostfix]public static void AssignBedToPawnCandidatesPostfix(CompAssignableToPawn __instance, ref IEnumerable<Pawn> __result)
@@ -343,6 +472,14 @@ namespace Explorite
             if (__instance.def == FleshTreeDef)
             {
                 __result = 1f;
+            }
+        }
+        ///<summary>使血肉树不会进入休眠状态。</summary>
+        [HarmonyPostfix]public static void PlantNoRestingPostfix(Plant __instance, ref bool __result)
+        {
+            if (__instance.def == FleshTreeDef)
+            {
+                __result = false;
             }
         }
 
@@ -435,6 +572,21 @@ namespace Explorite
                 && pawn.def == AlienCentaurDef)
             {
                 __result = false;
+            }
+        }
+        
+        ///<summary>增强半人马负重能力。</summary>
+        [HarmonyPostfix]
+        public static void MassUtilityCapacityPostfix(ref float __result, Pawn p, ref StringBuilder explanation)
+        {
+            if (p.def == AlienCentaurDef)
+            {
+                string strPreProcess = "  - " + p.LabelShortCap + ": " + __result.ToStringMassOffset();
+                __result = 1000f;
+                if (explanation != null)
+                {
+                    explanation.Replace(strPreProcess, "  - " + p.LabelShortCap + ": " + __result.ToStringMassOffset());
+                }
             }
         }
 
