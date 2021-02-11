@@ -29,45 +29,6 @@ namespace Explorite
     {
         internal static readonly Type patchType = typeof(ExploritePatches);
 
-        //TypeInitializationException 未得到解决
-        /* 
-        private static MethodInfo Patch(
-            Type type,
-            string name,
-            Type[] parameters = null,
-            Type[] generics = null,
-            string prefix = null,
-            string postfix = null,
-            string transpiler = null,
-            string finalizer = null,
-            bool incase = true
-            )
-        {
-            Log.Message($"[Explorite]Patching {type.FullName} with {}");
-            return incase?harmonyInstance.Patch(AccessTools.Method(type, name, parameters, generics),
-                prefix: postfix.NullOrEmpty()?null:new HarmonyMethod(patchType, prefix),
-                postfix: postfix.NullOrEmpty()?null:new HarmonyMethod(patchType, postfix),
-                transpiler: postfix.NullOrEmpty()?null:new HarmonyMethod(patchType, transpiler),
-                finalizer: postfix.NullOrEmpty()?null:new HarmonyMethod(patchType, finalizer))
-                :null;
-        }*/
-        /*
-        Patch(typeof(PawnGenerator),                nameof(PawnGenerator.GeneratePawn),     new[] { typeof(PawnGenerationRequest) }, 
-            postfix:nameof(GeneratePawnPostfix));
-        Patch(typeof(SkillRecord),                  nameof(SkillRecord.Learn),              new[] { typeof(float), typeof(bool) }, 
-            prefix: nameof(SkillLearnPrefix));
-        Patch(typeof(SkillRecord),                  nameof(SkillRecord.Interval),           null, 
-            postfix:nameof(SkillIntervalPostfix));
-        Patch(typeof(Pawn_PsychicEntropyTracker),   "get_PainMultiplier",                   null, 
-            postfix:nameof(NoPainBounsForCentaursPostfix));
-        Patch(typeof(IncidentWorker_WandererJoin),  "CanFireNowSub",                        new[] { typeof(IncidentParms) }, 
-            postfix:nameof(WandererJoin_CanFireNowPostfix));
-        Patch(typeof(Need_Outdoors),                "get_Disabled",                         null, 
-            postfix:nameof(NeedOutdoors_DisabledPostfix));
-        Patch(typeof(ShipInteriorMod2),             "HasSpaceSuitSlow",                     new[] { typeof(Pawn) },
-            incase: InstelledMods.SoS2, 
-            postfix:nameof(HasSpaceSuitSlowPostfix));
-        */
         static ExploritePatches()
         {
             string last_patch = "";
@@ -139,6 +100,9 @@ namespace Explorite
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(MassUtility), nameof(MassUtility.Capacity)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(MassUtilityCapacityPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(HediffComp_GetsPermanent), "set_IsPermanent"),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(HediffComp_GetsPermanentIsPermanentPrefix)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(StatPart_ApparelStatOffset), nameof(StatPart.TransformValue)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PsychicSensitivityPostfix)));
@@ -385,8 +349,8 @@ namespace Explorite
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Artistic")   //艺术
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Dignified")  //庄严
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Morbid")     //病态
-                    || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Minimal")    //简约
-                    || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Flame")      //火焰
+                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Minimal")    //简约
+                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Flame")      //火焰
                     )
                 )
             {
@@ -402,8 +366,8 @@ namespace Explorite
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Artistic")   //艺术
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Dignified")  //庄严
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Morbid")     //病态
-                    || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Minimal")    //简约
-                    || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Flame")      //火焰
+                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Minimal")    //简约
+                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Flame")      //火焰
                     )
                 )
             {
@@ -591,6 +555,16 @@ namespace Explorite
                 && pawn.def == AlienCentaurDef)
             {
                 __result = false;
+            }
+        }
+
+        ///<summary>阻止半人马得到任何永久性疤痕。</summary>
+        [HarmonyPrefix]public static void HediffComp_GetsPermanentIsPermanentPrefix(HediffComp_GetsPermanent __instance, ref bool value)
+        {
+            if (
+                __instance.Pawn.def == AlienCentaurDef)
+            {
+                value = false;
             }
         }
 
