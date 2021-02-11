@@ -37,18 +37,18 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new[] { typeof(PawnGenerationRequest) }),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(GeneratePawnPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Learn), new[] { typeof(float), typeof(bool) }),
+                harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Learn)),
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(SkillLearnPrefix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Interval), new Type[] { }),
+                harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Interval)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(SkillIntervalPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_PsychicEntropyTracker), "get_PainMultiplier", null),
+                harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_PsychicEntropyTracker), "get_PainMultiplier"),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(NoPainBounsForCentaursPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(IncidentWorker_WandererJoin), "CanFireNowSub", new[] { typeof(IncidentParms) }),
+                harmonyInstance.Patch(AccessTools.Method(typeof(IncidentWorker_WandererJoin), "CanFireNowSub"),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(WandererJoinCannotFirePostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Outdoors), "get_Disabled", new Type[] { }),
+                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Outdoors), "get_Disabled"),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(NeedOutdoors_DisabledPostfix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(Need_Mood), nameof(Need_Mood.GetTipString)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(NeedMood_GetTipStringPostfix)));
@@ -61,9 +61,9 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_NeedComfort), "CurrentStateInternal"),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorker_NeedComfort_CurrentStateInternalPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.CanPawnUse), new Type[] { typeof(Pawn) }),
+                harmonyInstance.Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.CanPawnUse)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(MeditationFocusCanPawnUsePostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.EnablingThingsExplanation), new Type[] { typeof(Pawn) }),
+                harmonyInstance.Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.EnablingThingsExplanation)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(MeditationFocusExplanationPostfix)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdMinor"),
@@ -89,7 +89,7 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_GrowthRate"),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PlantGrowthRateFactorEnsurePostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Alert_NeedBatteries), "NeedBatteries", new Type[] { typeof(Map) }),
+                harmonyInstance.Patch(AccessTools.Method(typeof(Alert_NeedBatteries), "NeedBatteries"),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(AlertNeedBatteriesPostfix)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(JobGiver_GetFood), "TryGiveJob"),
@@ -106,6 +106,9 @@ namespace Explorite
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(StatPart_ApparelStatOffset), nameof(StatPart.TransformValue)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PsychicSensitivityPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(PawnGraphicSet), nameof(PawnGraphicSet.ResolveAllGraphics)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnGraphicSetResolveAllGraphicsPostfix)));
 
 
                 if (InstelledMods.SoS2)
@@ -579,6 +582,21 @@ namespace Explorite
                 {
                     explanation.Replace(strPreProcess, "  - " + p.LabelShortCap + ": " + __result.ToStringMassOffset());
                 }
+            }
+        }
+
+        ///<summary>使半人马的身体被渲染为其头发颜色。</summary>
+        [HarmonyPostfix]public static void PawnGraphicSetResolveAllGraphicsPostfix(PawnGraphicSet __instance)
+        {
+            if (
+                __instance.pawn.def == AlienCentaurDef)
+            {
+                //__instance.nakedGraphic.color = __instance.pawn.story.hairColor;
+                __instance.nakedGraphic = GraphicDatabase.Get<Graphic_Multi>(
+                    __instance.nakedGraphic.path,
+                    __instance.nakedGraphic.Shader,
+                    __instance.nakedGraphic.drawSize, 
+                    __instance.pawn.story.hairColor);
             }
         }
 
