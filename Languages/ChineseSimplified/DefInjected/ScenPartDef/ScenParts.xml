@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <StartInSpaceCentaurs.label>在半人马巡洋舰中开局</StartInSpaceCentaurs.label>
+  <FillTriBattery.label>填满电池</FillTriBattery.label>
+  <RemoveChunkSlag.label>移除空投舱内的钢渣块</RemoveChunkSlag.label>
+  <UnpackMinified.label>解开空投舱内被打包的物品</UnpackMinified.label>
+  <AddFilledTribatteryInPod.label>追加三联电池</AddFilledTribatteryInPod.label>
+  <DumpThingsToPawnInv.label>将物品放入角色背包</DumpThingsToPawnInv.label>
+  <StartingThing_Defined_FillBattery.label>开局资源（填满电池）</StartingThing_Defined_FillBattery.label>
+
+
+</LanguageData>

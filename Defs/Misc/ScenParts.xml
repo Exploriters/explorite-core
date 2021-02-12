@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ScenPartDef>
+    <defName>FillTriBattery</defName>
+    <label>fill batteries</label>
+    <category>Misc</category>
+    <scenPartClass>Explorite.ScenPart_FillBattery</scenPartClass>
+    <maxUses>1</maxUses>
+  </ScenPartDef>
+  
+  <ScenPartDef>
+    <defName>RemoveChunkSlag</defName>
+    <label>remove steel slag chunk in drop pod</label>
+    <category>Misc</category>
+    <scenPartClass>Explorite.ScenPart_WipeoutChunkSlag</scenPartClass>
+    <maxUses>1</maxUses>
+  </ScenPartDef>
+  
+  <ScenPartDef>
+    <defName>DumpThingsToPawnInv</defName>
+    <label>transfer things to pawn inventory</label>
+    <category>Misc</category>
+    <scenPartClass>Explorite.ScenPart_DumpThingsToPawnInv</scenPartClass>
+    <maxUses>1</maxUses>
+  </ScenPartDef>
+  
+  <ScenPartDef>
+    <defName>UnpackMinified</defName>
+    <label>unpack minified things in drop pod</label>
+    <category>Misc</category>
+    <scenPartClass>Explorite.ScenPart_UnpackMinified</scenPartClass>
+    <maxUses>1</maxUses>
+  </ScenPartDef>
+  
+  <!--<ScenPartDef>
+    <defName>StartInSpace_Defined</defName>
+    <label>start in defined spaceship</label>
+    <category>Misc</category>
+    <scenPartClass>ScenPart_GameStartDialog</scenPartClass>
+    <maxUses>1</maxUses>
+  </ScenPartDef>-->
+  
+  
+  <!--<ScenPartDef>
+    <defName>StartingThingOfPawn_Defined</defName>
+    <label>pawn thing</label>
+    <category>Misc</category>
+    <scenPartClass>Explorite.ScenPart_StartingThingOfPawn_Defined</scenPartClass>
+  </ScenPartDef>-->
+
+  <!--<ScenPartDef>
+    <defName>StartingThing_Defined_FillBattery</defName>
+    <label>start with</label>
+    <scenPartClass>Explorite.ScenPart_StartingThing_Defined_FillBattery</scenPartClass>
+    <category>StartingItem</category>
+  </ScenPartDef>-->
+  
+  <!--<ScenPartDef>
+    <defName>AddFilledTribatteryInPod</defName>
+    <label>add filled tribattery in drop pod</label>
+    <category>Misc</category>
+    <scenPartClass>Explorite.ScenPart_AddFilledTribatteryInPod</scenPartClass>
+  </ScenPartDef>-->
+  
+</Defs>
