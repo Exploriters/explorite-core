@@ -550,11 +550,15 @@ namespace Explorite
                 maxDistance: 9999f,
                 validator: delegate (Thing t)
                 {
-                    if (!(t is Corpse))
+                    if (!(t is Corpse) || (t.def.ingestible.foodType & FoodTypeFlags.Meat) != 0 || t.def == BloodyTreeMeatDef)
                     {
                         return false;
                     }
                     if (t.IsForbidden(pawn))
+                    {
+                        return false;
+                    }
+                    if (!pawn.foodRestriction.CurrentFoodRestriction.Allows(t))
                     {
                         return false;
                     }
