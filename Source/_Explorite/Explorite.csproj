@@ -138,6 +138,7 @@
     <Compile Include="PatchCentaurRecipe.cs" />
     <Compile Include="ExploritePatches_PawnGenerator.cs" />
     <Compile Include="PawnShieldGenerator.cs" />
+    <Compile Include="Plant_FleshTree.cs" />
     <Compile Include="Projectile.cs" />
     <Compile Include="Projectile_Explosive_RoofBypass.cs" />
     <Compile Include="ResearchProjectDef.cs" />

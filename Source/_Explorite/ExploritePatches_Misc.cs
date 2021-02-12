@@ -84,10 +84,12 @@ namespace Explorite
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_GrowthRateFactor_Temperature"),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PlantGrowthRateFactorNoTemperaturePostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_Resting"),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PlantNoRestingPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_GrowthRate"),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PlantGrowthRateFactorEnsurePostfix)));
+                //harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_Resting"),
+                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(PlantNoRestingPostfix)));
+                //harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_GrowthRate"),
+                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(PlantGrowthRateFactorEnsurePostfix)));
+                //harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_LeaflessNow"),
+                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(PlantLeaflessNowPostfix)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(Alert_NeedBatteries), "NeedBatteries"),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(AlertNeedBatteriesPostfix)));
@@ -116,6 +118,10 @@ namespace Explorite
                     // 依赖 类 SaveOurShip2.ShipInteriorMod2
                     harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("SaveOurShip2.ShipInteriorMod2"), "HasSpaceSuitSlow", new[] { typeof(Pawn) }),
                         postfix: new HarmonyMethod(patchType, last_patch = nameof(HasSpaceSuitSlowPostfix)));
+
+                    // 依赖 类 RimWorld.ThoughtWorker_SpaceThoughts
+                    harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.ThoughtWorker_SpaceThoughts"), "CurrentStateInternal"),
+                        postfix: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorker_SpaceThoughts_CurrentStateInternalPostfix)));
                 }
             }
             catch (Exception e)
@@ -288,6 +294,18 @@ namespace Explorite
             }
         }
 
+        ///<summary>移除半人马在SoS2太空中的负面情绪。</summary>
+        [HarmonyPostfix]public static void ThoughtWorker_SpaceThoughts_CurrentStateInternalPostfix(ThoughtWorker __instance, ref ThoughtState __result, Pawn p)
+        {
+            if (
+                p.def == AlienCentaurDef && __result.Active && 
+                ( __result.StageIndex == 1 || __result.StageIndex == 3 )
+                )
+            {
+                __result = ThoughtState.ActiveAtStage(__result.StageIndex - 1);
+            }
+        }
+
         ///<summary>移除半人马精神轻度崩溃阈值。</summary>
         [HarmonyPostfix]public static void MentalBreaker_BreakThresholdMinorPostfix(MentalBreaker __instance, ref float __result)
         {
@@ -455,30 +473,40 @@ namespace Explorite
         ///<summary>使血肉树的生长无视环境温度。</summary>
         [HarmonyPostfix]public static void PlantGrowthRateFactorNoTemperaturePostfix(Plant __instance, ref float __result)
         {
-            if (__instance.def == FleshTreeDef)
+            if (__instance is Plant_FleshTree)
             {
                 __result = 1f;
             }
         }
-
+        /*
         ///<summary>使血肉树不会进入休眠状态。</summary>
         [HarmonyPostfix]public static void PlantNoRestingPostfix(Plant __instance, ref bool __result)
         {
-            if (__instance.def == FleshTreeDef)
+            if (__instance is Plant_FleshTree)
             {
                 __result = false;
             }
         }
-
+        
         ///<summary>使血肉树的生长至少具有100%速率。</summary>
         [HarmonyPostfix]public static void PlantGrowthRateFactorEnsurePostfix(Plant __instance, ref float __result)
         {
-            if (__instance.def == FleshTreeDef
+            if (__instance is Plant_FleshTree
                 && __result < 1f)
             {
                 __result = 1f;
             }
         }
+
+        ///<summary>使血肉树的叶子在成熟前不会出现。</summary>
+        [HarmonyPostfix]public static void PlantLeaflessNowPostfix(Plant __instance, ref bool __result)
+        {
+            if (__instance is Plant_FleshTree)
+            {
+                __result = !__instance.CanYieldNow();
+            }
+        }
+        */
 
         ///<summary>使三联电池同样被视为<see cref = "Alert_NeedBatteries" />可接受的电池类型。</summary>
         [HarmonyPostfix]public static void AlertNeedBatteriesPostfix(Alert_NeedBatteries __instance, ref bool __result, Map map)

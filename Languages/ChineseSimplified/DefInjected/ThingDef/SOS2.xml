@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <ShipSpinalBarrelCentaurTorpedo.label>脊峰炮管：鱼雷</ShipSpinalBarrelCentaurTorpedo.label>
+  <ShipSpinalBarrelCentaurTorpedo.description>脊峰加农炮的最后一部分。改良后的鱼雷发射器，非常精确且对护盾有毁灭性打击，同时速度足够快以至于能够穿越点防御的攻击。</ShipSpinalBarrelCentaurTorpedo.description>
+  <ShipSpinalBarrelCentaurTorpedo.comps.0.fuelGizmoLabel>充能</ShipSpinalBarrelCentaurTorpedo.comps.0.fuelGizmoLabel>
+  <ShipSpinalBarrelCentaurTorpedo.comps.0.fuelLabel>充能</ShipSpinalBarrelCentaurTorpedo.comps.0.fuelLabel>
+  <ShipSpinalBarrelCentaurTorpedo.comps.0.outOfFuelMessage>充能中</ShipSpinalBarrelCentaurTorpedo.comps.0.outOfFuelMessage>
+
+  <Artillery_ShipTorpedo_CentaurSpinal.label>鱼雷发射管</Artillery_ShipTorpedo_CentaurSpinal.label>
+  <Artillery_ShipTorpedo_CentaurSpinal.description>鱼雷发射管。对护盾的打击是精确而毁灭性的，但是容易受到点防御激光的攻击。</Artillery_ShipTorpedo_CentaurSpinal.description>
+  <Artillery_ShipTorpedo_CentaurSpinal.verbs.0.label>攻击敌对飞船</Artillery_ShipTorpedo_CentaurSpinal.verbs.0.label>
+  <Artillery_ShipTorpedo_CentaurSpinal.verbs.1.label>攻击临近目标</Artillery_ShipTorpedo_CentaurSpinal.verbs.1.label>
+
+  <Bullet_Fake_Torpedo_Mechanite.label>机械液鱼雷</Bullet_Fake_Torpedo_Mechanite.label>
+  <Bullet_Torpedo_Mechanite.label>机械液鱼雷</Bullet_Torpedo_Mechanite.label>
+  
+</LanguageData>

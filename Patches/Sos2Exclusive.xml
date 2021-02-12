@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+  <Operation Class="PatchOperationFindMod">
+    <mods>
+      <li>Save Our Ship 2</li>
+    </mods>
+    <nomatch Class="PatchOperationSequence">
+      <success>Normal</success>
+      <operations>
+
+        <li Class="PatchOperationRemove">
+          <xpath>
+            Defs/ThingDef[
+            defName="ShipSpinalBarrelCentaurTorpedo" or
+            defName="Artillery_ShipTorpedo_CentaurSpinal" ]</xpath>
+        </li>
+        <li Class="PatchOperationRemove">
+          <xpath>Defs/ScenPartDef[defName="StartInSpaceCentaurs"]</xpath>
+        </li>
+        <li Class="PatchOperationRemove">
+          <xpath>Defs/ScenarioDef/scenario/parts/li[def="StartInSpaceCentaurs"]</xpath>
+        </li>
+
+      </operations>
+      </nomatch>
+  </Operation>
+</Patch>

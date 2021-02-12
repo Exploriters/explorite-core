@@ -20,6 +20,12 @@ namespace Explorite
         {
             ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, ((IThingHolder)this).GetDirectlyHeldThings());
         }
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+
+            Scribe_Values.Look(ref innerContainer, "innerContainer", new ThingOwner<Thing>(), true);
+        }
 
         public override void CompTick()
         {

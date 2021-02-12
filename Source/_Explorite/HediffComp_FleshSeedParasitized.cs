@@ -33,7 +33,8 @@ namespace Explorite
         {
             base.Notify_PawnDied();
             Corpse corpse = Pawn?.Corpse;
-            CompRottable rott = Pawn?.Corpse?.TryGetComp<CompRottable>();
+            CompRottable rott = corpse.TryGetComp<CompRottable>();
+            //float corpseNutrition = corpse.GetStatValue(StatDefOf.Nutrition);
 
             corpse.Strip();
 

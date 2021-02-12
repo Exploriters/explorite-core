@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Save Our Ship 2</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+		<success>Normal</success>
+		<operations>
+			<li Class="PatchOperationRemove"><!--Class="PatchOperationReplace"-->
+				<xpath>Defs/ThingDef[
+					defName="Ship_Beam" or 
+					defName="Ship_Beam_Unpowered" or 
+					defName="Ship_BeamMech" or 
+					defName="Ship_BeamMech_Unpowered" or 
+					defName="Ship_BeamArchotech" or 
+					defName="Ship_BeamArchotech_Unpowered" or 
+					defName="Ship_ComputerCore" or 
+					defName="Ship_SensorCluster" or 
+					defName="Ship_SensorClusterAdv" or 
+					defName="Ship_LifeSupport" or 
+					defName="Ship_LifeSupport_Small" or 
+					defName="Ship_Reactor" or 
+					defName="ShipShuttleBay" or 
+					defName="ShipSalvageBay" or 
+					defName="ShipCloakingDevice" or 
+					defName="ShipTurret_Laser" or 
+					defName="ShipTurret_Plasma" or 
+					defName="ShipTurret_Kinetic" or 
+					defName="ShipTurret_Laser_Large" or 
+					defName="ShipTurret_Plasma_Large" or 
+					defName="ShipTurret_Kinetic_Large" or 
+					defName="ShipTurret_ACI" or 
+					defName="ShipTurret_ACII" or 
+					defName="ShipTurret_ACIII" or 
+					defName="ShipHullTileWrecked" or 
+					defName="HullFoamDistributor"]
+					/rotatable
+				</xpath>
+			</li>
+			<li Class="PatchOperationAdd">
+				<xpath>Defs/ThingDef[
+					defName="Ship_Beam" or 
+					defName="Ship_Beam_Unpowered" or 
+					defName="Ship_BeamMech" or 
+					defName="Ship_BeamMech_Unpowered" or 
+					defName="Ship_BeamArchotech" or 
+					defName="Ship_BeamArchotech_Unpowered" or 
+					defName="Ship_ComputerCore" or 
+					defName="Ship_SensorCluster" or 
+					defName="Ship_SensorClusterAdv" or 
+					defName="Ship_LifeSupport" or 
+					defName="Ship_LifeSupport_Small" or 
+					defName="Ship_Reactor" or 
+					defName="ShipShuttleBay" or 
+					defName="ShipSalvageBay" or 
+					defName="ShipCloakingDevice" or 
+					defName="ShipTurret_Laser" or 
+					defName="ShipTurret_Plasma" or 
+					defName="ShipTurret_Kinetic" or 
+					defName="ShipTurret_Laser_Large" or 
+					defName="ShipTurret_Plasma_Large" or 
+					defName="ShipTurret_Kinetic_Large" or 
+					defName="ShipTurret_ACI" or 
+					defName="ShipTurret_ACII" or 
+					defName="ShipTurret_ACIII" or 
+					defName="ShipHullTileWrecked" or 
+					defName="HullFoamDistributor"]
+				</xpath>
+				<value>
+					<rotatable>false</rotatable>
+				</value>
+			</li>
+			
+			<li Class="PatchOperationAdd">
+				<xpath>Defs/ThingDef[(
+					defName="Apparel_ArmorRecon" or
+					defName="Apparel_ArmorReconPrestige" or
+					defName="Apparel_ArmorLocust" or
+					defName="Apparel_ArmorHelmetRecon" or
+					defName="Apparel_ArmorHelmetReconPrestige" or
+					
+					defName="Apparel_PowerArmor" or
+					defName="Apparel_ArmorMarinePrestige" or
+					defName="Apparel_ArmorMarineGrenadier" or
+					defName="Apparel_PowerArmorHelmet" or
+					defName="Apparel_ArmorMarineHelmetPrestige" or
+					
+					defName="Apparel_ArmorCataphract" or
+					defName="Apparel_ArmorCataphractPrestige" or
+					defName="Apparel_ArmorCataphractPhoenix" or
+					defName="Apparel_ArmorHelmetCataphract" or
+					defName="Apparel_ArmorHelmetCataphractPrestige" or
+					
+					defName="Apparel_ArmorHelmetReconClocked" or
+					defName="Apparel_ArmorMarineHelmetClocked" or
+					defName="Apparel_ArmorHelmetCataphractClocked"
+					) 
+					and not (apparel)]</xpath>
+				<value>
+					<apparel>
+					<tags>
+					</tags>
+					</apparel>
+				</value>
+			</li>
+			<li Class="PatchOperationAdd">
+				<xpath>Defs/ThingDef[
+					defName="Apparel_ArmorRecon" or
+					defName="Apparel_ArmorReconPrestige" or
+					defName="Apparel_ArmorLocust" or
+					defName="Apparel_ArmorHelmetRecon" or
+					defName="Apparel_ArmorHelmetReconPrestige" or
+					
+					defName="Apparel_PowerArmor" or
+					defName="Apparel_ArmorMarinePrestige" or
+					defName="Apparel_ArmorMarineGrenadier" or
+					defName="Apparel_PowerArmorHelmet" or
+					defName="Apparel_ArmorMarineHelmetPrestige" or
+					
+					defName="Apparel_ArmorCataphract" or
+					defName="Apparel_ArmorCataphractPrestige" or
+					defName="Apparel_ArmorCataphractPhoenix" or
+					defName="Apparel_ArmorHelmetCataphract" or
+					defName="Apparel_ArmorHelmetCataphractPrestige" or
+					
+					defName="Apparel_ArmorHelmetReconClocked" or
+					defName="Apparel_ArmorMarineHelmetClocked" or
+					defName="Apparel_ArmorHelmetCataphractClocked"]
+					/apparel[not (tags)]</xpath>
+				<value>
+					<tags>
+					</tags>
+				</value>
+			</li>
+			<li Class="PatchOperationAdd">
+				<xpath>Defs/ThingDef[
+					defName="Apparel_ArmorRecon" or
+					defName="Apparel_ArmorReconPrestige" or
+					defName="Apparel_ArmorLocust" or
+					defName="Apparel_ArmorHelmetRecon" or
+					defName="Apparel_ArmorHelmetReconPrestige" or
+					
+					defName="Apparel_PowerArmor" or
+					defName="Apparel_ArmorMarinePrestige" or
+					defName="Apparel_ArmorMarineGrenadier" or
+					defName="Apparel_PowerArmorHelmet" or
+					defName="Apparel_ArmorMarineHelmetPrestige" or
+					
+					defName="Apparel_ArmorCataphract" or
+					defName="Apparel_ArmorCataphractPrestige" or
+					defName="Apparel_ArmorCataphractPhoenix" or
+					defName="Apparel_ArmorHelmetCataphract" or
+					defName="Apparel_ArmorHelmetCataphractPrestige" or
+					
+					defName="Apparel_ArmorHelmetReconClocked" or
+					defName="Apparel_ArmorMarineHelmetClocked" or
+					defName="Apparel_ArmorHelmetCataphractClocked"]
+					/apparel/tags
+				</xpath>
+				<value>
+					<li>EVA</li>
+				</value>
+			</li>
+		</operations>
+		</match>
+	
+	</Operation>
+</Patch>
