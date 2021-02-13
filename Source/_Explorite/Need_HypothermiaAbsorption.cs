@@ -23,6 +23,17 @@ namespace Explorite
             detlas.Add(num);
         }
         public float Last() => detlas.FindLast(de => de.HasValue).Value;
+        public float Averange()
+        {
+            float result = 0f;
+            int count = 0;
+            foreach (float num in detlas.Where(de => de.HasValue))
+            {
+                result += num;
+                count++;
+            }
+            return count == 0 ? 0 : result / count;
+        }
         public float AverangeP()
         {
             float result = 0f;
@@ -70,7 +81,7 @@ namespace Explorite
         }
 
         public override int GUIChangeArrow => IsFrozen ? 0 : Math.Sign(LastEffectiveDelta);
-        public override float MaxLevel => 3f;
+        public override float MaxLevel => 1f;
         protected override bool IsFrozen => false;
         public override bool ShowOnNeedList => !Disabled;
         private bool Disabled => pawn.def != AlienCentaurDef;
@@ -110,7 +121,8 @@ namespace Explorite
         }
         public override string GetTipString()
         {
-            string result = $"{LabelCap}: {CurLevel.ToStringPercent()} / {MaxLevel.ToStringPercent()} ({CurLevelPercentage.ToStringPercent()})\n";
+            //string result = $"{LabelCap}: {CurLevel.ToStringPercent()} / {MaxLevel.ToStringPercent()} ({CurLevelPercentage.ToStringPercent()})\n";
+            string result = $"{LabelCap}: {CurLevelPercentage.ToStringPercent()} ({(detlaTracer.Averange() >= 0f ? "+" : null)}{"PeriodSeconds".Translate((detlaTracer.Averange() * 100 / 2.5f).ToString("0.##") + "% /")})\n";
             result += ExposureState switch
             {
                 ExposureStateEnum.Exposing => $"{"Magnuassembly_CriticalExposureIn".Translate() }: {FormattingTickTime(ReachLimitIn)}\n",
