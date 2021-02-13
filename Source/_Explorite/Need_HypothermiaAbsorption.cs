@@ -27,10 +27,15 @@ namespace Explorite
         {
             float result = 0f;
             int count = 0;
+            bool encounted = false;
             foreach (float num in detlas.Where(de => de.HasValue && de.Value >= 0))
             {
-                result += num;
-                count++;
+                if (encounted || num > 0)
+                {
+                    encounted = true;
+                    result += num;
+                    count++;
+                }
             }
             return count == 0 ? 0 : result / count;
         }
@@ -38,10 +43,15 @@ namespace Explorite
         {
             float result = 0f;
             int count = 0;
-            foreach (float num in detlas.Where(de => de.HasValue && de.Value < 0))
+            bool encounted = false;
+            foreach (float num in detlas.Where(de => de.HasValue && de.Value <= 0))
             {
-                result += num;
-                count++;
+                if (encounted || num < 0)
+                {
+                    encounted = true;
+                    result += num;
+                    count++;
+                }
             }
             return count == 0 ? 0 : result / count;
         }
@@ -50,7 +60,7 @@ namespace Explorite
     public class Need_HypothermiaAbsorption : Need
     {
 
-        private const float DeltaPerIntervalBase = 0.01f;
+        private const float DeltaPerIntervalBase = 0.0025f;
         private const float AbsorbHypothermiaFactor = 1f;
         private float LastEffectiveDelta => detlaTracer.Last();
         private readonly DetlaTracer detlaTracer = new DetlaTracer();
