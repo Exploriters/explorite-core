@@ -27,6 +27,8 @@ namespace Explorite
         public static readonly ThingDef AlienSayersDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("Alien_Sayers");
         public static readonly ThingDef AlienFlowerBorhAnimalDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("Alien_FlowerBorhAnimal");
         public static readonly ThingDef FleshTreeDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("Plant_BloodyTree");
+        public static readonly ThingDef BloodyTreeMeatDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("BloodyTree_Meat");
+        public static readonly ThingDef PlantReactionComputerDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("PlantReactionComputer");
         public static readonly DamageDef InjectionDamageDef = !InstelledMods.Sayers ? null : DefDatabase<DamageDef>.GetNamed("Injection");
         public static readonly HediffDef InjectionHediffDef = !InstelledMods.Sayers ? null : DefDatabase<HediffDef>.GetNamed("Injection");
 
