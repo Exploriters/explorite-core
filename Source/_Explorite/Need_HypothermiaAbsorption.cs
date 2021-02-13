@@ -69,7 +69,7 @@ namespace Explorite
                 {
                     result = 0f;
                     count = 0;
-                    encounted = false;
+                    encounted = true;
                     continue;
                 }
                 if (encounted || num > 0)
@@ -92,7 +92,7 @@ namespace Explorite
                 {
                     result = 0f;
                     count = 0;
-                    encounted = false;
+                    encounted = true;
                     continue;
                 }
                 if (encounted || num < 0)
