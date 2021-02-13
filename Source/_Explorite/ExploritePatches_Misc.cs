@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Text;
 using HarmonyLib;
 using RimWorld;
-using UnityEngine;
 using Verse;
 using Verse.AI;
 using static Explorite.ExploriteCore;
@@ -111,6 +110,9 @@ namespace Explorite
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(PawnGraphicSet), nameof(PawnGraphicSet.ResolveAllGraphics)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnGraphicSetResolveAllGraphicsPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(CompAffectedByFacilities), nameof(CompAffectedByFacilities.CanPotentiallyLinkTo_Static), new Type[] { typeof(ThingDef), typeof(IntVec3), typeof(Rot4), typeof(ThingDef), typeof(IntVec3), typeof(Rot4) }),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(CompAffectedByFacilitiesCanPotentiallyLinkToStaticPostfix)));
 
 
                 if (InstelledMods.SoS2)
@@ -470,7 +472,7 @@ namespace Explorite
             }
         }
 
-        ///<summary>使血肉树的生长无视环境温度。</summary>
+        ///<summary>使指定植物的生长无视环境温度。</summary>
         [HarmonyPostfix]public static void PlantGrowthRateFactorNoTemperaturePostfix(Plant __instance, ref float __result)
         {
             if (__instance is Plant_FleshTree)
@@ -629,6 +631,18 @@ namespace Explorite
                     __instance.nakedGraphic.Shader,
                     __instance.nakedGraphic.drawSize, 
                     __instance.pawn.story.hairColor);
+            }
+        }
+
+        ///<summary>对设施连接性的后期处理。</summary>
+        [HarmonyPostfix]public static void CompAffectedByFacilitiesCanPotentiallyLinkToStaticPostfix
+            (ref bool __result, ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot, ThingDef myDef, IntVec3 myPos, Rot4 myRot)
+        {
+            if (__result == true && 
+                facilityDef?.placeWorkers?.Contains(typeof(PlaceWorker_FacingPort)) == true && 
+                !GenAdj.OccupiedRect(myPos, myRot, myDef.size).Cells.Contains(PlaceWorker_FacingPort.PortPosition(facilityDef, facilityPos, facilityRot)))
+            {
+                __result = false;
             }
         }
 
