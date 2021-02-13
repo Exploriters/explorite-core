@@ -27,7 +27,14 @@ namespace Explorite
             else
                 detlas.Add(num);
         }
-        public float Last() => detlas.FindLast(de => de.HasValue).Value;
+        public float Last()
+        {
+            float? last = detlas.FindLast(_ => true);
+            if (last.HasValue)
+                return last.Value;
+            return 0f;
+        }
+
         public float Averange()
         {
             float result = 0f;
