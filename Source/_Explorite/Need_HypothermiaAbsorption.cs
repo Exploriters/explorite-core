@@ -20,11 +20,12 @@ namespace Explorite
         public void Insert(float num)
         {
             detlas.RemoveAt(0);
-            detlas.Add(num);
-            if (detlas.Count == detlas.Where(n => !n.HasValue || n == 0f).Count())
+            if (num == 0 && detlas.Count == detlas.Where(n => !n.HasValue || (n.HasValue && n == 0f)).Count())
             {
-                detlas = new List<float?>() { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null };
+                detlas.Add(null);
             }
+            else
+                detlas.Add(num);
         }
         public float Last() => detlas.FindLast(de => de.HasValue).Value;
         public float Averange()
@@ -32,12 +33,19 @@ namespace Explorite
             float result = 0f;
             int count = 0;
             bool encounted = false;
-            foreach (float num in detlas.Where(de => de.HasValue))
+            foreach (float? num in detlas)
             {
+                if (!num.HasValue)
+                {
+                    result = 0f;
+                    count = 0;
+                    encounted = false;
+                    continue;
+                }
                 if (encounted || num != 0)
                 {
                     encounted = true;
-                    result += num;
+                    result += num.Value;
                     count++;
                 }
             }
@@ -48,12 +56,19 @@ namespace Explorite
             float result = 0f;
             int count = 0;
             bool encounted = false;
-            foreach (float num in detlas.Where(de => de.HasValue && de.Value >= 0))
+            foreach (float? num in detlas.Where(de => de.HasValue ? de.Value >= 0 : true))
             {
+                if (!num.HasValue)
+                {
+                    result = 0f;
+                    count = 0;
+                    encounted = false;
+                    continue;
+                }
                 if (encounted || num > 0)
                 {
                     encounted = true;
-                    result += num;
+                    result += num.Value;
                     count++;
                 }
             }
@@ -64,12 +79,19 @@ namespace Explorite
             float result = 0f;
             int count = 0;
             bool encounted = false;
-            foreach (float num in detlas.Where(de => de.HasValue && de.Value <= 0))
+            foreach (float? num in detlas.Where(de => de.HasValue ? de.Value <= 0 : true))
             {
+                if (!num.HasValue)
+                {
+                    result = 0f;
+                    count = 0;
+                    encounted = false;
+                    continue;
+                }
                 if (encounted || num < 0)
                 {
                     encounted = true;
-                    result += num;
+                    result += num.Value;
                     count++;
                 }
             }
