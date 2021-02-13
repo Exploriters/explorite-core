@@ -9,6 +9,39 @@ using Verse;
 
 namespace Explorite
 {
+    ///<summary>合并空降仓。</summary>
+    public class ScenPart_MergeDroppod : ScenPart
+    {
+        public override string Summary(Scenario scen) => "Magnuassembly_ScenPart_MergeDroppod_StaticSummary".Translate();
+        public override void PostGameStart()
+        {
+            base.PostGameStart();
+
+            List<DropPodIncoming> podsToDestroy = new List<DropPodIncoming>();
+            DropPodIncoming targetedPod = null;
+
+            List<Thing> Things = Find.CurrentMap.listerThings.AllThings.Where(thing => thing is DropPodIncoming).ToList();
+            foreach (Thing thing in Things)
+            {
+                if (thing is DropPodIncoming droppod)
+                {
+                    if (targetedPod == null)
+                        targetedPod = droppod;
+                    else
+                    {
+                        droppod.GetDirectlyHeldThings().TryTransferAllToContainer(
+                                targetedPod.GetDirectlyHeldThings()
+                            );
+                        droppod.Destroy();
+                    }
+                }
+            }
+            if (targetedPod == null)
+            {
+                Log.Error("[Explorite]Null target pod! Aborting...");
+            }
+        }
+    }
     ///<summary>向开局的空降仓内塞入Sayers粘液。</summary>
     public class ScenPart_ScatteredGarbage : ScenPart
     {
