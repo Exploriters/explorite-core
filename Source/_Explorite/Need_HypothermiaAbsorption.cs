@@ -15,22 +15,31 @@ namespace Explorite
     ///<summary>追踪最近20条变化量记录。</summary>
     public class DetlaTracer
     {
-        private readonly List<float?> detlas = new List<float?>() { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0f };
+        private List<float?> detlas = new List<float?>() { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null };
 
         public void Insert(float num)
         {
             detlas.RemoveAt(0);
             detlas.Add(num);
+            if (detlas.Count == detlas.Where(n => !n.HasValue || n == 0f).Count())
+            {
+                detlas = new List<float?>() { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null };
+            }
         }
         public float Last() => detlas.FindLast(de => de.HasValue).Value;
         public float Averange()
         {
             float result = 0f;
             int count = 0;
+            bool encounted = false;
             foreach (float num in detlas.Where(de => de.HasValue))
             {
-                result += num;
-                count++;
+                if (encounted || num != 0)
+                {
+                    encounted = true;
+                    result += num;
+                    count++;
+                }
             }
             return count == 0 ? 0 : result / count;
         }
@@ -122,7 +131,7 @@ namespace Explorite
         public override string GetTipString()
         {
             //string result = $"{LabelCap}: {CurLevel.ToStringPercent()} / {MaxLevel.ToStringPercent()} ({CurLevelPercentage.ToStringPercent()})\n";
-            string result = $"{LabelCap}: {CurLevelPercentage.ToStringPercent()} ({(detlaTracer.Averange() >= 0f ? "+" : null)}{"PeriodSeconds".Translate((detlaTracer.Averange() * 100 / 2.5f).ToString("0.##") + "% /")})\n";
+            string result = $"{LabelCap}: {CurLevelPercentage.ToStringPercent()} ({(detlaTracer.Averange() >= 0f ? "+" : null)}{"PeriodSeconds".Translate((detlaTracer.Averange() * 40f).ToString("0.##") + "% /")})\n";
             result += ExposureState switch
             {
                 ExposureStateEnum.Exposing => $"{"Magnuassembly_CriticalExposureIn".Translate() }: {FormattingTickTime(ReachLimitIn)}\n",
