@@ -17,7 +17,8 @@
   <Magnuassembly_ScenPart_UnpackMinified_StaticSummary>解开空投舱内被打包的建筑物。</Magnuassembly_ScenPart_UnpackMinified_StaticSummary>
   
   <Magnuassembly_CompRefuelable_PassiveRecharge_ChargeCompleted>{0}已经完成了充能。</Magnuassembly_CompRefuelable_PassiveRecharge_ChargeCompleted>
-  
-  <MeditationFocusEnabledByExploriteRace>种族：{0}。</MeditationFocusEnabledByExploriteRace>
+
+  <Magnuassembly_CriticalExposureIn>临界曝光</Magnuassembly_CriticalExposureIn>
+  <Magnuassembly_RestoringIn>完全恢复</Magnuassembly_RestoringIn>
 
 </LanguageData>
