@@ -23,6 +23,11 @@ namespace Explorite
             if (num == 0 && detlas.Count == detlas.Where(n => !n.HasValue || (n.HasValue && n == 0f)).Count())
             {
                 detlas.Add(null);
+                if (detlas.Where(n => n.HasValue).Any())
+                {
+                    detlas.Clear();
+                    detlas.AddRange(new float?[] { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null });
+                }
             }
             else
                 detlas.Add(num);
@@ -40,7 +45,7 @@ namespace Explorite
             float result = 0f;
             int count = 0;
             bool encounted = false;
-            foreach (float? num in detlas)
+            foreach (float? num in detlas.Where(de => de.HasValue))
             {
                 if (!num.HasValue)
                 {
@@ -63,7 +68,7 @@ namespace Explorite
             float result = 0f;
             int count = 0;
             bool encounted = false;
-            foreach (float? num in detlas.Where(de => de.HasValue ? de.Value >= 0 : true))
+            foreach (float? num in detlas.Where(de => de.HasValue ? de.Value >= 0 : false))
             {
                 if (!num.HasValue)
                 {
@@ -86,7 +91,7 @@ namespace Explorite
             float result = 0f;
             int count = 0;
             bool encounted = false;
-            foreach (float? num in detlas.Where(de => de.HasValue ? de.Value <= 0 : true))
+            foreach (float? num in detlas.Where(de => de.HasValue ? de.Value <= 0 : false))
             {
                 if (!num.HasValue)
                 {
@@ -105,7 +110,6 @@ namespace Explorite
             return count == 0 ? 0 : result / count;
         }
     }
-    ///<summary>持续吸收低温症。</summary>
     public class Need_HypothermiaAbsorption : Need
     {
 
@@ -121,7 +125,7 @@ namespace Explorite
         public override int GUIChangeArrow => IsFrozen ? 0 : Math.Sign(LastEffectiveDelta);
         public override float MaxLevel => 1f;
         protected override bool IsFrozen => false;
-        public override bool ShowOnNeedList => !Disabled;
+        public override bool ShowOnNeedList => !Disabled && ExposureState != ExposureStateEnum.None;
         private bool Disabled => pawn.def != AlienCentaurDef;
         public ExposureStateEnum ExposureState
         {
@@ -163,10 +167,11 @@ namespace Explorite
             string result = $"{LabelCap}: {CurLevelPercentage.ToStringPercent()} ({(detlaTracer.Averange() >= 0f ? "+" : null)}{"PeriodSeconds".Translate((detlaTracer.Averange() * 40f).ToString("0.##") + "% /")})\n";
             result += ExposureState switch
             {
-                ExposureStateEnum.Exposing => $"{"Magnuassembly_CriticalExposureIn".Translate() }: {FormattingTickTime(ReachLimitIn)}\n",
-                ExposureStateEnum.Restoring => $"{"Magnuassembly_RestoringIn".Translate()       }: {FormattingTickTime(ReachLimitIn)}\n",
-                _ => null,
+                ExposureStateEnum.Exposing => $"{"Magnuassembly_CriticalExposureIn".Translate() }: {FormattingTickTime(ReachLimitIn)}",
+                ExposureStateEnum.Restoring => $"{"Magnuassembly_RestoringIn".Translate()       }: {FormattingTickTime(ReachLimitIn)}",
+                _ => "Magnuassembly_RestoringIn".Translate(),
             };
+            result += "\n";
             result += def.description;
             return result;
         }

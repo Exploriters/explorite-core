@@ -82,7 +82,24 @@ namespace Explorite
                 {
                     IntVec3 randomCell = this.OccupiedRect().RandomCell;
                     float radius = Rand.Range(0.5f, 1f) * 3f * 1.7320508075688772935274463415059f;
-                    GenExplosion.DoExplosion(randomCell, Map, radius, DamageDefOf.Flame, null, -1, -1f, null, null, null, null, null, 0f, 1, false, null, 0f, 1, 0f, false);
+                    GenExplosion.DoExplosion(randomCell, Map, radius, DamageDefOf.Flame,
+                        instigator: null,
+                        damAmount: -1,
+                        armorPenetration: -1f,
+                        explosionSound: null,
+                        weapon: null,
+                        projectile: null,
+                        intendedTarget: null,
+                        postExplosionSpawnThingDef: null,
+                        postExplosionSpawnChance: 0f,
+                        postExplosionSpawnThingCount: 1,
+                        applyDamageToExplosionCellsNeighbors: false,
+                        preExplosionSpawnThingDef: null,
+                        preExplosionSpawnChance: 0f,
+                        preExplosionSpawnThingCount: 1,
+                        chanceToStartFire: 0f,
+                        damageFalloff: false
+                        );
                     GetComp<CompPowerBattery>().DrawPower(400f);
                 }
             }

@@ -98,6 +98,7 @@
     <Compile Include="AlienRace.cs" />
     <Compile Include="BackstoryCracker.cs" />
     <Compile Include="Building_TriBattery.cs" />
+    <Compile Include="Bullet_Direct.cs" />
     <Compile Include="ColorGenerator.cs" />
     <Compile Include="CompAbilityEffect_GiveHediff_ParasiticStab.cs" />
     <Compile Include="CompAbilityEffect_GiveHediff_WholeMap.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="HediffComp_SpawnThingOnDeath.cs" />
     <Compile Include="HediffGiver.cs" />
     <Compile Include="HManipulator.cs" />
+    <Compile Include="Need_CentaurCreativityInspiration.cs" />
     <Compile Include="Need_HypothermiaAbsorption.cs" />
     <Compile Include="PatchCentaurRecipe.cs" />
     <Compile Include="ExploritePatches_PawnGenerator.cs" />
@@ -150,7 +152,7 @@
     <Compile Include="StatPart_ApparelStatOffset_PsychicDeafIncluded.cs" />
     <Compile Include="StatPart_WorkSpeedByMood_Centaur.cs" />
     <Compile Include="ThoughtWorker_AlwaysActive_Centaur.cs" />
-    <Compile Include="Verb_DoNothing.cs" />
+    <Compile Include="Verb.cs" />
     <Compile Include="Verb_SensitivityToggle.cs" />
     <Compile Include="_AssemblyInfo.cs" />
   </ItemGroup>
