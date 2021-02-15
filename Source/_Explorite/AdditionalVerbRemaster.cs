@@ -14,7 +14,7 @@ using static Explorite.ExploriteCore;
 namespace Explorite
 {
     [StaticConstructorOnStartup]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("", "IDE0060")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0060")]
     internal static class AdditionalVerbPatch
     {
         private static readonly Type patchType = typeof(AdditionalVerbPatch);

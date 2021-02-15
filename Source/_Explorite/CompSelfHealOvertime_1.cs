@@ -13,7 +13,7 @@ namespace Explorite
      * 另请参阅: <seealso cref = "CompSelfHealOvertime2" />，使用了浮点数的实现。
      * </summary>
      */
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("", "IDE1006")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE1006")]
     public class CompSelfHealOvertime1 : CompSelfHealOvertime
     {
         public int ticksWithoutHeal = 0;

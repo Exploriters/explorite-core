@@ -13,7 +13,7 @@ namespace Explorite
      * 该类为抽象类，<see cref = "CompSelfHealOvertime1" />和<see cref = "CompSelfHealOvertime1" />分别以不同的方式完成了实现。
      * </summary>
      */
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE1006")]
     public abstract class CompSelfHealOvertime : ThingComp
     {
         public double detlaHpPerSec => ((CompProperties_SelfHealOvertime)props).detlaHpPerSec;

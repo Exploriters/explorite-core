@@ -50,13 +50,7 @@ namespace Explorite
             }
         }
 
-        public TaleReference TaleRef
-        {
-            get
-            {
-                return taleRef;
-            }
-        }
+        public TaleReference TaleRef => taleRef;
 
         public bool CanShowArt
         {
@@ -73,21 +67,9 @@ namespace Explorite
             }
         }
 
-        public bool Active
-        {
-            get
-            {
-                return taleRef != null;
-            }
-        }
+        public bool Active => taleRef != null;
 
-        public CompProperties_Art Props
-        {
-            get
-            {
-                return (CompProperties_Art)props;
-            }
-        }
+        public CompProperties_Art Props => (CompProperties_Art)props;
 
         public void InitializeArt(ArtGenerationContext source)
         {

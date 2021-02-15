@@ -127,12 +127,14 @@
     <Compile Include="ExploriteInitializer.cs" />
     <Compile Include="ExploritePatches_Misc.cs" />
     <Compile Include="ExploriteMod.cs" />
+    <Compile Include="ExploritePatches_PawnRenderer.cs" />
     <Compile Include="ExploriteRegistry.cs" />
     <Compile Include="FoodPoisonImmuneForSayers.cs" />
     <Compile Include="HediffCompProperties_SeverityFromEntropy_CentarusOnly.cs" />
     <Compile Include="HediffComp_AgeStop.cs" />
     <Compile Include="HediffComp_FactorBySeverity.cs" />
     <Compile Include="HediffComp_FleshSeedParasitized.cs" />
+    <Compile Include="HediffComp_SeverityHalfLife.cs" />
     <Compile Include="HediffComp_SpawnThingOnDeath.cs" />
     <Compile Include="HediffGiver.cs" />
     <Compile Include="HManipulator.cs" />

@@ -114,6 +114,9 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(CompAffectedByFacilities), nameof(CompAffectedByFacilities.CanPotentiallyLinkTo_Static), new Type[] { typeof(ThingDef), typeof(IntVec3), typeof(Rot4), typeof(ThingDef), typeof(IntVec3), typeof(Rot4) }),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(CompAffectedByFacilitiesCanPotentiallyLinkToStaticPostfix)));
 
+                harmonyInstance.Patch(AccessTools.Method(typeof(PawnGraphicSet), nameof(PawnGraphicSet.ResolveApparelGraphics)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnGraphicSetResolveApparelGraphicsPostfix)));
+
 
                 if (InstelledMods.SoS2)
                 {
@@ -643,6 +646,16 @@ namespace Explorite
                 !GenAdj.OccupiedRect(myPos, myRot, myDef.size).Cells.Contains(PlaceWorker_FacingPort.PortPosition(facilityDef, facilityPos, facilityRot)))
             {
                 __result = false;
+            }
+        }
+
+        ///<summary>对人物渲染器的服装选单的补丁。</summary>
+        [HarmonyPostfix]
+        public static void PawnGraphicSetResolveApparelGraphicsPostfix(PawnGraphicSet __instance)
+        {
+            if (__instance.pawn.apparel.WornApparel.Any(ap => ap.def == CentaurHeaddressDef))
+            {
+                __instance.apparelGraphics.RemoveAll(ag => ag.sourceApparel.def.apparel.layers.Contains(ApparelLayerDefOf.Overhead));
             }
         }
 
