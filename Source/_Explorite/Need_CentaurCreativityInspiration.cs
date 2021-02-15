@@ -19,7 +19,7 @@ namespace Explorite
             threshPercents = new List<float>();
         }
         private float lastEffectiveDelta = 0f;
-        private float DeltaPerIntervalBase => InHappiness ? 0.0025f : 0f;
+        private float DeltaPerIntervalBase => 0.0025f;
         private float DeltaPerInterval => InHappiness ? DeltaPerIntervalBase : 0f;
         public override int GUIChangeArrow => IsFrozen ? 0 : Math.Sign(lastEffectiveDelta);
         public override float MaxLevel => 2f;

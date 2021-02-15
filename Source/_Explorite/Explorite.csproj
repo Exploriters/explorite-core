@@ -121,6 +121,7 @@
     <Compile Include="CompUnbreakableViaDamage.cs" />
     <Compile Include="CompUseEffect_HediffApply.cs" />
     <Compile Include="DamageWorker_Frostbite_LauncherSafe.cs" />
+    <Compile Include="DamageWorker_Frostbrainer.cs" />
     <Compile Include="ExploriteCore.cs" />
     <Compile Include="ExploriteDefof.cs" />
     <Compile Include="ExploriteDefsCracker.cs" />
@@ -134,6 +135,8 @@
     <Compile Include="HediffComp_AgeStop.cs" />
     <Compile Include="HediffComp_FactorBySeverity.cs" />
     <Compile Include="HediffComp_FleshSeedParasitized.cs" />
+    <Compile Include="HediffComp_HediffGiverEnsureForAlwaysRequired.cs" />
+    <Compile Include="HediffComp_TendDuration_CantTend.cs" />
     <Compile Include="HediffComp_SeverityHalfLife.cs" />
     <Compile Include="HediffComp_SpawnThingOnDeath.cs" />
     <Compile Include="HediffGiver.cs" />

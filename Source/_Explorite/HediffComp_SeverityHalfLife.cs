@@ -32,7 +32,7 @@ namespace Explorite
         {
             if (parent == null)
                 return;
-            parent.Severity = parent.Severity <= LowLimit ? 0f : (float)(parent.Severity/ Math.Pow(2f , 1f / HalfLife));
+            parent.Severity = parent.Severity > LowLimit ? (float)(parent.Severity / Math.Pow(2f, 1f / HalfLife)) : 0f;
         }
         public override string CompDebugString()
         {
