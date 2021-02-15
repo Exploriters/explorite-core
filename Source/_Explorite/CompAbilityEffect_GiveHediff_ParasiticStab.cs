@@ -46,10 +46,24 @@ namespace Explorite
         public new CompProperties_AbilityGiveHediff_ParasiticStab Props => (CompProperties_AbilityGiveHediff_ParasiticStab)props;
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            //dest.Pawn?.records?.Increment(RecordDefOf.DamageDealt);
             Pawn targetPawn = target.Pawn;
             if (targetPawn != null
                 && targetPawn?.def != AlienSayersDef)
             {
+                //BattleLogEntry_MeleeCombat battleLogEntry_RangedImpact = new BattleLogEntry_MeleeCombat(launcher, hitThing, intendedTarget.Thing, equipmentDef, def, targetCoverDef);
+                BattleLogEntry_MeleeCombat battleLogEntry = new BattleLogEntry_MeleeCombat(
+                    ruleDef: DefDatabase<RulePackDef>.GetNamed("Maneuver_Slash_MeleeHit"),
+                    alwaysShowInCompact: true,
+                    initiator: parent.pawn,
+                    recipient: targetPawn,
+                    implementType: ImplementOwnerTypeDefOf.NativeVerb,
+                    toolLabel: "",
+                    ownerEquipmentDef: null,
+                    ownerHediffDef: null,
+                    def: LogEntryDefOf.MeleeAttack
+                    );
+                Find.BattleLog.Add(battleLogEntry);
                 if (!targetPawn.def.race.IsMechanoid)
                 {
                     base.Apply(target, dest);

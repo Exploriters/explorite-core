@@ -27,7 +27,7 @@ namespace Explorite
     public class CompHealWearedOvertime : ThingComp
     {
         public int ticksWithoutHeal = 0;
-        public double detlaHpPerSec { get { return ((CompProperties_SelfHealOvertime)props).detlaHpPerSec; } }
+        public double detlaHpPerSec => ((CompProperties_SelfHealOvertime)props).detlaHpPerSec;
         public int ticksBetweenHeal
         {
             get

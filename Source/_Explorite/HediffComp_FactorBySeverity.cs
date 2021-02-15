@@ -25,12 +25,12 @@ namespace Explorite
      * 使严重性下降速率受到严重性影响。
      * </summary>
      */
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("", "IDE1006")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE1006")]
     public class HediffComp_FactorBySeverity : HediffComp
     {
-        public float chancePerTick { get { return ((HediffCompProperties_FactorBySeverity)props).chancePerTick; } }
-        public float severityAdjust { get { return ((HediffCompProperties_FactorBySeverity)props).severityAdjust; } }
-        public float doCount { get { return ((HediffCompProperties_FactorBySeverity)props).doCount; } }
+        public float chancePerTick => ((HediffCompProperties_FactorBySeverity)props).chancePerTick;
+        public float severityAdjust => ((HediffCompProperties_FactorBySeverity)props).severityAdjust;
+        public float doCount => ((HediffCompProperties_FactorBySeverity)props).doCount;
         public override void CompPostTick(ref float severityAdjustment)
         {
             if (parent == null)

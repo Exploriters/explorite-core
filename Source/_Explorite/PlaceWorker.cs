@@ -2,7 +2,6 @@
  * 包含多个PlaceWorker的合集文件。
  * --siiftun1857
  */
-using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -38,8 +37,8 @@ namespace Explorite
                 Vector3 position = center.ToVector3ShiftedWithAltitude(AltitudeLayer.MetaOverlays);
                 Graphics.DrawMesh(MeshPool.plane10, position, Quaternion.identity, PortCellMaterial, 0);
             }
-		}
-		/*
+        }
+        /*
         public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thingToPlace = null)
         {
             if (checkingDef is ThingDef thingDef && thingDef.placeWorkers.Contains(typeof(PlaceWorker_PlantReactionTable)))
@@ -76,7 +75,7 @@ namespace Explorite
         }
         */
     }
-    
+
     ///<summary>在目标物体的面前绘制互动图标。</summary>
     [StaticConstructorOnStartup]
     public class PlaceWorker_FacingPort : PlaceWorker
@@ -102,7 +101,7 @@ namespace Explorite
         public static void DrawPortCell(IntVec3 center)
         {
             Map currentMap = Find.CurrentMap;
-            if (center.Standable(currentMap))
+            if (center.Walkable(currentMap))
             {
                 Vector3 position = center.ToVector3ShiftedWithAltitude(AltitudeLayer.MetaOverlays);
                 Graphics.DrawMesh(MeshPool.plane10, position, Quaternion.identity, PortCellMaterial, 0);

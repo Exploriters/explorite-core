@@ -573,7 +573,7 @@ namespace Explorite
     }
     */
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("", "IDE0044")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0044")]
     public abstract class Projectile_Explosive_RoofBypass : Projectile_Explosive
     {
         private Sustainer ambientSustainer = null;

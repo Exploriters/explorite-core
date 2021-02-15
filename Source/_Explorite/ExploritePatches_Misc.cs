@@ -104,6 +104,8 @@ namespace Explorite
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(HediffComp_GetsPermanent), "set_IsPermanent"),
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(HediffComp_GetsPermanentIsPermanentPrefix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(HediffComp_TendDuration), "get_AllowTend"),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(HediffComp_TendDurationAllowTendPrefix)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(StatPart_ApparelStatOffset), nameof(StatPart.TransformValue)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PsychicSensitivityPostfix)));
@@ -113,6 +115,16 @@ namespace Explorite
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(CompAffectedByFacilities), nameof(CompAffectedByFacilities.CanPotentiallyLinkTo_Static), new Type[] { typeof(ThingDef), typeof(IntVec3), typeof(Rot4), typeof(ThingDef), typeof(IntVec3), typeof(Rot4) }),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(CompAffectedByFacilitiesCanPotentiallyLinkToStaticPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(PawnGraphicSet), nameof(PawnGraphicSet.ResolveApparelGraphics)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnGraphicSetResolveApparelGraphicsPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.DegreeOfTrait)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetDegreeOfTraitPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.HasTrait)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetHasTraitPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.GetTrait)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetGetTraitPostfix)));
 
 
                 if (InstelledMods.SoS2)
@@ -230,7 +242,7 @@ namespace Explorite
                     threshPercents.Clear();
                 }
                 //移除半人马和Sayers的舒适需求显示第一个分隔符
-                if (__instance is Need_Comfort && (pawn.def == AlienSayersDef || pawn.def == AlienCentaurDef))
+                if (__instance is Need_Comfort && (pawn.def == AlienSayersDef/* || pawn.def == AlienCentaurDef*/))
                 {
                     threshPercents.RemoveAll(num => num < 0.5f);
                 }
@@ -288,7 +300,7 @@ namespace Explorite
         ///<summary>移除半人马舒适度需求的负面情绪。</summary>
         [HarmonyPostfix]public static void ThoughtWorker_NeedComfort_CurrentStateInternalPostfix(ThoughtWorker_NeedComfort __instance, ref ThoughtState __result, Pawn p)
         {
-            if (
+            if (false &&
                 p.def == AlienCentaurDef && __result.Active && __result.StageIndex == 0
                 )
             {
@@ -396,7 +408,8 @@ namespace Explorite
             {
                 //__result = $"  - {"MeditationFocusEnabledByExploriteRace".Translate(pawn.def.label)}"
                 __result = $"  - {"Race".Translate()}: {pawn.def.label}"
-                    + (__result.Length > 0 ? "\n" + __result : null);
+                    //+ (__result.Length > 0 ? "\n" + __result : null)
+                    ;
             }
         }
 
@@ -604,6 +617,16 @@ namespace Explorite
                 value = false;
             }
         }
+        ///<summary>设置不允许<see cref = "HediffComp_TendDuration_CantTend" />症状被治疗。</summary>
+        [HarmonyPostfix]public static void HediffComp_TendDurationAllowTendPrefix(HediffComp_TendDuration __instance, ref bool __result)
+        {
+            if (false&&
+                __instance is HediffComp_TendDuration_CantTend
+                && __instance.Pawn.def == AlienCentaurDef)
+            {
+                __result = false;
+            }
+        }
 
         ///<summary>增强半人马负重能力。</summary>
         [HarmonyPostfix]public static void MassUtilityCapacityPostfix(ref float __result, Pawn p, ref StringBuilder explanation)
@@ -643,6 +666,63 @@ namespace Explorite
                 !GenAdj.OccupiedRect(myPos, myRot, myDef.size).Cells.Contains(PlaceWorker_FacingPort.PortPosition(facilityDef, facilityPos, facilityRot)))
             {
                 __result = false;
+            }
+        }
+
+        ///<summary>对人物渲染器的服装选单的补丁。</summary>
+        [HarmonyPostfix]
+        public static void PawnGraphicSetResolveApparelGraphicsPostfix(PawnGraphicSet __instance)
+        {
+            if (__instance.pawn.apparel.WornApparel.Any(ap => ap.def == CentaurHeaddressDef))
+            {
+                __instance.apparelGraphics.RemoveAll(ag => ag.sourceApparel.def.apparel.layers.Contains(ApparelLayerDefOf.Overhead));
+            }
+        }
+
+        ///<summary>使半人马始终被视为具有特征等级。</summary>
+        [HarmonyPostfix]
+        public static void TraitSetDegreeOfTraitPostfix(TraitSet __instance, ref int __result, TraitDef tDef)
+        {
+            if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                && pawn.def == AlienCentaurDef)
+            {
+                if (tDef == TraitDefOf.Industriousness)
+                    __result = Math.Max(2, __result);
+                else if (tDef == TraitDefOf.DrugDesire)
+                    __result = Math.Min(-1, __result);
+            }
+        }
+        ///<summary>使半人马始终被视为具有特征。</summary>
+        [HarmonyPostfix]
+        public static void TraitSetHasTraitPostfix(TraitSet __instance, ref bool __result, TraitDef tDef)
+        {
+            if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                && pawn.def == AlienCentaurDef)
+            {
+                if (
+                    tDef == DefDatabase<TraitDef>.GetNamed("Masochist") ||
+                    tDef == TraitDefOf.Industriousness ||
+                    tDef == TraitDefOf.DrugDesire ||
+                    tDef == TraitDefOf.Transhumanist ||
+                    tDef == TraitDefOf.Kind ||
+                    tDef == TraitDefOf.Asexual)
+                {
+                    __result = true;
+                }
+            }
+        }
+        ///<summary>使半人马特征制作样本。</summary>
+        [HarmonyPostfix]
+        public static void TraitSetGetTraitPostfix(TraitSet __instance, ref Trait __result, TraitDef tDef)
+        {
+            if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                && pawn.def == AlienCentaurDef
+                && __result == null)
+            {
+                if (tDef == TraitDefOf.DrugDesire)
+                {
+                    __result = new Trait(tDef, -1);
+                }
             }
         }
 

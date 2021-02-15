@@ -19,13 +19,7 @@ namespace Explorite
         /*public ColorGenerator_CentaurHair()
         {
         }*/
-        public override Color ExemplaryColor
-        {
-            get
-            {
-                return new Color(0.75686276f, 0.572549045f, 0.333333343f);
-            }
-        }
+        public override Color ExemplaryColor => new Color(0.75686276f, 0.572549045f, 0.333333343f);
 
         public override Color NewRandomizedColor()
         {

@@ -16,25 +16,26 @@ namespace Explorite
     public class CompSelfHealOvertime2 : CompSelfHealOvertime
     {
         public double detlaHpPerTick => detlaHpPerSec / 60;
-        public int detlaHpPerTickInteger => (int)Math.Floor(detlaHpPerTick);
-        public double detlaHpPerTickDecimal => detlaHpPerTick - detlaHpPerTickInteger;
+        //public int detlaHpPerTickInteger => (int)Math.Floor(detlaHpPerTick);
+        //public double detlaHpPerTickDecimal => detlaHpPerTick - detlaHpPerTickInteger;
 
 
         public double exceedHealth = 0;
 
         public override void PostExposeData()
         {
-
             base.PostExposeData();
 
             Scribe_Values.Look(ref exceedHealth, "exceedHealth", 0D);
         }
-        public override void CompTick()
+        public virtual void RunHeal(float factor = 1f)
         {
-            base.CompTick();
-
             if (Invalid)
                 return;
+
+            double detlaHpThisTick = detlaHpPerTick * factor;
+            int detlaHpPerTickInteger = (int)Math.Floor(detlaHpThisTick);
+            double detlaHpPerTickDecimal = detlaHpThisTick - detlaHpPerTickInteger;
 
             if (parent.HitPoints < parent.MaxHitPoints)
             {
@@ -56,6 +57,21 @@ namespace Explorite
             {
                 exceedHealth = 0D;
             }
+        }
+        public override void CompTick()
+        {
+            base.CompTick();
+            RunHeal();
+        }
+        public override void CompTickRare()
+        {
+            base.CompTick();
+            RunHeal(250);
+        }
+        public override void CompTickLong()
+        {
+            base.CompTick();
+            RunHeal(2000);
         }
     }
 }

@@ -29,9 +29,14 @@ namespace Explorite
                         DefDatabase<BodyTypeDef>.GetNamed("CentaurFemale") : DefDatabase<BodyTypeDef>.GetNamed("CentaurMale");
 
                     //__result.abilities.abilities.Add(new Ability(__result, DefDatabase<AbilityDef>.GetNamed("MassPsychicDeafCentaur")));
+                    __result.ageTracker.AgeChronologicalTicks = (long)Math.Floor(__result.ageTracker.AgeChronologicalTicks / __result.ageTracker.AgeBiologicalTicks * (__result.ageTracker.AgeBiologicalTicks + 360000000f));
                     __result.ageTracker.AgeBiologicalTicks += 360000000;
-                    __result.ageTracker.AgeChronologicalTicks += 360000000;
 
+                    __result.story.traits.allTraits.Clear();
+                    if (__result.story.hairDef == DefDatabase<HairDef>.GetNamed("Mohawk"))
+                    {
+                        __result.story.hairDef = DefDatabase<HairDef>.GetNamed("Flowy");
+                    }
                     //__result.story.traits.GainTrait(new Trait(TraitDefOf.Asexual, 0, forced: true));
 
                     /*__result.story.traits.allTraits.Sort(delegate (Trait t1, Trait t2) {

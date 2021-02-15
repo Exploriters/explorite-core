@@ -98,6 +98,7 @@
     <Compile Include="AlienRace.cs" />
     <Compile Include="BackstoryCracker.cs" />
     <Compile Include="Building_TriBattery.cs" />
+    <Compile Include="Bullet_Direct.cs" />
     <Compile Include="ColorGenerator.cs" />
     <Compile Include="CompAbilityEffect_GiveHediff_ParasiticStab.cs" />
     <Compile Include="CompAbilityEffect_GiveHediff_WholeMap.cs" />
@@ -120,21 +121,28 @@
     <Compile Include="CompUnbreakableViaDamage.cs" />
     <Compile Include="CompUseEffect_HediffApply.cs" />
     <Compile Include="DamageWorker_Frostbite_LauncherSafe.cs" />
+    <Compile Include="DamageWorker_Frostbrainer.cs" />
     <Compile Include="ExploriteCore.cs" />
     <Compile Include="ExploriteDefof.cs" />
     <Compile Include="ExploriteDefsCracker.cs" />
     <Compile Include="ExploriteInitializer.cs" />
     <Compile Include="ExploritePatches_Misc.cs" />
     <Compile Include="ExploriteMod.cs" />
+    <Compile Include="ExploritePatches_PawnRenderer.cs" />
     <Compile Include="ExploriteRegistry.cs" />
     <Compile Include="FoodPoisonImmuneForSayers.cs" />
     <Compile Include="HediffCompProperties_SeverityFromEntropy_CentarusOnly.cs" />
     <Compile Include="HediffComp_AgeStop.cs" />
     <Compile Include="HediffComp_FactorBySeverity.cs" />
     <Compile Include="HediffComp_FleshSeedParasitized.cs" />
+    <Compile Include="HediffComp_HediffGiverEnsureForAlwaysRequired.cs" />
+    <Compile Include="HediffComp_TendDuration_CantTend.cs" />
+    <Compile Include="HediffComp_SeverityHalfLife.cs" />
     <Compile Include="HediffComp_SpawnThingOnDeath.cs" />
     <Compile Include="HediffGiver.cs" />
     <Compile Include="HManipulator.cs" />
+    <Compile Include="Need_CentaurCreativityInspiration.cs" />
+    <Compile Include="Need_HypothermiaAbsorption.cs" />
     <Compile Include="PatchCentaurRecipe.cs" />
     <Compile Include="ExploritePatches_PawnGenerator.cs" />
     <Compile Include="PawnShieldGenerator.cs" />
@@ -149,7 +157,7 @@
     <Compile Include="StatPart_ApparelStatOffset_PsychicDeafIncluded.cs" />
     <Compile Include="StatPart_WorkSpeedByMood_Centaur.cs" />
     <Compile Include="ThoughtWorker_AlwaysActive_Centaur.cs" />
-    <Compile Include="Verb_DoNothing.cs" />
+    <Compile Include="Verb.cs" />
     <Compile Include="Verb_SensitivityToggle.cs" />
     <Compile Include="_AssemblyInfo.cs" />
   </ItemGroup>

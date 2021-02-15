@@ -17,6 +17,7 @@ namespace Explorite
             public static bool RimCentaurs => ModLister.GetActiveModWithIdentifier("Exploriters.siiftun1857.CentaurTheMagnuassembly") != null;
             public static bool Sayers => ModLister.GetActiveModWithIdentifier("Exploriters.Abrel.Sayers") != null;
             public static bool GuoGuo => ModLister.GetActiveModWithIdentifier("Exploriters.AndoRingo.GuoGuo") != null;
+            public static bool Royalty => ModLister.GetActiveModWithIdentifier("Ludeon.RimWorld.Royalty") != null;
             public static bool SoS2 => ModLister.GetActiveModWithIdentifier("kentington.saveourship2") != null;
         }
 
