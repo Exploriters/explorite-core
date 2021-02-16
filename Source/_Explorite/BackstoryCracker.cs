@@ -261,8 +261,8 @@ namespace Explorite
             {
                 if (
                     Bs.Value.slot == backstorySlot
-                    && Bs.Value.DisabledWorkGivers.Count() == 0
-                    && Bs.Value.DisabledWorkTypes.Count() == 0
+                    && Bs.Value.DisabledWorkGivers.Any()
+                    && Bs.Value.DisabledWorkTypes.Any()
                     && Bs.Value.shuffleable == true
                     //&& Bs.Value.workDisables == 0
                     && (
