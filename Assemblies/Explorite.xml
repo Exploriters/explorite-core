@@ -39,6 +39,12 @@
         <member name="T:Explorite.ColorGenerator_CentaurHair">
             <summary>生成半人马的头发颜色。</summary>
         </member>
+        <member name="T:Explorite.ColorGenerator_GuoguoHairRed">
+            <summary>生成果果人的红色头发颜色。</summary>
+        </member>
+        <member name="T:Explorite.ColorGenerator_GuoguoHairGreen">
+            <summary>生成果果人的绿色头发颜色。</summary>
+        </member>
         <member name="T:Explorite.CompProperties_AbilityGiveHediff_ParasiticStab">
             <summary>为<see cref = "T:Explorite.CompAbilityEffect_GiveHediff_ParasiticStab" />接收参数。</summary>
         </member>
@@ -220,7 +226,7 @@
             <summary>移除半人马的疼痛带来心灵熵消散增益。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.WandererJoinCannotFirePostfix(RimWorld.IncidentParms,System.Boolean@)">
-            <summary>禁用半人马阵营生成流浪者加入事件。</summary>
+            <summary>禁用阵营生成流浪者加入事件。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.HasSpaceSuitSlowPostfix(Verse.Pawn,System.Boolean@)">
             <summary>使半人马可以在太空中靠动力装甲存活。</summary>

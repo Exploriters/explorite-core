@@ -32,6 +32,11 @@ namespace Explorite
         public static readonly ThingDef PlantReactionComputerDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("PlantReactionComputer");
         public static readonly DamageDef InjectionDamageDef = !InstelledMods.Sayers ? null : DefDatabase<DamageDef>.GetNamed("Injection");
         public static readonly HediffDef InjectionHediffDef = !InstelledMods.Sayers ? null : DefDatabase<HediffDef>.GetNamed("Injection");
+        public static readonly FactionDef SayersPlayerColonyDef = !InstelledMods.Sayers ? null : DefDatabase<FactionDef>.GetNamed("SayersClan");
+        public static readonly FactionDef SayersPlayerColonySingleDef = !InstelledMods.Sayers ? null : DefDatabase<FactionDef>.GetNamed("SayersRefugees");
+
+        public static readonly ThingDef AlienGuoguoDef = !InstelledMods.GuoGuo ? null : DefDatabase<ThingDef>.GetNamed("Alien_Guoguo");
+        public static readonly FactionDef GuoguoPlayerColonyDef = !InstelledMods.GuoGuo ? null : DefDatabase<FactionDef>.GetNamed("GuoguoPlayerColony");
 
         //public static readonly Def CentaursScenarioRetroCruiseDef = !(InstelledMods.SoS2 && InstelledMods.RimCentaurs) ? null : DefDatabase<EnemyShipDef>.GetNamed("CentaursScenarioRetroCruise");
 

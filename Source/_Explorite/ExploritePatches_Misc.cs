@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using HarmonyLib;
 using RimWorld;
+using UnityEngine;
 using Verse;
 using Verse.AI;
 using static Explorite.ExploriteCore;
@@ -181,10 +182,14 @@ namespace Explorite
                 __result = 1f;
         }
 
-        ///<summary>禁用半人马阵营生成流浪者加入事件。</summary>
+        ///<summary>禁用阵营生成流浪者加入事件。</summary>
         [HarmonyPostfix]public static void WandererJoinCannotFirePostfix(IncidentParms parms, ref bool __result)
         {
-            if (Faction.OfPlayer.def == CentaurPlayerColonyDef)
+            if (Faction.OfPlayer.def == CentaurPlayerColonyDef
+             || Faction.OfPlayer.def == SayersPlayerColonyDef
+             || Faction.OfPlayer.def == SayersPlayerColonySingleDef
+             || Faction.OfPlayer.def == GuoguoPlayerColonyDef
+                )
                 __result = false;
         }
 
@@ -379,13 +384,13 @@ namespace Explorite
         ///<summary>使半人马和Sayers可以使用额外类型的冥想媒介。</summary>
         [HarmonyPostfix]public static void MeditationFocusCanPawnUsePostfix(MeditationFocusDef __instance, ref bool __result, Pawn p)
         {
-            if ((p.def == AlienCentaurDef || p.def == AlienSayersDef
-                ) && (__instance == DefDatabase<MeditationFocusDef>.GetNamed("Natural")    //自然
+            if ((p.def == AlienCentaurDef || p.def == AlienSayersDef || p.def == AlienGuoguoDef
+                ) && (__instance == DefDatabase<MeditationFocusDef>.GetNamed("Natural")     //自然
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Artistic")   //艺术
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Dignified")  //庄严
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Morbid")     //病态
-                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Minimal")    //简约
-                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Flame")      //火焰
+                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Minimal")  //简约
+                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Flame")    //火焰
                     )
                 )
             {
@@ -396,13 +401,13 @@ namespace Explorite
         ///<summary>为半人马和Sayers补充启用冥想类型的原因。</summary>
         [HarmonyPostfix]public static void MeditationFocusExplanationPostfix(MeditationFocusDef __instance, ref string __result, Pawn pawn)
         {
-            if ((pawn.def == AlienCentaurDef || pawn.def == AlienSayersDef
-                ) && (__instance == DefDatabase<MeditationFocusDef>.GetNamed("Natural")    //自然
+            if ((pawn.def == AlienCentaurDef || pawn.def == AlienSayersDef || pawn.def == AlienGuoguoDef
+                ) && (__instance == DefDatabase<MeditationFocusDef>.GetNamed("Natural")     //自然
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Artistic")   //艺术
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Dignified")  //庄严
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Morbid")     //病态
-                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Minimal")    //简约
-                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Flame")      //火焰
+                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Minimal")  //简约
+                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Flame")    //火焰
                     )
                 )
             {
@@ -602,7 +607,7 @@ namespace Explorite
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-                && pawn.def == AlienCentaurDef)
+                &&( pawn.def == AlienCentaurDef || pawn.def == AlienGuoguoDef ))
             {
                 __result = false;
             }
@@ -655,6 +660,17 @@ namespace Explorite
                     __instance.nakedGraphic.drawSize, 
                     __instance.pawn.story.hairColor);
             }
+            if (
+                __instance.pawn.def == AlienGuoguoDef)
+            {
+                Color.RGBToHSV(__instance.pawn.story.SkinColor, out _, out _, out float v);
+                //__instance.nakedGraphic.color = __instance.pawn.story.hairColor;
+                __instance.nakedGraphic = GraphicDatabase.Get<Graphic_Multi>(
+                    __instance.nakedGraphic.path,
+                    __instance.nakedGraphic.Shader,
+                    __instance.nakedGraphic.drawSize, 
+                    Color.HSVToRGB(0f, 0f, v));
+            }
         }
 
         ///<summary>对设施连接性的后期处理。</summary>
@@ -677,6 +693,10 @@ namespace Explorite
             {
                 __instance.apparelGraphics.RemoveAll(ag => ag.sourceApparel.def.apparel.layers.Contains(ApparelLayerDefOf.Overhead));
             }
+            if (__instance.pawn.def == AlienCentaurDef)
+            {
+                __instance.apparelGraphics.RemoveAll(ag => ag.sourceApparel.def.apparel.bodyPartGroups.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")));
+            }
         }
 
         ///<summary>使半人马始终被视为具有特征等级。</summary>
@@ -696,16 +716,21 @@ namespace Explorite
         [HarmonyPostfix]
         public static void TraitSetHasTraitPostfix(TraitSet __instance, ref bool __result, TraitDef tDef)
         {
-            if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-                && pawn.def == AlienCentaurDef)
+            if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn)
             {
-                if (
+                if ( pawn.def == AlienCentaurDef && (
                     tDef == DefDatabase<TraitDef>.GetNamed("Masochist") ||
                     tDef == TraitDefOf.Industriousness ||
                     tDef == TraitDefOf.DrugDesire ||
                     tDef == TraitDefOf.Transhumanist ||
                     tDef == TraitDefOf.Kind ||
-                    tDef == TraitDefOf.Asexual)
+                    tDef == TraitDefOf.Asexual ))
+                {
+                    __result = true;
+                }
+                if ( pawn.def == AlienGuoguoDef && (
+                    tDef == TraitDefOf.Kind ||
+                    tDef == TraitDefOf.Asexual ))
                 {
                     __result = true;
                 }

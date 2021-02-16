@@ -67,7 +67,7 @@ namespace Explorite
 
                 for (int k = 0; k < chancePerTick; k++)
                 {
-                    if (rnd.Next(0, 9999) / 10000.0 < chancePerTick)
+                    if (rnd.Next(0, 10000) / 10000.0 < chancePerTick)
                     {
                         parent.HitPoints += 1;
                     }

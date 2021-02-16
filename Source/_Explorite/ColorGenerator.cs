@@ -23,7 +23,7 @@ namespace Explorite
             if (Rand.Value < 0.05f)
             {
                 //return new Color(Rand.Value, Rand.Value, Rand.Value);
-                return Color.HSVToRGB(Rand.Value * 360f, (float)Math.Sin(90.0f - (Rand.Value * 90.0f)), (float)Math.Sin(90.0f - (Rand.Value * 90.0f)));
+                return Color.HSVToRGB(Rand.Value * 1f, (float)Math.Sin(90.0f - (Rand.Value * 90.0f)), (float)Math.Sin(90.0f - (Rand.Value * 90.0f)));
             }
             if (/*PawnSkinColors.IsDarkSkin(skinColor) || */Rand.Value < 0.5f)
             {
@@ -60,6 +60,26 @@ namespace Explorite
                 return new Color(0.929411769f, 0.7921569f, 0.6117647f);
             }
         }
+    }
+
+    ///<summary>生成果果人的红色头发颜色。</summary>
+    public class ColorGenerator_GuoguoHairRed : ColorGenerator
+    {
+        private static float H360(float h) => h <= 0 ? h += 360f : h;
+        public override Color ExemplaryColor => new Color(0.85098039215686274509803921568627f, 0f, 0f);
+        public override Color NewRandomizedColor() => Color.HSVToRGB(
+            H360(((float)Math.Sin(Rand.Value * 180.0D) * 15f) - 7.5f)/360f,
+            ((float)Math.Sin(Rand.Value * 90.0D) * 0.3f) + 0.7f,
+            ((float)Math.Sin(Rand.Value * 180.0D) * 0.3f) + 0.7f);
+    }
+    ///<summary>生成果果人的绿色头发颜色。</summary>
+    public class ColorGenerator_GuoguoHairGreen : ColorGenerator
+    {
+        public override Color ExemplaryColor => new Color(0.07450980392156862745098039215686f, 0.5960784313725490196078431372549f, 0.03137254901960784313725490196078f);
+        public override Color NewRandomizedColor() => Color.HSVToRGB(
+            (((float)Math.Sin(Rand.Value * 180.0D) * 30f) + 100f)/360f,
+            ((float)Math.Sin(Rand.Value * 90.0D) * 0.25f) + 0.7f,
+            ((float)Math.Sin(Rand.Value * 180.0D) * 0.2f) + 0.5f);
     }
     /*public class ColorGenerator_3E66B5 : ColorGenerator
     {

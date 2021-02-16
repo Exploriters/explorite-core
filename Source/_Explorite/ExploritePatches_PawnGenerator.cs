@@ -25,6 +25,7 @@ namespace Explorite
             {
                 if (__result.kindDef.race == AlienCentaurDef)
                 {
+                    __result.relations.ClearAllRelations();
                     __result.story.bodyType = __result.gender == Gender.Female ?
                         DefDatabase<BodyTypeDef>.GetNamed("CentaurFemale") : DefDatabase<BodyTypeDef>.GetNamed("CentaurMale");
 
@@ -72,6 +73,41 @@ namespace Explorite
                 else
                 {
                     //__result.def = ThingDefOf.Human;
+                    __result = PawnGenerator.GeneratePawn(PawnKindDefOf.Villager, request.Faction);
+                }
+            }
+            if (__result.def == AlienGuoguoDef)
+            {
+                if (__result.kindDef.race == AlienGuoguoDef)
+                {
+                    __result.ageTracker.AgeBiologicalTicks = 0;
+                    __result.ageTracker.AgeChronologicalTicks = 0;
+                    __result.relations.ClearAllRelations();
+
+                    if (__result.Name is NameTriple name)
+                    {
+                        //__result.Name = new NameTriple(name.Last, name.Last, null);
+                        string nameFirst = PawnNameDatabaseShuffled.BankOf(PawnNameCategory.HumanStandard).GetName(PawnNameSlot.First, (Gender)new Random(__result.thingIDNumber).Next(1,3));
+                        __result.Name = new NameTriple(nameFirst, nameFirst, "");
+                    }
+
+                    __result.health.RestorePart(__result.RaceProps.body.corePart);
+                    __result.health.hediffSet.hediffs.RemoveAll(hediff => hediff.def.isBad);
+
+                    if(!__result.HasPsylink)
+                        __result.ChangePsylinkLevel(1, false);
+
+                    foreach (SkillRecord sr in __result.skills.skills)
+                    {
+                        sr.Level =
+                            __result.story.childhood.skillGainsResolved.TryGetValue(sr.def);
+
+                        sr.passion = sr.Level > 0 ? Passion.Major : Passion.None;
+                        sr.xpSinceLastLevel = 0;
+                    }
+                }
+                else
+                {
                     __result = PawnGenerator.GeneratePawn(PawnKindDefOf.Villager, request.Faction);
                 }
             }

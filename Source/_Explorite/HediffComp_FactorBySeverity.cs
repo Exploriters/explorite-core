@@ -32,7 +32,7 @@ namespace Explorite
             Random rnd = new Random();
             for (int k = 0; k < doCount; k++)
             {
-                if (rnd.Next(0, 9999) / 10000f < chancePerTick * parent.Severity)
+                if (rnd.Next(0, 10000) / 10000f < chancePerTick * parent.Severity)
                 {
                     parent.Severity += severityAdjust;
                 }
