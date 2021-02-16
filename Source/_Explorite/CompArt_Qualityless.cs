@@ -1,6 +1,7 @@
-﻿/**
+/********************
  * 没有品质的艺术品的Comp。
  * 
+ * 原版游戏已修复CompArt作用在无品质物品上的错误漏洞，此类型弃用
  * --siiftun1857
  */
 using Verse;
@@ -8,11 +9,8 @@ using RimWorld;
 
 namespace Explorite
 {
-    /**
-     * <summary>
-     * 没有品质的艺术品Comp类。
-     * </summary>
-     */
+    /*
+    ///<summary>没有品质的艺术品Comp类。</summary>
     public class CompArt_Qualityless : ThingComp
     {
         private string authorNameInt;
@@ -208,4 +206,5 @@ namespace Explorite
             return GenText.CapitalizeAsTitle(taleRef.GenerateText(TextGenerationPurpose.ArtName, Props.nameMaker));
         }
     }
+    */
 }

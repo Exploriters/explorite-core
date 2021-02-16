@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 使心灵敏感度属性受到心灵失聪hediff影响。
  * 
  * 该方案已被弃用。
@@ -10,13 +10,9 @@ using System;
 
 namespace Explorite
 {
-    /**
-     * <summary>
-     * 使心灵敏感度属性受到心灵失聪hediff影响。
-     * </summary>
-     * TODO: 改为补丁，而非XML Patch
-     */
     /*
+    ///<summary>使心灵敏感度属性受到心灵失聪hediff影响。</summary>
+	//改为补丁，而非XML Patch
     public class StatPart_ApparelStatOffset_PsychicDeafIncluded : StatPart_ApparelStatOffset
     {
         private bool Blocked(StatRequest req)

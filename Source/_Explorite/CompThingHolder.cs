@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 提供容器，在物体被摧毁时释放内容。
  * 
  * --siiftun1857
@@ -8,9 +8,7 @@ using Verse;
 
 namespace Explorite
 {
-    /**
-     * <summary>提供容器，在物体被摧毁时释放内容。</summary>
-     */
+    ///<summary>提供容器，在物体被摧毁时释放内容。</summary>
     public class CompThingHolder : ThingComp, IThingHolder
     {
         public ThingOwner<Thing> innerContainer = new ThingOwner<Thing>();

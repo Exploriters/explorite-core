@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 使HediffGiver_EnsureForAlways指定的健康状态不会异常存在。
  * --siiftun1857
  */

@@ -1,7 +1,7 @@
-﻿/**
-* 常量文件。
-* --siiftun1857
-*/
+/********************
+ * 常量文件。
+ * --siiftun1857
+ */
 using HarmonyLib;
 using RimWorld;
 using Verse;

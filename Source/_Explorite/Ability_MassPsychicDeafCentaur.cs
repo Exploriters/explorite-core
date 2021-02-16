@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 半人马的群体心灵失聪Verb和Gizmo。
  * 
  * 未被使用的特性。
@@ -13,9 +13,7 @@ using static Explorite.ExploriteCore;
 namespace Explorite
 {
 
-    /**
-     * <summary>半人马的群体心灵失聪技能的Verb，用于控制是否允许开火。</summary>
-     */
+    ///<summary>半人马的群体心灵失聪技能的Verb，用于控制是否允许开火。</summary>
     public class Verb_CastAbility_MassPsychicDeafCentaur : Verb_CastAbility
     {
         public bool ValidToCast => ((Pawn)caster)?.health?.hediffSet.HasHediff(DefDatabase<HediffDef>.GetNamed("PsychicDeafCentaur")) != true;
@@ -65,9 +63,7 @@ namespace Explorite
         }
     }*/
 
-    /**
-     * <summary>半人马的群体心灵失聪技能的Gizmo，用于控制UI按钮是否允许被按下。</summary>
-     */
+    ///<summary>半人马的群体心灵失聪技能的Gizmo，用于控制UI按钮是否允许被按下。</summary>
     public class Command_AbilityMassPsychicDeafCentaur : Command_Ability
     {
         //bool disabledToDeaf = false;

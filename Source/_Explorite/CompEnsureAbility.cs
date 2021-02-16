@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 确保物种具有指定技能。
  * 
  * --siiftun1857
@@ -9,9 +9,7 @@ using Verse;
 
 namespace Explorite
 {
-    /**
-     * <summary>为<see cref = "CompEnsureAbility" />接收参数。</summary>
-     */
+    ///<summary>为<see cref = "CompEnsureAbility" />接收参数。</summary>
     public class CompProperties_EnsureAbility : CompProperties
     {
         public List<AbilityDef> abilities = new List<AbilityDef>();
@@ -20,9 +18,7 @@ namespace Explorite
             compClass = typeof(CompEnsureAbility);
         }
     }
-    /**
-        * <summary>确保人物具有指定技能。</summary>
-        */
+    ///<summary>确保人物具有指定技能。</summary>
     public class CompEnsureAbility : ThingComp
     {
         CompProperties_EnsureAbility Props => (CompProperties_EnsureAbility)props;

@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 尺寸超出常规大小的武器。
  * 
  * 代码参考自
@@ -15,17 +15,13 @@ using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
-    /**
-     * <summary>为<see cref = "CompOversizedWeapon" />接收参数。</summary>
-     */
+    ///<summary>为<see cref = "CompOversizedWeapon" />接收参数。</summary>
     public class CompProperties_OversizedWeapon : CompProperties
     {
         public CompProperties_OversizedWeapon() : base(typeof(CompOversizedWeapon))
         { }
     }
-    /**
-     * <summary>使武器尺寸与其物品渲染设置一致。</summary>
-     */
+    ///<summary>使武器尺寸与其物品渲染设置一致。</summary>
     public class CompOversizedWeapon : ThingComp
     {
         public CompProperties_OversizedWeapon Props => props as CompProperties_OversizedWeapon;

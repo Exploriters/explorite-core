@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 该文件包含颜色生成器。
  * --siiftun1857
  */
@@ -8,12 +8,8 @@ using System;
 
 namespace Explorite
 {
-    /**
-     * <summary>
-     * 生成半人马的头发颜色。
-     * </summary>
-     * TODO: 弃用该方法并改为补丁。
-     */
+    ///<summary>生成半人马的头发颜色。</summary>
+    // TODO: 弃用该方法并改为补丁。
     public class ColorGenerator_CentaurHair : ColorGenerator
     {
         /*public ColorGenerator_CentaurHair()

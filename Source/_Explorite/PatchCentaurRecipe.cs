@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 将半人马的手术配方更换为无法选中肩胛的版本。
  * 
  * TODO: 应当改为补丁，而不是子类。
@@ -114,6 +114,7 @@ namespace Explorite
     /**
      * <summary>不能选中肩胛的截肢手术配方。</summary>
      */
+	// TODO: 应改为补丁
     public class Recipe_RemoveBodyPart_MX : Recipe_Surgery
     {
         //private const float ViolationGoodwillImpact = 20f;
@@ -153,6 +154,7 @@ namespace Explorite
                 }
             }
         }
+		/*
         public override string GetLabelWhenUsedOn(Pawn pawn, BodyPartRecord part)
         {
             if (pawn.RaceProps.IsMechanoid || pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(part))
@@ -222,7 +224,8 @@ namespace Explorite
                 faction.TryAffectGoodwillWith(faction2, goodwillChange, true, true, reason, lookTarget);
             }
         }
-    }
+		*/
+	}
 
 
     /*public class Recipe_RemoveBodyPart : Recipe_Surgery

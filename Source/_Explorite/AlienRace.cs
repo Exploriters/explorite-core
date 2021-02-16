@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 对AlienRace.AlienPartGenerator.BodyAddon的拓展
  * --siiftun1857
  */

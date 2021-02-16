@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 使Hediff的严重性下降速率受到严重性影响。
  * --siiftun1857
  */
@@ -7,9 +7,7 @@ using Verse;
 
 namespace Explorite
 {
-    /**
-     * <summary>为<see cref = "HediffComp_FactorBySeverity" />接收参数。</summary>
-     */
+    ///<summary>为<see cref = "HediffComp_FactorBySeverity" />接收参数。</summary>
     public class HediffCompProperties_FactorBySeverity : HediffCompProperties
     {
         public float chancePerTick = 1;
@@ -20,11 +18,7 @@ namespace Explorite
             compClass = typeof(HediffComp_FactorBySeverity);
         }
     }
-    /**
-     * <summary>
-     * 使严重性下降速率受到严重性影响。
-     * </summary>
-     */
+    ///<summary>使严重性下降速率受到严重性影响。</summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE1006")]
     public class HediffComp_FactorBySeverity : HediffComp
     {

@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 使生物持续获取精神力。
  * --siiftun1857
  */
@@ -6,9 +6,7 @@ using Verse;
 
 namespace Explorite
 {
-    /**
-     * <summary>为<see cref = "CompPassiveMeditationFocusGain" />接收参数。</summary>
-     */
+    ///<summary>为<see cref = "CompPassiveMeditationFocusGain" />接收参数。</summary>
     public class CompProperties_PassiveMeditationFocusGain : CompProperties
     {
         public float focusPerDay = 0f;
@@ -18,9 +16,7 @@ namespace Explorite
         }
     }
 
-    /**
-     * <summary>使生物持续获取精神力。</summary>
-     */
+    ///<summary>使生物持续获取精神力。</summary>
     public class CompPassiveMeditationFocusGain : ThingComp
     {
         public float FocusPerTick => ((CompProperties_PassiveMeditationFocusGain)props).focusPerDay / 60000;
