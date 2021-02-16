@@ -87,7 +87,7 @@ namespace Explorite
                     if (__result.Name is NameTriple name)
                     {
                         //__result.Name = new NameTriple(name.Last, name.Last, null);
-                        string nameFirst = PawnNameDatabaseShuffled.BankOf(PawnNameCategory.HumanStandard).GetName(PawnNameSlot.First, (Gender)new Random(__result.thingIDNumber).Next(1,3));
+                        string nameFirst = PawnNameDatabaseShuffled.BankOf(PawnNameCategory.HumanStandard).GetName(PawnNameSlot.First, Rand.Bool?Gender.Female:Gender.Male);
                         __result.Name = new NameTriple(nameFirst, nameFirst, "Ringo");
                     }
 
