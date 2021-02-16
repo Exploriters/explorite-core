@@ -481,10 +481,14 @@ namespace Explorite
 
         }
 
-        ///<summary>使半人马不能使用小尺寸床铺。</summary>
+        ///<summary>使半人马不能使用小尺寸床铺，使果果床铺不能被其他种族使用。</summary>
         [HarmonyPostfix]public static void RestUtilityCanUseBedEverPostfix(ref bool __result, Pawn p, ThingDef bedDef)
         {
             if (p.def == AlienCentaurDef && bedDef.Size.Area < 3)
+            {
+                __result = false;
+            }
+            if (p.def != AlienGuoguoDef && bedDef.HasComp(typeof(CompAssignableToPawn_Bed_Guoguo)))
             {
                 __result = false;
             }

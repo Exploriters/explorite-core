@@ -57,6 +57,9 @@
         <member name="T:Explorite.CompAbilityEffect_GiveHediff_WholeMap">
             <summary>半人马的群体心灵失聪技能的主要功能实现。<br />会对目标所处地图的所有生物造成健康状态效果。<br />务必确保技能对单一目标生效，或为对施法者自己生效。</summary>
         </member>
+        <member name="T:Explorite.CompAssignableToPawn_Bed_Guoguo">
+            <summary>果果床的类型，只有果果人可以使用。</summary>
+        </member>
         <member name="T:Explorite.CompProperties_EnsureAbility">
             <summary>为<see cref = "T:Explorite.CompEnsureAbility" />接收参数。</summary>
         </member>
@@ -280,7 +283,7 @@
             <summary>使半人马不能与他人同时被添加至同一个床。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.RestUtilityCanUseBedEverPostfix(System.Boolean@,Verse.Pawn,Verse.ThingDef)">
-            <summary>使半人马不能使用小尺寸床铺。</summary>
+            <summary>使半人马不能使用小尺寸床铺，使果果床铺不能被其他种族使用。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PlantGrowthRateFactorNoTemperaturePostfix(RimWorld.Plant,System.Single@)">
             <summary>使指定植物的生长无视环境温度。</summary>

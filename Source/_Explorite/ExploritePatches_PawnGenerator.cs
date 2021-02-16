@@ -88,7 +88,7 @@ namespace Explorite
                     {
                         //__result.Name = new NameTriple(name.Last, name.Last, null);
                         string nameFirst = PawnNameDatabaseShuffled.BankOf(PawnNameCategory.HumanStandard).GetName(PawnNameSlot.First, (Gender)new Random(__result.thingIDNumber).Next(1,3));
-                        __result.Name = new NameTriple(nameFirst, nameFirst, "");
+                        __result.Name = new NameTriple(nameFirst, nameFirst, "Ringo");
                     }
 
                     __result.health.RestorePart(__result.RaceProps.body.corePart);
