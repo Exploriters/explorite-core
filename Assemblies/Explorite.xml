@@ -214,6 +214,21 @@
             <param name="target">一个位置。</param>
             <returns>是否成功地完成了传送。</returns>
         </member>
+        <member name="M:Explorite.ExploriteDebugActions.ClearAllFogClickPlace">
+            <summary>清除所有迷雾。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.ClearAllFog">
+            <summary>清除所有迷雾。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.SnowWholeMap">
+            <summary>完全积雪。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.FrozenWholeMapWater">
+            <summary>将整个地图的所有水体都变成冰。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.FinishHyperManipulatorInstell(Verse.Pawn)">
+            <summary>完成物理操作仪极其漫长的整备时间。</summary>
+        </member>
         <member name="T:Explorite.ExploritePatches">
             <summary>
             包含多个补丁的合集类。
@@ -240,8 +255,14 @@
         <member name="M:Explorite.ExploritePatches.NeedMood_GetTipStringPostfix(RimWorld.Need_Mood,System.String@)">
             <summary>移除半人马的心情需求显示精神崩溃阈值描述。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.Need_DrawOnGUIPostfix(RimWorld.Need)">
-            <summary>更改需求显示的分隔符。</summary>
+        <member name="M:Explorite.ExploritePatches.NeedsCardUtilityDrawThoughtListingPrefix(UnityEngine.Rect@,Verse.Pawn,UnityEngine.Vector2@)">
+            <summary>更改渲染想法预补丁。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.Need_DrawOnGUIPrefix(RimWorld.Need,UnityEngine.Rect@,System.Int32@,System.Single@,System.Boolean@,System.Boolean@)">
+            <summary>更改渲染模式预补丁。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.Need_DrawOnGUIPostfix(RimWorld.Need,UnityEngine.Rect,System.Int32,System.Single,System.Boolean,System.Boolean)">
+            <summary>更改渲染模式后期处理补丁。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.Need_NeedIntervalPrefix(RimWorld.Need_Seeker,System.Single@)">
             <summary>记录在刻函数开始前的需求值。</summary>
@@ -322,7 +343,16 @@
             <summary>使半人马始终被视为具有特征。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.TraitSetGetTraitPostfix(RimWorld.TraitSet,RimWorld.Trait@,RimWorld.TraitDef)">
-            <summary>使半人马特征制作样本。</summary>
+            <summary>为半人马特征制作样本。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RacePropertiesSpecialDisplayStatsPostfix(Verse.RaceProperties,System.Collections.Generic.IEnumerable{RimWorld.StatDrawEntry}@,Verse.ThingDef,RimWorld.StatRequest)">
+            <summary>在信息页移除半人马的寿命显示。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.StatWorkerShouldShowForPostfix(RimWorld.StatWorker,System.Boolean@,RimWorld.StatRequest)">
+            <summary>在信息页移除半人马的疼痛休克阈值和精神崩溃阈值显示。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RecipeRemoveBodyPartGetPartsToApplyOnPostfix(RimWorld.Recipe_Surgery,System.Collections.Generic.IEnumerable{Verse.BodyPartRecord}@,Verse.Pawn,Verse.RecipeDef)">
+            <summary>从截肢手术清单中移除半人马的锁骨。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
@@ -433,6 +463,15 @@
         </member>
         <member name="T:Explorite.ResearchProjectDef_Trishot">
             <summary>三射弓研究项目，阻止其在特定情况下被研究。<br />未实现。</summary>
+        </member>
+        <member name="T:Explorite.ScenPart_ConfigPage_ConfigureStartingPawns_NoDoEditInterface">
+            <summary>不具有人物编辑界面的起始人物剧本部件。</summary>
+        </member>
+        <member name="T:Explorite.ScenPart_ConfigPage_ConfigureStartingPawns_Alt1">
+            <summary>人物编辑界面剧本部件副本。</summary>
+        </member>
+        <member name="T:Explorite.ScenPart_ConfigPage_ConfigureStartingPawns_Alt2">
+            <summary>人物编辑界面剧本部件副本。</summary>
         </member>
         <member name="T:Explorite.ScenPart_ScatteredGarbage">
             <summary>向开局的空降仓内塞入Sayers粘液。</summary>

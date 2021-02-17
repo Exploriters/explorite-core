@@ -5,10 +5,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace Explorite
 {
+    ///<summary>不具有人物编辑界面的起始人物剧本部件。</summary>
+    public class ScenPart_ConfigPage_ConfigureStartingPawns_NoDoEditInterface : ScenPart_ConfigPage_ConfigureStartingPawns
+    {
+        public override void DoEditInterface(Listing_ScenEdit listing)
+        {
+        }
+    }
+    ///<summary>人物编辑界面剧本部件副本。</summary>
+    public class ScenPart_ConfigPage_ConfigureStartingPawns_Alt1 : ScenPart_ConfigPage_ConfigureStartingPawns { }
+    ///<summary>人物编辑界面剧本部件副本。</summary>
+    public class ScenPart_ConfigPage_ConfigureStartingPawns_Alt2 : ScenPart_ConfigPage_ConfigureStartingPawns { }
     ///<summary>向开局的空降仓内塞入Sayers粘液。</summary>
     public class ScenPart_ScatteredGarbage : ScenPart
     {

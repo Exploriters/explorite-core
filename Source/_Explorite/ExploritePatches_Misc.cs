@@ -53,10 +53,12 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(Need_Mood), nameof(Need_Mood.GetTipString)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(NeedMood_GetTipStringPostfix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(Need), nameof(Need.DrawOnGUI)),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(Need_DrawOnGUIPrefix)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(Need_DrawOnGUIPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(NeedsCardUtility), "DrawThoughtListing"),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(NeedsCardUtilityDrawThoughtListingPrefix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(Need_Seeker), nameof(Need_Seeker.NeedInterval)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(Need_NeedIntervalPrefix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Seeker), nameof(Need_Seeker.NeedInterval)),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(Need_NeedIntervalPrefix)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(Need_NeedIntervalPostfix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_NeedComfort), "CurrentStateInternal"),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorker_NeedComfort_CurrentStateInternalPostfix)));
@@ -126,6 +128,15 @@ namespace Explorite
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetHasTraitPostfix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.GetTrait)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetGetTraitPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(RaceProperties), nameof(RaceProperties.SpecialDisplayStats)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(RacePropertiesSpecialDisplayStatsPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(StatWorker), nameof(StatWorker.ShouldShowFor)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(StatWorkerShouldShowForPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.Recipe_RemoveBodyPart"), "GetPartsToApplyOn"),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(RecipeRemoveBodyPartGetPartsToApplyOnPostfix)));
 
 
                 if (InstelledMods.SoS2)
@@ -233,8 +244,36 @@ namespace Explorite
             }
         }
 
-        ///<summary>更改需求显示的分隔符。</summary>
-        [HarmonyPostfix]public static void Need_DrawOnGUIPostfix(Need __instance)
+        ///<summary>更改渲染想法预补丁。</summary>
+        [HarmonyPrefix]public static void NeedsCardUtilityDrawThoughtListingPrefix(ref Rect listingRect, Pawn pawn, ref Vector2 thoughtScrollPosition)
+        {
+            //改变半人马的想法显示渲染高度
+            if (pawn.def == AlienCentaurDef)
+            {
+                if (pawn.needs.TryGetNeed<Need_CentaurCreativityInspiration>()?.ShouldShow == true)
+                {
+                    listingRect.y += 24f;
+                    thoughtScrollPosition.y += 24f;
+                }
+            }
+        }
+        ///<summary>更改渲染模式预补丁。</summary>
+        [HarmonyPrefix]public static void Need_DrawOnGUIPrefix(Need __instance, ref Rect rect, ref int maxThresholdMarkers, ref float customMargin, ref bool drawArrows, ref bool doTooltip)
+        {
+            if (
+                __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                // && __instance.GetType().GetField("threshPercents", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is List<float> threshPercents
+                )
+            {
+                //改变半人马的心情需求显示渲染高度
+                if (__instance is Need_Mood && pawn.def == AlienCentaurDef && pawn.needs.TryGetNeed<Need_CentaurCreativityInspiration>()?.ShouldShow == true)
+                {
+                    //rect.height = Mathf.Max(rect.height * 0.666f, 30f);
+                }
+            }
+        }
+        ///<summary>更改渲染模式后期处理补丁。</summary>
+        [HarmonyPostfix]public static void Need_DrawOnGUIPostfix(Need __instance, Rect rect, int maxThresholdMarkers, float customMargin, bool drawArrows, bool doTooltip)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn &&
@@ -245,6 +284,16 @@ namespace Explorite
                 if (__instance is Need_Mood && pawn.def == AlienCentaurDef)
                 {
                     threshPercents.Clear();
+
+                    Need_CentaurCreativityInspiration need = pawn.needs.TryGetNeed<Need_CentaurCreativityInspiration>();
+                    if (need?.ShouldShow == true)
+                    {
+                        Rect rect2 = new Rect(rect);
+                        //rect2.height *= 0.666f;
+                        rect2.height *= 0.5f;
+                        rect2.y += rect.height;
+                        need.DrawOnGUI(rect2, maxThresholdMarkers, customMargin, drawArrows, doTooltip);
+                    }
                 }
                 //移除半人马和Sayers的舒适需求显示第一个分隔符
                 if (__instance is Need_Comfort && (pawn.def == AlienSayersDef/* || pawn.def == AlienCentaurDef*/))
@@ -690,8 +739,7 @@ namespace Explorite
         }
 
         ///<summary>对人物渲染器的服装选单的补丁。</summary>
-        [HarmonyPostfix]
-        public static void PawnGraphicSetResolveApparelGraphicsPostfix(PawnGraphicSet __instance)
+        [HarmonyPostfix]public static void PawnGraphicSetResolveApparelGraphicsPostfix(PawnGraphicSet __instance)
         {
             if (__instance.pawn.apparel.WornApparel.Any(ap => ap.def == CentaurHeaddressDef))
             {
@@ -704,8 +752,7 @@ namespace Explorite
         }
 
         ///<summary>使半人马始终被视为具有特征等级。</summary>
-        [HarmonyPostfix]
-        public static void TraitSetDegreeOfTraitPostfix(TraitSet __instance, ref int __result, TraitDef tDef)
+        [HarmonyPostfix]public static void TraitSetDegreeOfTraitPostfix(TraitSet __instance, ref int __result, TraitDef tDef)
         {
             if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
                 && pawn.def == AlienCentaurDef)
@@ -717,8 +764,7 @@ namespace Explorite
             }
         }
         ///<summary>使半人马始终被视为具有特征。</summary>
-        [HarmonyPostfix]
-        public static void TraitSetHasTraitPostfix(TraitSet __instance, ref bool __result, TraitDef tDef)
+        [HarmonyPostfix]public static void TraitSetHasTraitPostfix(TraitSet __instance, ref bool __result, TraitDef tDef)
         {
             if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn)
             {
@@ -740,9 +786,8 @@ namespace Explorite
                 }
             }
         }
-        ///<summary>使半人马特征制作样本。</summary>
-        [HarmonyPostfix]
-        public static void TraitSetGetTraitPostfix(TraitSet __instance, ref Trait __result, TraitDef tDef)
+        ///<summary>为半人马特征制作样本。</summary>
+        [HarmonyPostfix]public static void TraitSetGetTraitPostfix(TraitSet __instance, ref Trait __result, TraitDef tDef)
         {
             if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
                 && pawn.def == AlienCentaurDef
@@ -752,6 +797,47 @@ namespace Explorite
                 {
                     __result = new Trait(tDef, -1);
                 }
+            }
+        }
+        ///<summary>在信息页移除半人马的寿命显示。</summary>
+        [HarmonyPostfix]public static void RacePropertiesSpecialDisplayStatsPostfix(RaceProperties __instance, ref IEnumerable<StatDrawEntry> __result, ThingDef parentDef, StatRequest req)
+        {
+            /*_ = new StatDrawEntry(
+                StatCategoryDefOf.BasicsPawn, 
+                "StatsReport_LifeExpectancy".Translate(),
+                float.PositiveInfinity.ToStringByStyle(ToStringStyle.Integer), 
+                "Stat_Race_LifeExpectancy_Desc".Translate(), 
+                2000);*/
+            if (parentDef == AlienCentaurDef)
+            {
+                List<StatDrawEntry> result = __result.ToList();
+                result.RemoveAll(
+                    stat => stat.LabelCap == "StatsReport_LifeExpectancy".Translate().CapitalizeFirst()
+                    && stat.ValueString == "-2147483648" //.Contains('-') // == float.PositiveInfinity.ToStringByStyle(ToStringStyle.Integer)
+                    //&& stat.DisplayPriorityWithinCategory == 2000
+                    );
+                __result = result;
+            }
+        }
+        ///<summary>在信息页移除半人马的疼痛休克阈值和精神崩溃阈值显示。</summary>
+        [HarmonyPostfix]public static void StatWorkerShouldShowForPostfix(StatWorker __instance, ref bool __result, StatRequest req)
+        {
+            if (__result &&
+                req.HasThing && req.Thing is Pawn pawn && pawn.def == AlienCentaurDef &&
+                __instance.GetType().GetField("stat", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is StatDef stat
+                && (stat == StatDefOf.PainShockThreshold || stat == StatDefOf.MentalBreakThreshold))
+            {
+                __result = false;
+            }
+        }
+        ///<summary>从截肢手术清单中移除半人马的锁骨。</summary>
+        [HarmonyPostfix]public static void RecipeRemoveBodyPartGetPartsToApplyOnPostfix(Recipe_Surgery __instance, ref IEnumerable<BodyPartRecord> __result, Pawn pawn, RecipeDef recipe)
+        {
+            if (pawn.def == AlienCentaurDef)
+            {
+                List<BodyPartRecord> result = __result.ToList();
+                result.RemoveAll(bpr => bpr.def == CentaurScapularDef);
+                __result = result;
             }
         }
 
