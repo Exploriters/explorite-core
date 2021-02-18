@@ -138,6 +138,9 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.Recipe_RemoveBodyPart"), "GetPartsToApplyOn"),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(RecipeRemoveBodyPartGetPartsToApplyOnPostfix)));
 
+                harmonyInstance.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.ThreatDisabled)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnThreatDisabledPostfix)));
+
 
                 if (InstelledMods.SoS2)
                 {
@@ -841,5 +844,52 @@ namespace Explorite
             }
         }
 
+        ///<summary>使半人马即使携带了物品也会被视为威胁。</summary>
+        [HarmonyPostfix]
+        public static void PawnThreatDisabledPostfix(Pawn __instance, ref bool __result, IAttackTargetSearcher disabledFor)
+        {
+            if (__instance.def == AlienCentaurDef)
+            {
+                if (__result)
+                {
+                    if (!__instance.Spawned)
+                    {
+                        __result = true;
+                        return;
+                    }
+                    /* if (!__instance.InMentalState && __instance.GetTraderCaravanRole() == TraderCaravanRole.Carrier && !(__instance.jobs.curDriver is JobDriver_AttackMelee))
+                    {
+                        __result = true;
+                        return;
+                    } */
+                    if (__instance.mindState.duty != null && __instance.mindState.duty.def.threatDisabled)
+                    {
+                        __result = true;
+                        return;
+                    }
+                    if (!__instance.mindState.Active)
+                    {
+                        __result = true;
+                        return;
+                    }
+                    if (__instance.Downed)
+                    {
+                        if (disabledFor == null)
+                        {
+                            __result = true;
+                            return;
+                        }
+                        Pawn pawn = disabledFor.Thing as Pawn;
+                        if (pawn == null || pawn.mindState == null || pawn.mindState.duty == null || !pawn.mindState.duty.attackDownedIfStarving || !pawn.Starving())
+                        {
+                            __result = true;
+                            return;
+                        }
+                    }
+                    __result = false;
+                    return;
+                }
+            }
+        }
     }
 }
