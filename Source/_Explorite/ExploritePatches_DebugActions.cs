@@ -80,6 +80,7 @@ namespace Explorite
                     }
                 }
                 Find.CurrentMap.mapDrawer.WholeMapChanged(MapMeshFlag.Terrain);
+                Find.CurrentMap.pathGrid.RecalculateAllPerceivedPathCosts();
             }));
             for (int i = 0; i < 9 - confirmNum; i++)
             {

@@ -2,13 +2,13 @@
  * 包含多个补丁的合集文件。
  * --siiftun1857
  */
+using HarmonyLib;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using HarmonyLib;
-using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.AI;
@@ -67,6 +67,8 @@ namespace Explorite
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(MeditationFocusCanPawnUsePostfix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.EnablingThingsExplanation)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(MeditationFocusExplanationPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(RecipeDef), "get_AvailableNow"),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(RecipeDefAvailableNowPostfix)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdMinor"),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(MentalBreaker_BreakThresholdMinorPostfix)));
@@ -137,6 +139,12 @@ namespace Explorite
 
                 harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.Recipe_RemoveBodyPart"), "GetPartsToApplyOn"),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(RecipeRemoveBodyPartGetPartsToApplyOnPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(OutfitDatabase), "GenerateStartingOutfits"),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(OutfitDatabaseGenerateStartingOutfitsPostfix)));
+
+                //harmonyInstance.Patch(AccessTools.Method(typeof(GenHostility), nameof(GenHostility.HostileTo), new Type[] { typeof(Thing), typeof(Thing) }),
+                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(GenHostilityHostileToPostfix)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.ThreatDisabled)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnThreatDisabledPostfix)));
@@ -448,6 +456,15 @@ namespace Explorite
             {
                 __result = true;
             }
+        }
+
+        ///<summary>更改特定配方的显示可用性。</summary>
+        [HarmonyPostfix]public static void RecipeDefAvailableNowPostfix(RecipeDef __instance, ref bool __result)
+        {
+            /*if (__instance.defName == "InstallHyperManipulatorSurgery")
+            {
+                __result = false;
+            }*/
         }
 
         ///<summary>为半人马和Sayers补充启用冥想类型的原因。</summary>
@@ -843,6 +860,136 @@ namespace Explorite
                 __result = result;
             }
         }
+        ///<summary>添加默认服装方案。</summary>
+        [HarmonyPostfix]public static void OutfitDatabaseGenerateStartingOutfitsPostfix(OutfitDatabase __instance)
+        {
+            if (InstelledMods.RimCentaurs)
+            {
+                Outfit outfit3 = __instance.MakeNewOutfit();
+                outfit3.label = "OutfitCentaur".Translate();
+                outfit3.filter.SetDisallowAll();
+                outfit3.filter.SetAllow(SpecialThingFilterDefOf.AllowDeadmansApparel, allow: false);
+                foreach (ThingDef allDef2 in DefDatabase<ThingDef>.AllDefs)
+                {
+                    if (allDef2.apparel != null && allDef2.apparel.defaultOutfitTags != null && allDef2.apparel.defaultOutfitTags.Contains("CentaurOutfit"))
+                    {
+                        outfit3.filter.SetAllow(allDef2, allow: true);
+                    }
+                }
+            }
+        }
+        /*
+        //static int ExLogLimit = 0;
+        //static readonly MethodInfo IsPredatorHostileToMethod = AccessTools.Method(typeof(GenHostility), "IsPredatorHostileTo", new Type[] { typeof(Pawn), typeof(Pawn) });
+        public static bool ExLog(this bool boolen, string msg, ref string str, bool tarfet = true)
+        {
+            if (boolen == tarfet)
+            {
+                str += msg;
+            }
+            return boolen;
+        }
+        ///<summary>检测敌对性状态，输出日志。</summary>
+        [HarmonyPostfix] public static void GenHostilityHostileToPostfix(Thing a, Thing b, bool __result)
+        {
+            try
+            {
+                if (!__result)
+                {
+                    return;
+                }
+                if (a.def == AlienCentaurDef || b.def == AlienCentaurDef)
+                {
+
+                    static bool IsPredatorHostileTo(Pawn predator, Pawn toPawn)
+                    {
+                        try
+                        {
+                            return false;// (bool)IsPredatorHostileToMethod.Invoke(null, new object[] { predator, toPawn });
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (a.Destroyed || b.Destroyed || a == b)
+                    {
+                        return;
+                    }
+                    Pawn pawn = a as Pawn;
+                    Pawn pawn2 = b as Pawn;
+                    string an = pawn.Name.ToStringShort;
+                    string bn = pawn2.Name.ToStringShort;
+                    string msg = $"[Explorite]Testing hostile with {an} and {bn}.\n";
+                    _ =
+                        (pawn != null
+                            && pawn.MentalState != null
+                            && pawn.MentalState.ForceHostileTo(b)).ExLog($"Hostile to {an} mental state.\n", ref msg)
+                        || (pawn2 != null
+                            && pawn2.MentalState != null
+                            && pawn2.MentalState.ForceHostileTo(a)).ExLog($"Hostile to {bn} mental state.\n", ref msg)
+                        || (pawn != null
+                            && pawn2 != null
+                            && (IsPredatorHostileTo(pawn, pawn2)
+                                || IsPredatorHostileTo(pawn2, pawn))).ExLog($"Hostile to predator.\n", ref msg)
+                        || ((a.Faction != null
+                                && pawn2 != null
+                                && pawn2.HostFaction == a.Faction
+                                && (pawn == null
+                                    || pawn.HostFaction == null)
+                                && PrisonBreakUtility.IsPrisonBreaking(pawn2))
+                                || (b.Faction != null
+                                    && pawn != null
+                                    && pawn.HostFaction == b.Faction
+                                    && (pawn2 == null
+                                        || pawn2.HostFaction == null)
+                                    && PrisonBreakUtility.IsPrisonBreaking(pawn))).ExLog($"Hostile to prison breaking.\n", ref msg)
+                        || ((a.Faction == null || pawn2 == null || pawn2.HostFaction != a.Faction)
+                                && (b.Faction == null || pawn == null || pawn.HostFaction != b.Faction)
+                                && (pawn == null
+                                    || !pawn.IsPrisoner
+                                    || pawn2 == null
+                                    || !pawn2.IsPrisoner)
+                                && (pawn == null
+                                    || pawn2 == null
+                                    || ((!pawn.IsPrisoner
+                                        || pawn.HostFaction != pawn2.HostFaction
+                                        || PrisonBreakUtility.IsPrisonBreaking(pawn))
+                                    && (!pawn2.IsPrisoner
+                                        || pawn2.HostFaction != pawn.HostFaction
+                                        || PrisonBreakUtility.IsPrisonBreaking(pawn2))))
+                            && (pawn == null
+                                || pawn2 == null
+                                || ((pawn.HostFaction == null
+                                        || pawn2.Faction == null
+                                        || pawn.HostFaction.HostileTo(pawn2.Faction)
+                                        || PrisonBreakUtility.IsPrisonBreaking(pawn))
+                                    && (pawn2.HostFaction == null
+                                        || pawn.Faction == null
+                                        || pawn2.HostFaction.HostileTo(pawn.Faction)
+                                        || PrisonBreakUtility.IsPrisonBreaking(pawn2))))
+                            && (a.Faction == null
+                                || !a.Faction.IsPlayer
+                                || pawn2 == null
+                                || !pawn2.mindState.WillJoinColonyIfRescued)
+                            && (b.Faction == null
+                                || !b.Faction.IsPlayer
+                                || pawn == null
+                                || !pawn.mindState.WillJoinColonyIfRescued)
+                            && a.Faction != null
+                            && b.Faction != null
+                            && a.Faction.HostileTo(b.Faction)
+                        ).ExLog($"Hostile to faction relation.\n", ref msg);
+
+                    Log.Message(msg);
+                }
+            }
+            catch
+            { }
+        }
+        */
+
 
         ///<summary>使半人马即使携带了物品也会被视为威胁。</summary>
         [HarmonyPostfix]

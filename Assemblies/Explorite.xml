@@ -291,6 +291,9 @@
         <member name="M:Explorite.ExploritePatches.MeditationFocusCanPawnUsePostfix(RimWorld.MeditationFocusDef,System.Boolean@,Verse.Pawn)">
             <summary>使半人马和Sayers可以使用额外类型的冥想媒介。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.RecipeDefAvailableNowPostfix(Verse.RecipeDef,System.Boolean@)">
+            <summary>更改特定配方的显示可用性。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.MeditationFocusExplanationPostfix(RimWorld.MeditationFocusDef,System.String@,Verse.Pawn)">
             <summary>为半人马和Sayers补充启用冥想类型的原因。</summary>
         </member>
@@ -353,6 +356,12 @@
         </member>
         <member name="M:Explorite.ExploritePatches.RecipeRemoveBodyPartGetPartsToApplyOnPostfix(RimWorld.Recipe_Surgery,System.Collections.Generic.IEnumerable{Verse.BodyPartRecord}@,Verse.Pawn,Verse.RecipeDef)">
             <summary>从截肢手术清单中移除半人马的锁骨。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.OutfitDatabaseGenerateStartingOutfitsPostfix(RimWorld.OutfitDatabase)">
+            <summary>添加默认服装方案。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PawnThreatDisabledPostfix(Verse.Pawn,System.Boolean@,Verse.AI.IAttackTargetSearcher)">
+            <summary>使半人马即使携带了物品也会被视为威胁。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>

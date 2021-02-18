@@ -30,49 +30,46 @@ namespace System.Runtime.CompilerServices
 
 namespace Explorite
 {
+    //[StaticConstructorOnStartup]
+    internal static class PatchCentaurRecipe
+    {
+        static PatchCentaurRecipe()
+        {
+            if (true && !InstelledMods.RimCentaurs)
+            {
+                return;
+            }
+            //AlienCentaurDef.recipes.Remove(DefDatabase<RecipeDef>.GetNamed("RemoveBodyPart"));
+            RecipeDef RemoveBodyPart = DefDatabase<RecipeDef>.GetNamed("RemoveBodyPart");
+            RecipeDef RemoveBodyPart_ExcludingScapular = DefDatabase<RecipeDef>.GetNamed("RemoveBodyPart_ExcludingScapular");
+            List<RecipeDef> Recipes = AlienCentaurDef.recipes;
+            for (int i = 0; i < Recipes.Count; i++)
+            {
+                if (Recipes[i] == RemoveBodyPart)
+                {
+                    AlienCentaurDef.recipes[i] = RemoveBodyPart_ExcludingScapular;
+                }
+            }
+        }
+
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("", "CS0122")]
+        /*public static IEnumerable<BodyPartRecord> GetPartsToApplyOn(this Recipe_RemoveBodyPart thisclass, Pawn pawn, RecipeDef recipe)
+        {
+            IEnumerable<BodyPartRecord> preret = thisclass.Recipe_RemoveBodyPart();
+            foreach (BodyPartRecord bpr in preret)
+            {
+                if (bpr.def == CentaurScapularDef)
+                    (preret as List<BodyPartRecord>).Remove(bpr);
+            }
+            return preret;
+        }*/
+    }
     /**
      * <summary>不能选中肩胛的截肢手术配方。</summary>
      */
-	// TODO: 应改为补丁
+    // TODO: 应改为补丁
     public abstract class Recipe_RemoveBodyPart_MX : Recipe_Surgery
     {
-
-        //[StaticConstructorOnStartup]
-        internal static class PatchCentaurRecipe
-        {
-            static PatchCentaurRecipe()
-            {
-                if (true && !InstelledMods.RimCentaurs)
-                {
-                    return;
-                }
-                //AlienCentaurDef.recipes.Remove(DefDatabase<RecipeDef>.GetNamed("RemoveBodyPart"));
-                RecipeDef RemoveBodyPart = DefDatabase<RecipeDef>.GetNamed("RemoveBodyPart");
-                RecipeDef RemoveBodyPart_ExcludingScapular = DefDatabase<RecipeDef>.GetNamed("RemoveBodyPart_ExcludingScapular");
-                List<RecipeDef> Recipes = AlienCentaurDef.recipes;
-                for (int i = 0; i < Recipes.Count; i++)
-                {
-                    if (Recipes[i] == RemoveBodyPart)
-                    {
-                        AlienCentaurDef.recipes[i] = RemoveBodyPart_ExcludingScapular;
-                    }
-                }
-            }
-
-            //[System.Diagnostics.CodeAnalysis.SuppressMessage("", "CS0122")]
-            /*public static IEnumerable<BodyPartRecord> GetPartsToApplyOn(this Recipe_RemoveBodyPart thisclass, Pawn pawn, RecipeDef recipe)
-            {
-                IEnumerable<BodyPartRecord> preret = thisclass.Recipe_RemoveBodyPart();
-                foreach (BodyPartRecord bpr in preret)
-                {
-                    if (bpr.def == CentaurScapularDef)
-                        (preret as List<BodyPartRecord>).Remove(bpr);
-                }
-                return preret;
-            }*/
-        }
-
-
         /*
         public class Recipe_RemoveBodyPart_ExcludingScapular : Recipe_RemoveBodyPart
         {

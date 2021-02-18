@@ -13,111 +13,149 @@ namespace Explorite
 {
     internal static partial class ExploritePatches
     {
+
+        internal static bool GenerateCentaurPostprocess(ref Pawn pawn, PawnGenerationRequest request, ref bool matchError)
+        {
+            if (matchError)
+            {
+                return false;
+            }
+            if (pawn.def != AlienCentaurDef)
+            {
+                if (pawn?.story?.childhood == CentaurCivilRetro)
+                {
+                    pawn.story.childhood = BackstoryDatabase.ShuffleableBackstoryList(
+                        BackstorySlot.Childhood,
+                        new BackstoryCategoryFilter { categories = pawn.kindDef.backstoryCategories }
+                    ).RandomElement();
+                }
+                return false;
+            }
+            if (pawn.kindDef.race != AlienCentaurDef)
+            {
+                matchError = true;
+                return false;
+            }
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            pawn.relations.ClearAllRelations();
+
+            pawn.story.bodyType = pawn.gender == Gender.Female ?
+                DefDatabase<BodyTypeDef>.GetNamed("CentaurFemale") : DefDatabase<BodyTypeDef>.GetNamed("CentaurMale");
+
+            //__result.abilities.abilities.Add(new Ability(__result, DefDatabase<AbilityDef>.GetNamed("MassPsychicDeafCentaur")));
+
+            pawn.ageTracker.AgeChronologicalTicks = (long)Math.Floor(
+                pawn.ageTracker.AgeChronologicalTicks * ((pawn.ageTracker.AgeBiologicalTicks + 360000000f) / pawn.ageTracker.AgeBiologicalTicks)
+                );
+            pawn.ageTracker.AgeBiologicalTicks += 360000000;
+
+            pawn.story.traits.allTraits.Clear();
+            if (pawn.story.hairDef == DefDatabase<HairDef>.GetNamed("Mohawk"))
+            {
+                pawn.story.hairDef = DefDatabase<HairDef>.GetNamed("Flowy");
+            }
+            //__result.story.traits.GainTrait(new Trait(TraitDefOf.Asexual, 0, forced: true));
+
+            foreach (SkillRecord sr in pawn.skills.skills)
+            {
+                sr.Level =
+                    pawn.story.childhood.skillGainsResolved.TryGetValue(sr.def) +
+                    pawn.story.adulthood.skillGainsResolved.TryGetValue(sr.def) + 9;
+                sr.passion = sr.passion switch
+                {
+                    Passion.None => Passion.Minor,
+                    Passion.Minor => Passion.Major,
+                    Passion.Major => Passion.Major,
+                    _ => Passion.Minor,
+                };
+                sr.xpSinceLastLevel = sr.XpRequiredForLevelUp / 2f;
+            }
+            return true;
+        }
+        internal static bool GenerateSayersPostprocess(ref Pawn pawn, PawnGenerationRequest request, ref bool matchError)
+        {
+            if (matchError)
+            {
+                return false;
+            }
+            if (pawn.def != AlienSayersDef)
+            {
+                return false;
+            }
+            if (pawn.kindDef.race != AlienSayersDef)
+            {
+                matchError = true;
+                return false;
+            }
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            // 在这里写后期处理
+
+            return true;
+        }
+        internal static bool GenerateGuoguoPostprocess(ref Pawn pawn, PawnGenerationRequest request, ref bool matchError)
+        {
+            if (matchError)
+            {
+                return false;
+            }
+            if (pawn.def != AlienGuoguoDef)
+            {
+                return false;
+            }
+            if (pawn.kindDef.race != AlienGuoguoDef)
+            {
+                matchError = true;
+                return false;
+            }
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            pawn.ageTracker.AgeBiologicalTicks = 0;
+            pawn.ageTracker.AgeChronologicalTicks = 0;
+            pawn.relations.ClearAllRelations();
+
+            if (pawn.Name is NameTriple name)
+            {
+                //__result.Name = new NameTriple(name.Last, name.Last, null);
+                string nameFirst = PawnNameDatabaseShuffled.BankOf(PawnNameCategory.HumanStandard).GetName(PawnNameSlot.First, Rand.Bool ? Gender.Female : Gender.Male);
+                pawn.Name = new NameTriple(nameFirst, nameFirst, "Ringo");
+            }
+
+            pawn.health.RestorePart(pawn.RaceProps.body.corePart);
+            pawn.health.hediffSet.hediffs.RemoveAll(hediff => hediff.def.isBad);
+
+            if (!pawn.HasPsylink)
+                pawn.ChangePsylinkLevel(1, false);
+
+            foreach (SkillRecord sr in pawn.skills.skills)
+            {
+                sr.Level =
+                    pawn.story.childhood.skillGainsResolved.TryGetValue(sr.def);
+
+                sr.passion = sr.Level > 0 ? Passion.Major : Passion.None;
+                sr.xpSinceLastLevel = 0;
+            }
+
+            return true;
+        }
+
+
         /**
-         * <summary>
-         * 对人物生成器的补丁。
-         * </summary>
-         */
+          * <summary>
+          * 对人物生成器的补丁。
+          * </summary>
+          */
         [HarmonyPostfix]
         public static void GeneratePawnPostfix(ref Pawn __result, PawnGenerationRequest request)
         {
-            if (__result.def == AlienCentaurDef)
+            bool matchError = false;
+            GenerateCentaurPostprocess(ref __result, request, ref matchError);
+            GenerateSayersPostprocess(ref __result, request, ref matchError);
+            GenerateGuoguoPostprocess(ref __result, request, ref matchError);
+
+            if (matchError)
             {
-                if (__result.kindDef.race == AlienCentaurDef)
-                {
-                    __result.relations.ClearAllRelations();
-                    __result.story.bodyType = __result.gender == Gender.Female ?
-                        DefDatabase<BodyTypeDef>.GetNamed("CentaurFemale") : DefDatabase<BodyTypeDef>.GetNamed("CentaurMale");
-
-                    //__result.abilities.abilities.Add(new Ability(__result, DefDatabase<AbilityDef>.GetNamed("MassPsychicDeafCentaur")));
-                    __result.ageTracker.AgeChronologicalTicks = (long)Math.Floor(__result.ageTracker.AgeChronologicalTicks / __result.ageTracker.AgeBiologicalTicks * (__result.ageTracker.AgeBiologicalTicks + 360000000f));
-                    __result.ageTracker.AgeBiologicalTicks += 360000000;
-
-                    __result.story.traits.allTraits.Clear();
-                    if (__result.story.hairDef == DefDatabase<HairDef>.GetNamed("Mohawk"))
-                    {
-                        __result.story.hairDef = DefDatabase<HairDef>.GetNamed("Flowy");
-                    }
-                    //__result.story.traits.GainTrait(new Trait(TraitDefOf.Asexual, 0, forced: true));
-
-                    /*__result.story.traits.allTraits.Sort(delegate (Trait t1, Trait t2) {
-                        if (t1.def == TraitDefOf.Asexual && t2.def != TraitDefOf.Asexual)
-                        {
-                            return 1;
-                        }
-                        return 0;
-                    });*/
-
-                    foreach (SkillRecord sr in __result.skills.skills)
-                    {
-                        sr.Level =
-                            __result.story.childhood.skillGainsResolved.TryGetValue(sr.def) +
-                            __result.story.adulthood.skillGainsResolved.TryGetValue(sr.def);
-                        if (sr.passion == Passion.None)
-                            sr.passion = Passion.Minor;
-                        sr.xpSinceLastLevel = sr.XpRequiredForLevelUp / 2f;
-                    }
-                }
-                else
-                {
-                    //__result.def = ThingDefOf.Human;
-                    __result = PawnGenerator.GeneratePawn(PawnKindDefOf.Villager, request.Faction);
-                }
-            }
-            if (__result.def == AlienSayersDef)
-            {
-                if (__result.kindDef.race == AlienSayersDef)
-                {
-                    //__result.abilities.abilities.Add(new Ability(__result, DefDatabase<AbilityDef>.GetNamed("ParasiticStab_Sayers")));
-                }
-                else
-                {
-                    //__result.def = ThingDefOf.Human;
-                    __result = PawnGenerator.GeneratePawn(PawnKindDefOf.Villager, request.Faction);
-                }
-            }
-            if (__result.def == AlienGuoguoDef)
-            {
-                if (__result.kindDef.race == AlienGuoguoDef)
-                {
-                    __result.ageTracker.AgeBiologicalTicks = 0;
-                    __result.ageTracker.AgeChronologicalTicks = 0;
-                    __result.relations.ClearAllRelations();
-
-                    if (__result.Name is NameTriple name)
-                    {
-                        //__result.Name = new NameTriple(name.Last, name.Last, null);
-                        string nameFirst = PawnNameDatabaseShuffled.BankOf(PawnNameCategory.HumanStandard).GetName(PawnNameSlot.First, Rand.Bool?Gender.Female:Gender.Male);
-                        __result.Name = new NameTriple(nameFirst, nameFirst, "Ringo");
-                    }
-
-                    __result.health.RestorePart(__result.RaceProps.body.corePart);
-                    __result.health.hediffSet.hediffs.RemoveAll(hediff => hediff.def.isBad);
-
-                    if(!__result.HasPsylink)
-                        __result.ChangePsylinkLevel(1, false);
-
-                    foreach (SkillRecord sr in __result.skills.skills)
-                    {
-                        sr.Level =
-                            __result.story.childhood.skillGainsResolved.TryGetValue(sr.def);
-
-                        sr.passion = sr.Level > 0 ? Passion.Major : Passion.None;
-                        sr.xpSinceLastLevel = 0;
-                    }
-                }
-                else
-                {
-                    __result = PawnGenerator.GeneratePawn(PawnKindDefOf.Villager, request.Faction);
-                }
-            }
-
-            if (__result.def == ThingDefOf.Human && __result.story.childhood == CentaurCivilRetro)
-            {
-                __result.story.childhood = BackstoryDatabase.ShuffleableBackstoryList(
-                    BackstorySlot.Childhood,
-                    new BackstoryCategoryFilter { categories = __result.kindDef.backstoryCategories }
-                ).RandomElement();
+                __result = PawnGenerator.GeneratePawn(PawnKindDefOf.Villager, request.Faction);
             }
 
             if (__result?.TryGetComp<CompEnsureAbility>() != null)

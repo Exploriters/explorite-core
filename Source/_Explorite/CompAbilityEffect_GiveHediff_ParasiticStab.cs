@@ -43,6 +43,7 @@ namespace Explorite
             //dest.Pawn?.records?.Increment(RecordDefOf.DamageDealt);
             Pawn targetPawn = target.Pawn;
             if (targetPawn != null
+                && parent.pawn != targetPawn
                 && targetPawn?.def != AlienSayersDef)
             {
                 //BattleLogEntry_MeleeCombat battleLogEntry_RangedImpact = new BattleLogEntry_MeleeCombat(launcher, hitThing, intendedTarget.Thing, equipmentDef, def, targetCoverDef);

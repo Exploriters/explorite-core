@@ -17,4 +17,13 @@
   <Magnuassembly_ScenPart_UnpackMinified_StaticSummary>Unpack all minified buildings in drop pods.</Magnuassembly_ScenPart_UnpackMinified_StaticSummary>
   
   <Magnuassembly_CompRefuelable_PassiveRecharge_ChargeCompleted>{0} has completely charged.</Magnuassembly_CompRefuelable_PassiveRecharge_ChargeCompleted>
+
+  <Magnuassembly_CriticalExposureIn>Critical exposure in</Magnuassembly_CriticalExposureIn>
+  <Magnuassembly_RestoringIn>Fully restore in</Magnuassembly_RestoringIn>
+  <Magnuassembly_NextCreativityInspirationIn>Est.</Magnuassembly_NextCreativityInspirationIn>
+  <Magnuassembly_NotHappyEnough>Not happy enough</Magnuassembly_NotHappyEnough>
+  
+  <OutfitCentaur>Centaur</OutfitCentaur>
+  
+  
 </LanguageData>
