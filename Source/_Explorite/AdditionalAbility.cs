@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * Ability继承测试。
  * 
  * 被Sayers使用。
@@ -9,9 +9,7 @@ using Verse;
 
 namespace Explorite
 {
-    /**
-     * <summary>被种族技能使用自定义Ability类。</summary>
-     */
+    ///<summary>被种族技能使用自定义Ability类。</summary>
     public class AdditionalAbility : Ability
     {
         public AdditionalAbility(Pawn pawn) : base(pawn) { }

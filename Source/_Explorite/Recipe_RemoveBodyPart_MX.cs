@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 将半人马的手术配方更换为无法选中肩胛的版本。
  * 
  * TODO: 应当改为补丁，而不是子类。
@@ -30,13 +30,15 @@ namespace System.Runtime.CompilerServices
 
 namespace Explorite
 {
-    [StaticConstructorOnStartup]
+    //[StaticConstructorOnStartup]
     internal static class PatchCentaurRecipe
     {
         static PatchCentaurRecipe()
         {
-            if (!InstelledMods.RimCentaurs)
+            if (true && !InstelledMods.RimCentaurs)
+            {
                 return;
+            }
             //AlienCentaurDef.recipes.Remove(DefDatabase<RecipeDef>.GetNamed("RemoveBodyPart"));
             RecipeDef RemoveBodyPart = DefDatabase<RecipeDef>.GetNamed("RemoveBodyPart");
             RecipeDef RemoveBodyPart_ExcludingScapular = DefDatabase<RecipeDef>.GetNamed("RemoveBodyPart_ExcludingScapular");
@@ -62,63 +64,62 @@ namespace Explorite
             return preret;
         }*/
     }
-
-
-    /*public class Recipe_RemoveBodyPart_ExcludingScapular : Recipe_RemoveBodyPart
-    {
-        public override IEnumerable<BodyPartRecord> GetPartsToApplyOn(Pawn pawn, RecipeDef recipe)
-        {
-            IEnumerable<BodyPartRecord> preret = base.Recipe_RemoveBodyPart();
-            foreach (BodyPartRecord bpr in preret)
-            {
-                if (bpr.def == CentaurScapularDef)
-                    (preret as List<BodyPartRecord>).Remove(bpr);
-            }
-            return preret;
-        }
-    }*/
-
-    /*[Verse.StaticConstructorOnStartup]
-    static class HarmonyPatchCentaurRecipe
-    {
-        // this static constructor runs to create a HarmonyInstance and install a patch.
-        static HarmonyPatchCentaurRecipe()
-        {
-            HarmonyInstance harmony = HarmonyInstance.Create("Explorite.rimworld.mod.RemoveBodyPartRecipePatch");
-
-            // find the FillTab method of the class RimWorld.ITab_Pawn_Character
-            MethodInfo targetmethod = AccessTools.Method(typeof(RimWorld.Recipe_Surgery), "GetPartsToApplyOn");
-
-            // find the static method to call before (i.e. Prefix) the targetmethod
-            HarmonyMethod prefixmethod = new HarmonyMethod(typeof(Explorite.HarmonyPatchCentaurRecipe).GetMethod("GetPartsToApplyOn_Prefix"));
-
-            // patch the targetmethod, by calling prefixmethod before it runs, with no postfixmethod (i.e. null)
-            harmony.Patch(targetmethod, prefixmethod, null);
-        }
-        
-        // This method is now always called right before RimWorld.ITab_Pawn_Character.FillTab.
-        // So, before the ITab_Pawn_Character is instantiated, reset the height of the dialog window.
-        // The class RimWorld.ITab_Pawn_Character is static so there is no this __instance.
-        public static void GetPartsToApplyOn_Prefix(RimWorld.Recipe_Surgery __instance, Pawn pawn, RecipeDef recipe, ref IEnumerable<BodyPartRecord> __result)
-        {
-            __result = __instance.GetPartsToApplyOn(pawn, recipe);
-            foreach (BodyPartRecord bpr in __result)
-            {
-                if (bpr.def == CentaurScapularDef)
-                    (__result as List<BodyPartRecord>).Remove(bpr);
-            }
-        }
-    }*/
-
-
     /**
      * <summary>不能选中肩胛的截肢手术配方。</summary>
      */
-    public class Recipe_RemoveBodyPart_MX : Recipe_Surgery
+    // TODO: 应改为补丁
+    public abstract class Recipe_RemoveBodyPart_MX : Recipe_Surgery
     {
+        /*
+        public class Recipe_RemoveBodyPart_ExcludingScapular : Recipe_RemoveBodyPart
+        {
+            public override IEnumerable<BodyPartRecord> GetPartsToApplyOn(Pawn pawn, RecipeDef recipe)
+            {
+                IEnumerable<BodyPartRecord> preret = base.Recipe_RemoveBodyPart();
+                foreach (BodyPartRecord bpr in preret)
+                {
+                    if (bpr.def == CentaurScapularDef)
+                        (preret as List<BodyPartRecord>).Remove(bpr);
+                }
+                return preret;
+            }
+        }
+        
+        [Verse.StaticConstructorOnStartup]
+        static class HarmonyPatchCentaurRecipe
+        {
+            // this static constructor runs to create a HarmonyInstance and install a patch.
+            static HarmonyPatchCentaurRecipe()
+            {
+                HarmonyInstance harmony = HarmonyInstance.Create("Explorite.rimworld.mod.RemoveBodyPartRecipePatch");
+
+                // find the FillTab method of the class RimWorld.ITab_Pawn_Character
+                MethodInfo targetmethod = AccessTools.Method(typeof(RimWorld.Recipe_Surgery), "GetPartsToApplyOn");
+
+                // find the static method to call before (i.e. Prefix) the targetmethod
+                HarmonyMethod prefixmethod = new HarmonyMethod(typeof(Explorite.HarmonyPatchCentaurRecipe).GetMethod("GetPartsToApplyOn_Prefix"));
+
+                // patch the targetmethod, by calling prefixmethod before it runs, with no postfixmethod (i.e. null)
+                harmony.Patch(targetmethod, prefixmethod, null);
+            }
+
+            // This method is now always called right before RimWorld.ITab_Pawn_Character.FillTab.
+            // So, before the ITab_Pawn_Character is instantiated, reset the height of the dialog window.
+            // The class RimWorld.ITab_Pawn_Character is static so there is no this __instance.
+            public static void GetPartsToApplyOn_Prefix(RimWorld.Recipe_Surgery __instance, Pawn pawn, RecipeDef recipe, ref IEnumerable<BodyPartRecord> __result)
+            {
+                __result = __instance.GetPartsToApplyOn(pawn, recipe);
+                foreach (BodyPartRecord bpr in __result)
+                {
+                    if (bpr.def == CentaurScapularDef)
+                        (__result as List<BodyPartRecord>).Remove(bpr);
+                }
+            }
+        }
+
         //private const float ViolationGoodwillImpact = 20f;
         [DebuggerHidden]
-        /*public override IEnumerable<BodyPartRecord> GetPartsToApplyOn(Pawn pawn, RecipeDef recipe)
+        public override IEnumerable<BodyPartRecord> GetPartsToApplyOn(Pawn pawn, RecipeDef recipe)
         {
             Recipe_RemoveBodyPart_MX.< GetPartsToApplyOn > c__Iterator8F < GetPartsToApplyOn > c__Iterator8F = new Recipe_RemoveBodyPart_MX.< GetPartsToApplyOn > c__Iterator8F();
 
@@ -128,7 +129,8 @@ namespace Explorite
             Recipe_RemoveBodyPart_MX.< GetPartsToApplyOn > c__Iterator8F expr_15 = < GetPartsToApplyOn > c__Iterator8F;
             expr_15.$PC = -2;
             return expr_15;
-        }*/
+        }
+        */
         public override IEnumerable<BodyPartRecord> GetPartsToApplyOn(Pawn pawn, RecipeDef recipe)
         {
             IEnumerable<BodyPartRecord> parts = pawn.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Undefined, null, null);
@@ -153,6 +155,7 @@ namespace Explorite
                 }
             }
         }
+		/*
         public override string GetLabelWhenUsedOn(Pawn pawn, BodyPartRecord part)
         {
             if (pawn.RaceProps.IsMechanoid || pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(part))
@@ -222,7 +225,8 @@ namespace Explorite
                 faction.TryAffectGoodwillWith(faction2, goodwillChange, true, true, reason, lookTarget);
             }
         }
-    }
+		*/
+	}
 
 
     /*public class Recipe_RemoveBodyPart : Recipe_Surgery

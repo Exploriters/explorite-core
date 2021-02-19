@@ -1,4 +1,10 @@
-﻿using RimWorld;
+/********************
+ * 使Sayers优先选择尸体作为食物。
+ * 
+ * 方法被弃用。
+ * --siiftun1857
+ */
+using RimWorld;
 using System;
 using Verse;
 using Verse.AI;
@@ -6,6 +12,8 @@ using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
+    /*
+    ///<summary>使Sayers优先选择尸体作为食物。</summary>
     public abstract class JobGiver_GetFood_Sayers : ThinkNode_JobGiver
     {
         private HungerCategory minCategory;
@@ -108,4 +116,5 @@ namespace Explorite
             return JobMaker.MakeJob(JobDefOf.Ingest, thing);
         }
     }
+    */
 }

@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 半人马长期幸福的创造灵感奖励需求类。
  * --siiftun1857
  */
@@ -24,7 +24,8 @@ namespace Explorite
         public override int GUIChangeArrow => IsFrozen ? 0 : Math.Sign(lastEffectiveDelta);
         public override float MaxLevel => 2f;
         //protected override bool IsFrozen => false;
-        public override bool ShowOnNeedList => !Disabled;
+        public override bool ShowOnNeedList => false; //!Disabled && pawn.IsColonist;
+        public bool ShouldShow => !Disabled;
         public bool InHappiness => pawn.needs.TryGetNeed<Need_Mood>().CurLevelPercentage >= 1f;
         private bool Disabled => pawn.def != AlienCentaurDef;
         public override void SetInitialLevel() => CurLevel = 0;
@@ -49,7 +50,7 @@ namespace Explorite
         {
             if (Disabled)
             {
-                CurLevel = MaxLevel;
+                CurLevel = 0f;
             }
             else if (!IsFrozen)
             {

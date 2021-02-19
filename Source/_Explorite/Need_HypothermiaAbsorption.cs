@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 半人马免疫冻伤的能力需求类。
  * --siiftun1857
  */
@@ -125,7 +125,7 @@ namespace Explorite
         public override int GUIChangeArrow => IsFrozen ? 0 : Math.Sign(LastEffectiveDelta);
         public override float MaxLevel => 1f;
         protected override bool IsFrozen => false;
-        public override bool ShowOnNeedList => !Disabled && ExposureState != ExposureStateEnum.None;
+        public override bool ShowOnNeedList => !Disabled;// && ExposureState != ExposureStateEnum.None;
         private bool Disabled => pawn.def != AlienCentaurDef;
         public ExposureStateEnum ExposureState
         {
@@ -160,6 +160,12 @@ namespace Explorite
         public override void SetInitialLevel()
         {
             CurLevel = MaxLevel;
+        }
+        public override void DrawOnGUI(Rect rect, int maxThresholdMarkers = 2147483647, float customMargin = -1f, bool drawArrows = true, bool doTooltip = true)
+        {
+            rect.width /= 0.73f;
+            //rect.height = Mathf.Max(rect.height * 0.666f, 30f);
+            base.DrawOnGUI(rect, maxThresholdMarkers, customMargin, drawArrows, doTooltip);
         }
         public override string GetTipString()
         {

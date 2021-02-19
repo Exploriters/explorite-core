@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 常量包以及常用函数。
  * --siiftun1857
  */
@@ -106,7 +106,7 @@ namespace Explorite
         public static Color CastingPixel(Color color)
         {
             System.Random Randy = new System.Random();
-            if (Randy.Next(0, 1) == 1)
+            if (Randy.Next(0, 2) == 1)
                 return color;
             color.r = (color.r * (1 - color.a)) + (0.5f * color.a);
             color.g = (color.g * (1 - color.a)) + (0.5f * color.a);

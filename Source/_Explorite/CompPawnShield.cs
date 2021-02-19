@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 使物种具有护盾。
  * 
  * 由半人马使用。
@@ -14,9 +14,7 @@ using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
-    /**
-     * <summary>为<see cref = "CompPawnShield" />接收参数。</summary>
-     */
+    ///<summary>为<see cref = "CompPawnShield" />接收参数。</summary>
     public class CompProperties_PawnShield : CompProperties
     {
         public CompProperties_PawnShield()

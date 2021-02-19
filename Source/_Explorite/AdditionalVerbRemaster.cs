@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 原始代码: https://github.com/solaris0115/AdditionalVerbMod
  * 由siiftun1857重制
  */

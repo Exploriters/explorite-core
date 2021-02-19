@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Explorite_SoS2Lib</name>
+    </assembly>
+    <members>
+        <member name="T:Explorite.Building_ShipTurretTorpedoSpinal">
+            <summary>半人马巡洋舰使用的鱼雷脊峰炮台建筑物类，负责绘制舱盖图层和开火效果。</summary>
+        </member>
+        <member name="T:Explorite.ScenPart_StartInSpaceCentaur">
+            <summary>使半人马开局在其巡洋舰中。</summary>
+        </member>
+        <member name="T:Explorite.SoS2Reflection">
+            <summary>
+            对SoS2的内部方法建立反射。
+            </summary>
+        </member>
+    </members>
+</doc>

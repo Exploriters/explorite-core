@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 使生物具有该效果时，在死亡后生成物体。
  * 
  * --siiftun1857
@@ -12,9 +12,7 @@ using Verse.Sound;
 
 namespace Explorite
 {
-    /**
-     * <summary>为<see cref = "HediffComp_SpawnThingOnDeath" />接收参数。</summary>
-     */
+    ///<summary>为<see cref = "HediffComp_SpawnThingOnDeath" />接收参数。</summary>
     public class HediffCompProperties_SpawnThingOnDeath : HediffCompProperties_DissolveGearOnDeath
     {
         public ThingDef thing;
@@ -25,9 +23,7 @@ namespace Explorite
             compClass = typeof(HediffComp_SpawnThingOnDeath);
         }
     }
-    /**
-     * <summary>使生物具有该效果时，在死亡后生成物体。</summary>
-     */
+    ///<summary>使生物具有该效果时，在死亡后生成物体。</summary>
     public class HediffComp_SpawnThingOnDeath : HediffComp
     {
         public HediffCompProperties_SpawnThingOnDeath Props => (HediffCompProperties_SpawnThingOnDeath)props;

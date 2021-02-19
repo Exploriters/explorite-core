@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 植物液注入技能的主要效果Comp。
  * 
  * --siiftun1857
@@ -12,9 +12,7 @@ using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
-    /**
-     * <summary>为<see cref = "CompAbilityEffect_GiveHediff_ParasiticStab" />接收参数。</summary>
-     */
+    ///<summary>为<see cref = "CompAbilityEffect_GiveHediff_ParasiticStab" />接收参数。</summary>
     public class CompProperties_AbilityGiveHediff_ParasiticStab : CompProperties_AbilityGiveHediff
     {
         public DamageDef injuryOnHit;
@@ -25,9 +23,7 @@ namespace Explorite
             compClass = typeof(CompAbilityEffect_GiveHediff_ParasiticStab);
         }
     }
-    /**
-     * <summary>Sayers的群体植物液注入的粒子效果功能实现。</summary>
-     */
+    ///<summary>Sayers的群体植物液注入的粒子效果功能实现。</summary>
     public class CompAbilityEffect_MoteOnTarget_ParasiticStab : CompAbilityEffect_MoteOnTarget
     {
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
@@ -38,9 +34,7 @@ namespace Explorite
             }
         }
     }
-    /**
-     * <summary>Sayers的群体植物液注入的主要功能实现。</summary>
-     */
+    ///<summary>Sayers的群体植物液注入的主要功能实现。</summary>
     public class CompAbilityEffect_GiveHediff_ParasiticStab : CompAbilityEffect_GiveHediff
     {
         public new CompProperties_AbilityGiveHediff_ParasiticStab Props => (CompProperties_AbilityGiveHediff_ParasiticStab)props;
@@ -49,6 +43,7 @@ namespace Explorite
             //dest.Pawn?.records?.Increment(RecordDefOf.DamageDealt);
             Pawn targetPawn = target.Pawn;
             if (targetPawn != null
+                && parent.pawn != targetPawn
                 && targetPawn?.def != AlienSayersDef)
             {
                 //BattleLogEntry_MeleeCombat battleLogEntry_RangedImpact = new BattleLogEntry_MeleeCombat(launcher, hitThing, intendedTarget.Thing, equipmentDef, def, targetCoverDef);

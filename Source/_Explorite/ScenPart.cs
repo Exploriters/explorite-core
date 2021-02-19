@@ -1,14 +1,16 @@
-﻿/**
+/********************
  * 该文件包含多个剧本部件。
  * --siiftun1857
  */
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace Explorite
 {
+<<<<<<< HEAD
     ///<summary>合并空降仓。</summary>
     public class ScenPart_MergeDroppod : ScenPart
     {
@@ -42,6 +44,19 @@ namespace Explorite
             }
         }
     }
+=======
+    ///<summary>不具有人物编辑界面的起始人物剧本部件。</summary>
+    public class ScenPart_ConfigPage_ConfigureStartingPawns_NoDoEditInterface : ScenPart_ConfigPage_ConfigureStartingPawns
+    {
+        public override void DoEditInterface(Listing_ScenEdit listing)
+        {
+        }
+    }
+    ///<summary>人物编辑界面剧本部件副本。</summary>
+    public class ScenPart_ConfigPage_ConfigureStartingPawns_Alt1 : ScenPart_ConfigPage_ConfigureStartingPawns { }
+    ///<summary>人物编辑界面剧本部件副本。</summary>
+    public class ScenPart_ConfigPage_ConfigureStartingPawns_Alt2 : ScenPart_ConfigPage_ConfigureStartingPawns { }
+>>>>>>> 37d8660b28b03aea3f6050d2eb29bd8b725a3134
     ///<summary>向开局的空降仓内塞入Sayers粘液。</summary>
     public class ScenPart_ScatteredGarbage : ScenPart
     {

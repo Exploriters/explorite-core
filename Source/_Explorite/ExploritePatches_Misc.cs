@@ -1,14 +1,15 @@
-﻿/**
+/********************
  * 包含多个补丁的合集文件。
  * --siiftun1857
  */
+using HarmonyLib;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using HarmonyLib;
-using RimWorld;
+using UnityEngine;
 using Verse;
 using Verse.AI;
 using static Explorite.ExploriteCore;
@@ -52,10 +53,12 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(Need_Mood), nameof(Need_Mood.GetTipString)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(NeedMood_GetTipStringPostfix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(Need), nameof(Need.DrawOnGUI)),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(Need_DrawOnGUIPrefix)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(Need_DrawOnGUIPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(NeedsCardUtility), "DrawThoughtListing"),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(NeedsCardUtilityDrawThoughtListingPrefix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(Need_Seeker), nameof(Need_Seeker.NeedInterval)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(Need_NeedIntervalPrefix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Seeker), nameof(Need_Seeker.NeedInterval)),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(Need_NeedIntervalPrefix)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(Need_NeedIntervalPostfix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_NeedComfort), "CurrentStateInternal"),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorker_NeedComfort_CurrentStateInternalPostfix)));
@@ -64,6 +67,8 @@ namespace Explorite
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(MeditationFocusCanPawnUsePostfix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.EnablingThingsExplanation)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(MeditationFocusExplanationPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(RecipeDef), "get_AvailableNow"),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(RecipeDefAvailableNowPostfix)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdMinor"),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(MentalBreaker_BreakThresholdMinorPostfix)));
@@ -126,6 +131,24 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.GetTrait)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetGetTraitPostfix)));
 
+                harmonyInstance.Patch(AccessTools.Method(typeof(RaceProperties), nameof(RaceProperties.SpecialDisplayStats)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(RacePropertiesSpecialDisplayStatsPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(StatWorker), nameof(StatWorker.ShouldShowFor)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(StatWorkerShouldShowForPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.Recipe_RemoveBodyPart"), "GetPartsToApplyOn"),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(RecipeRemoveBodyPartGetPartsToApplyOnPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(OutfitDatabase), "GenerateStartingOutfits"),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(OutfitDatabaseGenerateStartingOutfitsPostfix)));
+
+                //harmonyInstance.Patch(AccessTools.Method(typeof(GenHostility), nameof(GenHostility.HostileTo), new Type[] { typeof(Thing), typeof(Thing) }),
+                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(GenHostilityHostileToPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.ThreatDisabled)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnThreatDisabledPostfix)));
+
 
                 if (InstelledMods.SoS2)
                 {
@@ -181,10 +204,14 @@ namespace Explorite
                 __result = 1f;
         }
 
-        ///<summary>禁用半人马阵营生成流浪者加入事件。</summary>
+        ///<summary>禁用阵营生成流浪者加入事件。</summary>
         [HarmonyPostfix]public static void WandererJoinCannotFirePostfix(IncidentParms parms, ref bool __result)
         {
-            if (Faction.OfPlayer.def == CentaurPlayerColonyDef)
+            if (Faction.OfPlayer.def == CentaurPlayerColonyDef
+             || Faction.OfPlayer.def == SayersPlayerColonyDef
+             || Faction.OfPlayer.def == SayersPlayerColonySingleDef
+             || Faction.OfPlayer.def == GuoguoPlayerColonyDef
+                )
                 __result = false;
         }
 
@@ -228,8 +255,36 @@ namespace Explorite
             }
         }
 
-        ///<summary>更改需求显示的分隔符。</summary>
-        [HarmonyPostfix]public static void Need_DrawOnGUIPostfix(Need __instance)
+        ///<summary>更改渲染想法预补丁。</summary>
+        [HarmonyPrefix]public static void NeedsCardUtilityDrawThoughtListingPrefix(ref Rect listingRect, Pawn pawn, ref Vector2 thoughtScrollPosition)
+        {
+            //改变半人马的想法显示渲染高度
+            if (pawn.def == AlienCentaurDef)
+            {
+                if (pawn.needs.TryGetNeed<Need_CentaurCreativityInspiration>()?.ShouldShow == true)
+                {
+                    listingRect.y += 24f;
+                    thoughtScrollPosition.y += 24f;
+                }
+            }
+        }
+        ///<summary>更改渲染模式预补丁。</summary>
+        [HarmonyPrefix]public static void Need_DrawOnGUIPrefix(Need __instance, ref Rect rect, ref int maxThresholdMarkers, ref float customMargin, ref bool drawArrows, ref bool doTooltip)
+        {
+            if (
+                __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                // && __instance.GetType().GetField("threshPercents", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is List<float> threshPercents
+                )
+            {
+                //改变半人马的心情需求显示渲染高度
+                if (__instance is Need_Mood && pawn.def == AlienCentaurDef && pawn.needs.TryGetNeed<Need_CentaurCreativityInspiration>()?.ShouldShow == true)
+                {
+                    //rect.height = Mathf.Max(rect.height * 0.666f, 30f);
+                }
+            }
+        }
+        ///<summary>更改渲染模式后期处理补丁。</summary>
+        [HarmonyPostfix]public static void Need_DrawOnGUIPostfix(Need __instance, Rect rect, int maxThresholdMarkers, float customMargin, bool drawArrows, bool doTooltip)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn &&
@@ -240,6 +295,16 @@ namespace Explorite
                 if (__instance is Need_Mood && pawn.def == AlienCentaurDef)
                 {
                     threshPercents.Clear();
+
+                    Need_CentaurCreativityInspiration need = pawn.needs.TryGetNeed<Need_CentaurCreativityInspiration>();
+                    if (need?.ShouldShow == true)
+                    {
+                        Rect rect2 = new Rect(rect);
+                        //rect2.height *= 0.666f;
+                        rect2.height *= 0.5f;
+                        rect2.y += rect.height;
+                        need.DrawOnGUI(rect2, maxThresholdMarkers, customMargin, drawArrows, doTooltip);
+                    }
                 }
                 //移除半人马和Sayers的舒适需求显示第一个分隔符
                 if (__instance is Need_Comfort && (pawn.def == AlienSayersDef/* || pawn.def == AlienCentaurDef*/))
@@ -379,13 +444,13 @@ namespace Explorite
         ///<summary>使半人马和Sayers可以使用额外类型的冥想媒介。</summary>
         [HarmonyPostfix]public static void MeditationFocusCanPawnUsePostfix(MeditationFocusDef __instance, ref bool __result, Pawn p)
         {
-            if ((p.def == AlienCentaurDef || p.def == AlienSayersDef
-                ) && (__instance == DefDatabase<MeditationFocusDef>.GetNamed("Natural")    //自然
+            if ((p.def == AlienCentaurDef || p.def == AlienSayersDef || p.def == AlienGuoguoDef
+                ) && (__instance == DefDatabase<MeditationFocusDef>.GetNamed("Natural")     //自然
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Artistic")   //艺术
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Dignified")  //庄严
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Morbid")     //病态
-                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Minimal")    //简约
-                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Flame")      //火焰
+                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Minimal")  //简约
+                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Flame")    //火焰
                     )
                 )
             {
@@ -393,16 +458,25 @@ namespace Explorite
             }
         }
 
+        ///<summary>更改特定配方的显示可用性。</summary>
+        [HarmonyPostfix]public static void RecipeDefAvailableNowPostfix(RecipeDef __instance, ref bool __result)
+        {
+            /*if (__instance.defName == "InstallHyperManipulatorSurgery")
+            {
+                __result = false;
+            }*/
+        }
+
         ///<summary>为半人马和Sayers补充启用冥想类型的原因。</summary>
         [HarmonyPostfix]public static void MeditationFocusExplanationPostfix(MeditationFocusDef __instance, ref string __result, Pawn pawn)
         {
-            if ((pawn.def == AlienCentaurDef || pawn.def == AlienSayersDef
-                ) && (__instance == DefDatabase<MeditationFocusDef>.GetNamed("Natural")    //自然
+            if ((pawn.def == AlienCentaurDef || pawn.def == AlienSayersDef || pawn.def == AlienGuoguoDef
+                ) && (__instance == DefDatabase<MeditationFocusDef>.GetNamed("Natural")     //自然
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Artistic")   //艺术
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Dignified")  //庄严
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Morbid")     //病态
-                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Minimal")    //简约
-                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Flame")      //火焰
+                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Minimal")  //简约
+                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Flame")    //火焰
                     )
                 )
             {
@@ -476,10 +550,14 @@ namespace Explorite
 
         }
 
-        ///<summary>使半人马不能使用小尺寸床铺。</summary>
+        ///<summary>使半人马不能使用小尺寸床铺，使果果床铺不能被其他种族使用。</summary>
         [HarmonyPostfix]public static void RestUtilityCanUseBedEverPostfix(ref bool __result, Pawn p, ThingDef bedDef)
         {
             if (p.def == AlienCentaurDef && bedDef.Size.Area < 3)
+            {
+                __result = false;
+            }
+            if (p.def != AlienGuoguoDef && bedDef.HasComp(typeof(CompAssignableToPawn_Bed_Guoguo)))
             {
                 __result = false;
             }
@@ -602,17 +680,17 @@ namespace Explorite
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-                && pawn.def == AlienCentaurDef)
+                &&( pawn.def == AlienCentaurDef || pawn.def == AlienGuoguoDef || pawn.def == AlienMichellesDef))
             {
                 __result = false;
             }
         }
 
-        ///<summary>阻止半人马得到任何永久性疤痕。</summary>
+        ///<summary>阻止半人马和Michelles得到任何永久性疤痕。</summary>
         [HarmonyPrefix]public static void HediffComp_GetsPermanentIsPermanentPrefix(HediffComp_GetsPermanent __instance, ref bool value)
         {
-            if (
-                __instance.Pawn.def == AlienCentaurDef)
+            if (__instance.Pawn.def == AlienCentaurDef
+             || __instance.Pawn.def == AlienMichellesDef)
             {
                 value = false;
             }
@@ -655,6 +733,17 @@ namespace Explorite
                     __instance.nakedGraphic.drawSize, 
                     __instance.pawn.story.hairColor);
             }
+            if (
+                __instance.pawn.def == AlienGuoguoDef)
+            {
+                Color.RGBToHSV(__instance.pawn.story.SkinColor, out _, out _, out float v);
+                //__instance.nakedGraphic.color = __instance.pawn.story.hairColor;
+                __instance.nakedGraphic = GraphicDatabase.Get<Graphic_Multi>(
+                    __instance.nakedGraphic.path,
+                    __instance.nakedGraphic.Shader,
+                    __instance.nakedGraphic.drawSize, 
+                    Color.HSVToRGB(0f, 0f, v));
+            }
         }
 
         ///<summary>对设施连接性的后期处理。</summary>
@@ -670,18 +759,24 @@ namespace Explorite
         }
 
         ///<summary>对人物渲染器的服装选单的补丁。</summary>
-        [HarmonyPostfix]
-        public static void PawnGraphicSetResolveApparelGraphicsPostfix(PawnGraphicSet __instance)
+        [HarmonyPostfix]public static void PawnGraphicSetResolveApparelGraphicsPostfix(PawnGraphicSet __instance)
         {
             if (__instance.pawn.apparel.WornApparel.Any(ap => ap.def == CentaurHeaddressDef))
             {
                 __instance.apparelGraphics.RemoveAll(ag => ag.sourceApparel.def.apparel.layers.Contains(ApparelLayerDefOf.Overhead));
             }
+            if (__instance.pawn.def == AlienCentaurDef)
+            {
+                __instance.apparelGraphics.RemoveAll(ag => 
+                    ag.sourceApparel.def.apparel.bodyPartGroups.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist"))
+                 //&& ag.sourceApparel.def.apparel.layers.Contains(ApparelLayerDefOf.Belt)
+                 && !ag.sourceApparel.def.apparel.bodyPartGroups.Where(bpgd => bpgd != DefDatabase<BodyPartGroupDef>.GetNamed("Waist")).Any()
+                    );
+            }
         }
 
         ///<summary>使半人马始终被视为具有特征等级。</summary>
-        [HarmonyPostfix]
-        public static void TraitSetDegreeOfTraitPostfix(TraitSet __instance, ref int __result, TraitDef tDef)
+        [HarmonyPostfix]public static void TraitSetDegreeOfTraitPostfix(TraitSet __instance, ref int __result, TraitDef tDef)
         {
             if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
                 && pawn.def == AlienCentaurDef)
@@ -693,27 +788,30 @@ namespace Explorite
             }
         }
         ///<summary>使半人马始终被视为具有特征。</summary>
-        [HarmonyPostfix]
-        public static void TraitSetHasTraitPostfix(TraitSet __instance, ref bool __result, TraitDef tDef)
+        [HarmonyPostfix]public static void TraitSetHasTraitPostfix(TraitSet __instance, ref bool __result, TraitDef tDef)
         {
-            if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-                && pawn.def == AlienCentaurDef)
+            if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn)
             {
-                if (
+                if ( pawn.def == AlienCentaurDef && (
                     tDef == DefDatabase<TraitDef>.GetNamed("Masochist") ||
                     tDef == TraitDefOf.Industriousness ||
                     tDef == TraitDefOf.DrugDesire ||
                     tDef == TraitDefOf.Transhumanist ||
                     tDef == TraitDefOf.Kind ||
-                    tDef == TraitDefOf.Asexual)
+                    tDef == TraitDefOf.Asexual ))
+                {
+                    __result = true;
+                }
+                if ( pawn.def == AlienGuoguoDef && (
+                    tDef == TraitDefOf.Kind ||
+                    tDef == TraitDefOf.Asexual ))
                 {
                     __result = true;
                 }
             }
         }
-        ///<summary>使半人马特征制作样本。</summary>
-        [HarmonyPostfix]
-        public static void TraitSetGetTraitPostfix(TraitSet __instance, ref Trait __result, TraitDef tDef)
+        ///<summary>为半人马特征制作样本。</summary>
+        [HarmonyPostfix]public static void TraitSetGetTraitPostfix(TraitSet __instance, ref Trait __result, TraitDef tDef)
         {
             if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
                 && pawn.def == AlienCentaurDef
@@ -725,6 +823,224 @@ namespace Explorite
                 }
             }
         }
+        ///<summary>在信息页移除半人马的寿命显示。</summary>
+        [HarmonyPostfix]public static void RacePropertiesSpecialDisplayStatsPostfix(RaceProperties __instance, ref IEnumerable<StatDrawEntry> __result, ThingDef parentDef, StatRequest req)
+        {
+            /*_ = new StatDrawEntry(
+                StatCategoryDefOf.BasicsPawn, 
+                "StatsReport_LifeExpectancy".Translate(),
+                float.PositiveInfinity.ToStringByStyle(ToStringStyle.Integer), 
+                "Stat_Race_LifeExpectancy_Desc".Translate(), 
+                2000);*/
+            if (parentDef == AlienCentaurDef)
+            {
+                List<StatDrawEntry> result = __result.ToList();
+                result.RemoveAll(
+                    stat => stat.LabelCap == "StatsReport_LifeExpectancy".Translate().CapitalizeFirst()
+                    && stat.ValueString == "-2147483648" //.Contains('-') // == float.PositiveInfinity.ToStringByStyle(ToStringStyle.Integer)
+                    //&& stat.DisplayPriorityWithinCategory == 2000
+                    );
+                __result = result;
+            }
+        }
+        ///<summary>在信息页移除半人马的疼痛休克阈值和精神崩溃阈值显示。</summary>
+        [HarmonyPostfix]public static void StatWorkerShouldShowForPostfix(StatWorker __instance, ref bool __result, StatRequest req)
+        {
+            if (__result &&
+                req.HasThing && req.Thing is Pawn pawn && pawn.def == AlienCentaurDef &&
+                __instance.GetType().GetField("stat", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is StatDef stat
+                && (stat == StatDefOf.PainShockThreshold || stat == StatDefOf.MentalBreakThreshold))
+            {
+                __result = false;
+            }
+        }
+        ///<summary>从截肢手术清单中移除半人马的锁骨。</summary>
+        [HarmonyPostfix]public static void RecipeRemoveBodyPartGetPartsToApplyOnPostfix(Recipe_Surgery __instance, ref IEnumerable<BodyPartRecord> __result, Pawn pawn, RecipeDef recipe)
+        {
+            if (pawn.def == AlienCentaurDef)
+            {
+                List<BodyPartRecord> result = __result.ToList();
+                result.RemoveAll(bpr => bpr.def == CentaurScapularDef);
+                __result = result;
+            }
+        }
+        ///<summary>添加默认服装方案。</summary>
+        [HarmonyPostfix]public static void OutfitDatabaseGenerateStartingOutfitsPostfix(OutfitDatabase __instance)
+        {
+            if (InstelledMods.RimCentaurs)
+            {
+                Outfit outfit3 = __instance.MakeNewOutfit();
+                outfit3.label = "OutfitCentaur".Translate();
+                outfit3.filter.SetDisallowAll();
+                outfit3.filter.SetAllow(SpecialThingFilterDefOf.AllowDeadmansApparel, allow: false);
+                foreach (ThingDef allDef2 in DefDatabase<ThingDef>.AllDefs)
+                {
+                    if (allDef2.apparel != null && allDef2.apparel.defaultOutfitTags != null && allDef2.apparel.defaultOutfitTags.Contains("CentaurOutfit"))
+                    {
+                        outfit3.filter.SetAllow(allDef2, allow: true);
+                    }
+                }
+            }
+        }
+        /*
+        //static int ExLogLimit = 0;
+        //static readonly MethodInfo IsPredatorHostileToMethod = AccessTools.Method(typeof(GenHostility), "IsPredatorHostileTo", new Type[] { typeof(Pawn), typeof(Pawn) });
+        public static bool ExLog(this bool boolen, string msg, ref string str, bool tarfet = true)
+        {
+            if (boolen == tarfet)
+            {
+                str += msg;
+            }
+            return boolen;
+        }
+        ///<summary>检测敌对性状态，输出日志。</summary>
+        [HarmonyPostfix] public static void GenHostilityHostileToPostfix(Thing a, Thing b, bool __result)
+        {
+            try
+            {
+                if (!__result)
+                {
+                    return;
+                }
+                if (a.def == AlienCentaurDef || b.def == AlienCentaurDef)
+                {
 
+                    static bool IsPredatorHostileTo(Pawn predator, Pawn toPawn)
+                    {
+                        try
+                        {
+                            return false;// (bool)IsPredatorHostileToMethod.Invoke(null, new object[] { predator, toPawn });
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (a.Destroyed || b.Destroyed || a == b)
+                    {
+                        return;
+                    }
+                    Pawn pawn = a as Pawn;
+                    Pawn pawn2 = b as Pawn;
+                    string an = pawn.Name.ToStringShort;
+                    string bn = pawn2.Name.ToStringShort;
+                    string msg = $"[Explorite]Testing hostile with {an} and {bn}.\n";
+                    _ =
+                        (pawn != null
+                            && pawn.MentalState != null
+                            && pawn.MentalState.ForceHostileTo(b)).ExLog($"Hostile to {an} mental state.\n", ref msg)
+                        || (pawn2 != null
+                            && pawn2.MentalState != null
+                            && pawn2.MentalState.ForceHostileTo(a)).ExLog($"Hostile to {bn} mental state.\n", ref msg)
+                        || (pawn != null
+                            && pawn2 != null
+                            && (IsPredatorHostileTo(pawn, pawn2)
+                                || IsPredatorHostileTo(pawn2, pawn))).ExLog($"Hostile to predator.\n", ref msg)
+                        || ((a.Faction != null
+                                && pawn2 != null
+                                && pawn2.HostFaction == a.Faction
+                                && (pawn == null
+                                    || pawn.HostFaction == null)
+                                && PrisonBreakUtility.IsPrisonBreaking(pawn2))
+                                || (b.Faction != null
+                                    && pawn != null
+                                    && pawn.HostFaction == b.Faction
+                                    && (pawn2 == null
+                                        || pawn2.HostFaction == null)
+                                    && PrisonBreakUtility.IsPrisonBreaking(pawn))).ExLog($"Hostile to prison breaking.\n", ref msg)
+                        || ((a.Faction == null || pawn2 == null || pawn2.HostFaction != a.Faction)
+                                && (b.Faction == null || pawn == null || pawn.HostFaction != b.Faction)
+                                && (pawn == null
+                                    || !pawn.IsPrisoner
+                                    || pawn2 == null
+                                    || !pawn2.IsPrisoner)
+                                && (pawn == null
+                                    || pawn2 == null
+                                    || ((!pawn.IsPrisoner
+                                        || pawn.HostFaction != pawn2.HostFaction
+                                        || PrisonBreakUtility.IsPrisonBreaking(pawn))
+                                    && (!pawn2.IsPrisoner
+                                        || pawn2.HostFaction != pawn.HostFaction
+                                        || PrisonBreakUtility.IsPrisonBreaking(pawn2))))
+                            && (pawn == null
+                                || pawn2 == null
+                                || ((pawn.HostFaction == null
+                                        || pawn2.Faction == null
+                                        || pawn.HostFaction.HostileTo(pawn2.Faction)
+                                        || PrisonBreakUtility.IsPrisonBreaking(pawn))
+                                    && (pawn2.HostFaction == null
+                                        || pawn.Faction == null
+                                        || pawn2.HostFaction.HostileTo(pawn.Faction)
+                                        || PrisonBreakUtility.IsPrisonBreaking(pawn2))))
+                            && (a.Faction == null
+                                || !a.Faction.IsPlayer
+                                || pawn2 == null
+                                || !pawn2.mindState.WillJoinColonyIfRescued)
+                            && (b.Faction == null
+                                || !b.Faction.IsPlayer
+                                || pawn == null
+                                || !pawn.mindState.WillJoinColonyIfRescued)
+                            && a.Faction != null
+                            && b.Faction != null
+                            && a.Faction.HostileTo(b.Faction)
+                        ).ExLog($"Hostile to faction relation.\n", ref msg);
+
+                    Log.Message(msg);
+                }
+            }
+            catch
+            { }
+        }
+        */
+
+
+        ///<summary>使半人马即使携带了物品也会被视为威胁。</summary>
+        [HarmonyPostfix]
+        public static void PawnThreatDisabledPostfix(Pawn __instance, ref bool __result, IAttackTargetSearcher disabledFor)
+        {
+            if (__instance.def == AlienCentaurDef)
+            {
+                if (__result)
+                {
+                    if (!__instance.Spawned)
+                    {
+                        __result = true;
+                        return;
+                    }
+                    /* if (!__instance.InMentalState && __instance.GetTraderCaravanRole() == TraderCaravanRole.Carrier && !(__instance.jobs.curDriver is JobDriver_AttackMelee))
+                    {
+                        __result = true;
+                        return;
+                    } */
+                    if (__instance.mindState.duty != null && __instance.mindState.duty.def.threatDisabled)
+                    {
+                        __result = true;
+                        return;
+                    }
+                    if (!__instance.mindState.Active)
+                    {
+                        __result = true;
+                        return;
+                    }
+                    if (__instance.Downed)
+                    {
+                        if (disabledFor == null)
+                        {
+                            __result = true;
+                            return;
+                        }
+                        Pawn pawn = disabledFor.Thing as Pawn;
+                        if (pawn == null || pawn.mindState == null || pawn.mindState.duty == null || !pawn.mindState.duty.attackDownedIfStarving || !pawn.Starving())
+                        {
+                            __result = true;
+                            return;
+                        }
+                    }
+                    __result = false;
+                    return;
+                }
+            }
+        }
     }
 }

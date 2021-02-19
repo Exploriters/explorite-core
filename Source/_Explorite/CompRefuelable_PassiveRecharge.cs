@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 高速恢复燃料的CompRefuelable变种。
  */
 using System;
@@ -9,9 +9,7 @@ using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
-    /**
-     * <summary>为<see cref = "CompRefuelable_PassiveRecharge" />接收参数。</summary>
-     */
+    ///<summary>为<see cref = "CompRefuelable_PassiveRecharge" />接收参数。</summary>
     public class CompProperties_Refuelable_PassiveRecharge : CompProperties_Refuelable
     {
         public CompProperties_Refuelable_PassiveRecharge()
@@ -23,9 +21,7 @@ namespace Explorite
         public float displayFragment;
         public int fuelGenFragmentTicks;
     }
-    /**
-     * <summary>高速恢复燃料的<see cref = "CompRefuelable" />变种。</summary>
-     */
+    ///<summary>高速恢复燃料的<see cref = "CompRefuelable" />变种。</summary>
     public class CompRefuelable_PassiveRecharge : CompRefuelable
     {
         public bool messageSignal = false;

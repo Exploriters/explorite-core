@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 使冻伤不会杀伤攻击者，被三射弓的巨大爆炸使用。
  * --siiftun1857
  */
@@ -6,11 +6,7 @@ using Verse;
 
 namespace Explorite
 {
-    /**
-     * <summary>
-     * 不会杀伤攻击者的冻伤效果。<br />
-     * </summary>
-     */
+    ///<summary>不会杀伤攻击者的冻伤效果。<br /></summary>
     public class DamageWorker_Frostbite_LauncherSafe : DamageWorker_Frostbite
     {
 

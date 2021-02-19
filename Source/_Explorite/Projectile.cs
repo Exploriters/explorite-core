@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 该文件包含多个弹射物。
  * --siiftun1857
  */
@@ -8,10 +8,8 @@ using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
-    /**
-     * <summary>该弹射物会将目标传送至爆炸位置。</summary>
-     * 需要修复传送失败问题。
-     */
+    ///<summary>该弹射物会将目标传送至爆炸位置。</summary>
+	 // TODO: 需要修复传送失败问题。
     public class Projectile_Explosive_Teleshot : Projectile_Explosive_RoofBypass
     {
         //TODO: Fix Teleport
@@ -55,9 +53,7 @@ namespace Explorite
             }
         }*/
     }
-    /**
-     * <summary>该弹射物会探查目的地区域。</summary>
-     */
+    ///<summary>该弹射物会探查目的地区域。</summary>
     public class Projectile_Explosive_Spotshot : Projectile_Explosive
     {
         protected override void Explode()
@@ -66,9 +62,7 @@ namespace Explorite
             base.Explode();
         }
     }
-    /**
-     * <summary>该弹射物会在空中随机加速或减速，大量发射时之间会错开。</summary>
-     */
+    ///<summary>该弹射物会在空中随机加速或减速，大量发射时之间会错开。</summary>
     public class Projectile_Explosive_Waggingshot : Projectile_Explosive
     {
         static readonly Random Randy = new Random();

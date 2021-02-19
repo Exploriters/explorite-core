@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 使物品不被伤害摧毁。
  * 
  * 效果目前不可用。
@@ -9,9 +9,7 @@ using Verse;
 
 namespace Explorite
 {
-    /**
-     * <summary>为<see cref = "CompUnbreakableViaDamage" />接收参数。</summary>
-     */
+    ///<summary>为<see cref = "CompUnbreakableViaDamage" />接收参数。</summary>
     public class CompProperties_UnbreakableViaDamage : CompProperties_Healer
     {
         public CompProperties_UnbreakableViaDamage() : base(typeof(CompUnbreakableViaDamage))
@@ -22,9 +20,7 @@ namespace Explorite
         }
     }
 
-    /**
-     * <summary>使物品不被伤害摧毁。<br />效果目前不可用。</summary>
-     */
+    ///<summary>使物品不被伤害摧毁。<br />效果目前不可用。</summary>
     public class CompUnbreakableViaDamage : ThingComp
     {
 

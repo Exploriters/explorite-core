@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 使生物具有该效果时，在死亡后生成血肉之树。
  * 
  * --siiftun1857
@@ -13,9 +13,7 @@ using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
-    /**
-     * <summary>为<see cref = "HediffComp_FleshSeedParasitized" />接收参数。</summary>
-     */
+    ///<summary>为<see cref = "HediffComp_FleshSeedParasitized" />接收参数。</summary>
     public class HediffCompProperties_FleshSeedParasitized : HediffCompProperties_DissolveGearOnDeath
     {
         public HediffCompProperties_FleshSeedParasitized()
@@ -23,9 +21,7 @@ namespace Explorite
             compClass = typeof(HediffComp_FleshSeedParasitized);
         }
     }
-    /**
-     * <summary>使生物具有该效果时，在死亡后生成血肉之树。</summary>
-     */
+    ///<summary>使生物具有该效果时，在死亡后生成血肉之树。</summary>
     public class HediffComp_FleshSeedParasitized : HediffComp
     {
         public HediffCompProperties_FleshSeedParasitized Props => (HediffCompProperties_FleshSeedParasitized)props;

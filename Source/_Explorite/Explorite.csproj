@@ -32,6 +32,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>8.0</LangVersion>
+    <DocumentationFile>..\..\Assemblies\Explorite.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -104,6 +105,7 @@
     <Compile Include="CompAbilityEffect_GiveHediff_WholeMap.cs" />
     <Compile Include="CompAbilityEffect_TogglePsySensitivity.cs" />
     <Compile Include="CompArt_Qualityless.cs" />
+    <Compile Include="CompAssignableToPawn_Bed_Guoguo.cs" />
     <Compile Include="CompEnsureAbility.cs" />
     <Compile Include="CompHealWearedOvertime.cs" />
     <Compile Include="CompHMTrishotUser.cs" />
@@ -126,6 +128,7 @@
     <Compile Include="ExploriteDefof.cs" />
     <Compile Include="ExploriteDefsCracker.cs" />
     <Compile Include="ExploriteInitializer.cs" />
+    <Compile Include="ExploritePatches_DebugActions.cs" />
     <Compile Include="ExploritePatches_Misc.cs" />
     <Compile Include="ExploriteMod.cs" />
     <Compile Include="ExploritePatches_PawnRenderer.cs" />
@@ -141,9 +144,10 @@
     <Compile Include="HediffComp_SpawnThingOnDeath.cs" />
     <Compile Include="HediffGiver.cs" />
     <Compile Include="HManipulator.cs" />
+    <Compile Include="JobGiver_Nuzzle_Humanoid.cs" />
     <Compile Include="Need_CentaurCreativityInspiration.cs" />
     <Compile Include="Need_HypothermiaAbsorption.cs" />
-    <Compile Include="PatchCentaurRecipe.cs" />
+    <Compile Include="Recipe_RemoveBodyPart_MX.cs" />
     <Compile Include="ExploritePatches_PawnGenerator.cs" />
     <Compile Include="PawnShieldGenerator.cs" />
     <Compile Include="PlaceWorker.cs" />

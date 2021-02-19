@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 指定健康状态半衰期。
  * 
  * 故障。
@@ -10,9 +10,7 @@ using Verse;
 
 namespace Explorite
 {
-    /**
-     * <summary>为<see cref = "HediffComp_SeverityHalfLife" />接收参数。</summary>
-     */
+    ///<summary>为<see cref = "HediffComp_SeverityHalfLife" />接收参数。</summary>
     public class HediffCompProperties_SeverityHalfLife : HediffCompProperties
     {
         public int halfLife = 1;

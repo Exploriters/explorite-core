@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 使物品持续治疗身上穿戴和装备的物品。
  * --siiftun1857
  */
@@ -7,9 +7,7 @@ using System;
 
 namespace Explorite
 {
-    /**
-     * <summary>为<see cref = "CompHealWearedOvertime" />接收参数。<br /></summary>
-     */
+    ///<summary>为<see cref = "CompHealWearedOvertime" />接收参数。<br /></summary>
     public class CompProperties_HealWearedOvertime : CompProperties_Healer
     {
         public CompProperties_HealWearedOvertime() : base(typeof(CompHealWearedOvertime))
@@ -78,7 +76,7 @@ namespace Explorite
 
                 for (int k = 0; k < chancePerTick; k++)
                 {
-                    if (rnd.Next(0, 9999) / 10000.0 < chancePerTick)
+                    if (rnd.Next(0, 10000) / 10000.0 < chancePerTick)
                     {
                         parent.HitPoints += 1;
                     }

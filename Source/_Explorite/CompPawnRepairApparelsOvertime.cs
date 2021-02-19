@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 使生物持续修复身上的衣物。
  * 
  * 被半人马使用。
@@ -11,9 +11,7 @@ using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
-    /**
-     * <summary>为<see cref = "CompPawnRepairApparelsOvertime" />接收参数。</summary>
-     */
+    ///<summary>为<see cref = "CompPawnRepairApparelsOvertime" />接收参数。</summary>
     public class CompProperties_PawnRepairApparelsOvertime : CompProperties_Healer
     {
         public CompProperties_PawnRepairApparelsOvertime()
@@ -21,9 +19,7 @@ namespace Explorite
             compClass = typeof(CompPawnRepairApparelsOvertime);
         }
     }
-    /**
-     * <summary>使生物持续修复身上的衣物。</summary>
-     */
+    ///<summary>使生物持续修复身上的衣物。</summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE1006")]
     public class CompPawnRepairApparelsOvertime : ThingComp
     {

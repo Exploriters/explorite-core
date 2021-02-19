@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 该文件包含多个HediffGiver。
  * --siiftun1857
  */
@@ -52,7 +52,7 @@ namespace Explorite
             Random rnd = new Random();
             for (int k = 0; k < doCount; k++)
             {
-                if (rnd.Next(0, 9999) / 10000f < AttemptSuccessChance(cause.Severity))
+                if (rnd.Next(0, 10000) / 10000f < AttemptSuccessChance(cause.Severity))
                 {
                     if (doTryApply)
                         TryApply(pawn);

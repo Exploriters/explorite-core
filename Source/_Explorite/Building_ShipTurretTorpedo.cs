@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 半人马巡洋舰使用的鱼雷脊峰炮台建筑物类。
  * --siiftun1857
  */
@@ -18,9 +18,7 @@ using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
-    /**
-     * <summary>半人马巡洋舰使用的鱼雷脊峰炮台建筑物类，负责绘制舱盖图层和开火效果。</summary>
-     */
+    ///<summary>半人马巡洋舰使用的鱼雷脊峰炮台建筑物类，负责绘制舱盖图层和开火效果。</summary>
     [StaticConstructorOnStartup]
     public class Building_ShipTurretTorpedoSpinal : Building_ShipTurret
     {

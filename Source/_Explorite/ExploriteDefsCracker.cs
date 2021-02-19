@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 以程序手段处理Defs。
  * --siiftun1857
  */
@@ -6,6 +6,7 @@ using Verse;
 using RimWorld;
 using static Explorite.ExploriteCore;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Explorite
 {
@@ -15,7 +16,27 @@ namespace Explorite
         static ExploriteDefsCracker()
         {
             //CrackOrangice();
+            PostprocessCentaurRecipe();
         }
+
+        static void PostprocessCentaurRecipe()
+        {
+            List<RecipeDef> recipesToRemove = new List<RecipeDef>();
+
+            foreach (RecipeDef recipe in AlienCentaurDef?.recipes)
+            {
+                if (recipe?.addsHediff == HediffDefOf.LoveEnhancer)
+                {
+                    recipesToRemove.Add(recipe);
+                }
+            }
+
+            if (recipesToRemove.Any())
+            {
+                AlienCentaurDef.recipes.RemoveAll(r => recipesToRemove.Contains(r));
+            }
+        }
+
         /*static void CrackOrangice()
         {
             if (OrangiceStuffDef == null)

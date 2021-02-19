@@ -1,4 +1,4 @@
-﻿/**
+/********************
  * 包含StaticConstructorOnStartup的初始化内容。
  * --siiftun1857
  */
