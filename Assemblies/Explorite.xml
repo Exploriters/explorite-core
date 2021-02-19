@@ -479,12 +479,6 @@
         <member name="T:Explorite.ScenPart_ConfigPage_ConfigureStartingPawns_NoDoEditInterface">
             <summary>不具有人物编辑界面的起始人物剧本部件。</summary>
         </member>
-        <member name="T:Explorite.ScenPart_ConfigPage_ConfigureStartingPawns_Alt1">
-            <summary>人物编辑界面剧本部件副本。</summary>
-        </member>
-        <member name="T:Explorite.ScenPart_ConfigPage_ConfigureStartingPawns_Alt2">
-            <summary>人物编辑界面剧本部件副本。</summary>
-        </member>
         <member name="T:Explorite.ScenPart_ScatteredGarbage">
             <summary>向开局的空降仓内塞入Sayers粘液。</summary>
         </member>
