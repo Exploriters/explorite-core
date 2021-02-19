@@ -5,6 +5,7 @@
  */
 using Verse;
 using RimWorld;
+using System.Linq;
 
 namespace Explorite
 {
@@ -14,7 +15,7 @@ namespace Explorite
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
             //foreach (Thing thing in target.Thing.Map.listerThings.AllThings)
-            foreach (Pawn thing in target.Thing.Map.mapPawns.AllPawns)
+            foreach (Pawn thing in target.Thing.Map.mapPawns.AllPawns.Where(pawn => pawn.SpawnedOrAnyParentSpawned && !pawn.Dead))
             {
                 base.Apply(thing, dest);
             }

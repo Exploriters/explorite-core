@@ -35,6 +35,8 @@ namespace Explorite
         public static readonly FactionDef SayersPlayerColonyDef = !InstelledMods.Sayers ? null : DefDatabase<FactionDef>.GetNamed("SayersClan");
         public static readonly FactionDef SayersPlayerColonySingleDef = !InstelledMods.Sayers ? null : DefDatabase<FactionDef>.GetNamed("SayersRefugees");
 
+        public static readonly ThingDef AlienMichellesDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("Alien_Michelles");
+
         public static readonly ThingDef AlienGuoguoDef = !InstelledMods.GuoGuo ? null : DefDatabase<ThingDef>.GetNamed("Alien_Guoguo");
         public static readonly FactionDef GuoguoPlayerColonyDef = !InstelledMods.GuoGuo ? null : DefDatabase<FactionDef>.GetNamed("GuoguoPlayerColony");
 

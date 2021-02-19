@@ -322,7 +322,7 @@
             <summary>阻止半人马疼痛休克。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.HediffComp_GetsPermanentIsPermanentPrefix(Verse.HediffComp_GetsPermanent,System.Boolean@)">
-            <summary>阻止半人马得到任何永久性疤痕。</summary>
+            <summary>阻止半人马和Michelles得到任何永久性疤痕。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.HediffComp_TendDurationAllowTendPrefix(Verse.HediffComp_TendDuration,System.Boolean@)">
             <summary>设置不允许<see cref = "T:Explorite.HediffComp_TendDuration_CantTend" />症状被治疗。</summary>

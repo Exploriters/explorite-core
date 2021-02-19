@@ -680,17 +680,17 @@ namespace Explorite
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-                &&( pawn.def == AlienCentaurDef || pawn.def == AlienGuoguoDef ))
+                &&( pawn.def == AlienCentaurDef || pawn.def == AlienGuoguoDef || pawn.def == AlienMichellesDef))
             {
                 __result = false;
             }
         }
 
-        ///<summary>阻止半人马得到任何永久性疤痕。</summary>
+        ///<summary>阻止半人马和Michelles得到任何永久性疤痕。</summary>
         [HarmonyPrefix]public static void HediffComp_GetsPermanentIsPermanentPrefix(HediffComp_GetsPermanent __instance, ref bool value)
         {
-            if (
-                __instance.Pawn.def == AlienCentaurDef)
+            if (__instance.Pawn.def == AlienCentaurDef
+             || __instance.Pawn.def == AlienMichellesDef)
             {
                 value = false;
             }
@@ -767,7 +767,11 @@ namespace Explorite
             }
             if (__instance.pawn.def == AlienCentaurDef)
             {
-                __instance.apparelGraphics.RemoveAll(ag => ag.sourceApparel.def.apparel.bodyPartGroups.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")));
+                __instance.apparelGraphics.RemoveAll(ag => 
+                    ag.sourceApparel.def.apparel.bodyPartGroups.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist"))
+                 //&& ag.sourceApparel.def.apparel.layers.Contains(ApparelLayerDefOf.Belt)
+                 && !ag.sourceApparel.def.apparel.bodyPartGroups.Where(bpgd => bpgd != DefDatabase<BodyPartGroupDef>.GetNamed("Waist")).Any()
+                    );
             }
         }
 
