@@ -363,6 +363,9 @@
         <member name="M:Explorite.ExploritePatches.PawnThreatDisabledPostfix(Verse.Pawn,System.Boolean@,Verse.AI.IAttackTargetSearcher)">
             <summary>使半人马即使携带了物品也会被视为威胁。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.ApparelPropertiesGetCoveredOuterPartsStringPostfix(RimWorld.ApparelProperties,Verse.BodyDef@)">
+            <summary>使半人马服装正确显示覆盖的部位。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>

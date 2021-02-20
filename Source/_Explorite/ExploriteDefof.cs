@@ -18,12 +18,19 @@ namespace Explorite
 
         public static readonly ThingDef AlienCentaurDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Alien_Centaur");
         public static readonly ThingDef CentaurHeaddressDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Apparel_CentaurHeaddress");
+        public static readonly ThingDef TrishotThingDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Bow_Trishot");
+        public static readonly ThingDef ComponentArchotechDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("ComponentArchotech");
         public static readonly HediffDef HyperManipulatorHediffDef = !InstelledMods.RimCentaurs ? null : DefDatabase<HediffDef>.GetNamed("HyperManipulator");
         public static readonly HediffDef PsychicDeafHediffDef = !InstelledMods.RimCentaurs ? null : DefDatabase<HediffDef>.GetNamed("PsychicDeafCentaur");
         public static readonly BodyPartDef CentaurScapularDef = !InstelledMods.RimCentaurs ? null : DefDatabase<BodyPartDef>.GetNamed("CentaurScapular");
         public static readonly PawnKindDef CentaurColonistDef = !InstelledMods.RimCentaurs ? null : DefDatabase<PawnKindDef>.GetNamed("CentaurColonist");
         public static readonly FactionDef CentaurPlayerColonyDef = !InstelledMods.RimCentaurs ? null : DefDatabase<FactionDef>.GetNamed("CentaurPlayerColony");
+        public static readonly FactionDef CentaurDummyFactionDef = !InstelledMods.RimCentaurs ? null : DefDatabase<FactionDef>.GetNamed("CentaurFactionDummy");
         public static readonly StuffCategoryDef OrangiceStuffDef = !InstelledMods.RimCentaurs ? null : DefDatabase<StuffCategoryDef>.GetNamed("Orangice");
+        public static readonly ResearchProjectDef CentaurStoryProjectStep1Def = !InstelledMods.RimCentaurs ? null : DefDatabase<ResearchProjectDef>.GetNamed("CentaurStoryStep1st");
+        public static readonly ResearchProjectDef CentaurStoryProjectStep2Def = !InstelledMods.RimCentaurs ? null : DefDatabase<ResearchProjectDef>.GetNamed("CentaurStoryStep2nd");
+        public static readonly ResearchProjectDef CentaurStoryProjectStep3Def = !InstelledMods.RimCentaurs ? null : DefDatabase<ResearchProjectDef>.GetNamed("CentaurStoryStep3rd");
+        public static readonly BodyDef CentaurBodyDef = !InstelledMods.RimCentaurs ? null : DefDatabase<BodyDef>.GetNamed("Centaur");
 
         public static readonly ThingDef AlienSayersDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("Alien_Sayers");
         public static readonly ThingDef AlienFlowerBorhAnimalDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("Alien_FlowerBorhAnimal");

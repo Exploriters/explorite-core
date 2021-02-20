@@ -149,6 +149,9 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.ThreatDisabled)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnThreatDisabledPostfix)));
 
+                harmonyInstance.Patch(AccessTools.Method(typeof(ApparelProperties), nameof(ApparelProperties.GetCoveredOuterPartsString)),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(ApparelPropertiesGetCoveredOuterPartsStringPostfix)));
+
 
                 if (InstelledMods.SoS2)
                 {
@@ -165,7 +168,7 @@ namespace Explorite
             {
                 Log.Error(
                     $"[Explorite]Patch sequence failare at {last_patch}, " +
-                    $"an exception ({e.GetType().Name}) occurred." +
+                    $"an exception ({e.GetType().Name}) occurred.\n" +
                     $"Message:\n   {e.Message}\n" +
                     $"Stack Trace:\n   {e.StackTrace}\n"
 
@@ -182,6 +185,7 @@ namespace Explorite
                 )
             {
                 xp = Math.Max(0, xp);
+                __instance.xpSinceMidnight = 0f;
             }
         }
 
@@ -997,8 +1001,7 @@ namespace Explorite
 
 
         ///<summary>使半人马即使携带了物品也会被视为威胁。</summary>
-        [HarmonyPostfix]
-        public static void PawnThreatDisabledPostfix(Pawn __instance, ref bool __result, IAttackTargetSearcher disabledFor)
+        [HarmonyPostfix]public static void PawnThreatDisabledPostfix(Pawn __instance, ref bool __result, IAttackTargetSearcher disabledFor)
         {
             if (__instance.def == AlienCentaurDef)
             {
@@ -1041,6 +1044,14 @@ namespace Explorite
                     __result = false;
                     return;
                 }
+            }
+        }
+        ///<summary>使半人马服装正确显示覆盖的部位。</summary>
+        [HarmonyPrefix]public static void ApparelPropertiesGetCoveredOuterPartsStringPostfix(ApparelProperties __instance, ref BodyDef body)
+        {
+            if (__instance.tags.Contains("CentaurBodyFit"))
+            {
+                body = CentaurBodyDef;
             }
         }
     }

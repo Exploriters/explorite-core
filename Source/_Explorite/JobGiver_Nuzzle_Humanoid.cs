@@ -37,11 +37,11 @@ namespace Explorite
             if (!(
                 from p in pawn.Map.mapPawns.SpawnedPawnsInFaction(pawn.Faction)
                 where !p.NonHumanlikeOrWildMan()
-                   && p != pawn 
+                   && p != pawn
                    && pawn.relations.OpinionOf(p) > -20
                    && p.Position.InHorDistOf(pawn.Position, MaxNuzzleDistance)
-                   && pawn.GetRoom() == p.GetRoom() 
-                   && !p.Position.IsForbidden(pawn) 
+                   && pawn.GetRoom() == p.GetRoom()
+                   && !p.Position.IsForbidden(pawn)
                    && p.CanCasuallyInteractNow()
                 select p)
                 .TryRandomElement(out var result))

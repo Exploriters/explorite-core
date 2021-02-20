@@ -118,6 +118,7 @@
     <Compile Include="CompSelfHealOvertime.cs" />
     <Compile Include="CompSelfHealOvertime_1.cs" />
     <Compile Include="CompSelfHealOvertime_2.cs" />
+    <Compile Include="CompSendSignalOnDestroyed.cs" />
     <Compile Include="CompSnowExpand_Overtick.cs" />
     <Compile Include="CompThingHolder.cs" />
     <Compile Include="CompUnbreakableViaDamage.cs" />
@@ -144,9 +145,13 @@
     <Compile Include="HediffComp_SpawnThingOnDeath.cs" />
     <Compile Include="HediffGiver.cs" />
     <Compile Include="HManipulator.cs" />
+    <Compile Include="IngredientValueGetter_MarketValue.cs" />
     <Compile Include="JobGiver_Nuzzle_Humanoid.cs" />
     <Compile Include="Need_CentaurCreativityInspiration.cs" />
     <Compile Include="Need_HypothermiaAbsorption.cs" />
+    <Compile Include="QuestPart.cs" />
+    <Compile Include="QuestReward.cs" />
+    <Compile Include="QuestNode.cs" />
     <Compile Include="Recipe_RemoveBodyPart_MX.cs" />
     <Compile Include="ExploritePatches_PawnGenerator.cs" />
     <Compile Include="PawnShieldGenerator.cs" />

@@ -60,8 +60,8 @@ namespace Explorite
             foreach (SkillRecord sr in pawn.skills.skills)
             {
                 sr.Level =
-                    pawn.story.childhood.skillGainsResolved.TryGetValue(sr.def) +
-                    pawn.story.adulthood.skillGainsResolved.TryGetValue(sr.def) + 9;
+                    (pawn?.story?.childhood?.skillGainsResolved?.TryGetValue(sr.def) ?? 0) +
+                    (pawn?.story?.adulthood?.skillGainsResolved?.TryGetValue(sr.def) ?? 0) + 9;
                 sr.passion = sr.passion switch
                 {
                     Passion.None => Passion.Minor,
@@ -69,7 +69,7 @@ namespace Explorite
                     Passion.Major => Passion.Major,
                     _ => Passion.Minor,
                 };
-                sr.xpSinceLastLevel = sr.XpRequiredForLevelUp / 2f;
+                sr.xpSinceLastLevel = 0f; //sr.XpRequiredForLevelUp / 2f;
             }
             return true;
         }
@@ -130,10 +130,11 @@ namespace Explorite
             foreach (SkillRecord sr in pawn.skills.skills)
             {
                 sr.Level =
-                    pawn.story.childhood.skillGainsResolved.TryGetValue(sr.def);
+                    (pawn?.story?.childhood?.skillGainsResolved?.TryGetValue(sr.def) ?? 0) +
+                    (pawn?.story?.adulthood?.skillGainsResolved?.TryGetValue(sr.def) ?? 0) + 9;
 
+                sr.xpSinceLastLevel = 0f;
                 sr.passion = sr.Level > 0 ? Passion.Major : Passion.None;
-                sr.xpSinceLastLevel = 0;
             }
 
             return true;

@@ -155,7 +155,7 @@ namespace Explorite
                 }
             }
         }
-		/*
+        /*
         public override string GetLabelWhenUsedOn(Pawn pawn, BodyPartRecord part)
         {
             if (pawn.RaceProps.IsMechanoid || pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(part))
@@ -226,7 +226,7 @@ namespace Explorite
             }
         }
 		*/
-	}
+    }
 
 
     /*public class Recipe_RemoveBodyPart : Recipe_Surgery
