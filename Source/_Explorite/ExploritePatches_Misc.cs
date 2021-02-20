@@ -491,8 +491,9 @@ namespace Explorite
         [HarmonyPostfix]public static void AssignToPawnCandidatesPostfix(CompAssignableToPawn __instance, ref IEnumerable<Pawn> __result)
         {
             //从单人床选单中移除半人马。
-            if (__instance is CompAssignableToPawn_Bed &&
-                __instance?.Props?.maxAssignedPawnsCount < 2)
+            if (__instance is CompAssignableToPawn_Bed comp
+             && !(comp.props is CompProperties_AssignableToPawn_NoPostLoadSpecial)
+             && __instance?.Props?.maxAssignedPawnsCount < 2)
             {
                 __result = __result?.Where(pawn => pawn?.def != AlienCentaurDef);
             }

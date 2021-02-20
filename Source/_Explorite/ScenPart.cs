@@ -10,41 +10,6 @@ using Verse;
 
 namespace Explorite
 {
-<<<<<<< HEAD
-    ///<summary>合并空降仓。</summary>
-    public class ScenPart_MergeDroppod : ScenPart
-    {
-        public override string Summary(Scenario scen) => "Magnuassembly_ScenPart_MergeDroppod_StaticSummary".Translate();
-        public override void PostGameStart()
-        {
-            base.PostGameStart();
-
-            List<DropPodIncoming> podsToDestroy = new List<DropPodIncoming>();
-            DropPodIncoming targetedPod = null;
-
-            List<Thing> Things = Find.CurrentMap.listerThings.AllThings.Where(thing => thing is DropPodIncoming).ToList();
-            foreach (Thing thing in Things)
-            {
-                if (thing is DropPodIncoming droppod)
-                {
-                    if (targetedPod == null)
-                        targetedPod = droppod;
-                    else
-                    {
-                        droppod.GetDirectlyHeldThings().TryTransferAllToContainer(
-                                targetedPod.GetDirectlyHeldThings()
-                            );
-                        droppod.Destroy();
-                    }
-                }
-            }
-            if (targetedPod == null)
-            {
-                Log.Error("[Explorite]Null target pod! Aborting...");
-            }
-        }
-    }
-=======
     ///<summary>不具有人物编辑界面的起始人物剧本部件。</summary>
     public class ScenPart_ConfigPage_ConfigureStartingPawns_NoDoEditInterface : ScenPart_ConfigPage_ConfigureStartingPawns
     {
@@ -52,11 +17,28 @@ namespace Explorite
         {
         }
     }
-    ///<summary>人物编辑界面剧本部件副本。</summary>
-    public class ScenPart_ConfigPage_ConfigureStartingPawns_Alt1 : ScenPart_ConfigPage_ConfigureStartingPawns { }
-    ///<summary>人物编辑界面剧本部件副本。</summary>
-    public class ScenPart_ConfigPage_ConfigureStartingPawns_Alt2 : ScenPart_ConfigPage_ConfigureStartingPawns { }
->>>>>>> 37d8660b28b03aea3f6050d2eb29bd8b725a3134
+    public class ScenPart_ConfigPage_ConfigureStartingPawns_Solo : ScenPart_ConfigPage_ConfigureStartingPawns
+    {
+        private string pawnCountBuffer;
+
+        private string pawnCountChoiceBuffer;
+
+        public override void DoEditInterface(Listing_ScenEdit listing)
+        {
+            Rect scenPartRect = listing.GetScenPartRect(this, RowHeight * 2f);
+            scenPartRect.height = RowHeight;
+            Text.Anchor = TextAnchor.UpperRight;
+            Rect rect = new Rect(scenPartRect.x - 200f, scenPartRect.y + RowHeight, 200f, RowHeight);
+            rect.xMax -= 4f;
+            Widgets.Label(rect, "ScenPart_StartWithPawns_OutOf".Translate());
+            Text.Anchor = TextAnchor.UpperLeft;
+            Widgets.TextFieldNumeric(scenPartRect, ref pawnCount, ref pawnCountBuffer, 1f, 10f);
+            scenPartRect.y += RowHeight;
+            Widgets.TextFieldNumeric(scenPartRect, ref pawnChoiceCount, ref pawnCountChoiceBuffer, pawnCount, 10f);
+        }
+    }
+    */
+
     ///<summary>向开局的空降仓内塞入Sayers粘液。</summary>
     public class ScenPart_ScatteredGarbage : ScenPart
     {
