@@ -2,12 +2,30 @@
  * 该文件包含多个弹射物。
  * --siiftun1857
  */
+using RimWorld;
 using System;
 using Verse;
 using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
+    ///<summary>发射后直接命中目标的子弹。</summary>
+    public class Bullet_Direct : Bullet
+    {
+        public override void Tick()
+        {
+            if (AllComps != null)
+            {
+                int i = 0;
+                for (int count = AllComps.Count; i < count; i++)
+                {
+                    AllComps[i].CompTick();
+                }
+            }
+            Impact(intendedTarget.Thing as Pawn ?? intendedTarget.Pawn ?? null);
+            //if (!Destroyed) Destroy();
+        }
+    }
     ///<summary>该弹射物会将目标传送至爆炸位置。</summary>
 	 // TODO: 需要修复传送失败问题。
     public class Projectile_Explosive_Teleshot : Projectile_Explosive_RoofBypass
@@ -15,18 +33,21 @@ namespace Explorite
         //TODO: Fix Teleport
         protected override void Explode()
         {
-            if (launcher is Pawn)
+            if (launcher.Faction.IsPlayer)
             {
-                Map map = Map;
-                IntVec3 pos = Position;
-                if (launcher.Map.uniqueID == map.uniqueID)
+                if (launcher is Pawn pawn)
                 {
-                    if (TeleportPawn(launcher as Pawn, pos))
+                    Map map = Map;
+                    IntVec3 pos = Position;
+                    if (launcher.Map.uniqueID == map.uniqueID)
                     {
-                        //map.fogGrid.Unfog(launcher.Position);
-                        map.fogGrid.Notify_FogBlockerRemoved(launcher.Position);
+                        if (TeleportPawn(launcher as Pawn, pos))
+                        {
+                            map.fogGrid.Notify_FogBlockerRemoved(launcher.Position);
+                        }
                     }
                 }
+                Map.fogGrid.Notify_FogBlockerRemoved(Position);
             }
             base.Explode();
         }
@@ -58,7 +79,11 @@ namespace Explorite
     {
         protected override void Explode()
         {
-            Map.fogGrid.Unfog(Position);
+            if (launcher.Faction.IsPlayer)
+            {
+                Map.fogGrid.Notify_FogBlockerRemoved(Position);
+            }
+
             base.Explode();
         }
     }

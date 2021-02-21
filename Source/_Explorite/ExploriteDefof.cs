@@ -20,6 +20,7 @@ namespace Explorite
         public static readonly ThingDef CentaurHeaddressDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Apparel_CentaurHeaddress");
         public static readonly ThingDef TrishotThingDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Bow_Trishot");
         public static readonly ThingDef ComponentArchotechDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("ComponentArchotech");
+        public static readonly ThingDef ThermoDamperDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("ThermoDamper");
         public static readonly HediffDef HyperManipulatorHediffDef = !InstelledMods.RimCentaurs ? null : DefDatabase<HediffDef>.GetNamed("HyperManipulator");
         public static readonly HediffDef PsychicDeafHediffDef = !InstelledMods.RimCentaurs ? null : DefDatabase<HediffDef>.GetNamed("PsychicDeafCentaur");
         public static readonly BodyPartDef CentaurScapularDef = !InstelledMods.RimCentaurs ? null : DefDatabase<BodyPartDef>.GetNamed("CentaurScapular");
@@ -41,6 +42,7 @@ namespace Explorite
         public static readonly HediffDef InjectionHediffDef = !InstelledMods.Sayers ? null : DefDatabase<HediffDef>.GetNamed("Injection");
         public static readonly FactionDef SayersPlayerColonyDef = !InstelledMods.Sayers ? null : DefDatabase<FactionDef>.GetNamed("SayersClan");
         public static readonly FactionDef SayersPlayerColonySingleDef = !InstelledMods.Sayers ? null : DefDatabase<FactionDef>.GetNamed("SayersRefugees");
+        public static readonly BodyDef SayersBodyDef = !InstelledMods.RimCentaurs ? null : DefDatabase<BodyDef>.GetNamed("Body_Sayers");
 
         public static readonly ThingDef AlienMichellesDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("Alien_Michelles");
 

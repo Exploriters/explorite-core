@@ -1053,6 +1053,10 @@ namespace Explorite
             {
                 body = CentaurBodyDef;
             }
+            else if (__instance.tags.Contains("SayersBodyFit"))
+            {
+                body = SayersBodyDef;
+            }
         }
     }
 }
