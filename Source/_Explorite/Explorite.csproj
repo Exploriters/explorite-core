@@ -115,6 +115,7 @@
     <Compile Include="CompPawnShield.cs" />
     <Compile Include="CompProperties_Healer.cs" />
     <Compile Include="CompRefuelable_PassiveRecharge.cs" />
+    <Compile Include="CompSecretTrishot.cs" />
     <Compile Include="CompSelfHealOvertime.cs" />
     <Compile Include="CompSelfHealOvertime_1.cs" />
     <Compile Include="CompSelfHealOvertime_2.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="ExploritePatches_PawnRenderer.cs" />
     <Compile Include="ExploriteRegistry.cs" />
     <Compile Include="FoodPoisonImmuneForSayers.cs" />
+    <Compile Include="GameComponent_CentaurStory.cs" />
     <Compile Include="HediffCompProperties_SeverityFromEntropy_CentarusOnly.cs" />
     <Compile Include="HediffComp_AgeStop.cs" />
     <Compile Include="HediffComp_FactorBySeverity.cs" />
@@ -152,6 +154,7 @@
     <Compile Include="QuestPart.cs" />
     <Compile Include="QuestReward.cs" />
     <Compile Include="QuestNode.cs" />
+    <Compile Include="Recipe_RepairTrishot.cs" />
     <Compile Include="Recipe_RemoveBodyPart_MX.cs" />
     <Compile Include="ExploritePatches_PawnGenerator.cs" />
     <Compile Include="PawnShieldGenerator.cs" />

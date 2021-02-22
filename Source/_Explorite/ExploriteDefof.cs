@@ -10,6 +10,8 @@ namespace Explorite
 {
     public static partial class ExploriteCore
     {
+        public static GameComponent_CentaurStory GameComponentCentaurStory => Current.Game.GetComponent<GameComponent_CentaurStory>();
+
         public static readonly Harmony harmonyInstance = new Harmony(id: "Explorite.rimworld.mod.HarmonyPatches");
 
         public static readonly StatDef PawnShieldEnergyMaxDef = DefDatabase<StatDef>.GetNamed("PawnShieldEnergyMax");
@@ -18,6 +20,8 @@ namespace Explorite
 
         public static readonly ThingDef AlienCentaurDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Alien_Centaur");
         public static readonly ThingDef CentaurHeaddressDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Apparel_CentaurHeaddress");
+        public static readonly ThingDef TrishotThing1Def = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Bow_Trishot_1Stage");
+        public static readonly ThingDef TrishotThing2Def = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Bow_Trishot_2Stage");
         public static readonly ThingDef TrishotThingDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Bow_Trishot");
         public static readonly ThingDef ComponentArchotechDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("ComponentArchotech");
         public static readonly ThingDef ThermoDamperDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("ThermoDamper");

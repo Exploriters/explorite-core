@@ -30,9 +30,10 @@ namespace Explorite
      * </summary>
      */
     [StaticConstructorOnStartup]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006")]
     public class CompPawnShield : ThingComp
     {
-        Color currentColor = new Color(0.5f, 0.5f, 0.5f);
+        //Color currentColor = new Color(0.5f, 0.5f, 0.5f);
 
         public override void CompTick()
         {
@@ -310,13 +311,13 @@ namespace Explorite
         public CompPawnShield shield;
         private static readonly Texture2D FullShieldBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.2f, 0.2f, 0.24f));
         private static readonly Texture2D EmptyShieldBarTex = SolidColorMaterials.NewSolidColorTexture(Color.clear);
-        public bool valid => !shield.invalid;
+        public bool Valid => !shield.invalid;
         public Gizmo_EnergyShieldStatusPawn() => order = -2000f;
-        public override float GetWidth(float maxWidth) => valid ? 140f : 0f;
+        public override float GetWidth(float maxWidth) => Valid ? 140f : 0f;
 
         public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth)
         {
-            if (valid)
+            if (Valid)
             {
                 Rect rect = new Rect(topLeft.x, topLeft.y, GetWidth(maxWidth), 75f);
                 Rect rect2 = rect.ContractedBy(6f);

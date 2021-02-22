@@ -28,146 +28,165 @@ namespace Explorite
     internal static partial class ExploritePatches
     {
         internal static readonly Type patchType = typeof(ExploritePatches);
-
+        private static string App(this string str, ref string target)
+        {
+            return target = str;
+        }
         static ExploritePatches()
         {
             string last_patch = "";
+            string last_patch_method = "";
             try
             {
-                harmonyInstance.Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new[] { typeof(PawnGenerationRequest) }),
+                harmonyInstance.Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn).App(ref last_patch_method), new[] { typeof(PawnGenerationRequest) }),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(GeneratePawnPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Learn)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Learn).App(ref last_patch_method)),
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(SkillLearnPrefix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Interval)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Interval).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(SkillIntervalPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_PsychicEntropyTracker), "get_PainMultiplier"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_PsychicEntropyTracker), "get_PainMultiplier".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(NoPainBounsForCentaursPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(IncidentWorker_WandererJoin), "CanFireNowSub"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(IncidentWorker_WandererJoin), "CanFireNowSub".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(WandererJoinCannotFirePostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Outdoors), "get_Disabled"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Outdoors), "get_Disabled".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(NeedOutdoors_DisabledPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Mood), nameof(Need_Mood.GetTipString)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Mood), nameof(Need_Mood.GetTipString).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(NeedMood_GetTipStringPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Need), nameof(Need.DrawOnGUI)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(Need), nameof(Need.DrawOnGUI).App(ref last_patch_method)),
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(Need_DrawOnGUIPrefix)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(Need_DrawOnGUIPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(NeedsCardUtility), "DrawThoughtListing"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(NeedsCardUtility), "DrawThoughtListing".App(ref last_patch_method)),
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(NeedsCardUtilityDrawThoughtListingPrefix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Seeker), nameof(Need_Seeker.NeedInterval)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Seeker), nameof(Need_Seeker.NeedInterval).App(ref last_patch_method)),
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(Need_NeedIntervalPrefix)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(Need_NeedIntervalPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_NeedComfort), "CurrentStateInternal"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_NeedComfort), "CurrentStateInternal".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorker_NeedComfort_CurrentStateInternalPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.CanPawnUse)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.CanPawnUse).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(MeditationFocusCanPawnUsePostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.EnablingThingsExplanation)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.EnablingThingsExplanation).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(MeditationFocusExplanationPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(RecipeDef), "get_AvailableNow"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(RecipeDef), "get_AvailableNow".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(RecipeDefAvailableNowPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdMinor"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdMinor".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(MentalBreaker_BreakThresholdMinorPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdMajor"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdMajor".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(MentalBreaker_BreakThresholdMajorPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdExtreme"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdExtreme".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(MentalBreaker_BreakThresholdExtremePostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn), "get_AssigningCandidates"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn), "get_AssigningCandidates".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(AssignToPawnCandidatesPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn), "get_HasFreeSlot"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn), "get_HasFreeSlot".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(AssignBedToPawnHasFreeSlotPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn_Bed), nameof(CompAssignableToPawn_Bed.TryAssignPawn)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn_Bed), nameof(CompAssignableToPawn_Bed.TryAssignPawn).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(AssignBedToPawnTryAssignPawnPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(RestUtility), nameof(RestUtility.CanUseBedEver)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(RestUtility), nameof(RestUtility.CanUseBedEver).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(RestUtilityCanUseBedEverPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_GrowthRateFactor_Temperature"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_GrowthRateFactor_Temperature".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PlantGrowthRateFactorNoTemperaturePostfix)));
-                //harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_Resting"),
+                //harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_Resting".App(ref last_patch_method)),
                 //    postfix: new HarmonyMethod(patchType, last_patch = nameof(PlantNoRestingPostfix)));
-                //harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_GrowthRate"),
+                //harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_GrowthRate".App(ref last_patch_method)),
                 //    postfix: new HarmonyMethod(patchType, last_patch = nameof(PlantGrowthRateFactorEnsurePostfix)));
-                //harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_LeaflessNow"),
+                //harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_LeaflessNow".App(ref last_patch_method)),
                 //    postfix: new HarmonyMethod(patchType, last_patch = nameof(PlantLeaflessNowPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Alert_NeedBatteries), "NeedBatteries"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(MinifiedThing), nameof(MinifiedThing.Destroy).App(ref last_patch_method)),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(MinifiedThingDestroyPrefix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(Alert_NeedBatteries), "NeedBatteries".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(AlertNeedBatteriesPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(JobGiver_GetFood), "TryGiveJob"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(JobGiver_GetFood), "TryGiveJob".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(GetFoodTryGiveJobPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_HealthTracker), "get_InPainShock"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_HealthTracker), "get_InPainShock".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnHealthTrackerInPainShockPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(MassUtility), nameof(MassUtility.Capacity)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(MassUtility), nameof(MassUtility.Capacity).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(MassUtilityCapacityPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(HediffComp_GetsPermanent), "set_IsPermanent"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(HediffComp_GetsPermanent), "set_IsPermanent".App(ref last_patch_method)),
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(HediffComp_GetsPermanentIsPermanentPrefix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(HediffComp_TendDuration), "get_AllowTend"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(HediffComp_TendDuration), "get_AllowTend".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(HediffComp_TendDurationAllowTendPrefix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(StatPart_ApparelStatOffset), nameof(StatPart.TransformValue)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(StatPart_ApparelStatOffset), nameof(StatPart.TransformValue).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PsychicSensitivityPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(PawnGraphicSet), nameof(PawnGraphicSet.ResolveAllGraphics)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(PawnGraphicSet), nameof(PawnGraphicSet.ResolveAllGraphics).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnGraphicSetResolveAllGraphicsPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(CompAffectedByFacilities), nameof(CompAffectedByFacilities.CanPotentiallyLinkTo_Static), new Type[] { typeof(ThingDef), typeof(IntVec3), typeof(Rot4), typeof(ThingDef), typeof(IntVec3), typeof(Rot4) }),
+                harmonyInstance.Patch(AccessTools.Method(typeof(CompAffectedByFacilities), nameof(CompAffectedByFacilities.CanPotentiallyLinkTo_Static).App(ref last_patch_method), new Type[] { typeof(ThingDef), typeof(IntVec3), typeof(Rot4), typeof(ThingDef), typeof(IntVec3), typeof(Rot4) }),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(CompAffectedByFacilitiesCanPotentiallyLinkToStaticPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(PawnGraphicSet), nameof(PawnGraphicSet.ResolveApparelGraphics)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(PawnGraphicSet), nameof(PawnGraphicSet.ResolveApparelGraphics).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnGraphicSetResolveApparelGraphicsPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.DegreeOfTrait)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.DegreeOfTrait).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetDegreeOfTraitPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.HasTrait)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.HasTrait).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetHasTraitPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.GetTrait)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.GetTrait).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetGetTraitPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(RaceProperties), nameof(RaceProperties.SpecialDisplayStats)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(RaceProperties), nameof(RaceProperties.SpecialDisplayStats).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(RacePropertiesSpecialDisplayStatsPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(StatWorker), nameof(StatWorker.ShouldShowFor)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(StatWorker), nameof(StatWorker.ShouldShowFor).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(StatWorkerShouldShowForPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.Recipe_RemoveBodyPart"), "GetPartsToApplyOn"),
+                harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.Recipe_RemoveBodyPart"), "GetPartsToApplyOn".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(RecipeRemoveBodyPartGetPartsToApplyOnPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(OutfitDatabase), "GenerateStartingOutfits"),
+                harmonyInstance.Patch(AccessTools.Method(typeof(OutfitDatabase), "GenerateStartingOutfits".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(OutfitDatabaseGenerateStartingOutfitsPostfix)));
 
                 //harmonyInstance.Patch(AccessTools.Method(typeof(GenHostility), nameof(GenHostility.HostileTo), new Type[] { typeof(Thing), typeof(Thing) }),
                 //    postfix: new HarmonyMethod(patchType, last_patch = nameof(GenHostilityHostileToPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.ThreatDisabled)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.ThreatDisabled).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnThreatDisabledPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(ApparelProperties), nameof(ApparelProperties.GetCoveredOuterPartsString)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(ApparelProperties), nameof(ApparelProperties.GetCoveredOuterPartsString).App(ref last_patch_method)),
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(ApparelPropertiesGetCoveredOuterPartsStringPostfix)));
+                
+                harmonyInstance.Patch(AccessTools.Method(typeof(ThingMaker), nameof(ThingMaker.MakeThing).App(ref last_patch_method)),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(ThingMakerMakeThingPrefix)));
+
+                //harmonyInstance.Patch(AccessTools.Method(typeof(GenRecipe), nameof(GenRecipe.MakeRecipeProducts).App(ref last_patch_method)),
+                //    prefix: new HarmonyMethod(patchType, last_patch = nameof(GenRecipeMakeRecipeProductsPrefix)),
+                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(GenRecipeMakeRecipeProductsPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(GenRecipe), "PostProcessProduct".App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(GenRecipePostProcessProductPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(RimWorld.Planet.FactionGiftUtility), "GetBaseGoodwillChange".App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(FactionGiftUtilityGetBaseGoodwillChangePostfix)));
 
 
                 if (InstelledMods.SoS2)
                 {
                     // 依赖 类 SaveOurShip2.ShipInteriorMod2
-                    harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("SaveOurShip2.ShipInteriorMod2"), "HasSpaceSuitSlow", new[] { typeof(Pawn) }),
+                    harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("SaveOurShip2.ShipInteriorMod2"), "HasSpaceSuitSlow".App(ref last_patch_method), new[] { typeof(Pawn) }),
                         postfix: new HarmonyMethod(patchType, last_patch = nameof(HasSpaceSuitSlowPostfix)));
 
                     // 依赖 类 RimWorld.ThoughtWorker_SpaceThoughts
-                    harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.ThoughtWorker_SpaceThoughts"), "CurrentStateInternal"),
+                    harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.ThoughtWorker_SpaceThoughts"), "CurrentStateInternal".App(ref last_patch_method)),
                         postfix: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorker_SpaceThoughts_CurrentStateInternalPostfix)));
                 }
             }
             catch (Exception e)
             {
                 Log.Error(
-                    $"[Explorite]Patch sequence failare at {last_patch}, " +
+                    $"[Explorite]Patch sequence failare at {last_patch}, {last_patch_method}, " +
                     $"an exception ({e.GetType().Name}) occurred.\n" +
                     $"Message:\n   {e.Message}\n" +
                     $"Stack Trace:\n   {e.StackTrace}\n"
@@ -605,6 +624,14 @@ namespace Explorite
             }
         }
         */
+        ///<summary>使被收纳的秘密三射弓物体掉落故障三射弓。</summary>
+        [HarmonyPrefix]public static void MinifiedThingDestroyPrefix(MinifiedThing __instance)
+        {
+            if (__instance.InnerThing is ISecretTrishot trishotOwner)
+            {
+                trishotOwner.LeaveTrishot(__instance.Position, __instance.Map);
+            }
+        }
 
         ///<summary>使三联电池同样被视为<see cref = "Alert_NeedBatteries" />可接受的电池类型。</summary>
         [HarmonyPostfix]public static void AlertNeedBatteriesPostfix(Alert_NeedBatteries __instance, ref bool __result, Map map)
@@ -1034,8 +1061,7 @@ namespace Explorite
                             __result = true;
                             return;
                         }
-                        Pawn pawn = disabledFor.Thing as Pawn;
-                        if (pawn == null || pawn.mindState == null || pawn.mindState.duty == null || !pawn.mindState.duty.attackDownedIfStarving || !pawn.Starving())
+                        if (!(disabledFor.Thing is Pawn pawn) || pawn.mindState == null || pawn.mindState.duty == null || !pawn.mindState.duty.attackDownedIfStarving || !pawn.Starving())
                         {
                             __result = true;
                             return;
@@ -1056,6 +1082,57 @@ namespace Explorite
             else if (__instance.tags.Contains("SayersBodyFit"))
             {
                 body = SayersBodyDef;
+            }
+        }
+        ///<summary>显示MakeThing的调用堆栈。</summary>
+        [HarmonyPrefix]public static void ThingMakerMakeThingPrefix(ThingDef def)
+        {
+            if (def == TrishotThing2Def)
+            {
+                Log.Message("[Explorite]Making TriShot Prototype, with stack trace...");
+            }
+        }
+        /*
+        ///<summary>将被作为合成原材料的三射弓从追踪中移除。</summary>
+        [HarmonyPrefix]public static void GenRecipeMakeRecipeProductsPrefix(RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, Thing dominantIngredient, IBillGiver billGiver)
+        {
+            foreach (Thing thing in ingredients)
+            {
+                try
+                {
+                    GameComponentCentaurStory.TryRemove(thing);
+                }
+                catch { }
+            }
+        }
+        ///<summary>将被制作出来的三射弓添加到追踪中。</summary>
+        [HarmonyPostfix]public static void GenRecipeMakeRecipeProductsPostfix(IEnumerable<Thing> __result, RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, Thing dominantIngredient, IBillGiver billGiver)
+        {
+            foreach (Thing thing in __result)
+            {
+                try
+                {
+                    GameComponentCentaurStory.TryAdd(thing);
+                }
+                catch { }
+            }
+        }
+        */
+        ///<summary>将被制作出来的三射弓添加到追踪中。</summary>
+        [HarmonyPostfix]public static void GenRecipePostProcessProductPostfix(Thing __result, Thing product, RecipeDef recipeDef, Pawn worker)
+        {
+            try
+            {
+                GameComponentCentaurStory.TryAdd(__result);
+            }
+            catch { }
+        }
+        ///<summary>降低故障三射弓的好感度加成。</summary>
+        [HarmonyPostfix]public static void FactionGiftUtilityGetBaseGoodwillChangePostfix(ref float __result, Thing anyThing, int count, float singlePrice, Faction theirFaction)
+        {
+            if (anyThing.def.weaponTags.Contains("CentaurTracedTrishot"))
+            {
+                __result = 0f;//-= TrishotThing1Def.BaseMarketValue * count / 40f;
             }
         }
     }

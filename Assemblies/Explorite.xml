@@ -148,6 +148,12 @@
         <member name="T:Explorite.CompRefuelable_PassiveRecharge">
             <summary>高速恢复燃料的<see cref = "T:RimWorld.CompRefuelable" />变种。</summary>
         </member>
+        <member name="T:Explorite.CompProperties_SecretTrishot">
+            <summary>为<see cref = "T:Explorite.CompSecretTrishot" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompSecretTrishot">
+            <summary>电池里藏着一把三射弓。</summary>
+        </member>
         <member name="T:Explorite.CompSelfHealOvertime">
             <summary>
             使物品的生命值随着时间逐渐恢复。<br />
@@ -326,6 +332,9 @@
         <member name="M:Explorite.ExploritePatches.PlantGrowthRateFactorNoTemperaturePostfix(RimWorld.Plant,System.Single@)">
             <summary>使指定植物的生长无视环境温度。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.MinifiedThingDestroyPrefix(RimWorld.MinifiedThing)">
+            <summary>使被收纳的秘密三射弓物体掉落故障三射弓。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.AlertNeedBatteriesPostfix(RimWorld.Alert_NeedBatteries,System.Boolean@,Verse.Map)">
             <summary>使三联电池同样被视为<see cref = "T:RimWorld.Alert_NeedBatteries" />可接受的电池类型。</summary>
         </member>
@@ -380,6 +389,15 @@
         <member name="M:Explorite.ExploritePatches.ApparelPropertiesGetCoveredOuterPartsStringPostfix(RimWorld.ApparelProperties,Verse.BodyDef@)">
             <summary>使半人马服装正确显示覆盖的部位。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.ThingMakerMakeThingPrefix(Verse.ThingDef)">
+            <summary>显示MakeThing的调用堆栈。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.GenRecipePostProcessProductPostfix(Verse.Thing,Verse.Thing,Verse.RecipeDef,Verse.Pawn)">
+            <summary>将被制作出来的三射弓添加到追踪中。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.FactionGiftUtilityGetBaseGoodwillChangePostfix(System.Single@,Verse.Thing,System.Int32,System.Single,RimWorld.Faction)">
+            <summary>降低故障三射弓的好感度加成。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>
@@ -390,6 +408,9 @@
         </member>
         <member name="T:Explorite.ExploriteMod">
             <summary>Explorite模组信息类。</summary>
+        </member>
+        <member name="M:Explorite.GameComponent_CentaurStory.PrintTrishotTracerState">
+            <summary>显示追踪器状态。</summary>
         </member>
         <member name="T:Explorite.HediffComp_SeverityFromEntropy_CentarusOnly">
             <summary>

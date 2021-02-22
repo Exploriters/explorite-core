@@ -33,6 +33,10 @@
   <Reward_CentaurStoryProgress_Start>完成这个任务，将会使你开启半人马的故事链。</Reward_CentaurStoryProgress_Start>
   <Reward_CentaurStoryProgress_Label>推进半人马故事</Reward_CentaurStoryProgress_Label>
   <Reward_CentaurStoryProgress>完成这个任务将使你能够进一步探索半人马的故事。</Reward_CentaurStoryProgress>
+  
+  <Reward_CentaurStoryProgress>完成这个任务将使你能够进一步探索半人马的故事。</Reward_CentaurStoryProgress>
 
+  <Magnuassembly_NewTrishotArrived_Label>新三射弓已送达</Magnuassembly_NewTrishotArrived_Label>
+  <Magnuassembly_NewTrishotArrived_Text>由于你的上一个三射弓已被摧毁，一个新的三射弓已送达殖民地。</Magnuassembly_NewTrishotArrived_Text>
 
 </LanguageData>

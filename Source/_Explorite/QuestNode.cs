@@ -18,6 +18,7 @@ namespace Explorite
 
         protected override void RunInt()
         {
+            GameComponentCentaurStory.trishotTraceEnabled = true;
             Find.ResearchManager.AddTechprints(CentaurStoryProjectStep1Def, 1);
             Find.ResearchManager.FinishProject(CentaurStoryProjectStep1Def, false, null);
 

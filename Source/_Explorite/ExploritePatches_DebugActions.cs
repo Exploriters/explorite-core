@@ -19,7 +19,6 @@ namespace Explorite
 #pragma warning disable IDE0051 // 删除未使用的私有成员
     static partial class ExploriteDebugActions
     {
-
         ///<summary>清除所有迷雾。</summary>
         [DebugAction(category: "Explorite", name: "Clear fog at...", allowedGameStates = AllowedGameStates.PlayingOnMap,
             actionType = DebugActionType.ToolMap)]

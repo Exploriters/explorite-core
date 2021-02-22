@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Verse;
 using RimWorld;
 using System.Collections;
@@ -7,8 +7,14 @@ namespace Explorite
 {
     public class QuestPart_HyperLinks : QuestPart, IEnumerable<Dialog_InfoCard.Hyperlink>
     {
-        private readonly List<Dialog_InfoCard.Hyperlink> hyperlinks = new List<Dialog_InfoCard.Hyperlink>();
+        private List<Dialog_InfoCard.Hyperlink> hyperlinks = new List<Dialog_InfoCard.Hyperlink>();
         public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks => hyperlinks;
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Collections.Look(ref hyperlinks, "hyperlinks", LookMode.Deep);
+        }
 
         public IEnumerator<Dialog_InfoCard.Hyperlink> GetEnumerator() => hyperlinks.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => hyperlinks.GetEnumerator();

@@ -6,13 +6,20 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
+using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
+    public interface ISecretTrishot
+    {
+        public bool GetSecret();
+        public bool SetSecret(bool boolen);
+        public bool LeaveTrishot(IntVec3 position, Map map);
+    }
     ///<summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />不继承自<seealso cref = "Building_Battery" />，因该类并未有独有方法，且部分行为不可被覆盖。</summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0051")]
     [StaticConstructorOnStartup]
-    public class Building_TriBattery : Building//_Battery
+    public class Building_TriBattery : Building/*_Battery*/, ISecretTrishot
     {
         private int ticksToExplode;
 
@@ -30,6 +37,33 @@ namespace Explorite
 
         private static readonly Material BatteryBarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.3f, 0.3f, 0.3f), false);
 
+        private bool includingBrokenTrishot = false;
+        public bool GetSecret()
+        {
+            return includingBrokenTrishot;
+        }
+        public bool SetSecret(bool boolen)
+        {
+            return includingBrokenTrishot = boolen;
+        }
+        public bool LeaveTrishot(IntVec3 position, Map map)
+        {
+            if (includingBrokenTrishot)
+            {
+                Thing trishot = ThingMaker.MakeThing(TrishotThing1Def);
+                GameComponentCentaurStory.TryAdd(trishot);
+                GenSpawn.Spawn(trishot, position, map);
+                includingBrokenTrishot = false;
+                return true;
+            }
+            return false;
+        }
+        public override void Destroy(DestroyMode mode)
+        {
+            LeaveTrishot(Position, Map);
+            base.Destroy(mode);
+        }
+
         public Building_TriBattery()
         {
         }
@@ -38,6 +72,7 @@ namespace Explorite
         {
             base.ExposeData();
             Scribe_Values.Look(ref ticksToExplode, "ticksToExplode", 0, false);
+            Scribe_Values.Look(ref includingBrokenTrishot, "isSecretBattery", false);
         }
 
         public override void Draw()
