@@ -24,8 +24,8 @@ namespace Explorite
             {
                 //return new Color(Rand.Value, Rand.Value, Rand.Value);
                 return Color.HSVToRGB(
-                    Rand.Value * 1f, 
-                    (float)Math.Sin(Math.PI * (0.5 - (Rand.Value * 0.5))), 
+                    Rand.Value * 1f,
+                    (float)Math.Sin(Math.PI * (0.5 - (Rand.Value * 0.5))),
                     (float)Math.Sin(Math.PI * (0.5 - (Rand.Value * 0.5))));
             }
             if (/*PawnSkinColors.IsDarkSkin(skinColor) || */Rand.Value < 0.5f)
@@ -70,7 +70,7 @@ namespace Explorite
     {
         public override Color ExemplaryColor => new Color(0.85098039215686274509803921568627f, 0f, 0f);
         public override Color NewRandomizedColor() => Color.HSVToRGB(
-            (float)((Math.Pow(Math.Sin(Math.PI * Rand.Value),1D/3D) * 30 - 15 + Rand.Value < 0.05f ? 120f : 0f) / 360),
+            (float)((Math.Pow(Math.Sin(Math.PI * Rand.Value), 1D / 3D) * 30 - 15 + Rand.Value < 0.05f ? 120f : 0f) / 360),
             ((float)Math.Sin(Math.PI * Rand.Value * 0.5D) * 0.3f) + 0.7f,
             ((float)Math.Sin(Math.PI * Rand.Value) * 0.3f) + 0.7f);
     }

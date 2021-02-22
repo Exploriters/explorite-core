@@ -116,6 +116,7 @@ namespace Explorite
         private const float DeltaPerIntervalBase = 0.0025f;
         private const float AbsorbHypothermiaFactor = 1f;
         private float LastEffectiveDelta => detlaTracer.Last();
+        private float lastabsrobAmount = 0f;
         private readonly DetlaTracer detlaTracer = new DetlaTracer();
         public Need_HypothermiaAbsorption(Pawn pawn) : base(pawn)
         {
@@ -198,7 +199,7 @@ namespace Explorite
                 {
                     Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Hypothermia);
 
-                    absrobAmount = Math.Min(targetLevel, hediff.Severity / AbsorbHypothermiaFactor);
+                    lastabsrobAmount = absrobAmount = Math.Min(targetLevel, hediff.Severity / AbsorbHypothermiaFactor);
 
                     hediff.Severity -= absrobAmount / AbsorbHypothermiaFactor;
                     targetLevel -= absrobAmount;

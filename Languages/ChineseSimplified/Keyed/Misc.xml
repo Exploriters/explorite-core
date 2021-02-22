@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <LanguageData>
 
   <Magnuassembly_CompUseEffect_HediffApply_HManipulator_UseReject_AlreadyInstalled>{0}已经安装过物理操作仪了。</Magnuassembly_CompUseEffect_HediffApply_HManipulator_UseReject_AlreadyInstalled>
@@ -24,6 +24,15 @@
   <Magnuassembly_NotHappyEnough>心情不足</Magnuassembly_NotHappyEnough>
   
   <OutfitCentaur>半人马</OutfitCentaur>
+
+  <BillRequiresMarketValue>需要市场价值共计{0}的{1}</BillRequiresMarketValue>
+  
+  <Reward_ProgressToTrishot_Label>获得三射弓</Reward_ProgressToTrishot_Label>
+  <Reward_ProgressToTrishot>这个任务将引导你获得一把名为“三射弓”的强大武器。</Reward_ProgressToTrishot>
+  <Reward_CentaurStoryProgress_Start_Label>开启半人马任务线</Reward_CentaurStoryProgress_Start_Label>
+  <Reward_CentaurStoryProgress_Start>完成这个任务，将会使你开启半人马的故事链。</Reward_CentaurStoryProgress_Start>
+  <Reward_CentaurStoryProgress_Label>推进半人马故事</Reward_CentaurStoryProgress_Label>
+  <Reward_CentaurStoryProgress>完成这个任务将使你能够进一步探索半人马的故事。</Reward_CentaurStoryProgress>
 
 
 </LanguageData>

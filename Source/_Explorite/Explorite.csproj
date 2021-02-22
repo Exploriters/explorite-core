@@ -99,13 +99,13 @@
     <Compile Include="AlienRace.cs" />
     <Compile Include="BackstoryCracker.cs" />
     <Compile Include="Building_TriBattery.cs" />
-    <Compile Include="Bullet_Direct.cs" />
     <Compile Include="ColorGenerator.cs" />
     <Compile Include="CompAbilityEffect_GiveHediff_ParasiticStab.cs" />
     <Compile Include="CompAbilityEffect_GiveHediff_WholeMap.cs" />
     <Compile Include="CompAbilityEffect_TogglePsySensitivity.cs" />
     <Compile Include="CompArt_Qualityless.cs" />
     <Compile Include="CompAssignableToPawn_Bed_Guoguo.cs" />
+    <Compile Include="CompDropThingsOnDestroy.cs" />
     <Compile Include="CompEnsureAbility.cs" />
     <Compile Include="CompHealWearedOvertime.cs" />
     <Compile Include="CompHMTrishotUser.cs" />
@@ -118,6 +118,7 @@
     <Compile Include="CompSelfHealOvertime.cs" />
     <Compile Include="CompSelfHealOvertime_1.cs" />
     <Compile Include="CompSelfHealOvertime_2.cs" />
+    <Compile Include="CompSendSignalOnDestroyed.cs" />
     <Compile Include="CompSnowExpand_Overtick.cs" />
     <Compile Include="CompThingHolder.cs" />
     <Compile Include="CompUnbreakableViaDamage.cs" />
@@ -144,9 +145,13 @@
     <Compile Include="HediffComp_SpawnThingOnDeath.cs" />
     <Compile Include="HediffGiver.cs" />
     <Compile Include="HManipulator.cs" />
+    <Compile Include="IngredientValueGetter_MarketValue.cs" />
     <Compile Include="JobGiver_Nuzzle_Humanoid.cs" />
     <Compile Include="Need_CentaurCreativityInspiration.cs" />
     <Compile Include="Need_HypothermiaAbsorption.cs" />
+    <Compile Include="QuestPart.cs" />
+    <Compile Include="QuestReward.cs" />
+    <Compile Include="QuestNode.cs" />
     <Compile Include="Recipe_RemoveBodyPart_MX.cs" />
     <Compile Include="ExploritePatches_PawnGenerator.cs" />
     <Compile Include="PawnShieldGenerator.cs" />

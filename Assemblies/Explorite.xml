@@ -33,9 +33,6 @@
         <member name="T:Explorite.Building_TriBattery">
             <summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />不继承自<seealso cref = "T:RimWorld.Building_Battery" />，因该类并未有独有方法，且部分行为不可被覆盖。</summary>
         </member>
-        <member name="T:Explorite.Bullet_Direct">
-            <summary>发射后直接命中目标的子弹。</summary>
-        </member>
         <member name="T:Explorite.ColorGenerator_CentaurHair">
             <summary>生成半人马的头发颜色。</summary>
         </member>
@@ -55,10 +52,27 @@
             <summary>Sayers的群体植物液注入的主要功能实现。</summary>
         </member>
         <member name="T:Explorite.CompAbilityEffect_GiveHediff_WholeMap">
-            <summary>半人马的群体心灵失聪技能的主要功能实现。<br />会对目标所处地图的所有生物造成健康状态效果。<br />务必确保技能对单一目标生效，或为对施法者自己生效。</summary>
+            <summary>半人马的群体心灵失聪技能的主要功能实现。
+            <br />会对目标所处地图的所有生物造成健康状态效果。
+            <br />务必确保技能对单一目标生效，或为对施法者自己生效。</summary>
         </member>
         <member name="T:Explorite.CompAssignableToPawn_Bed_Guoguo">
             <summary>果果床的类型，只有果果人可以使用。</summary>
+        </member>
+        <member name="T:Explorite.ThingGenProp">
+            <summary>设置一个物体和数量。</summary>
+        </member>
+        <member name="T:Explorite.ThingOnDestroy">
+            <summary>为<see cref = "T:Explorite.CompProperties_DropThingsOnDestroy" />设置在何种情况下掉落物品。</summary>
+        </member>
+        <member name="T:Explorite.CompProperties_DropThingsOnDestroy">
+            <summary>为<see cref = "T:Explorite.CompDropThingsOnDestroy" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompDropThingsOnDestroy">
+            <summary>指定物体在被摧毁时掉落物品。</summary>
+        </member>
+        <member name="T:Explorite.CompDropThermoDamperOnDestroy">
+            <summary>指定物体在被摧毁时掉落一个失温器。</summary>
         </member>
         <member name="T:Explorite.CompProperties_EnsureAbility">
             <summary>为<see cref = "T:Explorite.CompEnsureAbility" />接收参数。</summary>
@@ -363,6 +377,9 @@
         <member name="M:Explorite.ExploritePatches.PawnThreatDisabledPostfix(Verse.Pawn,System.Boolean@,Verse.AI.IAttackTargetSearcher)">
             <summary>使半人马即使携带了物品也会被视为威胁。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.ApparelPropertiesGetCoveredOuterPartsStringPostfix(RimWorld.ApparelProperties,Verse.BodyDef@)">
+            <summary>使半人马服装正确显示覆盖的部位。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>
@@ -463,6 +480,9 @@
         </member>
         <member name="T:Explorite.Plant_FleshTree">
             <summary>血肉之树类型。</summary>
+        </member>
+        <member name="T:Explorite.Bullet_Direct">
+            <summary>发射后直接命中目标的子弹。</summary>
         </member>
         <member name="T:Explorite.Projectile_Explosive_Teleshot">
             <summary>该弹射物会将目标传送至爆炸位置。</summary>
