@@ -23,7 +23,21 @@
   <Magnuassembly_NextCreativityInspirationIn>Est.</Magnuassembly_NextCreativityInspirationIn>
   <Magnuassembly_NotHappyEnough>Not happy enough</Magnuassembly_NotHappyEnough>
   
+  <Magnuassembly_PawnShield>Shield</Magnuassembly_PawnShield>
+  
   <OutfitCentaur>Centaur</OutfitCentaur>
+
+  <BillRequiresMarketValue>Requires {0} market value {1}</BillRequiresMarketValue>
+  
+  <Reward_ProgressToTrishot_Label>Acquiring Trishot</Reward_ProgressToTrishot_Label>
+  <Reward_ProgressToTrishot>This quest will guide you accure a powerful weapon named Trishot.</Reward_ProgressToTrishot>
+  <Reward_CentaurStoryProgress_Start_Label>Centaur story chain</Reward_CentaurStoryProgress_Start_Label>
+  <Reward_CentaurStoryProgress_Start>Complete this quest will start centaur story chain.</Reward_CentaurStoryProgress_Start>
+  <Reward_CentaurStoryProgress_Label>Story chain progress</Reward_CentaurStoryProgress_Label>
+  <Reward_CentaurStoryProgress>Complete this quest will start centaur story chain.。</Reward_CentaurStoryProgress>
+
+  <Magnuassembly_NewTrishotArrived_Label>New trishot arrived</Magnuassembly_NewTrishotArrived_Label>
+  <Magnuassembly_NewTrishotArrived_Text>Since your last trishot has been destroyed, a new one has been sent to colony.</Magnuassembly_NewTrishotArrived_Text>
   
   
 </LanguageData>

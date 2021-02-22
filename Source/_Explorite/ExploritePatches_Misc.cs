@@ -117,7 +117,9 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(HediffComp_GetsPermanent), "set_IsPermanent".App(ref last_patch_method)),
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(HediffComp_GetsPermanentIsPermanentPrefix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(HediffComp_TendDuration), "get_AllowTend".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(HediffComp_TendDurationAllowTendPrefix)));
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(HediffComp_TendDurationAllowTendPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(HediffComp_ReactOnDamage), nameof(HediffComp_ReactOnDamage.Notify_PawnPostApplyDamage).App(ref last_patch_method)),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(HediffComp_ReactOnDamageNotify_PawnPostApplyDamagePrefix)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(StatPart_ApparelStatOffset), nameof(StatPart.TransformValue).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PsychicSensitivityPostfix)));
@@ -728,13 +730,22 @@ namespace Explorite
             }
         }
         ///<summary>设置不允许<see cref = "HediffComp_TendDuration_CantTend" />症状被治疗。</summary>
-        [HarmonyPostfix]public static void HediffComp_TendDurationAllowTendPrefix(HediffComp_TendDuration __instance, ref bool __result)
+        [HarmonyPostfix]public static void HediffComp_TendDurationAllowTendPostfix(HediffComp_TendDuration __instance, ref bool __result)
         {
             if (false&&
                 __instance is HediffComp_TendDuration_CantTend
                 && __instance.Pawn.def == AlienCentaurDef)
             {
                 __result = false;
+            }
+        }
+        ///<summary>阻止半人马大脑休克。</summary>
+        [HarmonyPrefix]public static void HediffComp_ReactOnDamageNotify_PawnPostApplyDamagePrefix(HediffComp_ReactOnDamage __instance, ref DamageInfo dinfo, float totalDamageDealt)
+        {
+            if (__instance.Pawn.def == AlienCentaurDef
+             && __instance.Props.damageDefIncoming == DamageDefOf.EMP && dinfo.Def == DamageDefOf.EMP)
+            {
+                dinfo.Def = null;
             }
         }
 
@@ -1130,9 +1141,11 @@ namespace Explorite
         ///<summary>降低故障三射弓的好感度加成。</summary>
         [HarmonyPostfix]public static void FactionGiftUtilityGetBaseGoodwillChangePostfix(ref float __result, Thing anyThing, int count, float singlePrice, Faction theirFaction)
         {
-            if (anyThing.def.weaponTags.Contains("CentaurTracedTrishot"))
+            if (anyThing?.def?.weaponTags?.Contains("CentaurTracedTrishot") == true)
             {
-                __result = 0f;//-= TrishotThing1Def.BaseMarketValue * count / 40f;
+                float factor =  singlePrice / anyThing.MarketValue;
+                //__result = 0f;//-= TrishotThing1Def.BaseMarketValue * count / 40f;
+                __result -= TrishotThing1Def.BaseMarketValue * factor * count / 40f;
             }
         }
     }

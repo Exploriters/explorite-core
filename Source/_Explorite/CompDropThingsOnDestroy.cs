@@ -51,7 +51,7 @@ namespace Explorite
         private List<ThingOnDestroy> Cases => Props.cases;
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
-            if(Vaild)
+            if (Vaild)
             {
                 ThingOwner<Thing> thingsToDrop = new ThingOwner<Thing>();
                 foreach (ThingOnDestroy thingOnDestroy in Cases)

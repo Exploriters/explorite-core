@@ -23,6 +23,8 @@
   <Magnuassembly_NextCreativityInspirationIn>预期</Magnuassembly_NextCreativityInspirationIn>
   <Magnuassembly_NotHappyEnough>心情不足</Magnuassembly_NotHappyEnough>
   
+  <Magnuassembly_PawnShield>护盾</Magnuassembly_PawnShield>
+  
   <OutfitCentaur>半人马</OutfitCentaur>
 
   <BillRequiresMarketValue>需要市场价值共计{0}的{1}</BillRequiresMarketValue>
@@ -32,8 +34,6 @@
   <Reward_CentaurStoryProgress_Start_Label>开启半人马任务线</Reward_CentaurStoryProgress_Start_Label>
   <Reward_CentaurStoryProgress_Start>完成这个任务，将会使你开启半人马的故事链。</Reward_CentaurStoryProgress_Start>
   <Reward_CentaurStoryProgress_Label>推进半人马故事</Reward_CentaurStoryProgress_Label>
-  <Reward_CentaurStoryProgress>完成这个任务将使你能够进一步探索半人马的故事。</Reward_CentaurStoryProgress>
-  
   <Reward_CentaurStoryProgress>完成这个任务将使你能够进一步探索半人马的故事。</Reward_CentaurStoryProgress>
 
   <Magnuassembly_NewTrishotArrived_Label>新三射弓已送达</Magnuassembly_NewTrishotArrived_Label>

@@ -36,7 +36,7 @@ namespace Explorite
         {
             get
             {
-                yield return 
+                yield return
                     QuestPartUtility.GetStandardRewardStackElement(
                         "Reward_ProgressToTrishot_Label".Translate(),
                         Icon,
@@ -48,7 +48,8 @@ namespace Explorite
         {
             return "Reward_ProgressToTrishot".Translate().Resolve();
         }
-    }[StaticConstructorOnStartup]
+    }
+    [StaticConstructorOnStartup]
     public class Reward_CentaurStoryProgress_Start : Reward_NotImplementedStatic
     {
         private Action<Rect> IconDrawer => delegate (Rect r)
@@ -62,7 +63,7 @@ namespace Explorite
         {
             get
             {
-                yield return 
+                yield return
                     QuestPartUtility.GetStandardRewardStackElement(
                         "Reward_CentaurStoryProgress_Start_Label".Translate(),
                         IconDrawer,

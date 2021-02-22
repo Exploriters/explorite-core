@@ -67,7 +67,7 @@ namespace Explorite
         {
             if (ValidTrishotPredicate(thing))
             {
-                if(!tracedTrishots.Contains(thing))
+                if (!tracedTrishots.Contains(thing))
                     tracedTrishots.Add(thing);
                 return true;
             }
