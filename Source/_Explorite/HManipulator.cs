@@ -118,17 +118,6 @@ namespace Explorite
         }
     }
 
-    /**
-     * <summary>
-     * 物理操作仪的hediff类型。无实际效果。
-     * </summary>
-     */
-    public class Hediff_AddedPart_HManipulator : Hediff_AddedPart
-    {
-        //T___O_NOMORE__D____O: Prevent remove part surgery targeting HM
-        //NOT HERE!
-        //Solved somewhere other
-    }
 
     // TO_NOMORE_DO: Force avaiable Solved
     /**

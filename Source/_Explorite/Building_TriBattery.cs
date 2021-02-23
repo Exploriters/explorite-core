@@ -10,13 +10,14 @@ using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
+    ///<summary>秘密三射弓物体。</summary>
     public interface ISecretTrishot
     {
         public bool GetSecret();
         public bool SetSecret(bool boolen);
         public bool LeaveTrishot(IntVec3 position, Map map);
     }
-    ///<summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />不继承自<seealso cref = "Building_Battery" />，因该类并未有独有方法，且部分行为不可被覆盖。</summary>
+    ///<summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />不继承自<seealso cref = "Building_Battery" />，因该类并未有独有方法，且部分行为不可被覆盖。<br />实现了<seealso cref = "ISecretTrishot" />，可在开局被指定具有三射弓。</summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0051")]
     [StaticConstructorOnStartup]
     public class Building_TriBattery : Building/*_Battery*/, ISecretTrishot

@@ -3,7 +3,10 @@
  * --siiftun1857
  */
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Verse;
+using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
@@ -14,6 +17,46 @@ namespace Explorite
         {
             if (!pawn.health.hediffSet.HasHediff(hediff))
                 TryApply(pawn);
+        }
+    }
+    ///<summary>始终会确保子系统存在。</summary>
+    public class HediffGiver_EnsureForBlankSubsystem : HediffGiver
+    {
+        public static void Apply(Pawn pawn, HediffDef hediffDef)
+        {
+            List<BodyPartRecord> partsToRestore = new List<BodyPartRecord>();
+            IEnumerable<Hediff_MissingPart> missingPartHediffs = pawn.health.hediffSet.GetMissingPartsCommonAncestors();
+            foreach (Hediff_MissingPart hediff_MissingPart in missingPartHediffs)
+            {
+                if (hediff_MissingPart.Part.groups.Contains(CentaurSubsystemGroup0Def))
+                {
+                    partsToRestore.Add(hediff_MissingPart.Part);
+                }
+            }
+            foreach (BodyPartRecord part in partsToRestore)
+            {
+                pawn.health.RestorePart(part, null, true);
+            }
+
+            IEnumerable<BodyPartRecord> parts = pawn?.health?.hediffSet?.GetNotMissingParts()?.Where(bpr =>
+                bpr?.groups?.Contains(CentaurSubsystemGroup0Def) ?? false);
+            foreach (BodyPartRecord part in parts)
+            {
+                if (!(pawn?.health?.hediffSet?.hediffs?.Any(h =>
+                        (h?.def?.tags?.Contains("CentaurSubsystem") ?? false) && h?.Part == part
+                    ) ?? false))
+                {
+                    pawn.health.AddHediff(hediffDef, part);
+                }
+            }
+        }
+        public virtual void Apply(Pawn pawn)
+        {
+            Apply(pawn, hediff);
+        }
+        public override void OnIntervalPassed(Pawn pawn, Hediff cause)
+        {
+            Apply(pawn);
         }
     }
 

@@ -143,6 +143,8 @@ namespace Explorite
             }
         }
 
+        public bool Depleted => CurLevel <= 0.05;
+
         public float ReachLimitIn => Math.Sign(LastEffectiveDelta) switch
         {
             -1 => CurLevel / -detlaTracer.AverangeN() * 2.5f,

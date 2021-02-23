@@ -30,8 +30,11 @@
         <member name="M:Explorite.BackstoryCracker.ExportBackstoriesToLog">
             <summary>将背景故事导出到日志中。</summary>
         </member>
+        <member name="T:Explorite.ISecretTrishot">
+            <summary>秘密三射弓物体。</summary>
+        </member>
         <member name="T:Explorite.Building_TriBattery">
-            <summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />不继承自<seealso cref = "T:RimWorld.Building_Battery" />，因该类并未有独有方法，且部分行为不可被覆盖。</summary>
+            <summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />不继承自<seealso cref = "T:RimWorld.Building_Battery" />，因该类并未有独有方法，且部分行为不可被覆盖。<br />实现了<seealso cref = "T:Explorite.ISecretTrishot" />，可在开局被指定具有三射弓。</summary>
         </member>
         <member name="T:Explorite.ColorGenerator_CentaurHair">
             <summary>生成半人马的头发颜色。</summary>
@@ -247,7 +250,7 @@
             <summary>将整个地图的所有水体都变成冰。</summary>
         </member>
         <member name="M:Explorite.ExploriteDebugActions.FinishHyperManipulatorInstell(Verse.Pawn)">
-            <summary>完成物理操作仪极其漫长的整备时间。</summary>
+            <summary>完成半人马身体部件极其漫长的整备时间。</summary>
         </member>
         <member name="T:Explorite.ExploritePatches">
             <summary>
@@ -381,7 +384,7 @@
             <summary>在信息页移除半人马的疼痛休克阈值和精神崩溃阈值显示。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.RecipeRemoveBodyPartGetPartsToApplyOnPostfix(RimWorld.Recipe_Surgery,System.Collections.Generic.IEnumerable{Verse.BodyPartRecord}@,Verse.Pawn,Verse.RecipeDef)">
-            <summary>从截肢手术清单中移除半人马的锁骨。</summary>
+            <summary>从截肢手术清单中移除半人马的锁骨和子系统。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.OutfitDatabaseGenerateStartingOutfitsPostfix(RimWorld.OutfitDatabase)">
             <summary>添加默认服装方案。</summary>
@@ -400,6 +403,18 @@
         </member>
         <member name="M:Explorite.ExploritePatches.FactionGiftUtilityGetBaseGoodwillChangePostfix(System.Single@,Verse.Thing,System.Int32,System.Single,RimWorld.Faction)">
             <summary>降低故障三射弓的好感度加成。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.InspirationHandlerGetRandomAvailableInspirationDefPostfix(RimWorld.InspirationHandler,RimWorld.InspirationDef@)">
+            <summary>移除半人马随机好心情灵感。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.DamageInfoCtorPrefix(Verse.ThingDef@)">
+            <summary>设置三射弓伤害源为满级三射弓。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.BattleLogEntry_ExplosionImpactCtorPrefix(Verse.ThingDef@)">
+            <summary>设置日志中三射弓伤害源为满级三射弓。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.HealthCardUtilityGetListPriorityPostfix(System.Single@,Verse.BodyPartRecord)">
+            <summary>修正健康面板中的身体部位排序。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
@@ -457,20 +472,24 @@
         <member name="T:Explorite.HediffGiver_EnsureForAlways">
             <summary>始终会确保健康状态存在。</summary>
         </member>
+        <member name="T:Explorite.HediffGiver_EnsureForBlankSubsystem">
+            <summary>始终会确保子系统存在。</summary>
+        </member>
         <member name="T:Explorite.HediffGiver_Overtime">
             <summary>按照几率来持续确保健康状态存在。</summary>
         </member>
         <member name="T:Explorite.HediffGiver_FactorBySeverity">
             <summary>按照受严重性影响的几率来持续确保健康状态存在。</summary>
         </member>
+        <member name="T:Explorite.Hediff_AddedPart_HManipulator">
+            <summary>物理操作仪的hediff类型。无实际效果。</summary>
+        </member>
+        <member name="T:Explorite.Hediff_AddedPart_BlankSubsystem">
+            <summary>空白子系统的hediff类，控制是否显示这一症状。</summary>
+        </member>
         <member name="T:Explorite.CompUseEffect_HediffApply_HManipulator">
             <summary>
             使物品被使用后为自身安装物理操作仪。
-            </summary>
-        </member>
-        <member name="T:Explorite.Hediff_AddedPart_HManipulator">
-            <summary>
-            物理操作仪的hediff类型。无实际效果。
             </summary>
         </member>
         <member name="T:Explorite.CompUsable_IgnoreManipulation">

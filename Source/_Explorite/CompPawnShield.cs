@@ -48,7 +48,7 @@ namespace Explorite
             }
             else
             {
-                pendingCharge += EnergyGainPerTick;
+                pendingCharge += EnergyGainPerTick * FragmentChargeRate;
                 if (pendingCharge >= FragemntPerCharge || pendingCharge > EnergyMax - energy)
                 {
                     energy = Math.Min(energy + FragemntPerCharge, EnergyMax);
@@ -86,7 +86,7 @@ namespace Explorite
         public bool overkilled = false;
 
         private float? fragemntSizeFactorCache;
-        public float FragemntSizeFactor => fragemntSizeFactorCache ??= Math.Max(1f/60f,(props as CompProperties_PawnShield)?.fragemntSizeFactor ?? 1f);
+        public float FragemntSizeFactor => fragemntSizeFactorCache ??= Math.Max(1f / 60f, (props as CompProperties_PawnShield)?.fragemntSizeFactor ?? 1f);
         public float FragemntPerCharge => EnergyGainPerSec * FragemntSizeFactor;
         public float ChargePrecent => Math.Min(1, Math.Max(0, pendingCharge / FragemntPerCharge));
         public float HitBufferPrecent => Math.Min(1, Math.Max(0, energyBuffer / EnergyMax));
@@ -116,6 +116,7 @@ namespace Explorite
 
         public float EnergyGainPerSec => parent.GetStatValue(PawnShieldRechargeRateDef, true);
         public float EnergyGainPerTick => EnergyGainPerSec / 60f;
+        public float FragmentChargeRate => 1f;
 
         public float Energy => energy;
 

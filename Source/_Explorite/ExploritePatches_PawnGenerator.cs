@@ -8,6 +8,7 @@ using HarmonyLib;
 using Verse;
 using static Explorite.ExploriteCore;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Explorite
 {
@@ -71,6 +72,8 @@ namespace Explorite
                 };
                 sr.xpSinceLastLevel = 0f; //sr.XpRequiredForLevelUp / 2f;
             }
+
+            HediffGiver_EnsureForBlankSubsystem.Apply(pawn, SubsystemBlankHediffDef);
             return true;
         }
         internal static bool GenerateSayersPostprocess(ref Pawn pawn, PawnGenerationRequest request, ref bool matchError)
@@ -139,6 +142,27 @@ namespace Explorite
 
             return true;
         }
+        
+        internal static bool FinalPostprocess(ref Pawn pawn, PawnGenerationRequest request)
+        {
+            if (pawn?.TryGetComp<CompEnsureAbility>() != null)
+            {
+                pawn?.TryGetComp<CompEnsureAbility>().ApplayAbilities();
+            }
+
+            foreach (HediffGiverSetDef hediffGiverSetDef in pawn?.RaceProps?.hediffGiverSets)
+            {
+                foreach (HediffGiver hediffGiver in hediffGiverSetDef?.hediffGivers)
+                {
+                    if(hediffGiver is HediffGiver_EnsureForAlways giver)
+                    {
+                        giver.TryApply(pawn);
+                    }
+                }
+            }
+
+            return true;
+        }
 
 
         /**
@@ -157,12 +181,10 @@ namespace Explorite
             if (matchError)
             {
                 __result = PawnGenerator.GeneratePawn(PawnKindDefOf.Villager, request.Faction);
+                matchError = false;
             }
 
-            if (__result?.TryGetComp<CompEnsureAbility>() != null)
-            {
-                __result?.TryGetComp<CompEnsureAbility>().ApplayAbilities();
-            }
+            FinalPostprocess(ref __result, request);
         }
     }
 

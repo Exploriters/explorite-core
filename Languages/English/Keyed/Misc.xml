@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <LanguageData>
-
+  
   <Magnuassembly_CompUseEffect_HediffApply_HManipulator_UseReject_AlreadyInstalled>{0} has already installed physic manipulator.</Magnuassembly_CompUseEffect_HediffApply_HManipulator_UseReject_AlreadyInstalled>
   <Magnuassembly_CompUseEffect_HediffApply_HManipulator_UseReject_NonCentaur>{0} can't operate physic manipulator.</Magnuassembly_CompUseEffect_HediffApply_HManipulator_UseReject_NonCentaur>
   
@@ -38,6 +38,9 @@
 
   <Magnuassembly_NewTrishotArrived_Label>New trishot arrived</Magnuassembly_NewTrishotArrived_Label>
   <Magnuassembly_NewTrishotArrived_Text>Since your last trishot has been destroyed, a new one has been sent to colony.</Magnuassembly_NewTrishotArrived_Text>
+  
+  <Magnuassembly_HypothermiaAbsorptionDepleted>hypoabsorb. depleted</Magnuassembly_HypothermiaAbsorptionDepleted>
+  <Magnuassembly_HypothermiaAbsorptionDepletedDesc>These colonists are exposing to chill hazard and about to build up hypothermia:\n\n{0}\nMake sure their clothing is appropriate for the season and that indoor spaces are properly heated.</Magnuassembly_HypothermiaAbsorptionDepletedDesc>
   
   
 </LanguageData>

@@ -96,6 +96,7 @@
     <Compile Include="Ability_MassPsychicDeafCentaur.cs" />
     <Compile Include="AdditionalAbility.cs" />
     <Compile Include="AdditionalVerbRemaster.cs" />
+    <Compile Include="Alert_HypothermiaAbsorptionDepletedColonists.cs" />
     <Compile Include="AlienRace.cs" />
     <Compile Include="BackstoryCracker.cs" />
     <Compile Include="Building_TriBattery.cs" />
@@ -146,6 +147,7 @@
     <Compile Include="HediffComp_SeverityHalfLife.cs" />
     <Compile Include="HediffComp_SpawnThingOnDeath.cs" />
     <Compile Include="HediffGiver.cs" />
+    <Compile Include="HediffWithComps.cs" />
     <Compile Include="HManipulator.cs" />
     <Compile Include="IngredientValueGetter_MarketValue.cs" />
     <Compile Include="JobGiver_Nuzzle_Humanoid.cs" />

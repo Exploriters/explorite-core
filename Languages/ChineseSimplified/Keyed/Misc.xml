@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LanguageData>
-
+  
   <Magnuassembly_CompUseEffect_HediffApply_HManipulator_UseReject_AlreadyInstalled>{0}已经安装过物理操作仪了。</Magnuassembly_CompUseEffect_HediffApply_HManipulator_UseReject_AlreadyInstalled>
   <Magnuassembly_CompUseEffect_HediffApply_HManipulator_UseReject_NonCentaur>{0}不能使用物理操作仪 。</Magnuassembly_CompUseEffect_HediffApply_HManipulator_UseReject_NonCentaur>
   
@@ -38,5 +38,9 @@
 
   <Magnuassembly_NewTrishotArrived_Label>新三射弓已送达</Magnuassembly_NewTrishotArrived_Label>
   <Magnuassembly_NewTrishotArrived_Text>由于你的上一个三射弓已被摧毁，一个新的三射弓已送达殖民地。</Magnuassembly_NewTrishotArrived_Text>
-
+  
+  <Magnuassembly_HypothermiaAbsorptionDepleted>低温灾害曝光</Magnuassembly_HypothermiaAbsorptionDepleted>
+  <Magnuassembly_HypothermiaAbsorptionDepletedDesc>以下殖民者的抗寒能力已耗尽:\n\n{0}\n确保他们穿着适合这个季节的服装并保证室内区域的正常供暖。</Magnuassembly_HypothermiaAbsorptionDepletedDesc>
+  
+  
 </LanguageData>

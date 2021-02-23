@@ -13,6 +13,7 @@ using UnityEngine;
 using Verse;
 using Verse.AI;
 using static Explorite.ExploriteCore;
+using static Verse.DamageInfo;
 
 namespace Explorite
 {
@@ -172,7 +173,26 @@ namespace Explorite
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(RimWorld.Planet.FactionGiftUtility), "GetBaseGoodwillChange".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(FactionGiftUtilityGetBaseGoodwillChangePostfix)));
+                
+                harmonyInstance.Patch(AccessTools.Method(typeof(InspirationHandler), nameof(InspirationHandler.GetRandomAvailableInspirationDef).App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(InspirationHandlerGetRandomAvailableInspirationDefPostfix)));
+                
+                nameof(DamageInfo).App(ref last_patch_method);
+                harmonyInstance.Patch(AccessTools.Constructor(typeof(DamageInfo),
+                    parameters: new Type[] { typeof(DamageDef), typeof(float), typeof(float), typeof(float), typeof(Thing), typeof(BodyPartRecord), typeof(ThingDef), typeof(SourceCategory), typeof(Thing) }),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(DamageInfoCtorPrefix)));
 
+                nameof(BattleLogEntry_ExplosionImpact).App(ref last_patch_method);
+                harmonyInstance.Patch(AccessTools.Constructor(typeof(BattleLogEntry_ExplosionImpact),
+                    parameters: new Type[] { typeof(Thing), typeof(Thing), typeof(ThingDef), typeof(ThingDef), typeof(DamageDef)}),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(BattleLogEntry_ExplosionImpactCtorPrefix)));
+                
+                //harmonyInstance.Patch(AccessTools.Method(typeof(Projectile), nameof(Projectile.Launch).App(ref last_patch_method),
+                //    parameters: new Type[] { typeof(Thing), typeof(Vector3), typeof(LocalTargetInfo), typeof(LocalTargetInfo), typeof(ProjectileHitFlags), typeof(Thing), typeof(ThingDef)}),
+                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(ProjectileLaunchPostfix)));
+                
+                harmonyInstance.Patch(AccessTools.Method(typeof(HealthCardUtility), "GetListPriority".App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(HealthCardUtilityGetListPriorityPostfix)));
 
                 if (InstelledMods.SoS2)
                 {
@@ -187,13 +207,13 @@ namespace Explorite
             }
             catch (Exception e)
             {
-                Log.Error(
-                    $"[Explorite]Patch sequence failare at {last_patch}, {last_patch_method}, " +
-                    $"an exception ({e.GetType().Name}) occurred.\n" +
-                    $"Message:\n   {e.Message}\n" +
-                    $"Stack Trace:\n   {e.StackTrace}\n"
-
-                           );
+                Log.Error(string.Concat(
+                    "[Explorite]Patch sequence failare at ",
+                    $"{last_patch}, {last_patch_method}, ",
+                    $"an exception ({e.GetType().Name}) occurred.\n",
+                    $"Message:\n   {e.Message}\n",
+                    $"Stack Trace:\n{e.StackTrace}\n"
+                    ));
             }
         }
 
@@ -897,13 +917,16 @@ namespace Explorite
                 __result = false;
             }
         }
-        ///<summary>从截肢手术清单中移除半人马的锁骨。</summary>
+        ///<summary>从截肢手术清单中移除半人马的锁骨和子系统。</summary>
         [HarmonyPostfix]public static void RecipeRemoveBodyPartGetPartsToApplyOnPostfix(Recipe_Surgery __instance, ref IEnumerable<BodyPartRecord> __result, Pawn pawn, RecipeDef recipe)
         {
             if (pawn.def == AlienCentaurDef)
             {
                 List<BodyPartRecord> result = __result.ToList();
-                result.RemoveAll(bpr => bpr.def == CentaurScapularDef);
+                result.RemoveAll(bpr => 
+                    bpr.def == CentaurScapularDef
+                 || bpr.def == CentaurSubsystemBodyPartDef
+                    );
                 __result = result;
             }
         }
@@ -1146,6 +1169,65 @@ namespace Explorite
                 float factor =  singlePrice / anyThing.MarketValue;
                 //__result = 0f;//-= TrishotThing1Def.BaseMarketValue * count / 40f;
                 __result -= TrishotThing1Def.BaseMarketValue * factor * count / 40f;
+            }
+        }
+        ///<summary>移除半人马随机好心情灵感。</summary>
+        [HarmonyPostfix]public static void InspirationHandlerGetRandomAvailableInspirationDefPostfix(InspirationHandler __instance, ref InspirationDef __result)
+        {
+            if (__instance.pawn.def == AlienCentaurDef)
+            {
+                __result = null;
+            }
+        }
+        ///<summary>设置三射弓伤害源为满级三射弓。</summary>
+        [HarmonyPrefix]public static void DamageInfoCtorPrefix(ref ThingDef weapon)
+        {
+            if (weapon?.weaponTags?.Contains("CentaurTracedTrishot") == true)
+            {
+                weapon = TrishotThingDef;
+            }
+        }
+        ///<summary>设置日志中三射弓伤害源为满级三射弓。</summary>
+        [HarmonyPrefix]public static void BattleLogEntry_ExplosionImpactCtorPrefix(ref ThingDef weaponDef)
+        {
+            if (weaponDef?.weaponTags?.Contains("CentaurTracedTrishot") == true)
+            {
+                weaponDef = TrishotThingDef;
+            }
+        }
+        /*
+        ///<summary>设置三射弓弹射物伤害来源为满级三射弓。</summary>
+        [HarmonyPostfix]public static void ProjectileLaunchPostfix(Projectile __instance)
+        {
+            if (__instance.GetType().GetField("equipmentDef", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is ThingDef equipmentDef
+             && equipmentDef?.weaponTags?.Contains("CentaurTracedTrishot") == true)
+            {
+                equipmentDef = TrishotThingDef;
+            }
+        }
+        */
+        ///<summary>修正健康面板中的身体部位排序。</summary>
+        [HarmonyPostfix]public static void HealthCardUtilityGetListPriorityPostfix(ref float __result, BodyPartRecord rec)
+        {
+            if (rec?.groups?.Contains(CentaurCorePartGroupDef) ?? false)
+            {
+                __result += 40002f;
+            }
+            if (rec?.groups?.Contains(CentaurSubsystemGroup0Def) ?? false)
+            {
+                __result += 100000f;
+                if (rec.groups.Contains(CentaurSubsystemGroup1Def))
+                {
+                    __result += 3f;
+                }
+                if (rec.groups.Contains(CentaurSubsystemGroup2Def))
+                {
+                    __result += 2f;
+                }
+                if (rec.groups.Contains(CentaurSubsystemGroup3Def))
+                {
+                    __result += 1f;
+                }
             }
         }
     }
