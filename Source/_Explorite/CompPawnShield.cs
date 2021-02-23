@@ -142,30 +142,36 @@ namespace Explorite
                 {
                     return false;
                 }
-                Pawn wearer = parent as Pawn;
-                if (!wearer.Spawned || wearer.Dead || wearer.Downed)
+                if (!parent.Spawned)
                 {
                     return false;
                 }
-                if (wearer.InAggroMentalState)
+                if (parent is Pawn pawn)
                 {
-                    return true;
-                }
-                if (wearer.Drafted)
-                {
-                    return true;
-                }
-                if (wearer.Faction.HostileTo(Faction.OfPlayer) && !wearer.IsPrisoner)
-                {
-                    return true;
-                }
-                if (Find.TickManager.TicksGame < lastKeepDisplayTick + KeepDisplayingTicks)
-                {
-                    return true;
-                }
-                if (wearer.playerSettings != null && wearer.playerSettings.RespectedMaster != null && wearer.playerSettings.followDrafted && wearer.playerSettings.RespectedMaster.Drafted)
-                {
-                    return true;
+                    if (!pawn.Spawned || pawn.Dead || pawn.Downed)
+                    {
+                        return false;
+                    }
+                    if (pawn.InAggroMentalState)
+                    {
+                        return true;
+                    }
+                    if (pawn.Drafted)
+                    {
+                        return true;
+                    }
+                    if (pawn.Faction.HostileTo(Faction.OfPlayer) && !pawn.IsPrisoner)
+                    {
+                        return true;
+                    }
+                    if (Find.TickManager.TicksGame < lastKeepDisplayTick + KeepDisplayingTicks)
+                    {
+                        return true;
+                    }
+                    if (pawn.playerSettings != null && pawn.playerSettings.RespectedMaster != null && pawn.playerSettings.followDrafted && pawn.playerSettings.RespectedMaster.Drafted)
+                    {
+                        return true;
+                    }
                 }
                 return false;
             }
@@ -205,6 +211,7 @@ namespace Explorite
                 if (!dinfo.IgnoreArmor
                  // || dinfo.Def.isRanged || dinfo.Def.isExplosive
                  || dinfo.Def.armorCategory != null
+                 || dinfo.Def.ExternalViolenceFor(parent)
                  || dinfo.Def == DamageDefOf.Stun
                  || dinfo.Def == DamageDefOf.EMP
                     )
