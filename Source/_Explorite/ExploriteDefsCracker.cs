@@ -21,6 +21,8 @@ namespace Explorite
 
         static void PostprocessCentaurRecipe()
         {
+            if (AlienCentaurDef == null)
+                return;
             List<RecipeDef> recipesToRemove = new List<RecipeDef>();
 
             foreach (RecipeDef recipe in AlienCentaurDef?.recipes)
