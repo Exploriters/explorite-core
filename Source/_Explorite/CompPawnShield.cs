@@ -17,6 +17,7 @@ namespace Explorite
     ///<summary>为<see cref = "CompPawnShield" />接收参数。</summary>
     public class CompProperties_PawnShield : CompProperties
     {
+        public float fragemntSizeFactor = 1f;
         public CompProperties_PawnShield()
         {
             compClass = typeof(CompPawnShield);
@@ -30,44 +31,68 @@ namespace Explorite
      * </summary>
      */
     [StaticConstructorOnStartup]
+    //[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006")]
     public class CompPawnShield : ThingComp
     {
-        Color currentColor = new Color(0.5f, 0.5f, 0.5f);
+        //Color currentColor = new Color(0.5f, 0.5f, 0.5f);
 
         public override void CompTick()
         {
             base.CompTick();
-            if (invalid)
+            if (Invalid)
             {
                 ticksToReset = StartingTicksToReset;
                 energy = Math.Min(0f, energy);
                 pendingCharge = 0;
                 return;
             }
-            pendingCharge += EnergyGainPerTick;
-            if (pendingCharge >= fragemntPerCharge || pendingCharge > EnergyMax - energy)
+            else
             {
-                energy = Math.Min(energy + fragemntPerCharge, EnergyMax);
-                if (energy > 0 && ShieldState == ShieldState.Resetting)
+                pendingCharge += EnergyGainPerTick * FragmentChargeRate;
+                if (pendingCharge >= FragemntPerCharge || pendingCharge > EnergyMax - energy)
                 {
-                    Reset();
+                    energy = Math.Min(energy + FragemntPerCharge, EnergyMax);
+                    if (energy > 0 && ShieldState == ShieldState.Resetting)
+                    {
+                        Reset();
+                    }
+                    else if (ShieldState == ShieldState.Active)
+                    {
+                    }
+                    pendingCharge -= FragemntPerCharge;
                 }
-                else if (ShieldState == ShieldState.Active)
-                {
-                }
-                pendingCharge -= fragemntPerCharge;
+                pendingCharge = Math.Min(pendingCharge, EnergyMax - energy);
             }
-            pendingCharge = Math.Min(pendingCharge, EnergyMax - energy);
+
+            float eng = Math.Max(0f, energy);
+            energyBuffer -= (energyBuffer - eng) * 0.05f;
+            if (energyBuffer - eng <= 0.05f && energyBuffer - eng >= -0.05f)
+            {
+                if (energyBuffer - eng >= 0f)
+                {
+                    energyBuffer = (float)Math.Floor(energyBuffer);
+                }
+                else
+                {
+                    energyBuffer = (float)Math.Ceiling(energyBuffer);
+                }
+            }
+            energyBuffer = Math.Max(energyBuffer, energy);
         }
 
         public float energy = 0f;
-
+        public float energyBuffer = 0f;
         public float pendingCharge = 0f;
-
         public bool overkilled = false;
-        public float fragemntPerCharge => EnergyGainPerSec;
-        public float chargePrecent => Math.Min(1, Math.Max(0, pendingCharge / EnergyGainPerSec));
-        public float energyPrecent => Math.Min(1, Math.Max(0, energy / EnergyMax));
+
+        private float? fragemntSizeFactorCache;
+        public float FragemntSizeFactor => fragemntSizeFactorCache ??= Math.Max(1f / 60f, (props as CompProperties_PawnShield)?.fragemntSizeFactor ?? 1f);
+        public float FragemntPerCharge => EnergyGainPerSec * FragemntSizeFactor;
+        public float ChargePrecent => Math.Min(1, Math.Max(0, pendingCharge / FragemntPerCharge));
+        public float HitBufferPrecent => Math.Min(1, Math.Max(0, energyBuffer / EnergyMax));
+        public float EnergyPrecent => Math.Min(1, Math.Max(0, energy / EnergyMax));
+        public float OverKillUpLimit => EnergyMax * 0.05f;
+        //public float OverKillUpLimit => EnergyMax * 10 / 3;
 
         public int ticksToReset = -1;
 
@@ -79,9 +104,9 @@ namespace Explorite
 
         public int StartingTicksToReset = 3200;
 
-        public float EnergyOnReset => fragemntPerCharge;//0.2f;
+        public float EnergyOnReset => FragemntPerCharge;//0.2f;
 
-        public float EnergyLossPerDamage = 0.03f;//0.033f;
+        public float EnergyLossPerDamage = 1f; //0.03f;//0.033f;
 
         public int KeepDisplayingTicks = 1000;
 
@@ -91,10 +116,11 @@ namespace Explorite
 
         public float EnergyGainPerSec => parent.GetStatValue(PawnShieldRechargeRateDef, true);
         public float EnergyGainPerTick => EnergyGainPerSec / 60f;
+        public float FragmentChargeRate => 1f;
 
         public float Energy => energy;
 
-        public bool invalid => EnergyMax <= 0;
+        public bool Invalid => EnergyMax <= 0;
 
         public ShieldState ShieldState
         {
@@ -112,34 +138,40 @@ namespace Explorite
         {
             get
             {
-                if (invalid)
+                if (Invalid)
                 {
                     return false;
                 }
-                Pawn wearer = parent as Pawn;
-                if (!wearer.Spawned || wearer.Dead || wearer.Downed)
+                if (!parent.Spawned)
                 {
                     return false;
                 }
-                if (wearer.InAggroMentalState)
+                if (parent is Pawn pawn)
                 {
-                    return true;
-                }
-                if (wearer.Drafted)
-                {
-                    return true;
-                }
-                if (wearer.Faction.HostileTo(Faction.OfPlayer) && !wearer.IsPrisoner)
-                {
-                    return true;
-                }
-                if (Find.TickManager.TicksGame < lastKeepDisplayTick + KeepDisplayingTicks)
-                {
-                    return true;
-                }
-                if (wearer.playerSettings != null && wearer.playerSettings.RespectedMaster != null && wearer.playerSettings.followDrafted && wearer.playerSettings.RespectedMaster.Drafted)
-                {
-                    return true;
+                    if (!pawn.Spawned || pawn.Dead || pawn.Downed)
+                    {
+                        return false;
+                    }
+                    if (pawn.InAggroMentalState)
+                    {
+                        return true;
+                    }
+                    if (pawn.Drafted)
+                    {
+                        return true;
+                    }
+                    if (pawn.Faction.HostileTo(Faction.OfPlayer) && !pawn.IsPrisoner)
+                    {
+                        return true;
+                    }
+                    if (Find.TickManager.TicksGame < lastKeepDisplayTick + KeepDisplayingTicks)
+                    {
+                        return true;
+                    }
+                    if (pawn.playerSettings != null && pawn.playerSettings.RespectedMaster != null && pawn.playerSettings.followDrafted && pawn.playerSettings.RespectedMaster.Drafted)
+                    {
+                        return true;
+                    }
                 }
                 return false;
             }
@@ -149,6 +181,7 @@ namespace Explorite
         {
             base.PostExposeData();
             Scribe_Values.Look(ref energy, "energy", 0f);
+            Scribe_Values.Look(ref energyBuffer, "energyBuffer", 0f);
             Scribe_Values.Look(ref ticksToReset, "ticksToReset", -1);
             Scribe_Values.Look(ref lastKeepDisplayTick, "lastKeepDisplayTick", 0);
             Scribe_Values.Look(ref pendingCharge, "pendingCharge", 0f);
@@ -173,51 +206,38 @@ namespace Explorite
 
         public override void PostPreApplyDamage(DamageInfo dinfo, out bool absorbed)
         {
-            if (invalid)
+            if (!Invalid && ShieldState == ShieldState.Active)
             {
-                absorbed = false;
-                return;
-            }
-            if (ShieldState != ShieldState.Active)
-            {
-                if (dinfo.Def == DamageDefOf.EMP)
+                if (!dinfo.IgnoreArmor
+                 // || dinfo.Def.isRanged || dinfo.Def.isExplosive
+                 || dinfo.Def.armorCategory != null
+                 || dinfo.Def.ExternalViolenceFor(parent)
+                 || dinfo.Def == DamageDefOf.Stun
+                 || dinfo.Def == DamageDefOf.EMP
+                    )
                 {
+                    if (dinfo.Def == DamageDefOf.EMP || dinfo.Def == DamageDefOf.Stun)
+                    {
+                        energy -= dinfo.Amount * EnergyLossPerDamage * 3;
+                    }
+                    else
+                    {
+                        energy -= dinfo.Amount * EnergyLossPerDamage;
+                    }
+
+                    if (energy <= 0f)
+                    {
+                        Break();
+                    }
+                    else
+                    {
+                        AbsorbedDamage(dinfo);
+                    }
                     absorbed = true;
                     return;
                 }
-                absorbed = false;
-                return;
             }
-            /*if (dinfo.Def == DamageDefOf.EMP)
-            {
-                energy = 0f;
-                Break();
-                absorbed = false;
-                return;
-            }*/
-            if (
-                    dinfo.Def.isRanged
-                || dinfo.Def.isExplosive
-                || dinfo.Def == DamageDefOf.EMP
-                )
-            {
-                if (dinfo.Def.isRanged || dinfo.Def.isExplosive)
-                    energy -= dinfo.Amount * EnergyLossPerDamage;
-                else if (dinfo.Def == DamageDefOf.EMP)
-                    energy -= dinfo.Amount * EnergyLossPerDamage * 3;
-                else
-                    energy -= dinfo.Amount * EnergyLossPerDamage * 10;
-                if (energy <= 0f)
-                {
-                    Break();
-                }
-                else
-                {
-                    AbsorbedDamage(dinfo);
-                }
-                absorbed = true;
-                return;
-            }
+            //absorbed = dinfo.Def == DamageDefOf.EMP;
             absorbed = false;
             return;
         }
@@ -245,8 +265,9 @@ namespace Explorite
 
         private void Break()
         {
-            float overkill = Math.Min(EnergyMax * 10 / 3, -energy);
-            if (overkill >= fragemntPerCharge)
+            //float overkill = Math.Min(EnergyMax * 10 / 3, -energy);
+            float overkill = Math.Min(OverKillUpLimit, -energy);
+            if (overkill >= FragemntPerCharge)
             {
                 SoundDefOf.EnergyShield_Broken.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
                 MoteMaker.MakeStaticMote(parent.TrueCenter(), parent.Map, ThingDefOf.Mote_ExplosionFlash, 12f);
@@ -309,28 +330,44 @@ namespace Explorite
     {
         public CompPawnShield shield;
         private static readonly Texture2D FullShieldBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.2f, 0.2f, 0.24f));
+        private static readonly Texture2D RedShieldBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.72f, 0f, 0f));
+        private static readonly Texture2D ChargeShieldBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.8f, 0.8f, 0f));
         private static readonly Texture2D EmptyShieldBarTex = SolidColorMaterials.NewSolidColorTexture(Color.clear);
-        public bool valid => !shield.invalid;
+        public bool Valid => !shield.Invalid;
         public Gizmo_EnergyShieldStatusPawn() => order = -2000f;
-        public override float GetWidth(float maxWidth) => valid ? 140f : 0f;
+        public override float GetWidth(float maxWidth) => Valid ? 140f : 0f;
 
         public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth)
         {
-            if (valid)
+            if (Valid)
             {
                 Rect rect = new Rect(topLeft.x, topLeft.y, GetWidth(maxWidth), 75f);
                 Rect rect2 = rect.ContractedBy(6f);
                 Widgets.DrawWindowBackground(rect);
+
                 Rect rect3 = rect2;
                 rect3.height = rect.height / 2f;
                 Text.Font = GameFont.Tiny;
-                Widgets.Label(rect3, ((Pawn)shield.parent)?.Name?.ToStringShort);
+                //Widgets.Label(rect3, ((shield.parent as Pawn))?.Name?.ToStringShort ?? shield.parent.LabelShortCap);
+                Widgets.Label(rect3, "Magnuassembly_PawnShield".Translate());
+
+                Rect rect5 = rect2;
+                rect5.yMin = rect2.y + (rect2.height / 2f);
+                Widgets.FillableBar(rect5, shield.HitBufferPrecent, RedShieldBarTex, EmptyShieldBarTex, doBorder: false);
+
                 Rect rect4 = rect2;
                 rect4.yMin = rect2.y + (rect2.height / 2f);
-                Widgets.FillableBar(rect4, shield.energyPrecent, FullShieldBarTex, EmptyShieldBarTex, doBorder: false);
+                Widgets.FillableBar(rect4, shield.EnergyPrecent, FullShieldBarTex, EmptyShieldBarTex, doBorder: false);
+
+                Rect rect6 = rect2;
+                rect6.yMin = rect2.y + (rect2.height / 2f);
+                rect6.y += rect6.height * 0.85f;
+                rect6.height *= 0.15f;
+                Widgets.FillableBar(rect6, shield.ChargePrecent, ChargeShieldBarTex, EmptyShieldBarTex, doBorder: false);
+
                 Text.Font = GameFont.Small;
                 Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(rect4, (shield.Energy * 100f).ToString("F0") + " / " + (shield.EnergyMax * 100f).ToString("F0"));
+                Widgets.Label(rect4, (shield.Energy * 1f).ToString("F0") + " / " + (shield.EnergyMax * 1f).ToString("F0"));
                 Text.Anchor = TextAnchor.UpperLeft;
             }
             return new GizmoResult(GizmoState.Clear);

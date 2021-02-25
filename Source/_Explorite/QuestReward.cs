@@ -30,16 +30,15 @@ namespace Explorite
     [StaticConstructorOnStartup]
     public class Reward_FisteverTrishot_Trishot : Reward_NotImplementedStatic
     {
-        private static readonly Texture2D Icon = ContentFinder<Texture2D>.Get(TrishotThingDef.graphicData.texPath);
-
+        //private static readonly Texture2D Icon = ContentFinder<Texture2D>.Get(TrishotThingDef.graphicData.texPath);
         public override IEnumerable<GenUI.AnonymousStackElement> StackElements
         {
             get
             {
-                yield return 
+                yield return
                     QuestPartUtility.GetStandardRewardStackElement(
                         "Reward_ProgressToTrishot_Label".Translate(),
-                        Icon,
+                        TrishotThingDef.uiIcon,
                         () => GetDescription(default).CapitalizeFirst(),
                         () => Find.WindowStack.Add(new Dialog_InfoCard(TrishotThingDef)));
             }
@@ -48,7 +47,8 @@ namespace Explorite
         {
             return "Reward_ProgressToTrishot".Translate().Resolve();
         }
-    }[StaticConstructorOnStartup]
+    }
+    [StaticConstructorOnStartup]
     public class Reward_CentaurStoryProgress_Start : Reward_NotImplementedStatic
     {
         private Action<Rect> IconDrawer => delegate (Rect r)
@@ -62,7 +62,7 @@ namespace Explorite
         {
             get
             {
-                yield return 
+                yield return
                     QuestPartUtility.GetStandardRewardStackElement(
                         "Reward_CentaurStoryProgress_Start_Label".Translate(),
                         IconDrawer,

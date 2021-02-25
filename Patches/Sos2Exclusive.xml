@@ -5,7 +5,7 @@
       <li>Save Our Ship 2</li>
     </mods>
     <nomatch Class="PatchOperationSequence">
-      <success>Normal</success>
+      <success>Always</success>
       <operations>
 
         <li Class="PatchOperationRemove">

@@ -131,6 +131,7 @@ namespace Explorite
             List<Thing> things = spaceMap.listerThings.AllThings;
             Thing targetTorpedo = null;
             IntVec3 torpedoToLocation = new IntVec3(0, 0, 0);
+            IntVec3? sunLampLocation = null;
             foreach (Thing thing in things)
             {
                 try
@@ -142,6 +143,10 @@ namespace Explorite
                         {
                             thingInside?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
                         }
+                    }
+                    if (sunLampLocation == null && thing.def == DefDatabase<ThingDef>.GetNamed("SunLamp"))
+                    {
+                        sunLampLocation = thing.Position;
                     }
                     if (thing?.TryGetComp<CompForbiddable>() != null)
                     {
@@ -279,16 +284,26 @@ namespace Explorite
             Thing InterplanetaryEngineR = ThingMaker.MakeThing(ThingDef.Named("Ship_Engine_Interplanetary"));
             InterplanetaryEngineR.SetFaction(Faction.OfPlayer);
             GenSpawn.Spawn(InterplanetaryEngineR, new IntVec3(18,0,-28), spaceMap);
+                //((Blueprint_Build)InterplanetaryEngineL).;
             */
 
-            Thing InterplanetaryEngineL = ThingMaker.MakeThing(ThingDef.Named("Blueprint_Ship_Engine_Interplanetary"));
-            InterplanetaryEngineL.SetFaction(Faction.OfPlayer);
-            //((Blueprint_Build)InterplanetaryEngineL).;
-            GenSpawn.Spawn(InterplanetaryEngineL, new IntVec3(-18, 0, -28), spaceMap);
+            if (false && sunLampLocation.HasValue)
+            {
+                IntVec3 leftEngine = new IntVec3(sunLampLocation.Value.ToVector3());
+                leftEngine.x -= 18;
+                leftEngine.z -= 17;
+                IntVec3 rightEngine = new IntVec3(sunLampLocation.Value.ToVector3());
+                leftEngine.x += 18;
+                rightEngine.z -= 17;
 
-            Thing InterplanetaryEngineR = ThingMaker.MakeThing(ThingDef.Named("Blueprint_Ship_Engine_Interplanetary"));
-            InterplanetaryEngineR.SetFaction(Faction.OfPlayer);
-            GenSpawn.Spawn(InterplanetaryEngineR, new IntVec3(18, 0, -28), spaceMap);
+                Thing InterplanetaryEngineL = ThingMaker.MakeThing(ThingDef.Named("Blueprint_Ship_Engine_Interplanetary"));
+                InterplanetaryEngineL.SetFaction(Faction.OfPlayer);
+                GenSpawn.Spawn(InterplanetaryEngineL, leftEngine, spaceMap);
+
+                Thing InterplanetaryEngineR = ThingMaker.MakeThing(ThingDef.Named("Blueprint_Ship_Engine_Interplanetary"));
+                InterplanetaryEngineR.SetFaction(Faction.OfPlayer);
+                GenSpawn.Spawn(InterplanetaryEngineR, rightEngine, spaceMap);
+            }
 
 
             /*

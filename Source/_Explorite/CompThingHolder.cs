@@ -22,7 +22,8 @@ namespace Explorite
         {
             base.PostExposeData();
 
-            Scribe_Values.Look(ref innerContainer, "innerContainer", new ThingOwner<Thing>(), true);
+            Scribe_Deep.Look(ref innerContainer, "innerContainer", this);
+            //Scribe_Values.Look(ref innerContainer, "innerContainer", new ThingOwner<Thing>(), true);
         }
 
         public override void CompTick()

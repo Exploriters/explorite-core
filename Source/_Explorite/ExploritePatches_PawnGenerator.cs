@@ -8,6 +8,7 @@ using HarmonyLib;
 using Verse;
 using static Explorite.ExploriteCore;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Explorite
 {
@@ -16,6 +17,10 @@ namespace Explorite
 
         internal static bool GenerateCentaurPostprocess(ref Pawn pawn, PawnGenerationRequest request, ref bool matchError)
         {
+            if (!InstelledMods.RimCentaurs)
+            {
+                return false;
+            }
             if (matchError)
             {
                 return false;
@@ -71,10 +76,16 @@ namespace Explorite
                 };
                 sr.xpSinceLastLevel = 0f; //sr.XpRequiredForLevelUp / 2f;
             }
+
+            HediffGiver_EnsureForBlankSubsystem.Apply(pawn, SubsystemBlankHediffDef);
             return true;
         }
         internal static bool GenerateSayersPostprocess(ref Pawn pawn, PawnGenerationRequest request, ref bool matchError)
         {
+            if (!InstelledMods.Sayers)
+            {
+                return false;
+            }
             if (matchError)
             {
                 return false;
@@ -96,6 +107,10 @@ namespace Explorite
         }
         internal static bool GenerateGuoguoPostprocess(ref Pawn pawn, PawnGenerationRequest request, ref bool matchError)
         {
+            if (!InstelledMods.GuoGuo)
+            {
+                return false;
+            }
             if (matchError)
             {
                 return false;
@@ -139,6 +154,53 @@ namespace Explorite
 
             return true;
         }
+        
+        internal static bool FinalPostprocess(ref Pawn pawn, PawnGenerationRequest request)
+        {
+            if (pawn == null)
+            {
+                return false;
+            }
+            if (pawn?.TryGetComp<CompEnsureAbility>() != null)
+            {
+                pawn?.TryGetComp<CompEnsureAbility>().ApplayAbilities();
+            }
+
+            try
+            {
+                if (pawn?.RaceProps?.hediffGiverSets != null)
+                {
+                    foreach (HediffGiverSetDef hediffGiverSetDef in pawn?.RaceProps?.hediffGiverSets)
+                    {
+                        foreach (HediffGiver hediffGiver in hediffGiverSetDef?.hediffGivers)
+                        {
+                            if (hediffGiver is HediffGiver_EnsureForAlways giver)
+                            {
+                                giver?.TryApply(pawn);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (NullReferenceException e)
+            {
+                Log.Message(string.Concat(
+                    $"[Explorite]an exception ({e.GetType().Name}) occurred during pawn generating.\n",
+                    $"Message:\n   {e.Message}\n",
+                    $"Stack Trace:\n{e.StackTrace}\n"
+                    ));
+            }
+            catch (Exception e)
+            {
+                Log.Error(string.Concat(
+                    $"[Explorite]an exception ({e.GetType().Name}) occurred during pawn generating.\n",
+                    $"Message:\n   {e.Message}\n",
+                    $"Stack Trace:\n{e.StackTrace}\n"
+                    ));
+            }
+
+            return true;
+        }
 
 
         /**
@@ -156,13 +218,82 @@ namespace Explorite
 
             if (matchError)
             {
-                __result = PawnGenerator.GeneratePawn(PawnKindDefOf.Villager, request.Faction);
+                /*
+                faction: null,
+                context: PawnGenerationContext.NonPlayer,
+                tile: -1,
+                forceGenerateNewPawn: false,
+                newborn: false,
+                allowDead: false,
+                allowDowned: false,
+                canGeneratePawnRelations: true,
+                mustBeCapableOfViolence: false,
+                colonistRelationChanceFactor: 1,
+                forceAddFreeWarmLayerIfNeeded: false,
+                allowGay: true,
+                allowFood: true,
+                allowAddictions: true,
+                inhabitant: false,
+                certainlyBeenInCryptosleep: false,
+                forceRedressWorldPawnIfFormerColonist: false,
+                worldPawnFactionDoesntMatter: false,
+                biocodeWeaponChance: 0,
+                extraPawnForExtraRelationChance: null,
+                relationWithExtraPawnChanceFactor: 1,
+                validatorPreGear: null,
+                validatorPostGear: null,
+                forcedTraits: null,
+                prohibitedTraits: null,
+                minChanceToRedressWorldPawn: null,
+                fixedBiologicalAge: null,
+                fixedChronologicalAge: null,
+                fixedGender: null,
+                fixedMelanin: null,
+                fixedLastName: null,
+                fixedBirthName: null,
+                fixedTitle: null
+                */
+                //__result = PawnGenerator.GeneratePawn(PawnKindDefOf.Villager, request.Faction);
+                __result = PawnGenerator.GeneratePawn(new PawnGenerationRequest(
+                    kind: PawnKindDefOf.Villager,
+                    faction: request.Faction,
+                    context: request.Context,
+                    tile: request.Tile,
+                    forceGenerateNewPawn: request.ForceGenerateNewPawn,
+                    newborn: request.Newborn,
+                    allowDead: request.AllowDead,
+                    allowDowned: request.AllowDowned,
+                    canGeneratePawnRelations: request.CanGeneratePawnRelations,
+                    mustBeCapableOfViolence: request.MustBeCapableOfViolence,
+                    colonistRelationChanceFactor: request.ColonistRelationChanceFactor,
+                    forceAddFreeWarmLayerIfNeeded: request.ForceAddFreeWarmLayerIfNeeded,
+                    allowGay: request.AllowGay,
+                    allowFood: request.AllowFood,
+                    allowAddictions: request.AllowAddictions,
+                    inhabitant: request.Inhabitant,
+                    certainlyBeenInCryptosleep: request.CertainlyBeenInCryptosleep,
+                    forceRedressWorldPawnIfFormerColonist: request.ForceRedressWorldPawnIfFormerColonist,
+                    worldPawnFactionDoesntMatter: request.WorldPawnFactionDoesntMatter,
+                    biocodeWeaponChance: request.BiocodeWeaponChance,
+                    extraPawnForExtraRelationChance: request.ExtraPawnForExtraRelationChance,
+                    relationWithExtraPawnChanceFactor: request.RelationWithExtraPawnChanceFactor,
+                    validatorPreGear: request.ValidatorPreGear,
+                    validatorPostGear: request.ValidatorPostGear,
+                    forcedTraits: request.ForcedTraits,
+                    prohibitedTraits: request.ProhibitedTraits,
+                    minChanceToRedressWorldPawn: request.MinChanceToRedressWorldPawn,
+                    fixedBiologicalAge: request.FixedBiologicalAge,
+                    fixedChronologicalAge: request.FixedChronologicalAge,
+                    fixedGender: request.FixedGender,
+                    fixedMelanin: request.FixedMelanin,
+                    fixedLastName: request.FixedLastName,
+                    fixedBirthName: request.FixedBirthName,
+                    fixedTitle: request.FixedTitle
+                    ));
+                matchError = false;
             }
 
-            if (__result?.TryGetComp<CompEnsureAbility>() != null)
-            {
-                __result?.TryGetComp<CompEnsureAbility>().ApplayAbilities();
-            }
+            FinalPostprocess(ref __result, request);
         }
     }
 

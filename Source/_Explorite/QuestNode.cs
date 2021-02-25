@@ -18,6 +18,7 @@ namespace Explorite
 
         protected override void RunInt()
         {
+            GameComponentCentaurStory.trishotTraceEnabled = true;
             Find.ResearchManager.AddTechprints(CentaurStoryProjectStep1Def, 1);
             Find.ResearchManager.FinishProject(CentaurStoryProjectStep1Def, false, null);
 
@@ -34,7 +35,7 @@ namespace Explorite
 
             questPart_Choice.choices.Add(choice);
 
-            QuestPart_HyperLinks questPart_HyperLinks = new QuestPart_HyperLinks() { 
+            QuestPart_HyperLinks questPart_HyperLinks = new QuestPart_HyperLinks() {
                 DefDatabase<ThingDef>.GetNamed("FabricationBench"),
                 DefDatabase<RecipeDef>.GetNamed("Repair_Trishot_1Stage"),
             };

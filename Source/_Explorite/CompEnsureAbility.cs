@@ -22,7 +22,7 @@ namespace Explorite
     public class CompEnsureAbility : ThingComp
     {
         CompProperties_EnsureAbility Props => (CompProperties_EnsureAbility)props;
-        public List<AbilityDef> abilities => Props.abilities;
+        public List<AbilityDef> Abilities => Props.abilities;
         public override void CompTick()
         {
             base.CompTick();
@@ -31,10 +31,10 @@ namespace Explorite
         public virtual void ApplayAbilities()
         {
             if (
-                abilities.Count >= 1
+                Abilities.Count >= 1
                 && parent is Pawn pawn)
             {
-                foreach (AbilityDef abilityDef in abilities)
+                foreach (AbilityDef abilityDef in Abilities)
                 {
                     if (pawn.abilities.GetAbility(abilityDef) == null)
                     {

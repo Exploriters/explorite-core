@@ -6,5 +6,6 @@
   
   <PawnShieldRechargeRate.label>护盾充能速度</PawnShieldRechargeRate.label>
   <PawnShieldRechargeRate.description>人物护盾不断获得能量的速度。</PawnShieldRechargeRate.description>
+  <PawnShieldRechargeRate.formatString>{0} / 秒</PawnShieldRechargeRate.formatString>
 
 </LanguageData>

@@ -10,6 +10,8 @@ namespace Explorite
 {
     public static partial class ExploriteCore
     {
+        public static GameComponent_CentaurStory GameComponentCentaurStory => Current.Game.GetComponent<GameComponent_CentaurStory>();
+
         public static readonly Harmony harmonyInstance = new Harmony(id: "Explorite.rimworld.mod.HarmonyPatches");
 
         public static readonly StatDef PawnShieldEnergyMaxDef = DefDatabase<StatDef>.GetNamed("PawnShieldEnergyMax");
@@ -18,12 +20,21 @@ namespace Explorite
 
         public static readonly ThingDef AlienCentaurDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Alien_Centaur");
         public static readonly ThingDef CentaurHeaddressDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Apparel_CentaurHeaddress");
+        public static readonly ThingDef TrishotThing1Def = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Bow_Trishot_1Stage");
+        public static readonly ThingDef TrishotThing2Def = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Bow_Trishot_2Stage");
         public static readonly ThingDef TrishotThingDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Bow_Trishot");
         public static readonly ThingDef ComponentArchotechDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("ComponentArchotech");
         public static readonly ThingDef ThermoDamperDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("ThermoDamper");
         public static readonly HediffDef HyperManipulatorHediffDef = !InstelledMods.RimCentaurs ? null : DefDatabase<HediffDef>.GetNamed("HyperManipulator");
         public static readonly HediffDef PsychicDeafHediffDef = !InstelledMods.RimCentaurs ? null : DefDatabase<HediffDef>.GetNamed("PsychicDeafCentaur");
+        public static readonly HediffDef SubsystemBlankHediffDef = !InstelledMods.RimCentaurs ? null : DefDatabase<HediffDef>.GetNamed("CentaurSubsystem_BlankBlank");
         public static readonly BodyPartDef CentaurScapularDef = !InstelledMods.RimCentaurs ? null : DefDatabase<BodyPartDef>.GetNamed("CentaurScapular");
+        public static readonly BodyPartDef CentaurSubsystemBodyPartDef = !InstelledMods.RimCentaurs ? null : DefDatabase<BodyPartDef>.GetNamed("CentaurSubsystem");
+        public static readonly BodyPartGroupDef CentaurCorePartGroupDef = !InstelledMods.RimCentaurs ? null : DefDatabase<BodyPartGroupDef>.GetNamed("CentaurCorePart");
+        public static readonly BodyPartGroupDef CentaurSubsystemGroup0Def = !InstelledMods.RimCentaurs ? null : DefDatabase<BodyPartGroupDef>.GetNamed("CentaurSubsystem");
+        public static readonly BodyPartGroupDef CentaurSubsystemGroup1Def = !InstelledMods.RimCentaurs ? null : DefDatabase<BodyPartGroupDef>.GetNamed("CentaurSubsystemPrimary");
+        public static readonly BodyPartGroupDef CentaurSubsystemGroup2Def = !InstelledMods.RimCentaurs ? null : DefDatabase<BodyPartGroupDef>.GetNamed("CentaurSubsystemSecondary");
+        public static readonly BodyPartGroupDef CentaurSubsystemGroup3Def = !InstelledMods.RimCentaurs ? null : DefDatabase<BodyPartGroupDef>.GetNamed("CentaurSubsystemTertiary");
         public static readonly PawnKindDef CentaurColonistDef = !InstelledMods.RimCentaurs ? null : DefDatabase<PawnKindDef>.GetNamed("CentaurColonist");
         public static readonly FactionDef CentaurPlayerColonyDef = !InstelledMods.RimCentaurs ? null : DefDatabase<FactionDef>.GetNamed("CentaurPlayerColony");
         public static readonly FactionDef CentaurDummyFactionDef = !InstelledMods.RimCentaurs ? null : DefDatabase<FactionDef>.GetNamed("CentaurFactionDummy");

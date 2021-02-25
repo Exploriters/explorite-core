@@ -7,6 +7,7 @@ using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
@@ -65,11 +66,20 @@ namespace Explorite
     {
         //ModContentPack.PatchOperationFindMod
         public override string Summary(Scenario scen) => "Magnuassembly_ScenPart_FillBattery_StaticSummary".Translate();
-        private static void ProcessBattery(Thing battery)
+        private static void ProcessBattery(Thing battery, ref bool once)
         {
             try
             {
                 battery?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
+                if (!once)
+                {
+                    if (battery is Building_TriBattery secretBattery)
+                    {
+                        secretBattery.SetSecret(true);
+                        GameComponentCentaurStory.TryAdd(secretBattery);
+                        once = true;
+                    }
+                }
             }
             catch
             { }
@@ -85,12 +95,13 @@ namespace Explorite
                 {
                     thing?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
                 }*/
+                bool once = Faction.OfPlayer.def.basicMemberKind.race != AlienCentaurDef;
                 if (thing is MinifiedThing minifiedThing)
                 {
                     Thing thingInside = minifiedThing.InnerThing;
                     if (thingInside.TryGetComp<CompPowerBattery>() != null)
                     {
-                        ProcessBattery(thingInside);
+                        ProcessBattery(thingInside, ref once);
                     }
                 }
                 if (thing is DropPodIncoming droppod)
@@ -99,17 +110,21 @@ namespace Explorite
                     {
                         if (thing3.TryGetComp<CompPowerBattery>() != null)
                         {
-                            ProcessBattery(thing3);
+                            ProcessBattery(thing3, ref once);
                         }
                         if (thing3 is MinifiedThing minifiedThing2)
                         {
                             Thing thingInside = minifiedThing2.InnerThing;
                             if (thingInside.TryGetComp<CompPowerBattery>() != null)
                             {
-                                ProcessBattery(thingInside);
+                                ProcessBattery(thingInside, ref once);
                             }
                         }
                     }
+                }
+                if (!once)
+                {
+                    Log.Warning("[Explorite]Warning, TriBattery not found.");
                 }
             }
 

@@ -19,7 +19,6 @@ namespace Explorite
 #pragma warning disable IDE0051 // 删除未使用的私有成员
     static partial class ExploriteDebugActions
     {
-
         ///<summary>清除所有迷雾。</summary>
         [DebugAction(category: "Explorite", name: "Clear fog at...", allowedGameStates = AllowedGameStates.PlayingOnMap,
             actionType = DebugActionType.ToolMap)]
@@ -89,14 +88,14 @@ namespace Explorite
             }
             Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
         }
-        ///<summary>完成物理操作仪极其漫长的整备时间。</summary>
+        ///<summary>完成半人马身体部件极其漫长的整备时间。</summary>
         [DebugAction(category: "Explorite", name: "Complete HyperManipulator", allowedGameStates = AllowedGameStates.PlayingOnMap,
             actionType = DebugActionType.ToolMapForPawns)]
         private static void FinishHyperManipulatorInstell(Pawn p)
         {
             /*foreach (Pawn pawn in Find.CurrentMap.mapPawns.AllPawns){ }*/
 
-            foreach (Hediff hediff in p.health.hediffSet.hediffs.Where(hediff => hediff.def == HyperManipulatorHediffDef))
+            foreach (Hediff hediff in p.health.hediffSet.hediffs.Where(hediff => hediff?.def?.tags?.Contains("CentaurTechHediff_InitializationNeeded") ?? false))
             {
                 hediff.Severity = hediff.def.maxSeverity;
             }

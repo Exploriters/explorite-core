@@ -41,7 +41,7 @@ namespace Explorite
                     IntVec3 pos = Position;
                     if (launcher.Map.uniqueID == map.uniqueID)
                     {
-                        if (TeleportPawn(launcher as Pawn, pos))
+                        if (TeleportPawn(pawn, pos))
                         {
                             map.fogGrid.Notify_FogBlockerRemoved(launcher.Position);
                         }

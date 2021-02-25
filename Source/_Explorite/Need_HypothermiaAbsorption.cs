@@ -15,7 +15,7 @@ namespace Explorite
     ///<summary>追踪最近20条变化量记录。</summary>
     public class DetlaTracer
     {
-        private List<float?> detlas = new List<float?>() { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null };
+        private readonly List<float?> detlas = new List<float?>() { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null };
 
         public void Insert(float num)
         {
@@ -68,7 +68,7 @@ namespace Explorite
             float result = 0f;
             int count = 0;
             bool encounted = false;
-            foreach (float? num in detlas.Where(de => de.HasValue ? de.Value >= 0 : false))
+            foreach (float? num in detlas.Where(de => de.HasValue && de.Value >= 0))
             {
                 if (!num.HasValue)
                 {
@@ -91,7 +91,7 @@ namespace Explorite
             float result = 0f;
             int count = 0;
             bool encounted = false;
-            foreach (float? num in detlas.Where(de => de.HasValue ? de.Value <= 0 : false))
+            foreach (float? num in detlas.Where(de => de.HasValue && de.Value <= 0))
             {
                 if (!num.HasValue)
                 {
@@ -134,7 +134,7 @@ namespace Explorite
             {
                 if (IsFrozen || Disabled)
                     return ExposureStateEnum.None;
-                if (Math.Sign(LastEffectiveDelta) < 0)
+                if (Math.Sign(LastEffectiveDelta) < 0 || lastabsrobAmount > 0)
                     return ExposureStateEnum.Exposing;
                 else if (MaxLevel > CurLevel)
                     return ExposureStateEnum.Restoring;
@@ -142,6 +142,8 @@ namespace Explorite
                     return ExposureStateEnum.None;
             }
         }
+
+        public bool Depleted => CurLevel <= 0.05;
 
         public float ReachLimitIn => Math.Sign(LastEffectiveDelta) switch
         {
