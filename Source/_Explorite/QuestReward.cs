@@ -30,8 +30,7 @@ namespace Explorite
     [StaticConstructorOnStartup]
     public class Reward_FisteverTrishot_Trishot : Reward_NotImplementedStatic
     {
-        private static readonly Texture2D Icon = ContentFinder<Texture2D>.Get(TrishotThingDef.graphicData.texPath);
-
+        //private static readonly Texture2D Icon = ContentFinder<Texture2D>.Get(TrishotThingDef.graphicData.texPath);
         public override IEnumerable<GenUI.AnonymousStackElement> StackElements
         {
             get
@@ -39,7 +38,7 @@ namespace Explorite
                 yield return
                     QuestPartUtility.GetStandardRewardStackElement(
                         "Reward_ProgressToTrishot_Label".Translate(),
-                        Icon,
+                        TrishotThingDef.uiIcon,
                         () => GetDescription(default).CapitalizeFirst(),
                         () => Find.WindowStack.Add(new Dialog_InfoCard(TrishotThingDef)));
             }
