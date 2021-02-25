@@ -17,6 +17,10 @@ namespace Explorite
 
         internal static bool GenerateCentaurPostprocess(ref Pawn pawn, PawnGenerationRequest request, ref bool matchError)
         {
+            if (!InstelledMods.RimCentaurs)
+            {
+                return false;
+            }
             if (matchError)
             {
                 return false;
@@ -78,6 +82,10 @@ namespace Explorite
         }
         internal static bool GenerateSayersPostprocess(ref Pawn pawn, PawnGenerationRequest request, ref bool matchError)
         {
+            if (!InstelledMods.Sayers)
+            {
+                return false;
+            }
             if (matchError)
             {
                 return false;
@@ -99,6 +107,10 @@ namespace Explorite
         }
         internal static bool GenerateGuoguoPostprocess(ref Pawn pawn, PawnGenerationRequest request, ref bool matchError)
         {
+            if (!InstelledMods.GuoGuo)
+            {
+                return false;
+            }
             if (matchError)
             {
                 return false;
@@ -156,24 +168,27 @@ namespace Explorite
 
             try
             {
-                foreach (HediffGiverSetDef hediffGiverSetDef in pawn?.RaceProps?.hediffGiverSets)
+                if (pawn?.RaceProps?.hediffGiverSets != null)
                 {
-                    foreach (HediffGiver hediffGiver in hediffGiverSetDef?.hediffGivers)
+                    foreach (HediffGiverSetDef hediffGiverSetDef in pawn?.RaceProps?.hediffGiverSets)
                     {
-                        if (hediffGiver is HediffGiver_EnsureForAlways giver)
+                        foreach (HediffGiver hediffGiver in hediffGiverSetDef?.hediffGivers)
                         {
-                            giver?.TryApply(pawn);
+                            if (hediffGiver is HediffGiver_EnsureForAlways giver)
+                            {
+                                giver?.TryApply(pawn);
+                            }
                         }
                     }
                 }
             }
-            catch (NullReferenceException)
+            catch (NullReferenceException e)
             {
-                /*Log.Message(string.Concat(
+                Log.Message(string.Concat(
                     $"[Explorite]an exception ({e.GetType().Name}) occurred during pawn generating.\n",
                     $"Message:\n   {e.Message}\n",
                     $"Stack Trace:\n{e.StackTrace}\n"
-                    ));*/
+                    ));
             }
             catch (Exception e)
             {
