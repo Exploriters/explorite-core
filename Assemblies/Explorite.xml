@@ -293,6 +293,9 @@
         <member name="M:Explorite.ExploritePatches.Need_NeedIntervalPostfix(RimWorld.Need_Seeker,System.Single)">
             <summary>对需求刻函数进行后期处理。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.NeedMaxLevelPostfix(RimWorld.Need_Food,System.Single@)">
+            <summary>增强半人马食物需求储备量。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.ThoughtWorker_NeedComfort_CurrentStateInternalPostfix(RimWorld.ThoughtWorker_NeedComfort,RimWorld.ThoughtState@,Verse.Pawn)">
             <summary>移除半人马舒适度需求的负面情绪。</summary>
         </member>
@@ -436,6 +439,15 @@
             未实现。
             </summary>
         </member>
+        <member name="T:Explorite.HediffCompProperties_StageRange">
+            <summary>指示一个<see cref = "T:Verse.HediffComp" />在什么阶段下才会工作。</summary>
+        </member>
+        <member name="T:Explorite.HediffCompProperties_StageRange_CustomDesc">
+            <summary>为<see cref = "T:Explorite.HediffComp_StageRange_CustomDesc" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.HediffComp_StageRange_CustomDesc">
+            <summary>在范围内时显示额外描述。</summary>
+        </member>
         <member name="T:Explorite.HediffCompProperties_FactorBySeverity">
             <summary>为<see cref = "T:Explorite.HediffComp_FactorBySeverity" />接收参数。</summary>
         </member>
@@ -453,6 +465,18 @@
         </member>
         <member name="T:Explorite.HediffComp_HediffGiverEnsureForAlwaysRequired">
             <summary>指定需要的<see cref = "T:Explorite.HediffGiver_EnsureForAlways" />必须存在。</summary>
+        </member>
+        <member name="T:Explorite.HediffCompProperties_PassiveMeditationFocusGain">
+            <summary>为<see cref = "T:Explorite.HediffComp_PassiveMeditationFocusGain" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.HediffComp_PassiveMeditationFocusGain">
+            <summary>使生物持续获取精神力。</summary>
+        </member>
+        <member name="T:Explorite.HediffCompProperties_RepairApparelsOvertime">
+            <summary>为<see cref = "T:Explorite.HediffComp_RepairApparelsOvertime" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.HediffComp_RepairApparelsOvertime">
+            <summary>持续修复生物身上的衣物。</summary>
         </member>
         <member name="T:Explorite.HediffComp_TendDuration_CantTend">
             <summary>指定不允许一个伤害被治疗。</summary>
@@ -483,6 +507,12 @@
         </member>
         <member name="T:Explorite.Hediff_AddedPart_HManipulator">
             <summary>物理操作仪的hediff类型。无实际效果。</summary>
+        </member>
+        <member name="T:Explorite.HediffDef_Subsystem">
+            <summary>子系统HediffDef类，接收数个参数。</summary>
+        </member>
+        <member name="T:Explorite.Hediff_AddedPart_Subsystem">
+            <summary>子系统hediff类，不显示部件效率。</summary>
         </member>
         <member name="T:Explorite.Hediff_AddedPart_BlankSubsystem">
             <summary>空白子系统的hediff类，控制是否显示这一症状。</summary>

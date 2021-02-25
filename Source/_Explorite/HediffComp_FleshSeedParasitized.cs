@@ -46,16 +46,16 @@ namespace Explorite
                 Pawn.health.AddHediff(hediff, part, new DamageInfo(
                         InjectionDamageDef, part.def.hitPoints * 20,
                         armorPenetration: 2f,
-                        instigator: parent.pawn,
-                        weapon: parent.pawn.def,
+                        instigator: Pawn,
+                        weapon: Pawn.def,
                         hitPart: part
                         ));
                 /*Pawn.TakeDamage(
                     new DamageInfo(
                         InjectionDamageDef, part.def.hitPoints * 20,
                         armorPenetration: 2f,
-                        instigator: parent.pawn,
-                        weapon: parent.pawn.def,
+                        instigator: Pawn,
+                        weapon: Pawn.def,
                         hitPart: part
                         )
                 );*/

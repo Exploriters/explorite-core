@@ -44,7 +44,6 @@ namespace Explorite
                 ticksToReset = StartingTicksToReset;
                 energy = Math.Min(0f, energy);
                 pendingCharge = 0;
-                return;
             }
             else
             {
@@ -367,7 +366,7 @@ namespace Explorite
 
                 Text.Font = GameFont.Small;
                 Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(rect4, (shield.Energy * 1f).ToString("F0") + " / " + (shield.EnergyMax * 1f).ToString("F0"));
+                Widgets.Label(rect4, (shield.Energy * 1f).ToString("0.0") + " / " + (shield.EnergyMax * 1f).ToString("0.0"));
                 Text.Anchor = TextAnchor.UpperLeft;
             }
             return new GizmoResult(GizmoState.Clear);

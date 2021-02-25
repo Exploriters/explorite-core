@@ -54,7 +54,7 @@ namespace Explorite
                     }
                 }
 
-                if (DamagedThings.Count > 0)
+                if (DamagedThings.Any())
                 {
                     DamagedThings.RandomElement().HitPoints += 1;
                     lastHealTick = InGameTick;

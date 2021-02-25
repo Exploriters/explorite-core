@@ -44,6 +44,10 @@ namespace Explorite
         public static readonly ResearchProjectDef CentaurStoryProjectStep3Def = !InstelledMods.RimCentaurs ? null : DefDatabase<ResearchProjectDef>.GetNamed("CentaurStoryStep3rd");
         public static readonly BodyDef CentaurBodyDef = !InstelledMods.RimCentaurs ? null : DefDatabase<BodyDef>.GetNamed("Centaur");
 
+        public static readonly HediffDef HediffCentaurSubsystem_NeedsCapacitor_Def = !InstelledMods.RimCentaurs ? null : DefDatabase<HediffDef>.GetNamed("CentaurSubsystem_NeedsCapacitor");
+        public static readonly HediffDef HediffCentaurSubsystem_HazardAdaptation_Def = !InstelledMods.RimCentaurs ? null : DefDatabase<HediffDef>.GetNamed("CentaurSubsystem_HazardAdaptation");
+        public static readonly HediffDef HediffCentaurSubsystem_AntiMass_Def = !InstelledMods.RimCentaurs ? null : DefDatabase<HediffDef>.GetNamed("CentaurSubsystem_AntiMass");
+
         public static readonly ThingDef AlienSayersDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("Alien_Sayers");
         public static readonly ThingDef AlienFlowerBorhAnimalDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("Alien_FlowerBorhAnimal");
         public static readonly ThingDef FleshTreeDef = !InstelledMods.Sayers ? null : DefDatabase<ThingDef>.GetNamed("Plant_BloodyTree");

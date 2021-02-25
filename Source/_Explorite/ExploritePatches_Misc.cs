@@ -65,6 +65,9 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(Need_Seeker), nameof(Need_Seeker.NeedInterval).App(ref last_patch_method)),
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(Need_NeedIntervalPrefix)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(Need_NeedIntervalPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Food), "get_MaxLevel".App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(NeedMaxLevelPostfix)));
+
                 harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_NeedComfort), "CurrentStateInternal".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorker_NeedComfort_CurrentStateInternalPostfix)));
 
@@ -403,6 +406,19 @@ namespace Explorite
                             _ = (__instance.def.seekerRisePerHour * 0.06f) - __state;
                         }
                     }
+                }
+            }
+        }
+        ///<summary>增强半人马食物需求储备量。</summary>
+        [HarmonyPostfix] public static void NeedMaxLevelPostfix(Need_Food __instance, ref float __result)
+        {
+            if (
+                __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                )
+            {
+                if ((pawn?.health?.hediffSet?.GetFirstHediffOfDef(HediffCentaurSubsystem_NeedsCapacitor_Def)).SubsystemEnabled())
+                {
+                    __result *= 10f / 3f;
                 }
             }
         }
@@ -775,7 +791,11 @@ namespace Explorite
             if (p.def == AlienCentaurDef || p.def == AlienSayersDef)
             {
                 string strPreProcess = "  - " + p.LabelShortCap + ": " + __result.ToStringMassOffset();
-                __result = Math.Max(__result, p.def == AlienCentaurDef?1000f:35f);
+                __result = Math.Max(__result, p.def == AlienCentaurDef ? 1000f : 35f);
+                if ((p?.health?.hediffSet?.GetFirstHediffOfDef(HediffCentaurSubsystem_AntiMass_Def)).SubsystemEnabled())
+                {
+                    __result *= 3;
+                }
                 if (explanation != null)
                 {
                     explanation.Replace(strPreProcess, "  - " + p.LabelShortCap + ": " + __result.ToStringMassOffset());

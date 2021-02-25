@@ -19,7 +19,8 @@ namespace Explorite
     ///<summary>使生物持续获取精神力。</summary>
     public class CompPassiveMeditationFocusGain : ThingComp
     {
-        public float FocusPerTick => ((CompProperties_PassiveMeditationFocusGain)props).focusPerDay / 60000;
+        private float? focusPerTick = null;
+        public float FocusPerTick => focusPerTick ??= ((CompProperties_PassiveMeditationFocusGain)props).focusPerDay / 60000;
         public override void CompTick()
         {
             base.CompTick();

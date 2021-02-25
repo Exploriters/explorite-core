@@ -114,7 +114,7 @@ namespace Explorite
     {
 
         private const float DeltaPerIntervalBase = 0.0025f;
-        private const float AbsorbHypothermiaFactor = 1f;
+        private const float AbsorbFactor = 1f;
         private float LastEffectiveDelta => detlaTracer.Last();
         private float lastabsrobAmount = 0f;
         private readonly DetlaTracer detlaTracer = new DetlaTracer();
@@ -159,6 +159,19 @@ namespace Explorite
             Restoring = 2
         }
 
+        public IEnumerable<HediffDef> TargetHediffs
+        {
+            get
+            {
+                yield return HediffDefOf.Hypothermia;
+                if ((pawn?.health?.hediffSet?.GetFirstHediffOfDef(HediffCentaurSubsystem_HazardAdaptation_Def)).SubsystemEnabled())
+                {
+                    yield return HediffDefOf.ToxicBuildup;
+                    yield return HediffDefOf.Heatstroke;
+                }
+                yield break;
+            }
+        }
 
         public override void SetInitialLevel()
         {
@@ -181,6 +194,8 @@ namespace Explorite
                 _ => "Magnuassembly_RestoringIn".Translate(),
             };
             result += "\n";
+            result += "Magnuassembly_HazardAbsorbType".Translate(string.Join(", ", TargetHediffs.Select(hediff => hediff.LabelCap)));
+            result += "\n";
             result += def.description;
             return result;
         }
@@ -195,20 +210,37 @@ namespace Explorite
             {
                 float curLevel = CurLevel;
                 float targetLevel = CurLevel + DeltaPerIntervalBase;
-                float absrobAmount;
+                float absrobAmount = 0f;
 
-                if (pawn.health.hediffSet.HasHediff(HediffDefOf.Hypothermia))
+                /*if (pawn.health.hediffSet.HasHediff(HediffDefOf.Hypothermia))
                 {
-                    Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Hypothermia);
-
-                    lastabsrobAmount = absrobAmount = Math.Min(targetLevel, hediff.Severity / AbsorbHypothermiaFactor);
-
-                    hediff.Severity -= absrobAmount / AbsorbHypothermiaFactor;
-                    targetLevel -= absrobAmount;
+                    float hypothermiaAbsrobAmount;
+                    Hediff hediffHypothermia = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Hypothermia);
+                    hypothermiaAbsrobAmount = Math.Min(targetLevel, hediffHypothermia.Severity / AbsorbFactor);
+                    hediffHypothermia.Severity -= hypothermiaAbsrobAmount / AbsorbFactor;
+                    absrobAmount += hypothermiaAbsrobAmount;
+                    targetLevel -= hypothermiaAbsrobAmount;
+                }*/
+                foreach (HediffDef hediffDef in TargetHediffs)
+                {
+                    Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
+                    if (hediff != null)
+                    {
+                        float hediffAbsrobAmount;
+                        hediffAbsrobAmount = Math.Min(targetLevel, hediff.Severity / AbsorbFactor);
+                        hediff.Severity -= hediffAbsrobAmount / AbsorbFactor;
+                        absrobAmount += hediffAbsrobAmount;
+                        targetLevel -= hediffAbsrobAmount;
+                    }
+                    if (targetLevel <= 0)
+                    {
+                        break;
+                    }
                 }
 
                 CurLevel = Mathf.Min(Mathf.Max(targetLevel, 0f), MaxLevel);
                 detlaTracer.Insert(CurLevel - curLevel);
+                lastabsrobAmount = absrobAmount;
             }
         }
     }
