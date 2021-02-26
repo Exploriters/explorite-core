@@ -34,6 +34,13 @@
       <ComponentSpacer>8</ComponentSpacer>
 	  <ThermoDamper>1</ThermoDamper>
     </costList>
+    <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
+    <resourcesFractionWhenDeconstructed>1</resourcesFractionWhenDeconstructed>
+    <killedLeavings>
+      <ChunkSlagSteel>16</ChunkSlagSteel>
+	  <Plasteel>240</Plasteel>
+	  <ThermoDamper>1</ThermoDamper>
+    </killedLeavings>
     <comps>
       <li Class="Explorite.CompProperties_Refuelable_PassiveRecharge">
         <fuelLabel>Charge progress</fuelLabel>
