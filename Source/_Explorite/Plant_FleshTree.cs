@@ -35,7 +35,7 @@ namespace Explorite
 
         public override string GetInspectString()
         {
-            return $"{GetInspectString()}\n{"HarvestYield".Translate()}: {def.plant.harvestYield * GetcorpseScale}";
+            return $"{base.GetInspectString()}\n{"HarvestYield".Translate()}: {def.plant.harvestYield * GetcorpseScale:0.##}";
         }
         public override void ExposeData()
         {
