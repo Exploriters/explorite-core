@@ -270,7 +270,7 @@ namespace Explorite
             {
                 foreach (Apparel app in pawn.apparel.WornApparel)
                 {
-                    if (app.def.apparel.tags.Contains("EVA"))
+                    if (app.def.apparel.tags.Contains("CentaurEVA"))
                     {
                         __result = true;
                         break;
