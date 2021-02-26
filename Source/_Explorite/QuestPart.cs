@@ -2,6 +2,10 @@ using System.Collections.Generic;
 using Verse;
 using RimWorld;
 using System.Collections;
+using System;
+using System.Reflection;
+using System.Linq;
+using HarmonyLib;
 
 namespace Explorite
 {
@@ -88,10 +92,99 @@ namespace Explorite
             }
         }
 
+        public struct DefWithType : IExposable
+        {
+            public Def def;
+            public DefWithType(Def def = null)
+            {
+                this.def = def;
+            }
+
+            public static implicit operator DefWithType(Def x)
+            {
+                return new DefWithType(x);
+            }
+            public static implicit operator Def(DefWithType x)
+            {
+                return x.def;
+            }
+            public static bool operator ==(DefWithType v1, DefWithType v2)
+            {
+                return v1.def == v2.def;
+            }
+            public static bool operator !=(DefWithType v1, DefWithType v2)
+            {
+                return v1.def != v2.def;
+            }
+            public override bool Equals(object obj)
+            {
+                return def.Equals(obj);
+            }
+            public override int GetHashCode()
+            {
+                return def.GetHashCode();
+            }
+            public override string ToString()
+            {
+                return def.ToString();
+            }
+
+            public static Def GetDefByType(string defName, Type defClass)
+            {
+                try
+                {
+                    /*
+                    return typeof(DefDatabase<>).MakeGenericType(defClass)
+                        .GetMethod("GetNamed", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static)
+                        .Invoke(
+                            obj: null,
+                            parameters: new object[] { defName, true }
+                        ) as Def;
+                    */
+                    return AccessTools.Method(typeof(DefDatabase<>).MakeGenericType(defClass), "GetNamed").Invoke(
+                            obj: null,
+                            parameters: new object[] { defName, true }
+                        ) as Def;
+                }
+                catch(Exception)
+                {
+                    throw;
+                    //return null;
+                }
+            }
+
+            public void ExposeData()
+            {
+                string defName = string.Empty;
+                Type defClass = typeof(Def);
+                if (def != null)
+                {
+                    defName = def.defName;
+                    defClass = def.GetType();
+
+                    for (Type type = defClass.BaseType; type != typeof(Def) && type != typeof(object) && type != null; type = type.BaseType)
+                    {
+                        defClass = type;
+                    }
+                }
+
+                Scribe_Values.Look(ref defName, "defName", defaultValue: string.Empty, forceSave: true);
+                Scribe_Values.Look(ref defClass, "defClass", defaultValue: typeof(Def), forceSave: true);
+
+                //Log.Message($"[Explorite]Exposing defClass {defClass}");
+                def = GetDefByType(defName, defClass);
+                //Log.Message($"[Explorite]Exposing def {def.defName}");
+            }
+        }
+
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Collections.Look(ref defs, "defs", LookMode.Undefined);
+
+            List<DefWithType> defsWithType = defs.Select(d => (DefWithType)d).ToList();
+            Scribe_Collections.Look(ref defsWithType, "defs", LookMode.Deep);
+            defs = defsWithType.Select(d => (Def)d).ToList();
+
             Scribe_Collections.Look(ref things, "things", LookMode.Reference);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {

@@ -13,19 +13,30 @@ namespace Explorite
     public class Plant_FleshTree : Plant
     {
         private float? corpseScaleStash = null;
-        public float GetcorpseScale
+        private float GetcorpseScaleInt
         {
             get
             {
-                if (corpseScaleStash.HasValue)
-                    return corpseScaleStash.Value;
-                if ((GetComp<CompThingHolder>()?.innerContainer?.Any != true ? null : GetComp<CompThingHolder>()?.innerContainer[0]) is Corpse corpse)
-                    return (corpseScaleStash = corpse.InnerPawn.BodySize).Value;
-                else
-                    return (corpseScaleStash = 1f).Value;
+                float num = 0f;
+                if (GetComp<CompThingHolder>()?.innerContainer?.Any == true)
+                {
+                    foreach (Thing thing in GetComp<CompThingHolder>().innerContainer)
+                    {
+                        if (thing is Corpse corpse)
+                        {
+                            num += corpse.InnerPawn.BodySize;
+                        }
+                    }
+                }
+                return num;
             }
         }
+        public float GetcorpseScale => corpseScaleStash ??= GetcorpseScaleInt;
 
+        public override string GetInspectString()
+        {
+            return $"{GetInspectString()}\n{"HarvestYield".Translate()}: {def.plant.harvestYield * GetcorpseScale}";
+        }
         public override void ExposeData()
         {
             base.ExposeData();
