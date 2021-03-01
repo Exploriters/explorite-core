@@ -28,7 +28,7 @@ namespace Explorite
         public int lastHealTick = -1;
 
         public int TicksBetweenHeal => (props as HediffCompProperties_RepairApparelsOvertime).ticksBetweenHeal;
-        public float HealPerDay =>  60000f / TicksBetweenHeal;
+        public float HealPerDay => 60000f / TicksBetweenHeal;
         public bool Valid => TicksBetweenHeal >= 0;
 
         //public Pawn Pawn => Pawn;

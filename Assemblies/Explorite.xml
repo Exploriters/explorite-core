@@ -99,7 +99,7 @@
         <member name="T:Explorite.CompOversizedWeapon">
             <summary>使武器尺寸与其物品渲染设置一致。</summary>
         </member>
-        <member name="M:Explorite.HarmonyCompOversizedWeapon.DrawEquipmentAimingPreFix(Verse.PawnRenderer,Verse.Thing,UnityEngine.Vector3,System.Single)">
+        <member name="M:Explorite.HarmonyCompOversizedWeapon.DrawEquipmentAimingPrefix(Verse.PawnRenderer,Verse.Thing,UnityEngine.Vector3,System.Single)">
             <summary>
                 Adds another "layer" to the equipment aiming if they have a
                 weapon with a CompActivatableEffect.
@@ -134,6 +134,12 @@
             <summary>
             显示生物护盾的界面UI
             </summary>
+        </member>
+        <member name="T:Explorite.CompProperties_PawnSubsystemManager">
+            <summary>为<see cref = "T:Explorite.CompSelfHealOvertime" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompPawnSubsystemManager">
+            <summary>半人马的子系统控制器。</summary>
         </member>
         <member name="T:Explorite.CompProperties_Healer">
             <summary>治疗类效果参数的基类。<br />
@@ -586,6 +592,51 @@
         </member>
         <member name="T:Explorite.ScenPart_DumpThingsToPawnInv">
             <summary>将物品塞入殖民者的背包中。</summary>
+        </member>
+        <member name="T:Explorite.SubsystemSlot">
+            <summary>指定一个子系统的槽位。</summary>
+        </member>
+        <member name="T:Explorite.SubsystemState">
+            <summary>指定一个子系统的状态。</summary>
+        </member>
+        <member name="T:Explorite.SubsystemUtility">
+            <summary>子系统方法集。</summary>
+        </member>
+        <member name="F:Explorite.SubsystemUtility.SubsystemPart1">
+            <summary>子系统1身体部件。</summary>
+        </member>
+        <member name="F:Explorite.SubsystemUtility.SubsystemPart2">
+            <summary>子系统2身体部件。</summary>
+        </member>
+        <member name="F:Explorite.SubsystemUtility.SubsystemPart3">
+            <summary>子系统3身体部件。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.SlotGroup(Explorite.SubsystemSlot)">
+            <summary>将子系统槽位枚举转为身体部件组。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.SlotPart(Explorite.SubsystemSlot)">
+            <summary>将子系统槽位枚举转为身体部件。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.InvalidSlotCheck(Explorite.SubsystemSlot)">
+            <summary>检查子系统槽位枚举是否属于三个中的一个。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.SubsystemVisible(Verse.Pawn)">
+            <summary>人物的子系统可见性。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.SubsystemEnabled(Verse.Pawn,Verse.HediffDef)">
+            <summary>检查人物的一个子系统是否已经启用。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.SubsystemEnabled(Verse.Hediff)">
+            <summary>检查一个子系统是否已经启用。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.GetSubsystemHediffOn(Verse.Pawn,Explorite.SubsystemSlot)">
+            <summary>取得人物对应身体部位的子系统。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.EnsureSubsystemExist(Verse.Pawn,Verse.HediffDef)">
+            <summary>确保子系统存在。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.SingleTab(UnityEngine.Rect,Verse.Pawn,Explorite.SubsystemSlot)">
+            <summary>在ITab内渲染单个子系统UI。</summary>
         </member>
         <member name="T:Explorite.ThoughtWorker_AlwaysActive_Centaur">
             <summary>

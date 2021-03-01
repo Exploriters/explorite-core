@@ -77,7 +77,7 @@ namespace Explorite
                 sr.xpSinceLastLevel = 0f; //sr.XpRequiredForLevelUp / 2f;
             }
 
-            HediffGiver_EnsureForBlankSubsystem.Apply(pawn, SubsystemBlankHediffDef);
+            pawn.EnsureSubsystemExist();
             return true;
         }
         internal static bool GenerateSayersPostprocess(ref Pawn pawn, PawnGenerationRequest request, ref bool matchError)

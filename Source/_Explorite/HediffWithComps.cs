@@ -6,6 +6,7 @@ using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 using Verse;
 using static Explorite.ExploriteCore;
 
@@ -24,19 +25,11 @@ namespace Explorite
     {
         [MustTranslate]
         public string tip = string.Empty;
-    }
-    public static class SubsystemUtility
-    {
-        public static bool SubsystemEnabled(this Pawn pawn, HediffDef hediffDef)
-        {
-            return (pawn?.health?.hediffSet?.GetFirstHediffOfDef(hediffDef)).SubsystemEnabled();
-        }
-        public static bool SubsystemEnabled(this Hediff hediff)
-        {
-            if (hediff is Hediff_AddedPart_Subsystem subsystem)
-                return subsystem.Enabled;
-            return false;
-        }
+        [NoTranslate]
+        public string sysTexturePath = "Subsystems/_MissingTexture";
+
+        private Texture2D SubsystemIconInt;
+        public Texture2D SubsystemIcon => SubsystemIconInt ??= ContentFinder<Texture2D>.Get(sysTexturePath);
     }
     ///<summary>子系统hediff类，不显示部件效率。</summary>
     public class Hediff_AddedPart_Subsystem : Hediff_AddedPart
@@ -47,6 +40,17 @@ namespace Explorite
         public virtual bool Enabled => !StageVaild || CurStageIndex >= 1;
         public virtual bool Initialzing => StageVaild && CurStageIndex < 1;
         public virtual float InitPercentage => severityInt / def.stages[1].minSeverity;
+        public virtual SubsystemState SubsystemState
+        {
+            get
+            {
+                if (Initialzing)
+                    return SubsystemState.Initialzing;
+                else if (Enabled)
+                    return SubsystemState.Enabled;
+                return SubsystemState.Unidentified;
+            }
+        }
         /*public virtual string LabelString(string tip = null)
         {
             if (def.stages.Count >= 2)
@@ -70,7 +74,7 @@ namespace Explorite
                         return (def.stages[1].minSeverity - severityInt) / prop.severityPerDay * 60000f;
                     }
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                 }
                 return null;
@@ -147,6 +151,7 @@ namespace Explorite
         public override bool Visible => (pawn?.health?.hediffSet?.hediffs?.Any(hediff => hediff?.def?.tags?.Contains("CentaurTechHediff_AccuSubsystem") ?? false)) ?? false;
         public override string LabelInBrackets => string.Empty;
         public override string TipStringExtra => string.Empty;
+        public override SubsystemState SubsystemState => SubsystemState.Blank;
     }
 
 }

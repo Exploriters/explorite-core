@@ -146,7 +146,7 @@ namespace Explorite
                             parameters: new object[] { defName, true }
                         ) as Def;
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     throw;
                     //return null;

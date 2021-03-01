@@ -48,5 +48,8 @@
   <Magnuassembly_HediffComp_PassiveMeditationFocus_TipString>Passive meditate: {0} focus / day</Magnuassembly_HediffComp_PassiveMeditationFocus_TipString>
   <Magnuassembly_HediffComp_RepairApparelsOvertime_TipString>Repair: {0} / day</Magnuassembly_HediffComp_RepairApparelsOvertime_TipString>
   
+  <TabSubsystem>Subsystems</TabSubsystem>
+  <NoSubsystemLabel>No subsystem</NoSubsystemLabel>
+  
   
 </LanguageData>

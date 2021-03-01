@@ -2,6 +2,7 @@
  * 包含StaticConstructorOnStartup的初始化内容。
  * --siiftun1857
  */
+using System.Collections.Generic;
 using Verse;
 
 namespace Explorite

@@ -44,7 +44,7 @@ namespace Explorite
                    && !p.Position.IsForbidden(pawn)
                    && p.CanCasuallyInteractNow()
                 select p)
-                .TryRandomElement(out var result))
+                .TryRandomElement(out Pawn result))
             {
                 return null;
             }

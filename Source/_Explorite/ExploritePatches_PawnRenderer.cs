@@ -28,7 +28,7 @@ namespace Explorite
                 }
                 for (int i = 0; i < apparelProperties.bodyPartGroups.Count; ++i)
                 {
-                    var group = apparelProperties.bodyPartGroups[i];
+                    BodyPartGroupDef group = apparelProperties.bodyPartGroups[i];
                     if (group == BodyPartGroupDefOf.FullHead || group == BodyPartGroupDefOf.UpperHead || group == BodyPartGroupDefOf.Eyes)
                     {
                         return true;

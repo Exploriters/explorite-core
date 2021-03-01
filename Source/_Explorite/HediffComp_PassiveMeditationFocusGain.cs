@@ -19,7 +19,8 @@ namespace Explorite
     public class HediffComp_PassiveMeditationFocusGain : HediffComp
     {
         public bool InStage => (props as HediffCompProperties_StageRange)?.InStage(parent.CurStageIndex) ?? false;
-        public float FocusPerTick => ((HediffCompProperties_PassiveMeditationFocusGain)props).focusPerDay / 60000;
+        public float FocusPerDay => ((HediffCompProperties_PassiveMeditationFocusGain)props).focusPerDay;
+        public float FocusPerTick => FocusPerDay / 60000;
         public override void CompPostTick(ref float severityAdjustment)
         {
             base.CompPostTick(ref severityAdjustment);
@@ -28,6 +29,6 @@ namespace Explorite
                 Pawn.psychicEntropy.OffsetPsyfocusDirectly(FocusPerTick);
             }
         }
-        public override string CompTipStringExtra => InStage ? "Magnuassembly_HediffComp_PassiveMeditationFocus_TipString".Translate(FocusPerTick.ToStringPercent()) : null;
+        public override string CompTipStringExtra => InStage ? "Magnuassembly_HediffComp_PassiveMeditationFocus_TipString".Translate(FocusPerDay.ToStringPercent()) : null;
     }
 }

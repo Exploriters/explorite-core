@@ -114,6 +114,7 @@
     <Compile Include="CompPassiveMeditationFocusGain.cs" />
     <Compile Include="CompPawnRepairApparelsOvertime.cs" />
     <Compile Include="CompPawnShield.cs" />
+    <Compile Include="CompPawnSubsystemManager.cs" />
     <Compile Include="CompProperties_Healer.cs" />
     <Compile Include="CompRefuelable_PassiveRecharge.cs" />
     <Compile Include="CompSecretTrishot.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="HediffWithComps.cs" />
     <Compile Include="HManipulator.cs" />
     <Compile Include="IngredientValueGetter_MarketValue.cs" />
+    <Compile Include="ITab_Pawn_Subsystem.cs" />
     <Compile Include="JobGiver_Nuzzle_Humanoid.cs" />
     <Compile Include="Need_CentaurCreativityInspiration.cs" />
     <Compile Include="Need_HypothermiaAbsorption.cs" />
@@ -173,6 +175,7 @@
     <Compile Include="SomeThingBlank.cs" />
     <Compile Include="StatPart_ApparelStatOffset_PsychicDeafIncluded.cs" />
     <Compile Include="StatPart_WorkSpeedByMood_Centaur.cs" />
+    <Compile Include="SubsystemUtility.cs" />
     <Compile Include="ThoughtWorker_AlwaysActive_Centaur.cs" />
     <Compile Include="Verb.cs" />
     <Compile Include="Verb_SensitivityToggle.cs" />
