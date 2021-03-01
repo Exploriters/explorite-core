@@ -243,7 +243,10 @@ namespace Explorite
                     if (Mouse.IsOver(rectTextBase))
                     {
                         textBgColor = new Color(45 / 255f, 48 / 255f, 52 / 255f);
-                        TaggedString taggedString2 = pawn.GetSubsystemTooltip(slot) + (noSubsystem ? (TaggedString)string.Empty : ("\n\n" + "ClickToLearnMore".Translate()));
+                        TaggedString taggedString2 = pawn.GetSubsystemTooltip(slot) + (noSubsystem ? (TaggedString)string.Empty : (
+                            "\n\n" + subsystemHediff?.Def.description +
+                            "\n\n" + "ClickToLearnMore".Translate()
+                            ));
                         TipSignal tip6 = new TipSignal(taggedString2, pawn.Faction.loadID * 37);
                         TooltipHandler.TipRegion(rectTextBase, tip6);
                     }
@@ -316,7 +319,7 @@ namespace Explorite
                     Rect rectFillBarTip = new Rect(pos, textsize);
                     if (rectFillBarTip.xMax > rectFillBar.xMax - 4f)
                     {
-                        rectFillBarTip.x = rectFillBar.x - textsize.x - 4f;
+                        rectFillBarTip.x = rectFillBar.xMax - textsize.x - 4f;
                     }
 
                     Widgets.Label(rectFillBarTip, reportStr);
