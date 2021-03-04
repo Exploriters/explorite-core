@@ -18,7 +18,6 @@ namespace Explorite
         public bool LeaveTrishot(IntVec3 position, Map map);
     }
     ///<summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />不继承自<seealso cref = "Building_Battery" />，因该类并未有独有方法，且部分行为不可被覆盖。<br />实现了<seealso cref = "ISecretTrishot" />，可在开局被指定具有三射弓。</summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0051")]
     [StaticConstructorOnStartup]
     public class Building_TriBattery : Building/*_Battery*/, ISecretTrishot
     {
@@ -134,7 +133,7 @@ namespace Explorite
                         chanceToStartFire: 0f,
                         damageFalloff: false
                         );
-                    GetComp<CompPowerBattery>().DrawPower(400f);
+                    GetComp<CompPowerBattery>().DrawPower(EnergyToLoseWhenExplode);
                 }
             }
         }
@@ -142,7 +141,7 @@ namespace Explorite
         public override void PostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
         {
             base.PostApplyDamage(dinfo, totalDamageDealt);
-            if (!Destroyed && ticksToExplode == 0 && dinfo.Def == DamageDefOf.Flame && Rand.Value < 0.05f && GetComp<CompPowerBattery>().StoredEnergy > 500f)
+            if (!Destroyed && ticksToExplode == 0 && dinfo.Def == DamageDefOf.Flame && Rand.Value < ExplodeChancePerDamage && GetComp<CompPowerBattery>().StoredEnergy > MinEnergyToExplode)
             {
                 ticksToExplode = Rand.Range(70, 150);
                 StartWickSustainer();

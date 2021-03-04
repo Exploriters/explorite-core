@@ -407,6 +407,9 @@
         <member name="M:Explorite.ExploritePatches.ThingMakerMakeThingPrefix(Verse.ThingDef)">
             <summary>显示MakeThing的调用堆栈。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.ThingMakerMakeThingPostfix(Verse.Thing)">
+            <summary>显示MakeThing的调用堆栈。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.GenRecipePostProcessProductPostfix(Verse.Thing,Verse.Thing,Verse.RecipeDef,Verse.Pawn)">
             <summary>将被制作出来的三射弓添加到追踪中。</summary>
         </member>
@@ -424,6 +427,12 @@
         </member>
         <member name="M:Explorite.ExploritePatches.HealthCardUtilityGetListPriorityPostfix(System.Single@,Verse.BodyPartRecord)">
             <summary>修正健康面板中的身体部位排序。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.TendUtilityCalculateBaseTendQualityPrefix(Verse.Pawn,Verse.Pawn,System.Single@,System.Single@)">
+            <summary>移除半人马自我治疗的70%效果惩罚。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.QuestPartDropPodsSetThingsPostfix(System.Collections.Generic.IEnumerable{Verse.Thing})">
+            <summary>检测任务奖励中的橙冰。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>

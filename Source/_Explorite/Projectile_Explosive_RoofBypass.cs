@@ -580,7 +580,7 @@ namespace Explorite
 
         private static List<IntVec3> checkedCells = new List<IntVec3>();
 
-        private static readonly List<Thing> cellThingsFiltered = new List<Thing>();
+        private static List<Thing> cellThingsFiltered = new List<Thing>();
 
         private int ticksToDetonation;
 

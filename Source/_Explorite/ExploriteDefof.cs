@@ -25,6 +25,7 @@ namespace Explorite
         public static readonly ThingDef TrishotThingDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Bow_Trishot");
         public static readonly ThingDef ComponentArchotechDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("ComponentArchotech");
         public static readonly ThingDef ThermoDamperDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("ThermoDamper");
+        public static readonly ThingDef OrangiceDef = !InstelledMods.RimCentaurs ? null : DefDatabase<ThingDef>.GetNamed("Orangice");
         public static readonly HediffDef HyperManipulatorHediffDef = !InstelledMods.RimCentaurs ? null : DefDatabase<HediffDef>.GetNamed("HyperManipulator");
         public static readonly HediffDef PsychicDeafHediffDef = !InstelledMods.RimCentaurs ? null : DefDatabase<HediffDef>.GetNamed("PsychicDeafCentaur");
         public static readonly HediffDef SubsystemBlankHediffDef = !InstelledMods.RimCentaurs ? null : DefDatabase<HediffDef>.GetNamed("CentaurSubsystem_BlankBlank");

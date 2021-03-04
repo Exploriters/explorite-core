@@ -166,7 +166,8 @@ namespace Explorite
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(ApparelPropertiesGetCoveredOuterPartsStringPostfix)));
                 
                 harmonyInstance.Patch(AccessTools.Method(typeof(ThingMaker), nameof(ThingMaker.MakeThing).App(ref last_patch_method)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(ThingMakerMakeThingPrefix)));
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(ThingMakerMakeThingPrefix)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(ThingMakerMakeThingPostfix)));
 
                 //harmonyInstance.Patch(AccessTools.Method(typeof(GenRecipe), nameof(GenRecipe.MakeRecipeProducts).App(ref last_patch_method)),
                 //    prefix: new HarmonyMethod(patchType, last_patch = nameof(GenRecipeMakeRecipeProductsPrefix)),
@@ -196,6 +197,12 @@ namespace Explorite
                 
                 harmonyInstance.Patch(AccessTools.Method(typeof(HealthCardUtility), "GetListPriority".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(HealthCardUtilityGetListPriorityPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(TendUtility), nameof(TendUtility.CalculateBaseTendQuality).App(ref last_patch_method), new Type[] { typeof(Pawn), typeof(Pawn), typeof(float), typeof(float) }),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(TendUtilityCalculateBaseTendQualityPrefix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(QuestPart_DropPods), "set_Things".App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(QuestPartDropPodsSetThingsPostfix)));
 
                 if (InstelledMods.SoS2)
                 {
@@ -1146,6 +1153,14 @@ namespace Explorite
                 Log.Message("[Explorite]Making TriShot Prototype, with stack trace...");
             }
         }
+        ///<summary>显示MakeThing的调用堆栈。</summary>
+        [HarmonyPostfix]public static void ThingMakerMakeThingPostfix(Thing __result)
+        {
+            if (__result.def == OrangiceDef)
+            {
+                Log.Message($"[Explorite]Making Orangice thing {__result.ThingID} detected. Stack trace below.");
+            }
+        }
         /*
         ///<summary>将被作为合成原材料的三射弓从追踪中移除。</summary>
         [HarmonyPrefix]public static void GenRecipeMakeRecipeProductsPrefix(RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, Thing dominantIngredient, IBillGiver billGiver)
@@ -1248,6 +1263,23 @@ namespace Explorite
                 {
                     __result += 1f;
                 }
+            }
+        }
+        ///<summary>移除半人马自我治疗的70%效果惩罚。</summary>
+        [HarmonyPrefix]public static void TendUtilityCalculateBaseTendQualityPrefix(Pawn doctor, Pawn patient, ref float medicinePotency, ref float medicineQualityMax)
+        {
+            if (doctor == patient && doctor?.def == AlienCentaurDef)
+            {
+                medicinePotency /= 0.7f;
+            }
+        }
+        ///<summary>检测任务奖励中的橙冰。</summary>
+        [HarmonyPostfix]public static void QuestPartDropPodsSetThingsPostfix(IEnumerable<Thing> value)
+        {
+            IEnumerable<Thing> orangices = value.Where(t => t.def == OrangiceDef);
+            foreach (Thing thing in orangices)
+            {
+                Log.Warning($"[Explorite]Warning, Orangice thing {thing.ThingID} detected in quest part drop pods. Stack trace below.");
             }
         }
     }
