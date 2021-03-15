@@ -204,6 +204,9 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(QuestPart_DropPods), "set_Things".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(QuestPartDropPodsSetThingsPostfix)));
 
+                harmonyInstance.Patch(AccessTools.Method(typeof(ResearchProjectDef), "get_CanStartNow".App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(ResearchProjectDefCanStartNowPostfix)));
+
                 if (InstelledMods.SoS2)
                 {
                     // 依赖 类 SaveOurShip2.ShipInteriorMod2
@@ -1280,6 +1283,14 @@ namespace Explorite
             foreach (Thing thing in orangices)
             {
                 Log.Warning($"[Explorite]Warning, Orangice thing {thing.ThingID} detected in quest part drop pods. Stack trace below.");
+            }
+        }
+        ///<summary>阻止特定项目被研究。</summary>
+        [HarmonyPostfix]public static void ResearchProjectDefCanStartNowPostfix(ResearchProjectDef __instance, ref bool __result)
+        {
+            if (__result && __instance?.tags?.Any(t => t.defName == "ExploriteNeverResearchable") == true)
+            {
+                __result = false;
             }
         }
     }

@@ -434,6 +434,9 @@
         <member name="M:Explorite.ExploritePatches.QuestPartDropPodsSetThingsPostfix(System.Collections.Generic.IEnumerable{Verse.Thing})">
             <summary>检测任务奖励中的橙冰。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.ResearchProjectDefCanStartNowPostfix(Verse.ResearchProjectDef,System.Boolean@)">
+            <summary>阻止特定项目被研究。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>
