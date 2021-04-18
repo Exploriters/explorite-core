@@ -106,6 +106,7 @@
     <Compile Include="CompAbilityEffect_TogglePsySensitivity.cs" />
     <Compile Include="CompArt_Qualityless.cs" />
     <Compile Include="CompAssignableToPawn_Bed_Guoguo.cs" />
+    <Compile Include="CompDestroyOnSpawn.cs" />
     <Compile Include="CompDropThingsOnDestroy.cs" />
     <Compile Include="CompEnsureAbility.cs" />
     <Compile Include="CompHealWearedOvertime.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="CompPawnSubsystemManager.cs" />
     <Compile Include="CompProperties_Healer.cs" />
     <Compile Include="CompRefuelable_PassiveRecharge.cs" />
+    <Compile Include="CompReloadable_InitOnEmpty.cs" />
     <Compile Include="CompSecretTrishot.cs" />
     <Compile Include="CompSelfHealOvertime.cs" />
     <Compile Include="CompSelfHealOvertime_1.cs" />

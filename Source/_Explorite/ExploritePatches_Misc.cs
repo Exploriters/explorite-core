@@ -965,15 +965,27 @@ namespace Explorite
         {
             if (InstelledMods.RimCentaurs)
             {
-                Outfit outfit3 = __instance.MakeNewOutfit();
-                outfit3.label = "OutfitCentaur".Translate();
-                outfit3.filter.SetDisallowAll();
-                outfit3.filter.SetAllow(SpecialThingFilterDefOf.AllowDeadmansApparel, allow: false);
+                BodyPartRecord partRecHead = CentaurBodyDef.AllParts.First(d => d.def == BodyPartDefOf.Head);
+                BodyPartRecord partRecWaist = CentaurBodyDef.AllParts.First(d => d?.groups?.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")) ?? false);
+                Outfit outfitCentaur = __instance.MakeNewOutfit();
+                outfitCentaur.label = "OutfitCentaur".Translate();
+                outfitCentaur.filter.SetDisallowAll();
+                outfitCentaur.filter.SetAllow(SpecialThingFilterDefOf.AllowDeadmansApparel, allow: false);
                 foreach (ThingDef allDef2 in DefDatabase<ThingDef>.AllDefs)
                 {
-                    if (allDef2.apparel != null && allDef2.apparel.defaultOutfitTags != null && allDef2.apparel.defaultOutfitTags.Contains("CentaurOutfit"))
+                    if (allDef2?.apparel != null && 
+                            (allDef2.apparel?.defaultOutfitTags?.Contains("CentaurOutfit") == true
+                          || allDef2.apparel?.CoversBodyPart(partRecHead) == true
+                          || allDef2.apparel?.CoversBodyPart(partRecWaist) == true
+                          /*|| allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.UpperHead) == true
+                          || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.FullHead) == true
+                          || allDef2.apparel?.bodyPartGroups.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")) == true
+                          || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Overhead) == true
+                          || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Belt) == true*/
+                            )
+                        )
                     {
-                        outfit3.filter.SetAllow(allDef2, allow: true);
+                        outfitCentaur.filter.SetAllow(allDef2, allow: true);
                     }
                 }
             }

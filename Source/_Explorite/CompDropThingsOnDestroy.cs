@@ -7,21 +7,49 @@ using Verse;
 using RimWorld;
 using System;
 using static Explorite.ExploriteCore;
+using UnityEngine;
 
 namespace Explorite
 {
     ///<summary>设置一个物体和数量。</summary>
-    public struct ThingGenProp
+    public class ThingGenProp : IEquatable<ThingGenProp>//, IExposable
     {
-        public ThingDef thingDef;
-        public ThingDef stuff;
-        public IntRange count;
-        public ThingGenProp(ThingDef thingDef, ThingDef stuff = null, IntRange? count = null)
+        public ThingDef thingDef = null;
+        public ThingDef stuff = null;
+        public IntRange count = new IntRange(1, 1);
+        public QualityCategory? quality = null;
+        public Color? color = null;
+
+        /*public ThingGenProp(ThingDef thingDef, IntRange? count = null, ThingDef stuff = null, QualityCategory? quality = null)
         {
             this.thingDef = thingDef ?? throw new ArgumentNullException(nameof(thingDef));
             this.stuff = stuff;
             this.count = count ?? new IntRange(1, 1);
+            this.quality = quality;
         }
+        public ThingGenProp(ThingDef thingDef, int count, ThingDef stuff = null, QualityCategory? quality = null)
+        {
+            this.thingDef = thingDef ?? throw new ArgumentNullException(nameof(thingDef));
+            this.stuff = stuff;
+            this.count = new IntRange(count, count);
+            this.quality = quality;
+        }*/
+        public bool Equals(ThingGenProp other)
+        {
+            return
+                thingDef == other.thingDef
+             && stuff == other.stuff
+             && count == other.count
+             && quality == other.quality
+                ;
+        }
+        /*public void ExposeData()
+        {
+            Scribe_Values.Look(ref thingDef, "thingDef");
+            Scribe_Values.Look(ref stuff, "stuff");
+            Scribe_Values.Look(ref count, "count");
+            Scribe_Values.Look(ref quality, "quality");
+        }*/
     }
     ///<summary>为<see cref = "CompProperties_DropThingsOnDestroy" />设置在何种情况下掉落物品。</summary>
     public struct ThingOnDestroy
@@ -47,8 +75,8 @@ namespace Explorite
     public class CompDropThingsOnDestroy : ThingComp
     {
         private CompProperties_DropThingsOnDestroy Props => props as CompProperties_DropThingsOnDestroy;
-        private bool Vaild => Props?.cases != null;
-        private List<ThingOnDestroy> Cases => Props.cases;
+        private bool Vaild => !Props.cases.NullOrEmpty();
+        private IEnumerable<ThingOnDestroy> Cases => Props.cases;
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
             if (Vaild)
@@ -63,8 +91,16 @@ namespace Explorite
                             int count = thingGenProp.count.RandomInRange;
                             if (count > 0)
                             {
-                                Thing thing = ThingMaker.MakeThing(thingGenProp.thingDef, thingGenProp.stuff);
+                                Thing thing = ThingMaker.MakeThing(thingGenProp.thingDef ?? ThingDefOf.Steel, thingGenProp.stuff);
                                 thing.stackCount = Math.Min(count, thing.def.stackLimit);
+                                if (thingGenProp.quality.HasValue && thing?.TryGetComp<CompQuality>() != null)
+                                {
+                                    thing.TryGetComp<CompQuality>().SetQuality(thingGenProp.quality.Value, ArtGenerationContext.Colony);
+                                }
+                                if (thingGenProp.color.HasValue && thing?.TryGetComp<CompColorable>() != null)
+                                {
+                                    thing.TryGetComp<CompColorable>().Color = thingGenProp.color.Value;
+                                }
                                 thingsToDrop.TryAddOrTransfer(thing);
                             }
                         }

@@ -62,6 +62,12 @@
         <member name="T:Explorite.CompAssignableToPawn_Bed_Guoguo">
             <summary>果果床的类型，只有果果人可以使用。</summary>
         </member>
+        <member name="T:Explorite.CompProperties_DestroyOnSpawn">
+            <summary>为<see cref = "T:Explorite.CompDestroyOnSpawn" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompDestroyOnSpawn">
+            <summary>生成后直接被摧毁的物品。</summary>
+        </member>
         <member name="T:Explorite.ThingGenProp">
             <summary>设置一个物体和数量。</summary>
         </member>
@@ -156,6 +162,9 @@
         </member>
         <member name="T:Explorite.CompRefuelable_PassiveRecharge">
             <summary>高速恢复燃料的<see cref = "T:RimWorld.CompRefuelable" />变种。</summary>
+        </member>
+        <member name="T:Explorite.CompReloadable_InitOnEmpty">
+            <summary>初始化装填数量为0的<see cref = "T:RimWorld.CompReloadable" />。</summary>
         </member>
         <member name="T:Explorite.CompProperties_SecretTrishot">
             <summary>为<see cref = "T:Explorite.CompSecretTrishot" />接收参数。</summary>
