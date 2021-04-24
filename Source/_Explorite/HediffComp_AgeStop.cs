@@ -13,11 +13,10 @@ namespace Explorite
         {
             compClass = typeof(HediffComp_AgeStop);
         }
-        //TODO: Supress pawn's age
     }
     public class HediffComp_AgeStop : HediffComp
     {
-        //TODO: Supress pawn's age
+        //TODO: 实现功能阻止年龄增长
 
         public override void CompPostTick(ref float severityAdjustment)
         {

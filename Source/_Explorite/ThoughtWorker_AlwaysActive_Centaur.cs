@@ -11,7 +11,7 @@ namespace Explorite
     /// <summary>
     /// 建立半人马之间始终存在的正面评价。
     /// </summary>
-    /// TODO: Fix relation
+    /// TODO: 修复关系
     public class ThoughtWorker_AlwaysActive_Centaur : ThoughtWorker // ThoughtWorker_AlwaysActive
     {
         protected override ThoughtState CurrentSocialStateInternal(Pawn p, Pawn otherPawn)

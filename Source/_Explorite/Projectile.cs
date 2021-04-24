@@ -27,10 +27,9 @@ namespace Explorite
         }
     }
     ///<summary>该弹射物会将目标传送至爆炸位置。</summary>
-	 // TODO: 需要修复传送失败问题。
     public class Projectile_Explosive_Teleshot : Projectile_Explosive_RoofBypass
     {
-        //TODO: Fix Teleport
+	    // TODO: 需要修复传送失败问题。
         protected override void Explode()
         {
             if (launcher.Faction.IsPlayer)

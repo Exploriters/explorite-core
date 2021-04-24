@@ -569,9 +569,6 @@
         <member name="T:Explorite.DetlaTracer">
             <summary>追踪最近20条变化量记录。</summary>
         </member>
-        <member name="T:Explorite.Recipe_RemoveBodyPart_MX">
-            <summary>不能选中肩胛的截肢手术配方。</summary>
-        </member>
         <member name="T:Explorite.PlaceWorker_PlantReactionTable">
             <summary>为植物反应桌绘制互动图标。</summary>
         </member>
@@ -663,7 +660,7 @@
             <summary>
             建立半人马之间始终存在的正面评价。
             </summary>
-            TODO: Fix relation
+            TODO: 修复关系
         </member>
         <member name="T:Explorite.Verb_DoNothing">
             <summary>什么都不做。</summary>

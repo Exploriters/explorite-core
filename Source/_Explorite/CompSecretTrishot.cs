@@ -8,7 +8,7 @@ using static Explorite.ExploriteCore;
 namespace Explorite
 {
     ///<summary>为<see cref = "CompSecretTrishot" />接收参数。</summary>
-    public abstract class CompProperties_SecretTrishot : CompProperties_Healer
+    public abstract class CompProperties_SecretTrishot : CompProperties
     {
         public CompProperties_SecretTrishot()
         {

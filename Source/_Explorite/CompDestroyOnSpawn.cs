@@ -8,7 +8,7 @@ using static Explorite.ExploriteCore;
 namespace Explorite
 {
     ///<summary>为<see cref = "CompDestroyOnSpawn" />接收参数。</summary>
-    public class CompProperties_DestroyOnSpawn : CompProperties_Healer
+    public class CompProperties_DestroyOnSpawn : CompProperties
     {
         public CompProperties_DestroyOnSpawn()
         {

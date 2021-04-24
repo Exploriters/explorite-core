@@ -10,7 +10,7 @@ using Verse;
 namespace Explorite
 {
     ///<summary>为<see cref = "CompUnbreakableViaDamage" />接收参数。</summary>
-    public class CompProperties_UnbreakableViaDamage : CompProperties_Healer
+    public class CompProperties_UnbreakableViaDamage : CompProperties
     {
         public CompProperties_UnbreakableViaDamage() : base(typeof(CompUnbreakableViaDamage))
         {

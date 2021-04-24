@@ -41,6 +41,7 @@ namespace Explorite
              && stuff == other.stuff
              && count == other.count
              && quality == other.quality
+             && color == other.color
                 ;
         }
         /*public void ExposeData()
