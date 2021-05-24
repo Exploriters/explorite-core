@@ -7,6 +7,7 @@ using System;
 using UnityEngine;
 using RimWorld;
 using HarmonyLib;
+using System.Linq;
 
 namespace Explorite
 {
@@ -313,6 +314,51 @@ namespace Explorite
             return new Color(r, g, b);
         }
         */
+
+        /**
+         * <summary>
+         * 检测物品是否为合法的半人马服装。
+         * </summary>
+         * <param name="thing">需要被检测的物品。</param>
+         * <returns>该物品是否为合法的半人马服装。</returns>
+         */
+        public static bool VaildCentaurApparelPredicate(ThingDef thing)
+        {
+            ApparelProperties apparel = thing?.apparel;
+            if (apparel == null)
+                return false;
+            if (apparel?.defaultOutfitTags?.Contains("CentaurOutfit") == true)
+                return true;
+
+            /*
+            BodyPartRecord partRecHead = CentaurBodyDef.AllParts.First(d => d.def == BodyPartDefOf.Head);
+            BodyPartRecord partRecWaist = CentaurBodyDef.AllParts.First(d => d?.groups?.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")) ?? false);
+            if (apparel != null &&
+                    (apparel?.defaultOutfitTags?.Contains("CentaurOutfit") == true
+                  / *|| apparel?.CoversBodyPart(partRecHead) == true
+                    || apparel?.CoversBodyPart(partRecWaist) == true
+                    || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.UpperHead) == true
+                    || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.FullHead) == true
+                    || allDef2.apparel?.bodyPartGroups.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")) == true
+                    || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Overhead) == true
+                    || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Belt) == true* /
+                    )
+                )
+                return true;
+            */
+
+            if (apparel.bodyPartGroups?.Any() == true)
+            {
+                foreach (BodyPartGroupDef bpg in apparel.bodyPartGroups)
+                {
+                    if (bpg == BodyPartGroupDefOf.Torso || !CentaurBodyPartGroups.Contains(bpg))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
     }
 
 }

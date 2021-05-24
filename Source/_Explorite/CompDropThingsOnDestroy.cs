@@ -17,7 +17,7 @@ namespace Explorite
         public ThingDef thingDef = null;
         public ThingDef stuff = null;
         public IntRange count = new IntRange(1, 1);
-        public QualityCategory? quality = null;
+        public QualityRange? quality = null;
         public Color? color = null;
 
         /*public ThingGenProp(ThingDef thingDef, IntRange? count = null, ThingDef stuff = null, QualityCategory? quality = null)
@@ -96,7 +96,9 @@ namespace Explorite
                                 thing.stackCount = Math.Min(count, thing.def.stackLimit);
                                 if (thingGenProp.quality.HasValue && thing?.TryGetComp<CompQuality>() != null)
                                 {
-                                    thing.TryGetComp<CompQuality>().SetQuality(thingGenProp.quality.Value, ArtGenerationContext.Colony);
+                                    thing.TryGetComp<CompQuality>().SetQuality(
+                                        (QualityCategory)new IntRange((int)thingGenProp.quality.Value.min, (int)thingGenProp.quality.Value.max).RandomInRange
+                                        , ArtGenerationContext.Colony);
                                 }
                                 if (thingGenProp.color.HasValue && thing?.TryGetComp<CompColorable>() != null)
                                 {

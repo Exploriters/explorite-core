@@ -14,7 +14,7 @@ namespace Explorite
     ///<summary>为<see cref = "HediffComp_RepairApparelsOvertime" />接收参数。</summary>
     public class HediffCompProperties_RepairApparelsOvertime : HediffCompProperties_StageRange
     {
-        public int ticksBetweenHeal = -1;
+        public float ticksBetweenHeal = -1;
         public HediffCompProperties_RepairApparelsOvertime()
         {
             compClass = typeof(HediffComp_RepairApparelsOvertime);
@@ -27,8 +27,14 @@ namespace Explorite
 
         public int lastHealTick = -1;
 
-        public int TicksBetweenHeal => (props as HediffCompProperties_RepairApparelsOvertime).ticksBetweenHeal;
-        public float HealPerDay => 60000f / TicksBetweenHeal;
+        public float exceededTicksDec = 0f;
+        public int ExceededTicks => (int)Math.Floor(exceededTicksDec);
+        public float TicksBetweenHealAccu => (props as HediffCompProperties_RepairApparelsOvertime).ticksBetweenHeal;
+        public int TicksBetweenHeal => (int)Math.Floor(TicksBetweenHealAccu);
+        public float TicksExceeding => TicksBetweenHealAccu - TicksBetweenHeal;
+        public int TicksTillNextHeal => TicksBetweenHeal - ExceededTicks;
+        public float TicksDec => TicksBetweenHealAccu - TicksBetweenHeal;
+        public float HealPerDay => 60000f / TicksBetweenHealAccu;
         public bool Valid => TicksBetweenHeal >= 0;
 
         //public Pawn Pawn => Pawn;
@@ -51,13 +57,16 @@ namespace Explorite
             {
                 comp.RotProgress = Math.Min(comp.PropsRot.TicksToRotStart, comp.RotProgress + (comp.PropsRot.TicksToRotStart * 0.05f));
             }
-            if (lastHealTick < 0 || InGameTick >= lastHealTick + TicksBetweenHeal)
+            if (lastHealTick < 0 || InGameTick >= lastHealTick + TicksTillNextHeal)
             {
                 IEnumerable<Thing> DamagedThings = Things.Where(thing => thing.def.useHitPoints && thing.HitPoints < thing.MaxHitPoints);
                 if (DamagedThings.Any())
                 {
                     DamagedThings.RandomElement().HitPoints += 1;
                     lastHealTick = InGameTick;
+
+                    exceededTicksDec += TicksExceeding;
+                    exceededTicksDec -= ExceededTicks;
                 }
                 else
                 {

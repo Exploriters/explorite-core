@@ -252,6 +252,13 @@
             <param name="target">一个位置。</param>
             <returns>是否成功地完成了传送。</returns>
         </member>
+        <member name="M:Explorite.ExploriteCore.VaildCentaurApparelPredicate(Verse.ThingDef)">
+            <summary>
+            检测物品是否为合法的半人马服装。
+            </summary>
+            <param name="thing">需要被检测的物品。</param>
+            <returns>该物品是否为合法的半人马服装。</returns>
+        </member>
         <member name="M:Explorite.ExploriteDebugActions.ClearAllFogClickPlace">
             <summary>清除所有迷雾。</summary>
         </member>
@@ -445,6 +452,9 @@
         </member>
         <member name="M:Explorite.ExploritePatches.ResearchProjectDefCanStartNowPostfix(Verse.ResearchProjectDef,System.Boolean@)">
             <summary>阻止特定项目被研究。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RaceRestrictionSettingsCanWearPostfix(Verse.ThingDef,Verse.ThingDef,System.Boolean@)">
+            <summary>自动判断服装是否适合半人马。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>

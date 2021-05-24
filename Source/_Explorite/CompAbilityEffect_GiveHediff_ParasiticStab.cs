@@ -59,23 +59,37 @@ namespace Explorite
                     def: LogEntryDefOf.MeleeAttack
                     );
                 Find.BattleLog.Add(battleLogEntry);
-                if (!targetPawn.def.race.IsMechanoid)
-                {
-                    base.Apply(target, dest);
-                }
+
+                bool atLeatHitOnce = false;
+
                 if (Props.injuryOnHit != null)
                 {
                     int num = Mathf.Min(Props.injuryCount.RandomInRange);
                     for (int i = 0; i < num; i++)
                     {
-                        targetPawn.TakeDamage(
-                        new DamageInfo(
-                            Props.injuryOnHit, Props.injuryDamage.RandomInRange,
-                            instigator: parent.pawn,
-                            weapon: parent.pawn.def
+                        if (
+                            Rand.Chance(Mathf.Clamp(
+                                parent.pawn.GetStatValue(StatDefOf.MeleeHitChance) *
+                                (targetPawn.CurJobDef == JobDefOf.AttackStatic ? 0f : targetPawn.GetStatValue(StatDefOf.MeleeDodgeChance))
+                                , 0.0f, 1.0f))
+                            
                             )
-                        );
+                        {
+                            atLeatHitOnce = true;
+                            targetPawn.TakeDamage(
+                            new DamageInfo(
+                                Props.injuryOnHit, Props.injuryDamage.RandomInRange,
+                                instigator: parent.pawn,
+                                weapon: parent.pawn.def
+                                )
+                            );
+                        }
                     }
+                }
+                if (!targetPawn.def.race.IsMechanoid
+                    && atLeatHitOnce)
+                {
+                    base.Apply(target, dest);
                 }
             }
         }

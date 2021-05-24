@@ -35,8 +35,8 @@ namespace Explorite
         }
         static ExploritePatches()
         {
-            string last_patch = "";
-            string last_patch_method = "";
+            string last_patch = "NULL-FIX";
+            string last_patch_method = "NO-METHOD";
             try
             {
                 harmonyInstance.Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn).App(ref last_patch_method), new[] { typeof(PawnGenerationRequest) }),
@@ -206,6 +206,9 @@ namespace Explorite
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(ResearchProjectDef), "get_CanStartNow".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(ResearchProjectDefCanStartNowPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(AlienRace.RaceRestrictionSettings), nameof(AlienRace.RaceRestrictionSettings.CanWear).App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(RaceRestrictionSettingsCanWearPostfix)));
 
                 if (InstelledMods.SoS2)
                 {
@@ -801,10 +804,10 @@ namespace Explorite
             if (p.def == AlienCentaurDef || p.def == AlienSayersDef)
             {
                 string strPreProcess = "  - " + p.LabelShortCap + ": " + __result.ToStringMassOffset();
-                __result = Math.Max(__result, p.def == AlienCentaurDef ? 1000f : 35f);
+                __result = Math.Max(__result, p.def == AlienCentaurDef ? 350f : 35f);
                 if ((p?.health?.hediffSet?.GetFirstHediffOfDef(HediffCentaurSubsystem_AntiMass_Def)).SubsystemEnabled())
                 {
-                    __result *= 3;
+                    __result *= 2.85714285714f;
                 }
                 if (explanation != null)
                 {
@@ -973,17 +976,19 @@ namespace Explorite
                 outfitCentaur.filter.SetAllow(SpecialThingFilterDefOf.AllowDeadmansApparel, allow: false);
                 foreach (ThingDef allDef2 in DefDatabase<ThingDef>.AllDefs)
                 {
+                    /*
                     if (allDef2?.apparel != null && 
                             (allDef2.apparel?.defaultOutfitTags?.Contains("CentaurOutfit") == true
                           || allDef2.apparel?.CoversBodyPart(partRecHead) == true
                           || allDef2.apparel?.CoversBodyPart(partRecWaist) == true
-                          /*|| allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.UpperHead) == true
+                            || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.UpperHead) == true
                           || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.FullHead) == true
                           || allDef2.apparel?.bodyPartGroups.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")) == true
                           || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Overhead) == true
-                          || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Belt) == true*/
+                          || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Belt) == true
                             )
-                        )
+                        )*/
+                    if(VaildCentaurApparelPredicate(allDef2))
                     {
                         outfitCentaur.filter.SetAllow(allDef2, allow: true);
                     }
@@ -1303,6 +1308,14 @@ namespace Explorite
             if (__result && __instance?.tags?.Any(t => t.defName == "ExploriteNeverResearchable") == true)
             {
                 __result = false;
+            }
+        }
+        ///<summary>自动判断服装是否适合半人马。</summary>
+        [HarmonyPostfix]public static void RaceRestrictionSettingsCanWearPostfix(ThingDef apparel, ThingDef race, ref bool __result)
+        {
+            if (race == AlienCentaurDef)
+            {
+                __result = VaildCentaurApparelPredicate(apparel);
             }
         }
     }
