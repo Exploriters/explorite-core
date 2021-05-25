@@ -315,6 +315,22 @@ namespace Explorite
         }
         */
 
+        /*
+        BodyPartRecord partRecHead = CentaurBodyDef.AllParts.First(d => d.def == BodyPartDefOf.Head);
+        BodyPartRecord partRecWaist = CentaurBodyDef.AllParts.First(d => d?.groups?.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")) ?? false);
+        if (apparel != null &&
+                (apparel?.defaultOutfitTags?.Contains("CentaurOutfit") == true
+              / *|| apparel?.CoversBodyPart(partRecHead) == true
+                || apparel?.CoversBodyPart(partRecWaist) == true
+                || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.UpperHead) == true
+                || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.FullHead) == true
+                || allDef2.apparel?.bodyPartGroups.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")) == true
+                || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Overhead) == true
+                || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Belt) == true* /
+                )
+            )
+            return true;
+        */
         /**
          * <summary>
          * 检测物品是否为合法的半人马服装。
@@ -330,28 +346,11 @@ namespace Explorite
             if (apparel?.defaultOutfitTags?.Contains("CentaurOutfit") == true)
                 return true;
 
-            /*
-            BodyPartRecord partRecHead = CentaurBodyDef.AllParts.First(d => d.def == BodyPartDefOf.Head);
-            BodyPartRecord partRecWaist = CentaurBodyDef.AllParts.First(d => d?.groups?.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")) ?? false);
-            if (apparel != null &&
-                    (apparel?.defaultOutfitTags?.Contains("CentaurOutfit") == true
-                  / *|| apparel?.CoversBodyPart(partRecHead) == true
-                    || apparel?.CoversBodyPart(partRecWaist) == true
-                    || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.UpperHead) == true
-                    || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.FullHead) == true
-                    || allDef2.apparel?.bodyPartGroups.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")) == true
-                    || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Overhead) == true
-                    || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Belt) == true* /
-                    )
-                )
-                return true;
-            */
-
             if (apparel.bodyPartGroups?.Any() == true)
             {
                 foreach (BodyPartGroupDef bpg in apparel.bodyPartGroups)
                 {
-                    if (bpg == BodyPartGroupDefOf.Torso || !CentaurBodyPartGroups.Contains(bpg))
+                    if (!CentaurBodyPartGroups.Contains(bpg)) // || bpg == BodyPartGroupDefOf.Torso)
                     {
                         return false;
                     }
