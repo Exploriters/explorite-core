@@ -6,12 +6,15 @@ using HarmonyLib;
 using RimWorld;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Verse;
 
 namespace Explorite
 {
     public static partial class ExploriteCore
     {
+
+
         private static readonly Dictionary<Type, Def> malrefs = new Dictionary<Type, Def>();
         private static T GetModDef<T>(bool willAttempt, string defName, bool errorOnFail = true) where T : Def, new()
         {
@@ -40,6 +43,14 @@ namespace Explorite
             }
         }
 
+        public static bool IsNonMal(this Def def)
+        {
+            if (def == null || malrefs.Any(kvp => kvp.Value == def))
+                return false;
+            else
+                return true;
+        }
+
         public static GameComponent_CentaurStory GameComponentCentaurStory => Current.Game.GetComponent<GameComponent_CentaurStory>();
 
         public static readonly Harmony harmonyInstance = new Harmony(id: "Explorite.rimworld.mod.HarmonyPatches");
@@ -49,6 +60,7 @@ namespace Explorite
 
 
         public static readonly ThingDef AlienCentaurDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Alien_Centaur");
+        public static readonly ThingDef AlienCentaurCorpseDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Corpse_Alien_Centaur");
         public static readonly ThingDef CentaurHeaddressDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Apparel_CentaurHeaddress");
         public static readonly ThingDef TrishotThing1Def = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Bow_Trishot_1Stage");
         public static readonly ThingDef TrishotThing2Def = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Bow_Trishot_2Stage");

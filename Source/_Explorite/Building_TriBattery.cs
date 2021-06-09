@@ -53,6 +53,12 @@ namespace Explorite
                 Thing trishot = ThingMaker.MakeThing(TrishotThing1Def);
                 GameComponentCentaurStory.TryAdd(trishot);
                 GenSpawn.Spawn(trishot, position, map);
+
+                bool? forbid = this?.TryGetComp<CompForbiddable>()?.Forbidden;
+                if (forbid.HasValue)
+                {
+                    trishot.TryGetComp<CompForbiddable>().Forbidden = forbid.Value;
+                }
                 includingBrokenTrishot = false;
                 return true;
             }
