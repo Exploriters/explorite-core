@@ -15,6 +15,7 @@ using Verse;
 using Verse.AI;
 using static Explorite.ExploriteCore;
 using static Verse.DamageInfo;
+using static Verse.PawnCapacityUtility;
 
 namespace Explorite
 {
@@ -217,6 +218,13 @@ namespace Explorite
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(BuildingTurretGunCanSetForcedTargetPostfix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(Building_TurretGun), "TryStartShootSomething".App(ref last_patch_method)),
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(BuildingTurretGunTryStartShootSomethingTranspiler)));
+
+                //harmonyInstance.Patch(AccessTools.Method(typeof(PawnCapacitiesHandler), nameof(PawnCapacitiesHandler.GetLevel).App(ref last_patch_method)),
+                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PawnCapacitiesHandlerGetLevelTranspiler)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(PawnCapacityUtility), nameof(PawnCapacityUtility.CalculateCapacityLevel).App(ref last_patch_method)),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(PawnCapacityUtilityCalculateCapacityLevelPrefix)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnCapacityUtilityCalculateCapacityLevelPostfix)));
 
                 if (InstelledMods.SoS2)
                 {
@@ -1360,7 +1368,7 @@ namespace Explorite
         ///<summary>使自动弩机炮台无视屋顶限制而开火。</summary>
         [HarmonyTranspiler]public static IEnumerable<CodeInstruction> BuildingTurretGunTryStartShootSomethingTranspiler(IEnumerable<CodeInstruction> instr)
         {
-            MethodBase projectileFliesOverheadMethod = AccessTools.Method(typeof(VerbUtility), "ProjectileFliesOverhead");
+            MethodBase projectileFliesOverheadMethod = AccessTools.Method(typeof(VerbUtility), nameof(VerbUtility.ProjectileFliesOverhead));
             //Log.Message($"[Explorite]Transpiler patch target: {projectileFliesOverheadMethod?.Name}.");
             foreach (CodeInstruction ins in instr)
             {
@@ -1380,6 +1388,114 @@ namespace Explorite
                 }
             }
             yield break;
+        }
+
+        /*private static float HyperManipulateCapacityLevelOverrider(HediffSet diffSet, PawnCapacityDef capacity, List<PawnCapacityUtility.CapacityImpactor> impactors = null, bool forTradePrice = false, object instance = null)
+        {
+            float value = PawnCapacityUtility.CalculateCapacityLevel(diffSet, capacity, impactors, forTradePrice);
+            if (diffSet.GetFirstHediffOfDef(HyperManipulatorHediffDef)?.Severity == 1f)
+            {
+                if (capacity == PawnCapacityDefOf.Manipulation)
+                {
+                    value *= Math.Max(1f, PawnCapacityUtility.CalculateCapacityLevel(diffSet, PawnCapacityDefOf.Moving, impactors, forTradePrice));
+                }
+                if (capacity == PawnCapacityDefOf.Moving)
+                {
+                    value *= Math.Max(1f, PawnCapacityUtility.CalculateCapacityLevel(diffSet, PawnCapacityDefOf.Manipulation, impactors, forTradePrice));
+                }
+            }
+            return value;
+        }
+        ///<summary>使物理操作仪激活效果影响移动能力和操作能力。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> PawnCapacitiesHandlerGetLevelTranspiler(IEnumerable<CodeInstruction> instr)
+        {
+            MethodBase calculateCapacityLevelMethod = AccessTools.Method(typeof(PawnCapacityUtility), nameof(PawnCapacityUtility.CalculateCapacityLevel));
+            foreach (CodeInstruction ins in instr)
+            {
+                if (ins.opcode == OpCodes.Call
+                    && ins.operand == (calculateCapacityLevelMethod as object)
+                    )
+                {
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<HediffSet, PawnCapacityDef, List<PawnCapacityUtility.CapacityImpactor>, bool, object, float>)HyperManipulateCapacityLevelOverrider).GetMethodInfo());
+                }
+                else
+                {
+                    yield return ins;
+                }
+            }
+            yield break;
+        }*/
+        private static bool CalculateCapacityLevelOngoing = false;
+        public static void PawnCapacityUtilityCalculateCapacityLevelPrefix(ref float? __state, HediffSet diffSet, PawnCapacityDef capacity, ref List<CapacityImpactor> impactors, bool forTradePrice)
+        {
+            __state = null;
+            if (!CalculateCapacityLevelOngoing
+                && diffSet.GetFirstHediffOfDef(HyperManipulatorHediffDef)?.Severity == 1f)
+            {
+                CalculateCapacityLevelOngoing = true;
+
+                __state = 1f;
+                if (capacity == PawnCapacityDefOf.Moving)
+                {
+                    //List<CapacityImpactor> imp2 = new List<CapacityImpactor>();
+                    __state *= Math.Max(1f, CalculateCapacityLevel(diffSet, PawnCapacityDefOf.Manipulation, impactors, forTradePrice));
+                    //imp2.AddRange(impactors);
+                    //impactors?.Clear();
+                    //impactors?.AddRange(imp2);
+                    //impactors = impactors == null ? imp2 : impactors.Concat(imp2).ToList();
+                }
+            }
+        }
+        [HarmonyPostfix]public static void PawnCapacityUtilityCalculateCapacityLevelPostfix(ref float __result, ref float? __state, HediffSet diffSet, PawnCapacityDef capacity, ref List<CapacityImpactor> impactors, bool forTradePrice)
+        {
+            if (__state.HasValue)
+            {
+                if (capacity == PawnCapacityDefOf.Manipulation)
+                {
+                    __result *= Math.Max(1f, CalculateCapacityLevel(diffSet, PawnCapacityDefOf.Moving, impactors, forTradePrice));
+                }
+                __result *= __state.Value;
+                CalculateCapacityLevelOngoing = false;
+            }
+
+            if (impactors != null)
+            {
+                bool onced = false;
+                /*
+                impactors.RemoveAll(cpor => {
+
+                    if (cpor is CapacityImpactorHediff cporh && cporh.hediff.def == HyperManipulatorHediffDef)
+                    {
+                        if (onced)
+                            return true;
+                        else
+                        {
+                            onced = true;
+                            return false;
+                        }
+                    }
+                    return false;
+
+                });
+                */
+                List<CapacityImpactor> replacement = new List<CapacityImpactor>();
+                foreach (CapacityImpactor impactor in impactors)
+                {
+                    if (impactor is CapacityImpactorHediff cporh && cporh.hediff.def == HyperManipulatorHediffDef)
+                    {
+                        if (!onced)
+                        {
+                            onced = true;
+                            replacement.Add(impactor);
+                        }
+                    }
+                    else
+                        replacement.Add(impactor);
+                }
+                impactors?.Clear();
+                impactors?.AddRange(replacement);
+            }
         }
     }
 }
