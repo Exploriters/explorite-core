@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
 using UnityEngine;
 using Verse;
@@ -209,6 +210,13 @@ namespace Explorite
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(AlienRace.RaceRestrictionSettings), nameof(AlienRace.RaceRestrictionSettings.CanWear).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(RaceRestrictionSettingsCanWearPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(Building_TurretGun), "get_IsMortarOrProjectileFliesOverhead".App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(BuildingTurretGunIsMortarOrProjectileFliesOverheadPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(Building_TurretGun), "get_CanSetForcedTarget".App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(BuildingTurretGunCanSetForcedTargetPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(Building_TurretGun), "TryStartShootSomething".App(ref last_patch_method)),
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(BuildingTurretGunTryStartShootSomethingTranspiler)));
 
                 if (InstelledMods.SoS2)
                 {
@@ -1317,6 +1325,61 @@ namespace Explorite
             {
                 __result = VaildCentaurApparelPredicate(apparel);
             }
+        }
+        ///<summary>使自动弩机炮台无视屋顶限制。</summary>
+        [HarmonyPostfix]public static void BuildingTurretGunIsMortarOrProjectileFliesOverheadPostfix(Building_TurretGun __instance, ref bool __result)
+        {
+            if (__instance.def == HyperTrishotTurretBuildingDef)
+            {
+                __result = false;
+            }
+        }
+        ///<summary>使自动弩机炮台可以手动选择目标。</summary>
+        [HarmonyPostfix]public static void BuildingTurretGunCanSetForcedTargetPostfix(Building_TurretGun __instance, ref bool __result)
+        {
+            if (__instance.def == HyperTrishotTurretBuildingDef)
+            {
+                __result = true;
+            }
+        }
+
+        private static bool TrishotProjFliesOverheadOverrider(Verb verb, object instance)
+        {
+            //if (HyperTrishotTurretBuildingDef.Verbs.Contains(verb.verbProps))
+            //Log.Message($"[Explorite]Transpiler overrider get {instance.def.defName} and {verb.verbProps}");
+            if (instance is Building_TurretGun building && building.def == HyperTrishotTurretBuildingDef)
+            {
+                return false;
+            }
+            else
+            {
+                //return projectileFliesOverheadMethod.Invoke(null, new object[] { verb }) as bool? ?? false;
+                return verb.ProjectileFliesOverhead();
+            }
+        }
+        ///<summary>使自动弩机炮台无视屋顶限制而开火。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> BuildingTurretGunTryStartShootSomethingTranspiler(IEnumerable<CodeInstruction> instr)
+        {
+            MethodBase projectileFliesOverheadMethod = AccessTools.Method(typeof(VerbUtility), "ProjectileFliesOverhead");
+            //Log.Message($"[Explorite]Transpiler patch target: {projectileFliesOverheadMethod?.Name}.");
+            foreach (CodeInstruction ins in instr)
+            {
+                if (ins.opcode == OpCodes.Call
+                    && ins.operand == (projectileFliesOverheadMethod as object)
+                    )
+                {
+                    //Log.Message("[Explorite]Find transpiler patch target.");
+                    //yield return new CodeInstruction(OpCodes.Ldloc_0);
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<Verb, object, bool>)TrishotProjFliesOverheadOverrider).GetMethodInfo());
+                }
+                else
+                {
+                    //Log.Message("[Explorite]Pass transpiler patch target.");
+                    yield return ins;
+                }
+            }
+            yield break;
         }
     }
 }

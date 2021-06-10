@@ -456,6 +456,15 @@
         <member name="M:Explorite.ExploritePatches.RaceRestrictionSettingsCanWearPostfix(Verse.ThingDef,Verse.ThingDef,System.Boolean@)">
             <summary>自动判断服装是否适合半人马。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.BuildingTurretGunIsMortarOrProjectileFliesOverheadPostfix(RimWorld.Building_TurretGun,System.Boolean@)">
+            <summary>使自动弩机炮台无视屋顶限制。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.BuildingTurretGunCanSetForcedTargetPostfix(RimWorld.Building_TurretGun,System.Boolean@)">
+            <summary>使自动弩机炮台可以手动选择目标。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.BuildingTurretGunTryStartShootSomethingTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction})">
+            <summary>使自动弩机炮台无视屋顶限制而开火。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>
