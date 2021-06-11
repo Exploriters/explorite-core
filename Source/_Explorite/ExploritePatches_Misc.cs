@@ -876,6 +876,11 @@ namespace Explorite
             if (__instance.pawn.apparel.WornApparel.Any(ap => ap.def == CentaurHeaddressDef))
             {
                 __instance.apparelGraphics.RemoveAll(ag => ag.sourceApparel.def.apparel.layers.Contains(ApparelLayerDefOf.Overhead));
+
+                //ApparelGraphicRecord NullApparelGraphicRecord(ThingDef apparelDef, Color? color = null) => new ApparelGraphicRecord() { graphic = GraphicDatabase.Get<Graphic_Multi>((apparelDef.apparel.LastLayer != ApparelLayerDefOf.Overhead && !PawnRenderer.RenderAsPack(new Apparel() { def = apparelDef }) && !(apparelDef.apparel.wornGraphicPath == BaseContent.PlaceholderImagePath)) ? (apparelDef.apparel.wornGraphicPath + "_" + __instance.pawn.story.bodyType.defName) : apparelDef.apparel.wornGraphicPath, apparelDef.apparel.useWornGraphicMask ? ShaderDatabase.CutoutComplex : ShaderDatabase.Cutout, apparelDef.graphicData.drawSize, color ?? new Color(1f, 1f, 1f)), sourceApparel = new Apparel() { def = apparelDef } };
+                //__instance.apparelGraphics.Add(NullApparelGraphicRecord(DefDatabase<ThingDef>.GetNamed("Apparel_CrownStellic"), new Color(1f,1f,0f)));
+                //__instance.apparelGraphics.Add(NullApparelGraphicRecord(DefDatabase<ThingDef>.GetNamed("Apparel_Gunlink"), new Color(1f,1f,1f)));
+                //__instance.apparelGraphics.Add(NullApparelGraphicRecord(DefDatabase<ThingDef>.GetNamed("Apparel_ArmorHelmetReconPrestige"), new Color(0.5f,0.75f,1f)));
             }
             if (__instance.pawn.def == AlienCentaurDef)
             {
@@ -1122,8 +1127,6 @@ namespace Explorite
             { }
         }
         */
-
-
         ///<summary>使半人马即使携带了物品也会被视为威胁。</summary>
         [HarmonyPostfix]public static void PawnThreatDisabledPostfix(Pawn __instance, ref bool __result, IAttackTargetSearcher disabledFor)
         {
@@ -1426,72 +1429,69 @@ namespace Explorite
             }
             yield break;
         }*/
-        private static bool CalculateCapacityLevelOngoing = false;
-        public static void PawnCapacityUtilityCalculateCapacityLevelPrefix(ref float? __state, HediffSet diffSet, PawnCapacityDef capacity, ref List<CapacityImpactor> impactors, bool forTradePrice)
+        private static readonly PawnCapacityDef ManipulationAlt = new PawnCapacityDef() { defName = "EManipulationAlt" };
+        private static readonly PawnCapacityDef MovingAlt = new PawnCapacityDef() { defName = "EMovingAlt" };
+        ///<summary>干预半人马健康能力计算预处理。</summary>
+        [HarmonyPrefix]public static void PawnCapacityUtilityCalculateCapacityLevelPrefix(ref float? __state, HediffSet diffSet, ref PawnCapacityDef capacity, ref List<CapacityImpactor> impactors, bool forTradePrice)
         {
             __state = null;
-            if (!CalculateCapacityLevelOngoing
-                && diffSet.GetFirstHediffOfDef(HyperManipulatorHediffDef)?.Severity == 1f)
+            if (diffSet.pawn.def == AlienCentaurDef
+                && diffSet.GetFirstHediffOfDef(HyperManipulatorHediffDef).Part.def == CentaurScapularDef
+                && diffSet.GetFirstHediffOfDef(HyperManipulatorHediffDef)?.Severity == 1f
+                && (capacity == PawnCapacityDefOf.Manipulation || capacity == PawnCapacityDefOf.Moving)
+                )
             {
-                CalculateCapacityLevelOngoing = true;
-
                 __state = 1f;
                 if (capacity == PawnCapacityDefOf.Moving)
                 {
-                    //List<CapacityImpactor> imp2 = new List<CapacityImpactor>();
-                    __state *= Math.Max(1f, CalculateCapacityLevel(diffSet, PawnCapacityDefOf.Manipulation, impactors, forTradePrice));
-                    //imp2.AddRange(impactors);
-                    //impactors?.Clear();
-                    //impactors?.AddRange(imp2);
-                    //impactors = impactors == null ? imp2 : impactors.Concat(imp2).ToList();
+                    __state *= Math.Max(1f, CalculateCapacityLevel(diffSet, ManipulationAlt, impactors, forTradePrice));
+                    impactors?.Add(new CapacityImpactorCapacity() { capacity = PawnCapacityDefOf.Manipulation });
                 }
             }
+
+            if (capacity == ManipulationAlt)
+            {
+                capacity = PawnCapacityDefOf.Manipulation;
+            }
+            if (capacity == MovingAlt)
+            {
+                capacity = PawnCapacityDefOf.Moving;
+            }
         }
-        [HarmonyPostfix]public static void PawnCapacityUtilityCalculateCapacityLevelPostfix(ref float __result, ref float? __state, HediffSet diffSet, PawnCapacityDef capacity, ref List<CapacityImpactor> impactors, bool forTradePrice)
+        ///<summary>干预半人马健康能力计算后期处理。</summary>
+        [HarmonyPostfix]public static void PawnCapacityUtilityCalculateCapacityLevelPostfix(ref float __result, ref float? __state, HediffSet diffSet, ref PawnCapacityDef capacity, ref List<CapacityImpactor> impactors, bool forTradePrice)
         {
             if (__state.HasValue)
             {
                 if (capacity == PawnCapacityDefOf.Manipulation)
                 {
-                    __result *= Math.Max(1f, CalculateCapacityLevel(diffSet, PawnCapacityDefOf.Moving, impactors, forTradePrice));
+                    __result *= Math.Max(1f, CalculateCapacityLevel(diffSet, MovingAlt, impactors, forTradePrice));
+                    impactors?.Add(new CapacityImpactorCapacity() { capacity = PawnCapacityDefOf.Moving });
                 }
                 __result *= __state.Value;
-                CalculateCapacityLevelOngoing = false;
             }
 
-            if (impactors != null)
+            if (diffSet.pawn.def == AlienCentaurDef && impactors != null)
             {
-                bool onced = false;
-                /*
-                impactors.RemoveAll(cpor => {
-
-                    if (cpor is CapacityImpactorHediff cporh && cporh.hediff.def == HyperManipulatorHediffDef)
-                    {
-                        if (onced)
-                            return true;
-                        else
-                        {
-                            onced = true;
-                            return false;
-                        }
-                    }
-                    return false;
-
-                });
-                */
                 List<CapacityImpactor> replacement = new List<CapacityImpactor>();
                 foreach (CapacityImpactor impactor in impactors)
                 {
-                    if (impactor is CapacityImpactorHediff cporh && cporh.hediff.def == HyperManipulatorHediffDef)
+                    switch (impactor)
                     {
-                        if (!onced)
-                        {
-                            onced = true;
+                        case CapacityImpactorHediff impH when impH.hediff.def == HyperManipulatorHediffDef
+                            && replacement.Any(imp => imp is CapacityImpactorHediff impt && impt.hediff == impH.hediff):
+                        case CapacityImpactorBodyPartHealth impB when impB.bodyPart.def == CentaurScapularDef
+                            && replacement.Any(imp => imp is CapacityImpactorBodyPartHealth impt && impt.bodyPart == impB.bodyPart):
+                        case CapacityImpactorCapacity impC when
+                            replacement.Any(imp => imp is CapacityImpactorCapacity impt && impt.capacity == impC.capacity):
+                        case CapacityImpactorPain _ when
+                            replacement.Any(imp => imp is CapacityImpactorPain):
+                            break;
+                        
+                        default:
                             replacement.Add(impactor);
-                        }
+                            break;
                     }
-                    else
-                        replacement.Add(impactor);
                 }
                 impactors?.Clear();
                 impactors?.AddRange(replacement);

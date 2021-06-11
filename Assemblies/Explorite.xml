@@ -465,6 +465,12 @@
         <member name="M:Explorite.ExploritePatches.BuildingTurretGunTryStartShootSomethingTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction})">
             <summary>使自动弩机炮台无视屋顶限制而开火。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.PawnCapacityUtilityCalculateCapacityLevelPrefix(System.Nullable{System.Single}@,Verse.HediffSet,Verse.PawnCapacityDef@,System.Collections.Generic.List{Verse.PawnCapacityUtility.CapacityImpactor}@,System.Boolean)">
+            <summary>干预半人马健康能力计算预处理。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PawnCapacityUtilityCalculateCapacityLevelPostfix(System.Single@,System.Nullable{System.Single}@,Verse.HediffSet,Verse.PawnCapacityDef@,System.Collections.Generic.List{Verse.PawnCapacityUtility.CapacityImpactor}@,System.Boolean)">
+            <summary>干预半人马健康能力计算后期处理。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>
