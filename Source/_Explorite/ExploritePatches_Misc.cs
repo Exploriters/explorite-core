@@ -1435,9 +1435,9 @@ namespace Explorite
         [HarmonyPrefix]public static void PawnCapacityUtilityCalculateCapacityLevelPrefix(ref float? __state, HediffSet diffSet, ref PawnCapacityDef capacity, ref List<CapacityImpactor> impactors, bool forTradePrice)
         {
             __state = null;
-            if (diffSet.pawn.def == AlienCentaurDef
-                && diffSet.GetFirstHediffOfDef(HyperManipulatorHediffDef).Part.def == CentaurScapularDef
-                && diffSet.GetFirstHediffOfDef(HyperManipulatorHediffDef)?.Severity == 1f
+            if (diffSet?.pawn?.def == AlienCentaurDef
+                && diffSet?.GetFirstHediffOfDef(HyperManipulatorHediffDef)?.Part?.def == CentaurScapularDef
+                && diffSet?.GetFirstHediffOfDef(HyperManipulatorHediffDef)?.Severity == 1f
                 && (capacity == PawnCapacityDefOf.Manipulation || capacity == PawnCapacityDefOf.Moving)
                 )
             {
