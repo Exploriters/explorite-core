@@ -164,6 +164,7 @@
     <Compile Include="QuestPart.cs" />
     <Compile Include="QuestReward.cs" />
     <Compile Include="QuestNode.cs" />
+    <Compile Include="Recipe_ForceScarSurgery.cs" />
     <Compile Include="Recipe_RepairTrishot.cs" />
     <Compile Include="Recipe_RemoveBodyPart_MX.cs" />
     <Compile Include="ExploritePatches_PawnGenerator.cs" />

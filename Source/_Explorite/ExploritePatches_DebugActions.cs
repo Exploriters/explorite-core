@@ -26,7 +26,7 @@ namespace Explorite
         {
             if (UI.MouseCell().InBounds(Find.CurrentMap))
             {
-                Find.CurrentMap.fogGrid.Notify_FogBlockerRemoved(UI.MouseCell());
+                Find.CurrentMap.fogGrid.RevealFogCluster(UI.MouseCell());
             }
         }
         ///<summary>清除所有迷雾。</summary>

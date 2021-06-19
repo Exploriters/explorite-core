@@ -1,7 +1,7 @@
 /********************
  * 该文件包含一个不能打穿屋顶的穿墙弹射物。
  * 
- * 未实现。
+ * 已弃用。
  * --siiftun1857
  */
 using RimWorld;
@@ -12,6 +12,31 @@ using Verse.Sound;
 
 namespace Explorite
 {
+    /*public class Projectile_Explosive_RoofBypass : Projectile_Explosive
+    {
+        private void ImpactSomething()
+        {
+            if (def.projectile.flyOverhead)
+            {
+                RoofDef roofDef = base.Map.roofGrid.RoofAt(base.Position);
+                if (roofDef != null)
+                {
+                    Log.Message("AAA!");
+                }
+            }
+        }
+        private void ImpactSomething2()
+        {
+            if (def.projectile.flyOverhead && ExploritePatches.IsProjFliesOverheadOverrider(this))
+            {
+                RoofDef roofDef = base.Map.roofGrid.RoofAt(base.Position);
+                if (roofDef != null)
+                {
+                    Log.Message("AAA2!");
+                }
+            }
+        }
+    }*/
     /*public abstract class Projectile_Explosive_RoofBypass : ThingWithComps
     {
 
@@ -572,9 +597,9 @@ namespace Explorite
         }
     }
     */
-
+    /*
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0044")]
-    public abstract class Projectile_Explosive_RoofBypass : Projectile_Explosive
+    public class Projectile_Explosive_RoofBypass : Projectile_Explosive
     {
         private Sustainer ambientSustainer = null;
 
@@ -779,10 +804,10 @@ namespace Explorite
                 {
                     if (roofDef.isThickRoof)
                     {
-                        /*this.ThrowDebugText("hit-thick-roof", Position);
+                        / *this.ThrowDebugText("hit-thick-roof", Position);
                         this.def.projectile.soundHitThickRoof.PlayOneShot(new TargetInfo(Position, Map, false));
                         this.Destroy(DestroyMode.Vanish);
-                        return;*/
+                        return;* /
                     }
                     else if (Position.GetEdifice(Map) == null || Position.GetEdifice(Map).def.Fillage != FillCategory.Full)
                     {
@@ -843,11 +868,11 @@ namespace Explorite
             Impact(usedTarget.Thing);
         }
 
-        /*protected virtual void Impact(Thing hitThing)
+        / *protected virtual void Impact(Thing hitThing)
         {
             GenClamor.DoClamor(this, 2.1f, ClamorDefOf.Impact);
             this.Destroy(DestroyMode.Vanish);
-        }*/
+        }* /
 
         protected override void Impact(Thing hitThing)
         {
@@ -889,5 +914,5 @@ namespace Explorite
         {
         }
     }
-
+    */
 }

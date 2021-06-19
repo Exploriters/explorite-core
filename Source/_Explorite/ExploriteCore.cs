@@ -8,6 +8,7 @@ using UnityEngine;
 using RimWorld;
 using HarmonyLib;
 using System.Linq;
+using System.Reflection;
 
 namespace Explorite
 {
@@ -255,9 +256,19 @@ namespace Explorite
                 pawn.SetPositionDirect((IntVec3)relocated);
                 flag = true;
             }
+            pawn.Notify_Teleported();
 
             return flag;
         }
+
+        internal static MethodInfo methodFloodUnfogAdjacent = typeof(FogGrid).GetMethod("FloodUnfogAdjacent", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+        public static void RevealFogCluster(this FogGrid fogGrid, IntVec3 target)
+        {
+            methodFloodUnfogAdjacent.Invoke(fogGrid, new object[] { target });
+        }
+        
+        
+        
         // 与Color.HSVToRGB重复
         /*
         public static Color hsb2rgb(float h, float s, float v, float a = 1f)

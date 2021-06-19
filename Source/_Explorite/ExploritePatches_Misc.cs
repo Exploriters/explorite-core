@@ -226,6 +226,9 @@ namespace Explorite
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(PawnCapacityUtilityCalculateCapacityLevelPrefix)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnCapacityUtilityCalculateCapacityLevelPostfix)));
 
+                harmonyInstance.Patch(AccessTools.Method(typeof(Projectile), "ImpactSomething".App(ref last_patch_method)),
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(ProjectileImpactSomethingTranspiler)));
+
                 if (InstelledMods.SoS2)
                 {
                     // 依赖 类 SaveOurShip2.ShipInteriorMod2
@@ -1496,6 +1499,63 @@ namespace Explorite
                 impactors?.Clear();
                 impactors?.AddRange(replacement);
             }
+        }
+
+        public static bool IsProjFliesOverheadOverrider(object instance)
+        {
+            return !(instance is Projectile projectile) || !projectile.def.tradeTags.Contains("ExRoofBypass");
+        }
+        /*private static T Appsb<T>(this T obj, StringBuilder stringBuilder)
+        {
+            stringBuilder.AppendLine(obj.ToString());
+            return obj;
+        }*/
+        ///<summary>干涉弹射物命中屋顶的效果。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> ProjectileImpactSomethingTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            FieldInfo flyOverheadInfo = AccessTools.Field(typeof(ProjectileProperties), nameof(ProjectileProperties.flyOverhead));
+            Label label = ilg.DefineLabel();
+
+            byte patchActionStage = 0;
+
+            Label? zerolabel = null;
+            Label? addlabel = null;
+
+            //StringBuilder stringBuilder = new StringBuilder();
+
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0 && ins.opcode == OpCodes.Ldfld && ins.operand == flyOverheadInfo as object)
+                {
+                    patchActionStage = 1;
+                    yield return ins;
+                }
+                else if (patchActionStage == 1 && ins.opcode == OpCodes.Brfalse)
+                {
+                    patchActionStage = 2;
+                    zerolabel = ins.operand as Label?;
+                    yield return ins;
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<object, bool>)IsProjFliesOverheadOverrider).GetMethodInfo());
+                    CodeInstruction brf = new CodeInstruction(OpCodes.Brfalse, label);
+                    addlabel = brf.operand as Label?;
+                    yield return brf;
+                }
+                else if (patchActionStage == 2 && zerolabel.HasValue && addlabel.HasValue && ins.labels.Contains(zerolabel.Value))
+                {
+                    patchActionStage = 3;
+                    ins.labels.Add(addlabel.Value);
+                    yield return ins;
+                    zerolabel = null;
+                    addlabel = null;
+                }
+                else
+                {
+                    yield return ins;
+                }
+            }
+            //Log.Message("[Explorite]instr result:\n"+stringBuilder.ToString());
+            yield break;
         }
     }
 }

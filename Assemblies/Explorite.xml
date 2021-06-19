@@ -211,6 +211,9 @@
         <member name="T:Explorite.DamageWorker_Frostbrainer">
             <summary>只能杀伤大脑的伤害。</summary>
         </member>
+        <member name="T:Explorite.DamageWorker_Scarshot">
+            <summary>干涉伤痕永久性几率的伤害。</summary>
+        </member>
         <member name="M:Explorite.ExploriteCore.FormattingTickTimeDiv(System.Double,System.String,System.String)">
             <summary>
             将一个游戏刻格式化为速率值的字符串。
@@ -471,6 +474,9 @@
         <member name="M:Explorite.ExploritePatches.PawnCapacityUtilityCalculateCapacityLevelPostfix(System.Single@,System.Nullable{System.Single}@,Verse.HediffSet,Verse.PawnCapacityDef@,System.Collections.Generic.List{Verse.PawnCapacityUtility.CapacityImpactor}@,System.Boolean)">
             <summary>干预半人马健康能力计算后期处理。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.ProjectileImpactSomethingTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>干涉弹射物命中屋顶的效果。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>
@@ -594,6 +600,9 @@
         <member name="T:Explorite.DetlaTracer">
             <summary>追踪最近20条变化量记录。</summary>
         </member>
+        <member name="T:Explorite.Recipe_ForceScarSurgery">
+            <summary>制造永久性伤口的手术。</summary>
+        </member>
         <member name="T:Explorite.PlaceWorker_PlantReactionTable">
             <summary>为植物反应桌绘制互动图标。</summary>
         </member>
@@ -607,7 +616,7 @@
             <summary>发射后直接命中目标的子弹。</summary>
         </member>
         <member name="T:Explorite.Projectile_Explosive_Teleshot">
-            <summary>该弹射物会将目标传送至爆炸位置。</summary>
+            <summary>该弹射物会将发射者传送至爆炸位置。</summary>
         </member>
         <member name="T:Explorite.Projectile_Explosive_Spotshot">
             <summary>该弹射物会探查目的地区域。</summary>
