@@ -10,7 +10,7 @@ namespace Explorite
     /**
      * <summary>
      * 使物品的生命值随着时间逐渐恢复。<br />
-     * 该类为抽象类，<see cref = "CompSelfHealOvertime1" />和<see cref = "CompSelfHealOvertime1" />分别以不同的方式完成了实现。
+     * 该类为抽象类，<see cref = "CompSelfHealOvertime1" />和<see cref = "CompSelfHealOvertime2" />分别以不同的方式完成了实现。
      * </summary>
      */
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE1006")]
@@ -32,8 +32,9 @@ namespace Explorite
         public CompProperties_SelfHealOvertime(Type cc) : base(cc == typeof(ThingComp) ? typeof(CompSelfHealOvertime2) : cc)
         {
         }
+        /*
         //GIVE UP FOR NOW TILL I K HOW TO DO
-        /*public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
+        public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
         {
             IEnumerable<StatDrawEntry> result = base.SpecialDisplayStats(req);
             double detlaHpPerSec=0;

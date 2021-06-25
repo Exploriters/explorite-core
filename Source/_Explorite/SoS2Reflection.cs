@@ -11,11 +11,7 @@ using Verse.AI.Group;
 
 namespace Explorite
 {
-    /**
-     * <summary>
-     * 对SoS2的内部方法建立反射。
-     * </summary>
-     */
+    ///<summary>对SoS2的内部方法建立反射。</summary>
     [StaticConstructorOnStartup]
     internal static class SoS2Reflection
     {

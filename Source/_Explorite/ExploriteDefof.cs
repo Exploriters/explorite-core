@@ -1,5 +1,7 @@
 /********************
  * 常量文件。
+ * 
+ * 注意：有意不使用DefOf
  * --siiftun1857
  */
 using HarmonyLib;
@@ -75,6 +77,7 @@ namespace Explorite
         public static readonly BodyDef CentaurBodyDef = GetModDef<BodyDef>(InstelledMods.RimCentaurs, "Centaur");
         public static readonly BodyPartDef CentaurScapularDef = GetModDef<BodyPartDef>(InstelledMods.RimCentaurs, "CentaurScapular");
         public static readonly BodyPartDef CentaurSubsystemBodyPartDef = GetModDef<BodyPartDef>(InstelledMods.RimCentaurs, "CentaurSubsystem");
+        public static readonly BodyPartGroupDef CentaurTorsoGroupDef = GetModDef<BodyPartGroupDef>(InstelledMods.RimCentaurs, "CentaurTorso");
         public static readonly BodyPartGroupDef CentaurCorePartGroupDef = GetModDef<BodyPartGroupDef>(InstelledMods.RimCentaurs, "CentaurCorePart");
         public static readonly BodyPartGroupDef CentaurSubsystemGroup0Def = GetModDef<BodyPartGroupDef>(InstelledMods.RimCentaurs, "CentaurSubsystem");
         public static readonly BodyPartGroupDef CentaurSubsystemGroup1Def = GetModDef<BodyPartGroupDef>(InstelledMods.RimCentaurs, "CentaurSubsystemPrimary");

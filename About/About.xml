@@ -2,7 +2,7 @@
 <ModMetaData>
   <packageId>Exploriters.ExploriteCore</packageId>
   <name>Explorite Core</name>
-  <author>Magnus siiftun1857 Frankline</author>
+  <author>siiftun1857</author>
   <supportedVersions>
     <li>1.2</li>
   </supportedVersions>
@@ -13,19 +13,19 @@
         <steamWorkshopUrl isNull="True" />
         <downloadUrl isNull="True" />
     </li>
-    <li>
+    <!--<li>
         <packageId>Ludeon.RimWorld.Royalty</packageId>
         <displayName>Royalty</displayName>
         <steamWorkshopUrl isNull="True" />
         <downloadUrl isNull="True" />
-    </li>
+    </li>-->
     <li>
         <packageId>brrainz.harmony</packageId>
         <displayName>Harmony</displayName>
         <steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
         <downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
     </li>
-    <li>
+    <!--<li>
         <packageId>UnlimitedHugs.HugsLib</packageId>
         <displayName>HugsLib</displayName>
         <steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
@@ -36,7 +36,7 @@
         <displayName>Humanoid Alien Races 2.0</displayName>
         <steamWorkshopUrl>steam://url/CommunityFilePage/839005762</steamWorkshopUrl>
         <downloadUrl>https://github.com/RimWorld-CCL-Reborn/AlienRaces/releases/latest</downloadUrl>
-    </li>
+    </li>-->
   </modDependencies>
   <loadAfter>
 	<li>brrainz.harmony</li>

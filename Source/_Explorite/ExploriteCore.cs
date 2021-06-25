@@ -12,6 +12,7 @@ using System.Reflection;
 
 namespace Explorite
 {
+    ///<summary>Explorite Core核心函数集。</summary>
     public static partial class ExploriteCore
     {
         public static class InstelledMods
@@ -21,6 +22,7 @@ namespace Explorite
             public static bool GuoGuo => ModLister.GetActiveModWithIdentifier("Exploriters.AndoRingo.GuoGuo") != null;
             public static bool Royalty => ModLister.GetActiveModWithIdentifier("Ludeon.RimWorld.Royalty") != null;
             public static bool SoS2 => ModLister.GetActiveModWithIdentifier("kentington.saveourship2") != null;
+            public static bool HAR => ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null;
         }
 
         /*
@@ -266,9 +268,7 @@ namespace Explorite
         {
             methodFloodUnfogAdjacent.Invoke(fogGrid, new object[] { target });
         }
-        
-        
-        
+
         // 与Color.HSVToRGB重复
         /*
         public static Color hsb2rgb(float h, float s, float v, float a = 1f)
@@ -325,7 +325,6 @@ namespace Explorite
             return new Color(r, g, b);
         }
         */
-
         /*
         BodyPartRecord partRecHead = CentaurBodyDef.AllParts.First(d => d.def == BodyPartDefOf.Head);
         BodyPartRecord partRecWaist = CentaurBodyDef.AllParts.First(d => d?.groups?.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")) ?? false);
@@ -342,6 +341,7 @@ namespace Explorite
             )
             return true;
         */
+
         /**
          * <summary>
          * 检测物品是否为合法的半人马服装。
@@ -359,16 +359,28 @@ namespace Explorite
 
             if (apparel.bodyPartGroups?.Any() == true)
             {
+                byte flag = 0;
                 foreach (BodyPartGroupDef bpg in apparel.bodyPartGroups)
                 {
-                    if (!CentaurBodyPartGroups.Contains(bpg)) // || bpg == BodyPartGroupDefOf.Torso)
+                    if (bpg == BodyPartGroupDefOf.Torso)
+                    {
+                        flag |= 1;
+                    }
+                    if (bpg == CentaurTorsoGroupDef)
+                    {
+                        flag |= 2;
+                    }
+                    else if (!CentaurBodyPartGroups.Contains(bpg))
                     {
                         return false;
                     }
+                }
+                if ((flag & 1) != 0 && (flag & 2) == 0)
+                {
+                    return false;
                 }
             }
             return true;
         }
     }
-
 }

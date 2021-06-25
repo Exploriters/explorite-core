@@ -19,11 +19,7 @@ using static Verse.PawnCapacityUtility;
 
 namespace Explorite
 {
-    /**
-     * <summary>
-     * 包含多个补丁的合集类。
-     * </summary>
-     */
+    ///<summary>包含多个补丁的合集类。</summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0055")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0058")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0060")]
@@ -34,6 +30,11 @@ namespace Explorite
         private static string App(this string str, ref string target)
         {
             return target = str;
+        }
+        private static T Appsb<T>(this T obj, StringBuilder stringBuilder)
+        {
+            stringBuilder.AppendLine(obj.ToString());
+            return obj;
         }
         static ExploritePatches()
         {
@@ -157,6 +158,8 @@ namespace Explorite
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(OutfitDatabase), "GenerateStartingOutfits".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(OutfitDatabaseGenerateStartingOutfitsPostfix)));
+                //harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_OutfitTracker), "get_CurrentOutfit".App(ref last_patch_method)),
+                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnOutfitTrackerGetCurrentOutfitPostfix)));
 
                 //harmonyInstance.Patch(AccessTools.Method(typeof(GenHostility), nameof(GenHostility.HostileTo), new Type[] { typeof(Thing), typeof(Thing) }),
                 //    postfix: new HarmonyMethod(patchType, last_patch = nameof(GenHostilityHostileToPostfix)));
@@ -209,9 +212,6 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(ResearchProjectDef), "get_CanStartNow".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(ResearchProjectDefCanStartNowPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(AlienRace.RaceRestrictionSettings), nameof(AlienRace.RaceRestrictionSettings.CanWear).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(RaceRestrictionSettingsCanWearPostfix)));
-
                 harmonyInstance.Patch(AccessTools.Method(typeof(Building_TurretGun), "get_IsMortarOrProjectileFliesOverhead".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(BuildingTurretGunIsMortarOrProjectileFliesOverheadPostfix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(Building_TurretGun), "get_CanSetForcedTarget".App(ref last_patch_method)),
@@ -229,6 +229,12 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(Projectile), "ImpactSomething".App(ref last_patch_method)),
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(ProjectileImpactSomethingTranspiler)));
 
+                if (InstelledMods.HAR)
+                {
+                    // 依赖 类 AlienRace.RaceRestrictionSettings
+                    harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("AlienRace.RaceRestrictionSettings"), "CanWear".App(ref last_patch_method)),
+                        postfix: new HarmonyMethod(patchType, last_patch = nameof(RaceRestrictionSettingsCanWearPostfix)));
+                }
                 if (InstelledMods.SoS2)
                 {
                     // 依赖 类 SaveOurShip2.ShipInteriorMod2
@@ -910,36 +916,48 @@ namespace Explorite
         ///<summary>使半人马始终被视为具有特征。</summary>
         [HarmonyPostfix]public static void TraitSetHasTraitPostfix(TraitSet __instance, ref bool __result, TraitDef tDef)
         {
-            if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn)
+            if (__result == false
+                && __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                && pawn.def == AlienCentaurDef)
             {
-                if ( pawn.def == AlienCentaurDef && (
+                if (
                     tDef == DefDatabase<TraitDef>.GetNamed("Masochist") ||
                     tDef == TraitDefOf.Industriousness ||
                     tDef == TraitDefOf.DrugDesire ||
                     tDef == TraitDefOf.Transhumanist ||
                     tDef == TraitDefOf.Kind ||
-                    tDef == TraitDefOf.Asexual ))
+                    tDef == TraitDefOf.Asexual )
                 {
                     __result = true;
                 }
-                if ( pawn.def == AlienGuoguoDef && (
+                /*if ( pawn.def == AlienGuoguoDef && (
                     tDef == TraitDefOf.Kind ||
                     tDef == TraitDefOf.Asexual ))
                 {
                     __result = true;
-                }
+                }*/
             }
         }
         ///<summary>为半人马特征制作样本。</summary>
         [HarmonyPostfix]public static void TraitSetGetTraitPostfix(TraitSet __instance, ref Trait __result, TraitDef tDef)
         {
-            if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-                && pawn.def == AlienCentaurDef
-                && __result == null)
+            if (__result == null
+                && __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                && pawn.def == AlienCentaurDef)
             {
-                if (tDef == TraitDefOf.DrugDesire)
+                if (tDef == DefDatabase<TraitDef>.GetNamed("Masochist") ||
+                    tDef == TraitDefOf.Industriousness ||
+                    tDef == TraitDefOf.DrugDesire ||
+                    tDef == TraitDefOf.Transhumanist ||
+                    tDef == TraitDefOf.Kind ||
+                    tDef == TraitDefOf.Asexual)
                 {
-                    __result = new Trait(tDef, -1);
+                    __result = new Trait(tDef, tDef.defName switch
+                    {
+                        "DrugDesire" => -1,
+                        "Transhumanist" => 2,
+                        _ => 0,
+                    }) { pawn = pawn};
                 }
             }
         }
@@ -1012,13 +1030,23 @@ namespace Explorite
                           || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Belt) == true
                             )
                         )*/
-                    if(VaildCentaurApparelPredicate(allDef2))
+                    if (VaildCentaurApparelPredicate(allDef2))
                     {
                         outfitCentaur.filter.SetAllow(allDef2, allow: true);
                     }
                 }
             }
         }
+        /*
+        ///<summary>更改半人马默认服装方案。</summary>
+        [HarmonyPostfix]public static void PawnOutfitTrackerGetCurrentOutfitPostfix(Pawn_OutfitTracker __instance)
+        {
+            if (__instance.GetType().GetField("curOutfit", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Outfit curOutfit
+                && curOutfit == null)
+            {
+                __instance.CurrentOutfit = Current.Game.outfitDatabase.AllOutfits.First(o => o.label == "OutfitCentaur".Translate());
+            }
+        }*/
         /*
         //static int ExLogLimit = 0;
         //static readonly MethodInfo IsPredatorHostileToMethod = AccessTools.Method(typeof(GenHostility), "IsPredatorHostileTo", new Type[] { typeof(Pawn), typeof(Pawn) });
@@ -1503,13 +1531,8 @@ namespace Explorite
 
         public static bool IsProjFliesOverheadOverrider(object instance)
         {
-            return !(instance is Projectile projectile) || !projectile.def.tradeTags.Contains("ExRoofBypass");
+            return !(instance is Projectile projectile) || !(projectile?.def?.tradeTags?.Contains("ExRoofBypass") ?? false);
         }
-        /*private static T Appsb<T>(this T obj, StringBuilder stringBuilder)
-        {
-            stringBuilder.AppendLine(obj.ToString());
-            return obj;
-        }*/
         ///<summary>干涉弹射物命中屋顶的效果。</summary>
         [HarmonyTranspiler]public static IEnumerable<CodeInstruction> ProjectileImpactSomethingTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {

@@ -97,7 +97,6 @@
     <Compile Include="AdditionalAbility.cs" />
     <Compile Include="AdditionalVerbRemaster.cs" />
     <Compile Include="Alert_HypothermiaAbsorptionDepletedColonists.cs" />
-    <Compile Include="AlienRace.cs" />
     <Compile Include="BackstoryCracker.cs" />
     <Compile Include="Building_TriBattery.cs" />
     <Compile Include="Building_TurretGun_HyperTrishot.cs" />

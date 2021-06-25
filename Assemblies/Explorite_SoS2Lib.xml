@@ -11,9 +11,7 @@
             <summary>使半人马开局在其巡洋舰中。</summary>
         </member>
         <member name="T:Explorite.SoS2Reflection">
-            <summary>
-            对SoS2的内部方法建立反射。
-            </summary>
+            <summary>对SoS2的内部方法建立反射。</summary>
         </member>
     </members>
 </doc>

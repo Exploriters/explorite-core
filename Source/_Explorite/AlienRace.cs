@@ -7,6 +7,7 @@ using Verse;
 
 namespace Explorite
 {
+    ///<summary>不在尸体白骨化情况下显示的部件。</summary>
     public class BodyAddon_MX : AlienRace.AlienPartGenerator.BodyAddon
     {
         public override bool CanDrawAddon(Pawn pawn)
