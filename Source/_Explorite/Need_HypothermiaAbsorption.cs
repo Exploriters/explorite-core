@@ -177,11 +177,11 @@ namespace Explorite
         {
             CurLevel = MaxLevel;
         }
-        public override void DrawOnGUI(Rect rect, int maxThresholdMarkers = 2147483647, float customMargin = -1f, bool drawArrows = true, bool doTooltip = true)
+        public override void DrawOnGUI(Rect rect, int maxThresholdMarkers = int.MaxValue, float customMargin = -1, bool drawArrows = true, bool doTooltip = true, Rect? rectForTooltip = null)
         {
             rect.width /= 0.73f;
             //rect.height = Mathf.Max(rect.height * 0.666f, 30f);
-            base.DrawOnGUI(rect, maxThresholdMarkers, customMargin, drawArrows, doTooltip);
+            base.DrawOnGUI(rect, maxThresholdMarkers, customMargin, drawArrows, doTooltip, rectForTooltip);
         }
         public override string GetTipString()
         {

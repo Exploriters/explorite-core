@@ -252,11 +252,11 @@ namespace Explorite
             impactAngleVect = Vector3Utility.HorizontalVectorFromAngle(dinfo.Angle);
             Vector3 loc = parent.TrueCenter() + (impactAngleVect.RotatedBy(180f) * 0.5f);
             float num = Mathf.Min(10f, 2f + (dinfo.Amount / 10f));
-            MoteMaker.MakeStaticMote(loc, parent.Map, ThingDefOf.Mote_ExplosionFlash, num);
+            FleckMaker.Static(loc, parent.Map, FleckDefOf.ExplosionFlash, num);
             int num2 = (int)num;
             for (int i = 0; i < num2; i++)
             {
-                MoteMaker.ThrowDustPuff(loc, parent.Map, Rand.Range(0.8f, 1.2f));
+                FleckMaker.ThrowDustPuff(loc, parent.Map, Rand.Range(0.8f, 1.2f));
             }
             lastAbsorbDamageTick = Find.TickManager.TicksGame;
             KeepDisplaying();
@@ -269,14 +269,14 @@ namespace Explorite
             if (overkill >= FragemntPerCharge)
             {
                 SoundDefOf.EnergyShield_Broken.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
-                MoteMaker.MakeStaticMote(parent.TrueCenter(), parent.Map, ThingDefOf.Mote_ExplosionFlash, 12f);
+                FleckMaker.Static(parent.TrueCenter(), parent.Map, FleckDefOf.ExplosionFlash, 12f);
                 overkilled = true;
             }
             else
                 SoundDefOf.EnergyShield_AbsorbDamage.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
             for (int i = 0; i < 6; i++)
             {
-                MoteMaker.ThrowDustPuff(parent.TrueCenter() + (Vector3Utility.HorizontalVectorFromAngle(Rand.Range(0, 360)) * Rand.Range(0.3f, 0.6f)), parent.Map, Rand.Range(0.8f, 1.2f));
+                FleckMaker.ThrowDustPuff(parent.TrueCenter() + (Vector3Utility.HorizontalVectorFromAngle(Rand.Range(0, 360)) * Rand.Range(0.3f, 0.6f)), parent.Map, Rand.Range(0.8f, 1.2f));
             }
             //energy = 0f;
             energy = -Math.Min(EnergyMax * 10 / 3, overkill * 3);
@@ -289,7 +289,7 @@ namespace Explorite
             if (parent.Spawned && overkilled)
             {
                 SoundDefOf.EnergyShield_Reset.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
-                MoteMaker.ThrowLightningGlow(parent.TrueCenter(), parent.Map, 3f);
+                FleckMaker.ThrowLightningGlow(parent.TrueCenter(), parent.Map, 3f);
             }
             ticksToReset = -1;
             overkilled = false;
@@ -336,7 +336,7 @@ namespace Explorite
         public Gizmo_EnergyShieldStatusPawn() => order = -2000f;
         public override float GetWidth(float maxWidth) => Valid ? 140f : 0f;
 
-        public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth)
+        public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth, GizmoRenderParms parms)
         {
             if (Valid)
             {

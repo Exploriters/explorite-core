@@ -80,7 +80,7 @@ namespace Explorite
                         {
                             loc2.y = hairLoc - 0.001f;
 
-                            Material mat = __instance.graphics.HairMatAt_NewTemp(headFacing, true);
+                            Material mat = __instance.graphics.HairMatAt(headFacing, true);
                             if (true)
                             {
                                 GenDraw.DrawMeshNowOrLater(__instance.graphics.HairMeshSet.MeshAt(headFacing), loc2, quad, mat, portrait);

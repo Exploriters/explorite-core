@@ -102,7 +102,7 @@ namespace Explorite
                                 }
                                 if (thingGenProp.color.HasValue && thing?.TryGetComp<CompColorable>() != null)
                                 {
-                                    thing.TryGetComp<CompColorable>().Color = thingGenProp.color.Value;
+                                    thing.TryGetComp<CompColorable>().SetColor(thingGenProp.color.Value);
                                 }
                                 thingsToDrop.TryAddOrTransfer(thing);
                             }

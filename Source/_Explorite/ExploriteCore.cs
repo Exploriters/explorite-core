@@ -256,9 +256,9 @@ namespace Explorite
             if (relocated != null)
             {
                 pawn.SetPositionDirect((IntVec3)relocated);
+                pawn.Notify_Teleported();
                 flag = true;
             }
-            pawn.Notify_Teleported();
 
             return flag;
         }
