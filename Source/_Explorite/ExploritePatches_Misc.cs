@@ -50,8 +50,9 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Interval).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(SkillIntervalPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_PsychicEntropyTracker), "get_PainMultiplier".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(NoPainBounsForCentaursPostfix)));
+                //TODO: MISSING PATCHING TARGET!
+                //harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_PsychicEntropyTracker), "get_PainMultiplier".App(ref last_patch_method)),
+                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(NoPainBounsForCentaursPostfix)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(IncidentWorker_WandererJoin), "CanFireNowSub".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(WandererJoinCannotFirePostfix)));
@@ -142,10 +143,14 @@ namespace Explorite
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.DegreeOfTrait).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetDegreeOfTraitPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.HasTrait).App(ref last_patch_method)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.HasTrait).App(ref last_patch_method), new Type[] { typeof(TraitDef) }),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetHasTraitPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.GetTrait).App(ref last_patch_method)),
+                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.HasTrait).App(ref last_patch_method), new Type[] { typeof(TraitDef), typeof(int) }),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetHasTraitDegreePostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.GetTrait).App(ref last_patch_method), new Type[] { typeof(TraitDef) }),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetGetTraitPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.GetTrait).App(ref last_patch_method), new Type[] { typeof(TraitDef), typeof(int) }),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetGetTraitDegreePostfix)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(RaceProperties), nameof(RaceProperties.SpecialDisplayStats).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(RacePropertiesSpecialDisplayStatsPostfix)));
@@ -188,7 +193,7 @@ namespace Explorite
                 
                 nameof(DamageInfo).App(ref last_patch_method);
                 harmonyInstance.Patch(AccessTools.Constructor(typeof(DamageInfo),
-                    parameters: new Type[] { typeof(DamageDef), typeof(float), typeof(float), typeof(float), typeof(Thing), typeof(BodyPartRecord), typeof(ThingDef), typeof(SourceCategory), typeof(Thing) }),
+                    parameters: new Type[] { typeof(DamageDef), typeof(float), typeof(float), typeof(float), typeof(Thing), typeof(BodyPartRecord), typeof(ThingDef), typeof(SourceCategory), typeof(Thing), typeof(bool), typeof(bool) }),
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(DamageInfoCtorPrefix)));
 
                 nameof(BattleLogEntry_ExplosionImpact).App(ref last_patch_method);
@@ -906,10 +911,8 @@ namespace Explorite
             if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
                 && pawn.def == AlienCentaurDef)
             {
-                if (tDef == TraitDefOf.Industriousness)
-                    __result = Math.Max(2, __result);
-                else if (tDef == TraitDefOf.DrugDesire)
-                    __result = Math.Min(-1, __result);
+                if (CentaurTraitPredicate(tDef, out int degree))
+                    __result = degree;
             }
         }
         ///<summary>使半人马始终被视为具有特征。</summary>
@@ -919,22 +922,23 @@ namespace Explorite
                 && __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
                 && pawn.def == AlienCentaurDef)
             {
-                if (
-                    tDef == DefDatabase<TraitDef>.GetNamed("Masochist") ||
-                    tDef == TraitDefOf.Industriousness ||
-                    tDef == TraitDefOf.DrugDesire ||
-                    tDef == TraitDefOf.Transhumanist ||
-                    tDef == TraitDefOf.Kind ||
-                    tDef == TraitDefOf.Asexual )
+                if (CentaurTraitPredicate(tDef))
                 {
                     __result = true;
                 }
-                /*if ( pawn.def == AlienGuoguoDef && (
-                    tDef == TraitDefOf.Kind ||
-                    tDef == TraitDefOf.Asexual ))
+            }
+        }
+        ///<summary>使半人马始终被视为具有特征等级。</summary>
+        [HarmonyPostfix]public static void TraitSetHasTraitDegreePostfix(TraitSet __instance, ref bool __result, TraitDef tDef, int degree)
+        {
+            if (__result == false
+                && __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                && pawn.def == AlienCentaurDef)
+            {
+                if (CentaurTraitPredicate(tDef, degree))
                 {
                     __result = true;
-                }*/
+                }
             }
         }
         ///<summary>为半人马特征制作样本。</summary>
@@ -944,19 +948,22 @@ namespace Explorite
                 && __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
                 && pawn.def == AlienCentaurDef)
             {
-                if (tDef == DefDatabase<TraitDef>.GetNamed("Masochist") ||
-                    tDef == TraitDefOf.Industriousness ||
-                    tDef == TraitDefOf.DrugDesire ||
-                    tDef == TraitDefOf.Transhumanist ||
-                    tDef == TraitDefOf.Kind ||
-                    tDef == TraitDefOf.Asexual)
+                if (CentaurTraitPredicate(tDef, out int degree))
                 {
-                    __result = new Trait(tDef, tDef.defName switch
-                    {
-                        "DrugDesire" => -1,
-                        "Transhumanist" => 2,
-                        _ => 0,
-                    }) { pawn = pawn};
+                    __result = new Trait(tDef, degree) { pawn = pawn};
+                }
+            }
+        }
+        ///<summary>为半人马特征等级制作样本。</summary>
+        [HarmonyPostfix]public static void TraitSetGetTraitDegreePostfix(TraitSet __instance, ref Trait __result, TraitDef tDef, int degree)
+        {
+            if (__result == null
+                && __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                && pawn.def == AlienCentaurDef)
+            {
+                if (CentaurTraitPredicate(tDef, degree))
+                {
+                    __result = new Trait(tDef, degree) { pawn = pawn};
                 }
             }
         }

@@ -394,5 +394,54 @@ namespace Explorite
             }
             return true;
         }
+
+        /**
+         * <summary>
+         * 检测特征是否为半人马特征。
+         * </summary>
+         * <param name="tDef">需要被检测的特征。</param>
+         * <param name="degree">需要被检测的特征程度。</param>
+         * <returns>该特征是否为半人马服装。</returns>
+         */
+        public static bool CentaurTraitPredicate(TraitDef tDef, int? degree = null)
+        {
+            return CentaurTraitPredicate(tDef, out int tergetDegree) && ( !degree.HasValue || degree == tergetDegree);
+        }
+        /**
+         * <summary>
+         * 检测特征是否为半人马特征。
+         * </summary>
+         * <param name="tDef">需要被检测的特征。</param>
+         * <param name="degree">需要被检测的特征程度。</param>
+         * <returns>该特征是否为半人马特征。</returns>
+         */
+        public static bool CentaurTraitPredicate(TraitDef tDef, out int degree)
+        {
+            if (tDef == DefDatabase<TraitDef>.GetNamed("Masochist")
+             || tDef == TraitDefOf.Masochist
+             || tDef == TraitDefOf.Industriousness
+             || tDef == TraitDefOf.Kind
+             || tDef == TraitDefOf.Asexual
+             )
+            {
+                degree = 0;
+                return true;
+            }
+            else if (tDef == TraitDefOf.DrugDesire)
+            {
+                degree = -1;
+                return true;
+            }
+            else if (tDef == TraitDefOf.Transhumanist)
+            {
+                degree = 2;
+                return true;
+            }
+            else
+            {
+                degree = 0;
+                return false;
+            }
+        }
     }
 }

@@ -134,7 +134,7 @@
     <Compile Include="ExploriteDefof.cs" />
     <Compile Include="ExploriteDefsCracker.cs" />
     <Compile Include="ExploriteInitializer.cs" />
-    <Compile Include="ExploritePatches_DebugActions.cs" />
+    <Compile Include="ExploriteDebugActions.cs" />
     <Compile Include="ExploritePatches_Misc.cs" />
     <Compile Include="ExploriteMod.cs" />
     <Compile Include="ExploritePatches_PawnRenderer.cs" />

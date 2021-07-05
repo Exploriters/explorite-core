@@ -265,6 +265,22 @@
             <param name="thing">需要被检测的物品。</param>
             <returns>该物品是否为合法的半人马服装。</returns>
         </member>
+        <member name="M:Explorite.ExploriteCore.CentaurTraitPredicate(RimWorld.TraitDef,System.Nullable{System.Int32})">
+            <summary>
+            检测特征是否为半人马特征。
+            </summary>
+            <param name="tDef">需要被检测的特征。</param>
+            <param name="degree">需要被检测的特征程度。</param>
+            <returns>该特征是否为半人马服装。</returns>
+        </member>
+        <member name="M:Explorite.ExploriteCore.CentaurTraitPredicate(RimWorld.TraitDef,System.Int32@)">
+            <summary>
+            检测特征是否为半人马特征。
+            </summary>
+            <param name="tDef">需要被检测的特征。</param>
+            <param name="degree">需要被检测的特征程度。</param>
+            <returns>该特征是否为半人马特征。</returns>
+        </member>
         <member name="M:Explorite.ExploriteDebugActions.ClearAllFogClickPlace">
             <summary>清除所有迷雾。</summary>
         </member>
@@ -403,8 +419,14 @@
         <member name="M:Explorite.ExploritePatches.TraitSetHasTraitPostfix(RimWorld.TraitSet,System.Boolean@,RimWorld.TraitDef)">
             <summary>使半人马始终被视为具有特征。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.TraitSetHasTraitDegreePostfix(RimWorld.TraitSet,System.Boolean@,RimWorld.TraitDef,System.Int32)">
+            <summary>使半人马始终被视为具有特征等级。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.TraitSetGetTraitPostfix(RimWorld.TraitSet,RimWorld.Trait@,RimWorld.TraitDef)">
             <summary>为半人马特征制作样本。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.TraitSetGetTraitDegreePostfix(RimWorld.TraitSet,RimWorld.Trait@,RimWorld.TraitDef,System.Int32)">
+            <summary>为半人马特征等级制作样本。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.RacePropertiesSpecialDisplayStatsPostfix(Verse.RaceProperties,System.Collections.Generic.IEnumerable{RimWorld.StatDrawEntry}@,Verse.ThingDef,RimWorld.StatRequest)">
             <summary>在信息页移除半人马的寿命显示。</summary>
