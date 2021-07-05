@@ -99,12 +99,6 @@
             勿与<see cref = "T:Explorite.CompPawnRepairApparelsOvertime" />混淆，后者为种族能力。
             </summary>
         </member>
-        <member name="T:Explorite.CompProperties_OversizedWeapon">
-            <summary>为<see cref = "T:Explorite.CompOversizedWeapon" />接收参数。</summary>
-        </member>
-        <member name="T:Explorite.CompOversizedWeapon">
-            <summary>使武器尺寸与其物品渲染设置一致。</summary>
-        </member>
         <member name="M:Explorite.HarmonyCompOversizedWeapon.DrawEquipmentAimingPrefix(Verse.PawnRenderer,Verse.Thing,UnityEngine.Vector3,System.Single)">
             <summary>
                 Adds another "layer" to the equipment aiming if they have a

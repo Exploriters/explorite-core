@@ -15,6 +15,7 @@ using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
+    /*
     ///<summary>为<see cref = "CompOversizedWeapon" />接收参数。</summary>
     public class CompProperties_OversizedWeapon : CompProperties
     {
@@ -55,6 +56,7 @@ namespace Explorite
             set => firstAttack = value;
         }
     }
+    */
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE1006")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0058")]
@@ -73,6 +75,10 @@ namespace Explorite
                 postfix: new HarmonyMethod(typeof(HarmonyCompOversizedWeapon), nameof(get_Graphic_PostFix)));
         }
 
+        public static bool IsOversizedWeapon(ThingDef thingDef)
+        {
+            return thingDef?.weaponTags?.Contains("ExploriteOversizedWeapon") ?? false;
+        }
 
         /// <summary>
         ///     Adds another "layer" to the equipment aiming if they have a
@@ -97,8 +103,7 @@ namespace Explorite
                         return false;
                 }
 
-                CompOversizedWeapon compOversizedWeapon = thingWithComps.TryGetComp<CompOversizedWeapon>();
-                if (compOversizedWeapon != null)
+                if (IsOversizedWeapon(thingWithComps.def))
                 {
                     bool flip = false;
                     float num = aimAngle - 90f;
@@ -120,7 +125,7 @@ namespace Explorite
                     }
                     else
                     {
-                        num = AdjustOffsetAtPeace(eq, pawn, compOversizedWeapon, num);
+                        num = AdjustOffsetAtPeace(eq, num);
                     }
                     num %= 360f;
 
@@ -146,7 +151,7 @@ namespace Explorite
             return true;
         }
 
-        private static float AdjustOffsetAtPeace(Thing eq, Pawn pawn, CompOversizedWeapon compOversizedWeapon, float num)
+        private static float AdjustOffsetAtPeace(Thing eq, float num)
         {
             //Mesh mesh = MeshPool.plane10;
             float offsetAtPeace = eq.def.equippedAngleOffset;
@@ -171,8 +176,7 @@ namespace Explorite
                         if (getPawn != null)
                             return;
                     }
-                    CompOversizedWeapon compOversizedWeapon = thingWithComps.TryGetComp<CompOversizedWeapon>();
-                    if (compOversizedWeapon != null)
+                    if (IsOversizedWeapon(thingWithComps.def))
                     {
                         tempGraphic.drawSize = __instance.def.graphicData.drawSize;
                         __result = tempGraphic;
