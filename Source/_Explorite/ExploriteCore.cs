@@ -341,6 +341,18 @@ namespace Explorite
             )
             return true;
         */
+        /*
+        if (allDef2?.apparel != null && 
+                (allDef2.apparel?.defaultOutfitTags?.Contains("CentaurOutfit") == true
+              || allDef2.apparel?.CoversBodyPart(partRecHead) == true
+              || allDef2.apparel?.CoversBodyPart(partRecWaist) == true
+                || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.UpperHead) == true
+              || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.FullHead) == true
+              || allDef2.apparel?.bodyPartGroups.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")) == true
+              || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Overhead) == true
+              || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Belt) == true
+                )
+            )*/
 
         /**
          * <summary>

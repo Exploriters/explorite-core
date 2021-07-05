@@ -868,8 +868,7 @@ namespace Explorite
         }
 
         ///<summary>对设施连接性的后期处理。</summary>
-        [HarmonyPostfix]public static void CompAffectedByFacilitiesCanPotentiallyLinkToStaticPostfix
-            (ref bool __result, ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot, ThingDef myDef, IntVec3 myPos, Rot4 myRot)
+        [HarmonyPostfix]public static void CompAffectedByFacilitiesCanPotentiallyLinkToStaticPostfix(ref bool __result, ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot, ThingDef myDef, IntVec3 myPos, Rot4 myRot)
         {
             if (__result == true && 
                 facilityDef?.placeWorkers?.Contains(typeof(PlaceWorker_FacingPort)) == true && 
@@ -1018,18 +1017,6 @@ namespace Explorite
                 outfitCentaur.filter.SetAllow(SpecialThingFilterDefOf.AllowDeadmansApparel, allow: false);
                 foreach (ThingDef allDef2 in DefDatabase<ThingDef>.AllDefs)
                 {
-                    /*
-                    if (allDef2?.apparel != null && 
-                            (allDef2.apparel?.defaultOutfitTags?.Contains("CentaurOutfit") == true
-                          || allDef2.apparel?.CoversBodyPart(partRecHead) == true
-                          || allDef2.apparel?.CoversBodyPart(partRecWaist) == true
-                            || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.UpperHead) == true
-                          || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.FullHead) == true
-                          || allDef2.apparel?.bodyPartGroups.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")) == true
-                          || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Overhead) == true
-                          || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Belt) == true
-                            )
-                        )*/
                     if (VaildCentaurApparelPredicate(allDef2))
                     {
                         outfitCentaur.filter.SetAllow(allDef2, allow: true);
