@@ -494,6 +494,12 @@
         <member name="M:Explorite.ExploritePatches.ProjectileImpactSomethingTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>干涉弹射物命中屋顶的效果。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.DamageWorkerExplosionCellsToHitTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>改变爆炸效果选择的覆盖范围。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PrinterTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>打印函数的构造。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>
@@ -625,6 +631,9 @@
         </member>
         <member name="T:Explorite.PlaceWorker_FacingPort">
             <summary>在目标物体的面前绘制互动图标。</summary>
+        </member>
+        <member name="T:Explorite.PlaceWorker_Rect_5_1">
+            <summary>绘制5*1矩形。</summary>
         </member>
         <member name="T:Explorite.Plant_FleshTree">
             <summary>血肉之树类型。</summary>

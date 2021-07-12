@@ -65,7 +65,7 @@ namespace Explorite
                             else
                             {
                                 Vector3 loc3 = rootLoc + b;
-                                loc3.y += ((!(bodyFacing == Rot4.North)) ? 0.03515625f : 0.00390625f);
+                                loc3.y += (!(bodyFacing == Rot4.North)) ? 0.03515625f : 0.00390625f;
                                 hairLoc = loc3.y;
                             }
                             offsetApplied = true;
