@@ -36,6 +36,20 @@ namespace Explorite
             stringBuilder.AppendLine(obj.ToString());
             return obj;
         }
+        ///<summary>打印函数的构造。</summary>
+        [HarmonyTranspiler]
+        public static IEnumerable<CodeInstruction> PrinterTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            foreach (CodeInstruction ins in instr)
+            {
+                stringBuilder.AppendLine(ins.ToString());
+                yield return ins;
+            }
+            Log.Message("[Explorite]instr result:\n" + stringBuilder.ToString());
+            yield break;
+        }
         static ExploritePatches()
         {
             string last_patch = "NULL-FIX";
@@ -1613,15 +1627,10 @@ namespace Explorite
         public static IEnumerable<CodeInstruction> ProjectileImpactSomethingTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {
             FieldInfo flyOverheadInfo = AccessTools.Field(typeof(ProjectileProperties), nameof(ProjectileProperties.flyOverhead));
-            Label label = ilg.DefineLabel();
-
             byte patchActionStage = 0;
-
             Label? zerolabel = null;
             Label? addlabel = null;
-
             //StringBuilder stringBuilder = new StringBuilder();
-
             foreach (CodeInstruction ins in instr)
             {
                 if (patchActionStage == 0 && ins.opcode == OpCodes.Ldfld && ins.operand == flyOverheadInfo as object)
@@ -1636,7 +1645,7 @@ namespace Explorite
                     yield return ins;
                     yield return new CodeInstruction(OpCodes.Ldarg_0);
                     yield return new CodeInstruction(OpCodes.Call, ((Func<object, bool>)IsProjFliesOverheadOverrider).GetMethodInfo());
-                    CodeInstruction brf = new CodeInstruction(OpCodes.Brfalse, label);
+                    CodeInstruction brf = new CodeInstruction(OpCodes.Brfalse, ilg.DefineLabel());
                     addlabel = brf.operand as Label?;
                     yield return brf;
                 }
@@ -1657,7 +1666,7 @@ namespace Explorite
             yield break;
         }
 
-
+        ///<summary>检查护盾物体。</summary>
         public static bool TestShieldSpotValidator(IntVec3 pos, Map map)
         {
             for (int i = -2; i <= 2; i++)
@@ -1669,6 +1678,7 @@ namespace Explorite
             }
             return false;
         }
+        ///<summary>设置爆炸物不能穿透何种物体。</summary>
         public static bool ExplosionCellsToHitBlockOverrider(IntVec3 start, IntVec3 end, Map map)
         {
             bool validator(IntVec3 pos)
@@ -1677,106 +1687,46 @@ namespace Explorite
             }
             return GenSight.LineOfSight(start, end, map, skipFirstCell: false, validator: validator, halfXOffset: 0, halfZOffset: 0);
         }
+        ///<summary>设置爆炸物不能覆盖何种物体。</summary>
         public static bool ExplosionCellsToHitInsideOverrider(IntVec3 pos, Map map)
         {
             return !TestShieldSpotValidator(pos, map);
         }
+        ///<summary>设置爆炸物无视一切物体。</summary>
         public static bool ExplosionCellsToHitEverythingOverrider(DamageWorker instance)
         {
-            return true;
+            return instance.def.defName.Contains("Frostblast");
         }
-        /*public static T Aps<T>(this T obj, StringBuilder stringBuilder)
-        {
-            stringBuilder.AppendLine(obj.ToString());
-            return obj;
-        }*/
-        /*
-        ///<summary>改变爆炸效果选择的覆盖范围。</summary>
-        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> DamageWorkerExplosionCellsToHitTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
-        {
-            MethodInfo walkableInfo = AccessTools.Method(typeof(GenGrid), nameof(GenGrid.Walkable));
-            Label label = ilg.DefineLabel();
-
-            byte patchActionStage = 0;
-
-            Label? addlabel = null;
-
-            StringBuilder stringBuilder = new StringBuilder();
-
-            object lastLdloc = null;
-
-            foreach (CodeInstruction ins in instr)
-            {
-                if (ins.opcode == OpCodes.Ldloc_S)
-                {
-                    lastLdloc = ins.operand;
-                }
-                if (patchActionStage == 0 && ins.opcode == OpCodes.Call && ins.operand == walkableInfo as object)
-                {
-                    patchActionStage = 1;
-
-                    yield return new CodeInstruction(OpCodes.Call, ((Func<IntVec3, Map, bool>)ExplosionCellsToHitOverrider).GetMethodInfo()).Aps(stringBuilder);
-
-                    CodeInstruction brf = new CodeInstruction(OpCodes.Brtrue, label);
-                    addlabel = brf.operand as Label?;
-                    yield return brf.Aps(stringBuilder);
-
-                    yield return new CodeInstruction(OpCodes.Ldloc_S, lastLdloc).Aps(stringBuilder);
-                    yield return new CodeInstruction(OpCodes.Ldarg_2).Aps(stringBuilder);
-
-                    yield return ins.Aps(stringBuilder);
-                }
-                else if (patchActionStage == 1 && addlabel.HasValue && ins.opcode == OpCodes.Ldc_I4_0)
-                {
-                    patchActionStage = 2;
-                    ins.labels.Add(addlabel.Value);
-                    yield return ins.Aps(stringBuilder);
-                    addlabel = null;
-                }
-                else
-                {
-                    yield return ins.Aps(stringBuilder);
-                }
-            }
-            Log.Message("[Explorite]instr result:\n"+stringBuilder.ToString());
-            if (patchActionStage == 2)
-            {
-                Log.Message($"[Explorite]instr patch done!({patchActionStage})");
-            }
-            else
-            {
-                Log.Error($"[Explorite]instr patch stage error!({patchActionStage})");
-            }
-            yield break;
-        }
-        */
         ///<summary>改变爆炸效果选择的覆盖范围。</summary>
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> DamageWorkerExplosionCellsToHitTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {
             MethodInfo lineOfSightInfo = AccessTools.Method(typeof(GenSight), nameof(GenSight.LineOfSight),
                 new Type[] { typeof(IntVec3), typeof(IntVec3), typeof(Map), typeof(bool), typeof(Func<IntVec3, bool>), typeof(int), typeof(int) });
-            Label label = ilg.DefineLabel();
-            byte patchActionStage = 0;
+            MethodInfo inBoundsInfo = AccessTools.Method(typeof(GenGrid), nameof(GenGrid.InBounds),
+                new Type[] { typeof(IntVec3), typeof(Map) });
+            byte patchActionStage1 = 0;
+            byte patchActionStage2 = 0;
             List<Label?> addlabels = new List<Label?>();
             Label? zerolabel = null;
+            Label? olabel = null;
+            StringBuilder stringBuilder = new StringBuilder();
             foreach (CodeInstruction ins in instr)
             {
-                if (patchActionStage == 0 && ins.opcode == OpCodes.Call && ins.operand == lineOfSightInfo as object)
+                if (patchActionStage1 == 0 && ins.opcode == OpCodes.Call && ins.operand == lineOfSightInfo as object)
                 {
-                    patchActionStage = 1;
-                    yield return ins;
+                    patchActionStage1 = 1;
                 }
-                else if (patchActionStage == 1 && ins.opcode == OpCodes.Brfalse_S)
+                else if (patchActionStage1 == 1 && ins.opcode == OpCodes.Brfalse_S)
                 {
-                    patchActionStage = 2;
+                    patchActionStage1 = 2;
                     zerolabel = ins.operand as Label?;
                     yield return ins;
 
                     yield return new CodeInstruction(OpCodes.Ldloc_2);
                     yield return new CodeInstruction(OpCodes.Ldarg_2);
                     yield return new CodeInstruction(OpCodes.Call, ((Func<IntVec3, Map, bool>)ExplosionCellsToHitInsideOverrider).GetMethodInfo());
-                    CodeInstruction brf1 = new CodeInstruction(OpCodes.Brfalse_S, label);
+                    CodeInstruction brf1 = new CodeInstruction(OpCodes.Brfalse_S, ilg.DefineLabel());
                     addlabels.Add(brf1.operand as Label?);
                     yield return brf1;
 
@@ -1784,45 +1734,81 @@ namespace Explorite
                     yield return new CodeInstruction(OpCodes.Ldloc_2);
                     yield return new CodeInstruction(OpCodes.Ldarg_2);
                     yield return new CodeInstruction(OpCodes.Call, ((Func<IntVec3, IntVec3, Map, bool>)ExplosionCellsToHitBlockOverrider).GetMethodInfo());
-                    CodeInstruction brf2 = new CodeInstruction(OpCodes.Brfalse_S, label);
+                    CodeInstruction brf2 = new CodeInstruction(OpCodes.Brfalse_S, ilg.DefineLabel());
                     addlabels.Add(brf2.operand as Label?);
                     yield return brf2;
+                    continue;
                 }
-                else if (patchActionStage == 2 && zerolabel.HasValue && addlabels.Any() && ins.labels.Contains(zerolabel.Value))
+                else if (patchActionStage1 == 2)
                 {
-                    patchActionStage = 3;
-                    foreach (Label? addlabel in addlabels)
+                    if (olabel.HasValue && patchActionStage2 == 2)
                     {
-                        ins.labels.Add(addlabel.Value);
+                        patchActionStage2 = 3;
+                        ins.labels.Add(olabel.Value);
+                        yield return ins;
+                        olabel = null;
+                        continue;
                     }
-                    yield return ins;
-                    zerolabel = null;
-                    addlabels.Clear();
+                    if (zerolabel.HasValue && addlabels.Any() && ins.labels.Contains(zerolabel.Value))
+                    {
+                        patchActionStage1 = 3;
+                        foreach (Label? addlabel in addlabels)
+                        {
+                            ins.labels.Add(addlabel.Value);
+                        }
+                        yield return ins;
+                        zerolabel = null;
+                        addlabels.Clear();
+                        continue;
+                    }
                 }
-                else
+
+                if (patchActionStage2 == 0 && ins.opcode == OpCodes.Call && ins.operand == inBoundsInfo as object)
                 {
-                    yield return ins;
+                    patchActionStage2 = 1;
                 }
-            }
-            yield break;
-        }
+                else if (patchActionStage2 == 1 && ins.opcode == OpCodes.Brfalse_S)
+                {
+                    patchActionStage2 = 2;
+                    yield return ins;
 
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<DamageWorker, bool>)ExplosionCellsToHitEverythingOverrider).GetMethodInfo());
+                    CodeInstruction brf1 = new CodeInstruction(OpCodes.Brtrue_S, ilg.DefineLabel());
+                    olabel = brf1.operand as Label?;
+                    yield return brf1;
 
-        ///<summary>打印函数的构造。</summary>
-        [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> PrinterTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
-        {
-            StringBuilder stringBuilder = new StringBuilder();
+                    continue;
+                }
 
-            foreach (CodeInstruction ins in instr)
-            {
-                stringBuilder.AppendLine(ins.ToString());
                 yield return ins;
+                continue;
             }
+            /*
             Log.Message("[Explorite]instr result:\n" + stringBuilder.ToString());
+            if (patchActionStage1 == 3)
+            {
+                Log.Message($"[Explorite]instr patch 1 done!({patchActionStage1})");
+            }
+            else
+            {
+                Log.Error($"[Explorite]instr patch 1 stage error!({patchActionStage1})");
+            }
+            if (patchActionStage1 == 3)
+            {
+                Log.Message($"[Explorite]instr patch 2 done!({patchActionStage2})");
+            }
+            else
+            {
+                Log.Error($"[Explorite]instr patch 2 stage error!({patchActionStage2})");
+            }
+            */
             yield break;
         }
 
+
+    }
+    /*
         public static void LocalTest1()
         {
             IntVec3 intVec2 = Fun5();
@@ -1858,8 +1844,8 @@ namespace Explorite
         {
             Fun6(a1, a2, a3, a4, a5, a6, a7, a8);
         }
-    }
-
+        */
+    /*
     class DamageWorker_Tes1 : DamageWorker
     {
         public override IEnumerable<IntVec3> ExplosionCellsToHit(IntVec3 center, Map map, float radius, IntVec3? needLOSToCell1 = null, IntVec3? needLOSToCell2 = null)
@@ -1952,4 +1938,5 @@ namespace Explorite
             return openCells.Concat(adjWallCells);
         }
     }
+    */
 }

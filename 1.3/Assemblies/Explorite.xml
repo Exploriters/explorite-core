@@ -293,6 +293,9 @@
         <member name="T:Explorite.ExploritePatches">
             <summary>包含多个补丁的合集类。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.PrinterTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>打印函数的构造。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.SkillLearnPrefix(RimWorld.SkillRecord,System.Single@)">
             <summary>阻止半人马的技能衰退。</summary>
         </member>
@@ -494,11 +497,20 @@
         <member name="M:Explorite.ExploritePatches.ProjectileImpactSomethingTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>干涉弹射物命中屋顶的效果。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.TestShieldSpotValidator(Verse.IntVec3,Verse.Map)">
+            <summary>检查护盾物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ExplosionCellsToHitBlockOverrider(Verse.IntVec3,Verse.IntVec3,Verse.Map)">
+            <summary>设置爆炸物不能穿透何种物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ExplosionCellsToHitInsideOverrider(Verse.IntVec3,Verse.Map)">
+            <summary>设置爆炸物不能覆盖何种物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ExplosionCellsToHitEverythingOverrider(Verse.DamageWorker)">
+            <summary>设置爆炸物无视一切物体。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.DamageWorkerExplosionCellsToHitTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>改变爆炸效果选择的覆盖范围。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PrinterTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>打印函数的构造。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>

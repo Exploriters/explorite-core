@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-  <ThingDef ParentName="BuildingBase">
+  <ThingDef ParentName="BuildingBase" Abstract="True">
     <defName>TestShieldSpot</defName>
     <label>shield spot</label>
     <description>Test spot to spawn shield.</description>
