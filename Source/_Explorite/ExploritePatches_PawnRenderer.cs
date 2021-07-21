@@ -28,7 +28,7 @@ namespace Explorite
                 }
                 for (int i = 0; i < apparelProperties.bodyPartGroups.Count; ++i)
                 {
-                    var group = apparelProperties.bodyPartGroups[i];
+                    BodyPartGroupDef group = apparelProperties.bodyPartGroups[i];
                     if (group == BodyPartGroupDefOf.FullHead || group == BodyPartGroupDefOf.UpperHead || group == BodyPartGroupDefOf.Eyes)
                     {
                         return true;
@@ -65,7 +65,7 @@ namespace Explorite
                             else
                             {
                                 Vector3 loc3 = rootLoc + b;
-                                loc3.y += ((!(bodyFacing == Rot4.North)) ? 0.03515625f : 0.00390625f);
+                                loc3.y += (!(bodyFacing == Rot4.North)) ? 0.03515625f : 0.00390625f;
                                 hairLoc = loc3.y;
                             }
                             offsetApplied = true;
@@ -80,7 +80,7 @@ namespace Explorite
                         {
                             loc2.y = hairLoc - 0.001f;
 
-                            Material mat = __instance.graphics.HairMatAt_NewTemp(headFacing, true);
+                            Material mat = __instance.graphics.HairMatAt(headFacing, true);
                             if (true)
                             {
                                 GenDraw.DrawMeshNowOrLater(__instance.graphics.HairMeshSet.MeshAt(headFacing), loc2, quad, mat, portrait);

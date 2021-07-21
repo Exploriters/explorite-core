@@ -26,11 +26,11 @@ namespace Explorite
             //if (!Destroyed) Destroy();
         }
     }
-    ///<summary>该弹射物会将目标传送至爆炸位置。</summary>
-	 // TODO: 需要修复传送失败问题。
-    public class Projectile_Explosive_Teleshot : Projectile_Explosive_RoofBypass
+    ///<summary>该弹射物会将发射者传送至爆炸位置。</summary>
+    public class Projectile_Explosive_Teleshot : Projectile_Explosive
     {
-        //TODO: Fix Teleport
+        // TO-NOMORE-DO: 需要修复传送失败问题。
+        // 问题已修复
         protected override void Explode()
         {
             if (launcher.Faction.IsPlayer)
@@ -43,11 +43,11 @@ namespace Explorite
                     {
                         if (TeleportPawn(pawn, pos))
                         {
-                            map.fogGrid.Notify_FogBlockerRemoved(launcher.Position);
+                            map.fogGrid.RevealFogCluster(launcher.Position);
                         }
                     }
                 }
-                Map.fogGrid.Notify_FogBlockerRemoved(Position);
+                Map.fogGrid.RevealFogCluster(Position);
             }
             base.Explode();
         }
@@ -81,7 +81,7 @@ namespace Explorite
         {
             if (launcher.Faction.IsPlayer)
             {
-                Map.fogGrid.Notify_FogBlockerRemoved(Position);
+                Map.fogGrid.RevealFogCluster(Position);
             }
 
             base.Explode();

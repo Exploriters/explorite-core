@@ -7,9 +7,12 @@ using System;
 using UnityEngine;
 using RimWorld;
 using HarmonyLib;
+using System.Linq;
+using System.Reflection;
 
 namespace Explorite
 {
+    ///<summary>Explorite Core核心函数集。</summary>
     public static partial class ExploriteCore
     {
         public static class InstelledMods
@@ -19,6 +22,7 @@ namespace Explorite
             public static bool GuoGuo => ModLister.GetActiveModWithIdentifier("Exploriters.AndoRingo.GuoGuo") != null;
             public static bool Royalty => ModLister.GetActiveModWithIdentifier("Ludeon.RimWorld.Royalty") != null;
             public static bool SoS2 => ModLister.GetActiveModWithIdentifier("kentington.saveourship2") != null;
+            public static bool HAR => ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null;
         }
 
         /*
@@ -252,11 +256,19 @@ namespace Explorite
             if (relocated != null)
             {
                 pawn.SetPositionDirect((IntVec3)relocated);
+                pawn.Notify_Teleported();
                 flag = true;
             }
 
             return flag;
         }
+
+        internal static MethodInfo methodFloodUnfogAdjacent = typeof(FogGrid).GetMethod("FloodUnfogAdjacent", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+        public static void RevealFogCluster(this FogGrid fogGrid, IntVec3 target)
+        {
+            methodFloodUnfogAdjacent.Invoke(fogGrid, new object[] { target });
+        }
+
         // 与Color.HSVToRGB重复
         /*
         public static Color hsb2rgb(float h, float s, float v, float a = 1f)
@@ -313,6 +325,123 @@ namespace Explorite
             return new Color(r, g, b);
         }
         */
-    }
+        /*
+        BodyPartRecord partRecHead = CentaurBodyDef.AllParts.First(d => d.def == BodyPartDefOf.Head);
+        BodyPartRecord partRecWaist = CentaurBodyDef.AllParts.First(d => d?.groups?.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")) ?? false);
+        if (apparel != null &&
+                (apparel?.defaultOutfitTags?.Contains("CentaurOutfit") == true
+              / *|| apparel?.CoversBodyPart(partRecHead) == true
+                || apparel?.CoversBodyPart(partRecWaist) == true
+                || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.UpperHead) == true
+                || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.FullHead) == true
+                || allDef2.apparel?.bodyPartGroups.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")) == true
+                || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Overhead) == true
+                || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Belt) == true* /
+                )
+            )
+            return true;
+        */
+        /*
+        if (allDef2?.apparel != null && 
+                (allDef2.apparel?.defaultOutfitTags?.Contains("CentaurOutfit") == true
+              || allDef2.apparel?.CoversBodyPart(partRecHead) == true
+              || allDef2.apparel?.CoversBodyPart(partRecWaist) == true
+                || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.UpperHead) == true
+              || allDef2.apparel?.bodyPartGroups.Contains(BodyPartGroupDefOf.FullHead) == true
+              || allDef2.apparel?.bodyPartGroups.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")) == true
+              || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Overhead) == true
+              || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Belt) == true
+                )
+            )*/
 
+        /**
+         * <summary>
+         * 检测物品是否为合法的半人马服装。
+         * </summary>
+         * <param name="thing">需要被检测的物品。</param>
+         * <returns>该物品是否为合法的半人马服装。</returns>
+         */
+        public static bool VaildCentaurApparelPredicate(ThingDef thing)
+        {
+            ApparelProperties apparel = thing?.apparel;
+            if (apparel == null)
+                return false;
+            if (apparel?.defaultOutfitTags?.Contains("CentaurOutfit") == true)
+                return true;
+
+            if (apparel.bodyPartGroups?.Any() == true)
+            {
+                byte flag = 0;
+                foreach (BodyPartGroupDef bpg in apparel.bodyPartGroups)
+                {
+                    if (bpg == BodyPartGroupDefOf.Torso)
+                    {
+                        flag |= 1;
+                    }
+                    if (bpg == CentaurTorsoGroupDef)
+                    {
+                        flag |= 2;
+                    }
+                    else if (!CentaurBodyPartGroups.Contains(bpg))
+                    {
+                        return false;
+                    }
+                }
+                if ((flag & 1) != 0 && (flag & 2) == 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /**
+         * <summary>
+         * 检测特征是否为半人马特征。
+         * </summary>
+         * <param name="tDef">需要被检测的特征。</param>
+         * <param name="degree">需要被检测的特征程度。</param>
+         * <returns>该特征是否为半人马服装。</returns>
+         */
+        public static bool CentaurTraitPredicate(TraitDef tDef, int? degree = null)
+        {
+            return CentaurTraitPredicate(tDef, out int tergetDegree) && ( !degree.HasValue || degree == tergetDegree);
+        }
+        /**
+         * <summary>
+         * 检测特征是否为半人马特征。
+         * </summary>
+         * <param name="tDef">需要被检测的特征。</param>
+         * <param name="degree">需要被检测的特征程度。</param>
+         * <returns>该特征是否为半人马特征。</returns>
+         */
+        public static bool CentaurTraitPredicate(TraitDef tDef, out int degree)
+        {
+            if (tDef == DefDatabase<TraitDef>.GetNamed("Masochist")
+             || tDef == TraitDefOf.Masochist
+             || tDef == TraitDefOf.Industriousness
+             || tDef == TraitDefOf.Kind
+             || tDef == TraitDefOf.Asexual
+             )
+            {
+                degree = 0;
+                return true;
+            }
+            else if (tDef == TraitDefOf.DrugDesire)
+            {
+                degree = -1;
+                return true;
+            }
+            else if (tDef == TraitDefOf.Transhumanist)
+            {
+                degree = 2;
+                return true;
+            }
+            else
+            {
+                degree = 0;
+                return false;
+            }
+        }
+    }
 }

@@ -43,7 +43,7 @@ namespace Explorite
             {
                 return false;
             }
-            return ih.TryStartInspiration_NewTemp(InspirationDefOf.Inspired_Creativity, "LetterInspirationBeginThanksToHighMoodPart".Translate());
+            return ih.TryStartInspiration(InspirationDefOf.Inspired_Creativity, "LetterInspirationBeginThanksToHighMoodPart".Translate());
         }
 
         public override void NeedInterval()

@@ -27,4 +27,14 @@ namespace Explorite
             return pawn.health.hediffSet.GetBrain() ?? pawn.RaceProps.body.corePart;
         }
     }
+
+    ///<summary>干涉伤痕永久性几率的伤害。</summary>
+    public class DamageWorker_Scarshot : DamageWorker_AddInjury
+    {
+        public override DamageResult Apply(DamageInfo dinfo, Thing thing)
+        {
+            dinfo.SetInstantPermanentInjury(true);
+            return base.Apply(dinfo, thing);
+        }
+    }
 }

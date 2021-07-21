@@ -26,7 +26,7 @@ namespace Explorite
         {
             if (UI.MouseCell().InBounds(Find.CurrentMap))
             {
-                Find.CurrentMap.fogGrid.Notify_FogBlockerRemoved(UI.MouseCell());
+                Find.CurrentMap.fogGrid.RevealFogCluster(UI.MouseCell());
             }
         }
         ///<summary>清除所有迷雾。</summary>
@@ -80,7 +80,8 @@ namespace Explorite
                     }
                 }
                 Find.CurrentMap.mapDrawer.WholeMapChanged(MapMeshFlag.Terrain);
-                Find.CurrentMap.pathGrid.RecalculateAllPerceivedPathCosts();
+                //Find.CurrentMap.pathGrid.RecalculateAllPerceivedPathCosts();
+                Find.CurrentMap.pathing.RecalculateAllPerceivedPathCosts();
             }));
             for (int i = 0; i < 9 - confirmNum; i++)
             {

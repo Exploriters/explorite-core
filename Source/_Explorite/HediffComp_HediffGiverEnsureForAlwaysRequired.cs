@@ -21,13 +21,13 @@ namespace Explorite
         private ThingDef raceRecorded = null;
         public override void CompPostTick(ref float severityAdjustment)
         {
-            if (raceRecorded != parent.pawn.def && !Pawn.RaceProps.hediffGiverSets.Where(hgsd => hgsd.hediffGivers.Where(hg => hg is HediffGiver_EnsureForAlways hediffGiver && hediffGiver.hediff == parent.def).Any()).Any())
+            if (raceRecorded != Pawn.def && !Pawn.RaceProps.hediffGiverSets.Where(hgsd => hgsd.hediffGivers.Where(hg => hg is HediffGiver_EnsureForAlways hediffGiver && hediffGiver.hediff == parent.def).Any()).Any())
             {
-                parent.pawn.health.RemoveHediff(parent);
+                Pawn.health.RemoveHediff(parent);
             }
-            else if (raceRecorded != parent.pawn.def)
+            else if (raceRecorded != Pawn.def)
             {
-                raceRecorded = parent.pawn.def;
+                raceRecorded = Pawn.def;
             }
         }
     }

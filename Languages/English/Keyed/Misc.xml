@@ -18,6 +18,7 @@
   
   <Magnuassembly_CompRefuelable_PassiveRecharge_ChargeCompleted>{0} has completely charged.</Magnuassembly_CompRefuelable_PassiveRecharge_ChargeCompleted>
 
+  <Magnuassembly_HazardAbsorbType>Absorb: {0}</Magnuassembly_HazardAbsorbType>
   <Magnuassembly_CriticalExposureIn>Critical exposure in</Magnuassembly_CriticalExposureIn>
   <Magnuassembly_RestoringIn>Fully restore in</Magnuassembly_RestoringIn>
   <Magnuassembly_NextCreativityInspirationIn>Est.</Magnuassembly_NextCreativityInspirationIn>
@@ -39,8 +40,16 @@
   <Magnuassembly_NewTrishotArrived_Label>New trishot arrived</Magnuassembly_NewTrishotArrived_Label>
   <Magnuassembly_NewTrishotArrived_Text>Since your last trishot has been destroyed, a new one has been sent to colony.</Magnuassembly_NewTrishotArrived_Text>
   
-  <Magnuassembly_HypothermiaAbsorptionDepleted>hypoabsorb. depleted</Magnuassembly_HypothermiaAbsorptionDepleted>
-  <Magnuassembly_HypothermiaAbsorptionDepletedDesc>These colonists are exposing to chill hazard and about to build up hypothermia:\n\n{0}\nMake sure their clothing is appropriate for the season and that indoor spaces are properly heated.</Magnuassembly_HypothermiaAbsorptionDepletedDesc>
+  <Magnuassembly_HypothermiaAbsorptionDepleted>Hazard Absorp. depleted</Magnuassembly_HypothermiaAbsorptionDepleted>
+  <Magnuassembly_HypothermiaAbsorptionDepletedDesc>These colonists are exposing to hazard and about to build up lethal damage:\n\n{0}</Magnuassembly_HypothermiaAbsorptionDepletedDesc>
+
+  <Magnuassembly_SubsystemInitialzingProgressLabel>Initialzing</Magnuassembly_SubsystemInitialzingProgressLabel>
+  
+  <Magnuassembly_HediffComp_PassiveMeditationFocus_TipString>Passive meditate: {0} focus / day</Magnuassembly_HediffComp_PassiveMeditationFocus_TipString>
+  <Magnuassembly_HediffComp_RepairApparelsOvertime_TipString>Repair: {0} / day</Magnuassembly_HediffComp_RepairApparelsOvertime_TipString>
+  
+  <TabSubsystem>Subsystems</TabSubsystem>
+  <NoSubsystemLabel>No subsystem</NoSubsystemLabel>
   
   
 </LanguageData>

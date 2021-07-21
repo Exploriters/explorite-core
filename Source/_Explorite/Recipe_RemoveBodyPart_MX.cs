@@ -1,7 +1,7 @@
 /********************
  * 将半人马的手术配方更换为无法选中肩胛的版本。
  * 
- * TODO: 应当改为补丁，而不是子类。
+ * TO -NO MORE- DO: 应当改为补丁，而不是子类。
  * --siiftun1857
  */
 using RimWorld;
@@ -30,7 +30,8 @@ namespace System.Runtime.CompilerServices
 
 namespace Explorite
 {
-    //[StaticConstructorOnStartup]
+    /*
+    //[StaticConstru -NO MORE- ctorOnStartup]
     internal static class PatchCentaurRecipe
     {
         static PatchCentaurRecipe()
@@ -53,7 +54,7 @@ namespace Explorite
         }
 
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("", "CS0122")]
-        /*public static IEnumerable<BodyPartRecord> GetPartsToApplyOn(this Recipe_RemoveBodyPart thisclass, Pawn pawn, RecipeDef recipe)
+        public static IEnumerable<BodyPartRecord> GetPartsToApplyOn(this Recipe_RemoveBodyPart thisclass, Pawn pawn, RecipeDef recipe)
         {
             IEnumerable<BodyPartRecord> preret = thisclass.Recipe_RemoveBodyPart();
             foreach (BodyPartRecord bpr in preret)
@@ -62,15 +63,12 @@ namespace Explorite
                     (preret as List<BodyPartRecord>).Remove(bpr);
             }
             return preret;
-        }*/
+        }
     }
-    /**
-     * <summary>不能选中肩胛的截肢手术配方。</summary>
-     */
-    // TODO: 应改为补丁
+    ///<summary>不能选中肩胛的截肢手术配方。</summary>
+    // TO -NO MORE- DO: 应改为补丁
     public abstract class Recipe_RemoveBodyPart_MX : Recipe_Surgery
     {
-        /*
         public class Recipe_RemoveBodyPart_ExcludingScapular : Recipe_RemoveBodyPart
         {
             public override IEnumerable<BodyPartRecord> GetPartsToApplyOn(Pawn pawn, RecipeDef recipe)
@@ -130,7 +128,6 @@ namespace Explorite
             expr_15.$PC = -2;
             return expr_15;
         }
-        */
         public override IEnumerable<BodyPartRecord> GetPartsToApplyOn(Pawn pawn, RecipeDef recipe)
         {
             IEnumerable<BodyPartRecord> parts = pawn.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Undefined, null, null);
@@ -155,7 +152,6 @@ namespace Explorite
                 }
             }
         }
-        /*
         public override string GetLabelWhenUsedOn(Pawn pawn, BodyPartRecord part)
         {
             if (pawn.RaceProps.IsMechanoid || pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(part))
@@ -225,11 +221,8 @@ namespace Explorite
                 faction.TryAffectGoodwillWith(faction2, goodwillChange, true, true, reason, lookTarget);
             }
         }
-		*/
     }
-
-
-    /*public class Recipe_RemoveBodyPart : Recipe_Surgery
+	public class Recipe_RemoveBodyPart : Recipe_Surgery
     {
         public Recipe_RemoveBodyPart()
         {

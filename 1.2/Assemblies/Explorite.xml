@@ -62,6 +62,12 @@
         <member name="T:Explorite.CompAssignableToPawn_Bed_Guoguo">
             <summary>果果床的类型，只有果果人可以使用。</summary>
         </member>
+        <member name="T:Explorite.CompProperties_DestroyOnSpawn">
+            <summary>为<see cref = "T:Explorite.CompDestroyOnSpawn" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompDestroyOnSpawn">
+            <summary>生成后直接被摧毁的物品。</summary>
+        </member>
         <member name="T:Explorite.ThingGenProp">
             <summary>设置一个物体和数量。</summary>
         </member>
@@ -99,7 +105,7 @@
         <member name="T:Explorite.CompOversizedWeapon">
             <summary>使武器尺寸与其物品渲染设置一致。</summary>
         </member>
-        <member name="M:Explorite.HarmonyCompOversizedWeapon.DrawEquipmentAimingPreFix(Verse.PawnRenderer,Verse.Thing,UnityEngine.Vector3,System.Single)">
+        <member name="M:Explorite.HarmonyCompOversizedWeapon.DrawEquipmentAimingPrefix(Verse.PawnRenderer,Verse.Thing,UnityEngine.Vector3,System.Single)">
             <summary>
                 Adds another "layer" to the equipment aiming if they have a
                 weapon with a CompActivatableEffect.
@@ -135,6 +141,12 @@
             显示生物护盾的界面UI
             </summary>
         </member>
+        <member name="T:Explorite.CompProperties_PawnSubsystemManager">
+            <summary>为<see cref = "T:Explorite.CompSelfHealOvertime" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompPawnSubsystemManager">
+            <summary>半人马的子系统控制器。</summary>
+        </member>
         <member name="T:Explorite.CompProperties_Healer">
             <summary>治疗类效果参数的基类。<br />
             为<see cref = "T:Explorite.CompSelfHealOvertime" />，<see cref = "T:Explorite.CompHealWearedOvertime" />，<see cref = "T:Explorite.CompPawnRepairApparelsOvertime" />，等类型及其子类接收参数。</summary>
@@ -151,6 +163,9 @@
         <member name="T:Explorite.CompRefuelable_PassiveRecharge">
             <summary>高速恢复燃料的<see cref = "T:RimWorld.CompRefuelable" />变种。</summary>
         </member>
+        <member name="T:Explorite.CompReloadable_InitOnEmpty">
+            <summary>初始化装填数量为0的<see cref = "T:RimWorld.CompReloadable" />。</summary>
+        </member>
         <member name="T:Explorite.CompProperties_SecretTrishot">
             <summary>为<see cref = "T:Explorite.CompSecretTrishot" />接收参数。</summary>
         </member>
@@ -160,7 +175,7 @@
         <member name="T:Explorite.CompSelfHealOvertime">
             <summary>
             使物品的生命值随着时间逐渐恢复。<br />
-            该类为抽象类，<see cref = "T:Explorite.CompSelfHealOvertime1" />和<see cref = "T:Explorite.CompSelfHealOvertime1" />分别以不同的方式完成了实现。
+            该类为抽象类，<see cref = "T:Explorite.CompSelfHealOvertime1" />和<see cref = "T:Explorite.CompSelfHealOvertime2" />分别以不同的方式完成了实现。
             </summary>
         </member>
         <member name="T:Explorite.CompProperties_SelfHealOvertime">
@@ -195,6 +210,12 @@
         </member>
         <member name="T:Explorite.DamageWorker_Frostbrainer">
             <summary>只能杀伤大脑的伤害。</summary>
+        </member>
+        <member name="T:Explorite.DamageWorker_Scarshot">
+            <summary>干涉伤痕永久性几率的伤害。</summary>
+        </member>
+        <member name="T:Explorite.ExploriteCore">
+            <summary>Explorite Core核心函数集。</summary>
         </member>
         <member name="M:Explorite.ExploriteCore.FormattingTickTimeDiv(System.Double,System.String,System.String)">
             <summary>
@@ -237,6 +258,13 @@
             <param name="target">一个位置。</param>
             <returns>是否成功地完成了传送。</returns>
         </member>
+        <member name="M:Explorite.ExploriteCore.VaildCentaurApparelPredicate(Verse.ThingDef)">
+            <summary>
+            检测物品是否为合法的半人马服装。
+            </summary>
+            <param name="thing">需要被检测的物品。</param>
+            <returns>该物品是否为合法的半人马服装。</returns>
+        </member>
         <member name="M:Explorite.ExploriteDebugActions.ClearAllFogClickPlace">
             <summary>清除所有迷雾。</summary>
         </member>
@@ -253,9 +281,7 @@
             <summary>完成半人马身体部件极其漫长的整备时间。</summary>
         </member>
         <member name="T:Explorite.ExploritePatches">
-            <summary>
-            包含多个补丁的合集类。
-            </summary>
+            <summary>包含多个补丁的合集类。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.SkillLearnPrefix(RimWorld.SkillRecord,System.Single@)">
             <summary>阻止半人马的技能衰退。</summary>
@@ -292,6 +318,9 @@
         </member>
         <member name="M:Explorite.ExploritePatches.Need_NeedIntervalPostfix(RimWorld.Need_Seeker,System.Single)">
             <summary>对需求刻函数进行后期处理。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.NeedMaxLevelPostfix(RimWorld.Need_Food,System.Single@)">
+            <summary>增强半人马食物需求储备量。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.ThoughtWorker_NeedComfort_CurrentStateInternalPostfix(RimWorld.ThoughtWorker_NeedComfort,RimWorld.ThoughtState@,Verse.Pawn)">
             <summary>移除半人马舒适度需求的负面情绪。</summary>
@@ -398,6 +427,9 @@
         <member name="M:Explorite.ExploritePatches.ThingMakerMakeThingPrefix(Verse.ThingDef)">
             <summary>显示MakeThing的调用堆栈。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.ThingMakerMakeThingPostfix(Verse.Thing)">
+            <summary>显示MakeThing的调用堆栈。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.GenRecipePostProcessProductPostfix(Verse.Thing,Verse.Thing,Verse.RecipeDef,Verse.Pawn)">
             <summary>将被制作出来的三射弓添加到追踪中。</summary>
         </member>
@@ -415,6 +447,36 @@
         </member>
         <member name="M:Explorite.ExploritePatches.HealthCardUtilityGetListPriorityPostfix(System.Single@,Verse.BodyPartRecord)">
             <summary>修正健康面板中的身体部位排序。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.TendUtilityCalculateBaseTendQualityPrefix(Verse.Pawn,Verse.Pawn,System.Single@,System.Single@)">
+            <summary>移除半人马自我治疗的70%效果惩罚。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.QuestPartDropPodsSetThingsPostfix(System.Collections.Generic.IEnumerable{Verse.Thing})">
+            <summary>检测任务奖励中的橙冰。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ResearchProjectDefCanStartNowPostfix(Verse.ResearchProjectDef,System.Boolean@)">
+            <summary>阻止特定项目被研究。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RaceRestrictionSettingsCanWearPostfix(Verse.ThingDef,Verse.ThingDef,System.Boolean@)">
+            <summary>自动判断服装是否适合半人马。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.BuildingTurretGunIsMortarOrProjectileFliesOverheadPostfix(RimWorld.Building_TurretGun,System.Boolean@)">
+            <summary>使自动弩机炮台无视屋顶限制。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.BuildingTurretGunCanSetForcedTargetPostfix(RimWorld.Building_TurretGun,System.Boolean@)">
+            <summary>使自动弩机炮台可以手动选择目标。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.BuildingTurretGunTryStartShootSomethingTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction})">
+            <summary>使自动弩机炮台无视屋顶限制而开火。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PawnCapacityUtilityCalculateCapacityLevelPrefix(System.Nullable{System.Single}@,Verse.HediffSet,Verse.PawnCapacityDef@,System.Collections.Generic.List{Verse.PawnCapacityUtility.CapacityImpactor}@,System.Boolean)">
+            <summary>干预半人马健康能力计算预处理。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PawnCapacityUtilityCalculateCapacityLevelPostfix(System.Single@,System.Nullable{System.Single}@,Verse.HediffSet,Verse.PawnCapacityDef@,System.Collections.Generic.List{Verse.PawnCapacityUtility.CapacityImpactor}@,System.Boolean)">
+            <summary>干预半人马健康能力计算后期处理。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ProjectileImpactSomethingTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>干涉弹射物命中屋顶的效果。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
@@ -436,6 +498,15 @@
             未实现。
             </summary>
         </member>
+        <member name="T:Explorite.HediffCompProperties_StageRange">
+            <summary>指示一个<see cref = "T:Verse.HediffComp" />在什么阶段下才会工作。</summary>
+        </member>
+        <member name="T:Explorite.HediffCompProperties_StageRange_CustomDesc">
+            <summary>为<see cref = "T:Explorite.HediffComp_StageRange_CustomDesc" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.HediffComp_StageRange_CustomDesc">
+            <summary>在范围内时显示额外描述。</summary>
+        </member>
         <member name="T:Explorite.HediffCompProperties_FactorBySeverity">
             <summary>为<see cref = "T:Explorite.HediffComp_FactorBySeverity" />接收参数。</summary>
         </member>
@@ -453,6 +524,18 @@
         </member>
         <member name="T:Explorite.HediffComp_HediffGiverEnsureForAlwaysRequired">
             <summary>指定需要的<see cref = "T:Explorite.HediffGiver_EnsureForAlways" />必须存在。</summary>
+        </member>
+        <member name="T:Explorite.HediffCompProperties_PassiveMeditationFocusGain">
+            <summary>为<see cref = "T:Explorite.HediffComp_PassiveMeditationFocusGain" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.HediffComp_PassiveMeditationFocusGain">
+            <summary>使生物持续获取精神力。</summary>
+        </member>
+        <member name="T:Explorite.HediffCompProperties_RepairApparelsOvertime">
+            <summary>为<see cref = "T:Explorite.HediffComp_RepairApparelsOvertime" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.HediffComp_RepairApparelsOvertime">
+            <summary>持续修复生物身上的衣物。</summary>
         </member>
         <member name="T:Explorite.HediffComp_TendDuration_CantTend">
             <summary>指定不允许一个伤害被治疗。</summary>
@@ -484,6 +567,12 @@
         <member name="T:Explorite.Hediff_AddedPart_HManipulator">
             <summary>物理操作仪的hediff类型。无实际效果。</summary>
         </member>
+        <member name="T:Explorite.HediffDef_Subsystem">
+            <summary>子系统HediffDef类，接收数个参数。</summary>
+        </member>
+        <member name="T:Explorite.Hediff_AddedPart_Subsystem">
+            <summary>子系统hediff类，不显示部件效率。</summary>
+        </member>
         <member name="T:Explorite.Hediff_AddedPart_BlankSubsystem">
             <summary>空白子系统的hediff类，控制是否显示这一症状。</summary>
         </member>
@@ -512,8 +601,8 @@
         <member name="T:Explorite.DetlaTracer">
             <summary>追踪最近20条变化量记录。</summary>
         </member>
-        <member name="T:Explorite.Recipe_RemoveBodyPart_MX">
-            <summary>不能选中肩胛的截肢手术配方。</summary>
+        <member name="T:Explorite.Recipe_ForceScarSurgery">
+            <summary>制造永久性伤口的手术。</summary>
         </member>
         <member name="T:Explorite.PlaceWorker_PlantReactionTable">
             <summary>为植物反应桌绘制互动图标。</summary>
@@ -528,7 +617,7 @@
             <summary>发射后直接命中目标的子弹。</summary>
         </member>
         <member name="T:Explorite.Projectile_Explosive_Teleshot">
-            <summary>该弹射物会将目标传送至爆炸位置。</summary>
+            <summary>该弹射物会将发射者传送至爆炸位置。</summary>
         </member>
         <member name="T:Explorite.Projectile_Explosive_Spotshot">
             <summary>该弹射物会探查目的地区域。</summary>
@@ -557,11 +646,53 @@
         <member name="T:Explorite.ScenPart_DumpThingsToPawnInv">
             <summary>将物品塞入殖民者的背包中。</summary>
         </member>
+        <member name="T:Explorite.SubsystemSlot">
+            <summary>指定一个子系统的槽位。</summary>
+        </member>
+        <member name="T:Explorite.SubsystemState">
+            <summary>指定一个子系统的状态。</summary>
+        </member>
+        <member name="T:Explorite.SubsystemUtility">
+            <summary>子系统方法集。</summary>
+        </member>
+        <member name="F:Explorite.SubsystemUtility.SubsystemPart1">
+            <summary>子系统1身体部件。</summary>
+        </member>
+        <member name="F:Explorite.SubsystemUtility.SubsystemPart2">
+            <summary>子系统2身体部件。</summary>
+        </member>
+        <member name="F:Explorite.SubsystemUtility.SubsystemPart3">
+            <summary>子系统3身体部件。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.SlotGroup(Explorite.SubsystemSlot)">
+            <summary>将子系统槽位枚举转为身体部件组。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.SlotPart(Explorite.SubsystemSlot)">
+            <summary>将子系统槽位枚举转为身体部件。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.InvalidSlotCheck(Explorite.SubsystemSlot)">
+            <summary>检查子系统槽位枚举是否属于三个中的一个。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.SubsystemVisible(Verse.Pawn)">
+            <summary>人物的子系统可见性。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.SubsystemEnabled(Verse.Pawn,Verse.HediffDef)">
+            <summary>检查人物的一个子系统是否已经启用。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.SubsystemEnabled(Verse.Hediff)">
+            <summary>检查一个子系统是否已经启用。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.GetSubsystemHediffOn(Verse.Pawn,Explorite.SubsystemSlot)">
+            <summary>取得人物对应身体部位的子系统。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.EnsureSubsystemExist(Verse.Pawn,Verse.HediffDef)">
+            <summary>确保子系统存在。</summary>
+        </member>
+        <member name="M:Explorite.SubsystemUtility.SingleTab(UnityEngine.Rect,Verse.Pawn,Explorite.SubsystemSlot)">
+            <summary>在ITab内渲染单个子系统UI。</summary>
+        </member>
         <member name="T:Explorite.ThoughtWorker_AlwaysActive_Centaur">
-            <summary>
-            建立半人马之间始终存在的正面评价。
-            </summary>
-            TODO: Fix relation
+            <summary>建立半人马之间始终存在的正面评价。</summary>
         </member>
         <member name="T:Explorite.Verb_DoNothing">
             <summary>什么都不做。</summary>

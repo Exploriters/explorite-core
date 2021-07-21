@@ -71,7 +71,7 @@ namespace Explorite
         {
         }
 
-        public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth)
+        public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth, GizmoRenderParms parms)
         {
             if (ability.pawn.health.hediffSet.HasHediff(DefDatabase<HediffDef>.GetNamed("PsychicDeafCentaur")))
             {
@@ -83,7 +83,7 @@ namespace Explorite
             {
                 disabled = false;
             }
-            GizmoResult gizmoResult = base.GizmoOnGUI(topLeft, maxWidth);
+            GizmoResult gizmoResult = base.GizmoOnGUI(topLeft, maxWidth, parms);
             return gizmoResult;
         }
     }

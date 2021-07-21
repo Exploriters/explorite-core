@@ -15,6 +15,7 @@ using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
+    /*
     ///<summary>为<see cref = "CompOversizedWeapon" />接收参数。</summary>
     public class CompProperties_OversizedWeapon : CompProperties
     {
@@ -55,20 +56,29 @@ namespace Explorite
             set => firstAttack = value;
         }
     }
+    */
 
-    [StaticConstructorOnStartup]
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE1006")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0058")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0060")]
+    [StaticConstructorOnStartup]
     internal static partial class HarmonyCompOversizedWeapon
     {
         static HarmonyCompOversizedWeapon()
         {
             //var harmony = new Harmony("Explorite.rimworld.mod.OversizedWeaponGraphicPatch");
-            harmonyInstance.Patch(typeof(PawnRenderer).GetMethod("DrawEquipmentAiming"),
-                new HarmonyMethod(typeof(HarmonyCompOversizedWeapon).GetMethod("DrawEquipmentAimingPreFix")), null);
-            harmonyInstance.Patch(AccessTools.Method(typeof(Thing), "get_DefaultGraphic"), null,
-                new HarmonyMethod(typeof(HarmonyCompOversizedWeapon), nameof(get_Graphic_PostFix)));
+
+            harmonyInstance.Patch(typeof(PawnRenderer).GetMethod(nameof(PawnRenderer.DrawEquipmentAiming)),
+                prefix: new HarmonyMethod(typeof(HarmonyCompOversizedWeapon), nameof(DrawEquipmentAimingPrefix)));
+
+            harmonyInstance.Patch(AccessTools.Method(typeof(Thing), "get_DefaultGraphic"),
+                postfix: new HarmonyMethod(typeof(HarmonyCompOversizedWeapon), nameof(get_Graphic_PostFix)));
         }
 
+        public static bool IsOversizedWeapon(ThingDef thingDef)
+        {
+            return thingDef?.weaponTags?.Contains("ExploriteOversizedWeapon") ?? false;
+        }
 
         /// <summary>
         ///     Adds another "layer" to the equipment aiming if they have a
@@ -78,27 +88,26 @@ namespace Explorite
         /// <param name="eq"></param>
         /// <param name="drawLoc"></param>
         /// <param name="aimAngle"></param>
-        public static bool DrawEquipmentAimingPreFix(PawnRenderer __instance, Thing eq, Vector3 drawLoc, float aimAngle)
+        public static bool DrawEquipmentAimingPrefix(PawnRenderer __instance, Thing eq, Vector3 drawLoc, float aimAngle)
         {
             if (eq is ThingWithComps thingWithComps)
             {
                 //If the deflector is active, it's already using this code.
-                var deflector = thingWithComps.AllComps.FirstOrDefault(y =>
+                ThingComp deflector = thingWithComps.AllComps.FirstOrDefault(y =>
                     y.GetType().ToString() == "CompDeflector.CompDeflector" ||
                     y.GetType().BaseType.ToString() == "CompDeflector.CompDeflector");
                 if (deflector != null)
                 {
-                    var isAnimatingNow = Traverse.Create(deflector).Property("IsAnimatingNow").GetValue<bool>();
+                    bool isAnimatingNow = Traverse.Create(deflector).Property("IsAnimatingNow").GetValue<bool>();
                     if (isAnimatingNow)
                         return false;
                 }
 
-                var compOversizedWeapon = thingWithComps.TryGetComp<CompOversizedWeapon>();
-                if (compOversizedWeapon != null)
+                if (IsOversizedWeapon(thingWithComps.def))
                 {
-                    var flip = false;
-                    var num = aimAngle - 90f;
-                    var pawn = Traverse.Create(__instance).Field("pawn").GetValue<Pawn>();
+                    bool flip = false;
+                    float num = aimAngle - 90f;
+                    Pawn pawn = Traverse.Create(__instance).Field("pawn").GetValue<Pawn>();
                     if (pawn == null) return true;
 
                     Mesh mesh;
@@ -116,7 +125,7 @@ namespace Explorite
                     }
                     else
                     {
-                        num = AdjustOffsetAtPeace(eq, pawn, compOversizedWeapon, num);
+                        num = AdjustOffsetAtPeace(eq, num);
                     }
                     num %= 360f;
 
@@ -129,8 +138,8 @@ namespace Explorite
                         matSingle = eq.Graphic.MatSingle;
 
 
-                    var s = new Vector3(eq.def.graphicData.drawSize.x, 1f, eq.def.graphicData.drawSize.y);
-                    var matrix = default(Matrix4x4);
+                    Vector3 s = new Vector3(eq.def.graphicData.drawSize.x, 1f, eq.def.graphicData.drawSize.y);
+                    Matrix4x4 matrix = default;
 
                     matrix.SetTRS(drawLoc, Quaternion.AngleAxis(num, Vector3.up), s);
 
@@ -142,34 +151,32 @@ namespace Explorite
             return true;
         }
 
-        private static float AdjustOffsetAtPeace(Thing eq, Pawn pawn, CompOversizedWeapon compOversizedWeapon, float num)
+        private static float AdjustOffsetAtPeace(Thing eq, float num)
         {
-            Mesh mesh;
-            mesh = MeshPool.plane10;
-            var offsetAtPeace = eq.def.equippedAngleOffset;
+            //Mesh mesh = MeshPool.plane10;
+            float offsetAtPeace = eq.def.equippedAngleOffset;
             num += offsetAtPeace;
             return num;
         }
 
         public static void get_Graphic_PostFix(Thing __instance, ref Graphic __result)
         {
-            var tempGraphic = Traverse.Create(__instance).Field("graphicInt").GetValue<Graphic>();
+            Graphic tempGraphic = Traverse.Create(__instance).Field("graphicInt").GetValue<Graphic>();
             if (tempGraphic != null)
                 if (__instance is ThingWithComps thingWithComps)
                 {
                     if (thingWithComps.ParentHolder is Pawn)
                         return;
-                    var activatableEffect =
+                    ThingComp activatableEffect =
                         thingWithComps.AllComps.FirstOrDefault(
                             y => y.GetType().ToString().Contains("ActivatableEffect"));
                     if (activatableEffect != null)
                     {
-                        var getPawn = Traverse.Create(activatableEffect).Property("GetPawn").GetValue<Pawn>();
+                        Pawn getPawn = Traverse.Create(activatableEffect).Property("GetPawn").GetValue<Pawn>();
                         if (getPawn != null)
                             return;
                     }
-                    var compOversizedWeapon = thingWithComps.TryGetComp<CompOversizedWeapon>();
-                    if (compOversizedWeapon != null)
+                    if (IsOversizedWeapon(thingWithComps.def))
                     {
                         tempGraphic.drawSize = __instance.def.graphicData.drawSize;
                         __result = tempGraphic;

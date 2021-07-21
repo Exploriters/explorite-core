@@ -2,6 +2,8 @@
  * 包含多个PlaceWorker的合集文件。
  * --siiftun1857
  */
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -105,6 +107,41 @@ namespace Explorite
             {
                 Vector3 position = center.ToVector3ShiftedWithAltitude(AltitudeLayer.MetaOverlays);
                 Graphics.DrawMesh(MeshPool.plane10, position, Quaternion.identity, PortCellMaterial, 0);
+            }
+        }
+    }
+
+    ///<summary>绘制5*1矩形。</summary>
+    [StaticConstructorOnStartup]
+    public class PlaceWorker_Rect_5_1 : PlaceWorker
+    {
+        public override void DrawGhost(ThingDef def, IntVec3 center, Rot4 rot, Color ghostCol, Thing thing = null)
+        {
+            GenDraw.DrawFieldEdges(CellsToAffect(center, rot).ToList());
+        }
+
+        public static IEnumerable<IntVec3> CellsToAffect(IntVec3 center, Rot4 rot)
+        {
+            switch (rot.AsByte)
+            {
+                case 0:
+                case 2:
+                    yield return center + new IntVec3(-2, 0, 0);
+                    yield return center + new IntVec3(-1, 0, 0);
+                    yield return center + new IntVec3(0, 0, 0);
+                    yield return center + new IntVec3(1, 0, 0);
+                    yield return center + new IntVec3(2, 0, 0);
+                    yield break;
+                case 1:
+                case 3:
+                    yield return center + new IntVec3(0, 0, -2);
+                    yield return center + new IntVec3(0, 0, -1);
+                    yield return center + new IntVec3(0, 0, 0);
+                    yield return center + new IntVec3(0, 0, 1);
+                    yield return center + new IntVec3(0, 0, 2);
+                    yield break;
+                default:
+                    yield break;
             }
         }
     }

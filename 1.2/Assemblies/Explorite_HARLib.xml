@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Explorite_HARLib</name>
+    </assembly>
+    <members>
+        <member name="T:Explorite.BodyAddon_MX">
+            <summary>不在尸体白骨化情况下显示的部件。</summary>
+        </member>
+    </members>
+</doc>

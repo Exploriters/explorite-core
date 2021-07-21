@@ -52,14 +52,14 @@ namespace Explorite
 
             pawn.ageTracker.AgeChronologicalTicks = (long)Math.Floor(
                 pawn.ageTracker.AgeChronologicalTicks * ((pawn.ageTracker.AgeBiologicalTicks + 360000000f) / pawn.ageTracker.AgeBiologicalTicks)
-                );
+                ) + 360000000;
             pawn.ageTracker.AgeBiologicalTicks += 360000000;
 
             pawn.story.traits.allTraits.Clear();
-            if (pawn.story.hairDef == DefDatabase<HairDef>.GetNamed("Mohawk"))
+            /* if (pawn.story.hairDef == DefDatabase<HairDef>.GetNamed("Mohawk"))
             {
                 pawn.story.hairDef = DefDatabase<HairDef>.GetNamed("Flowy");
-            }
+            } */
             //__result.story.traits.GainTrait(new Trait(TraitDefOf.Asexual, 0, forced: true));
 
             foreach (SkillRecord sr in pawn.skills.skills)
@@ -77,7 +77,7 @@ namespace Explorite
                 sr.xpSinceLastLevel = 0f; //sr.XpRequiredForLevelUp / 2f;
             }
 
-            HediffGiver_EnsureForBlankSubsystem.Apply(pawn, SubsystemBlankHediffDef);
+            pawn.EnsureSubsystemExist();
             return true;
         }
         internal static bool GenerateSayersPostprocess(ref Pawn pawn, PawnGenerationRequest request, ref bool matchError)

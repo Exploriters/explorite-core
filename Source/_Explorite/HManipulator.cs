@@ -146,7 +146,7 @@ namespace Explorite
             {
                 yield return new FloatMenuOption(FloatMenuOptionLabel(myPawn) + ((failReason == null) ? string.Empty : (" (" + failReason + ")")), null, MenuOptionPriority.Default, null, null, 0f, null, null);
             }
-            else if (!myPawn.CanReach(parent, PathEndMode.Touch, Danger.Deadly, false, TraverseMode.ByPawn))
+            else if (!myPawn.CanReach(parent, PathEndMode.Touch, Danger.Deadly, false, false, TraverseMode.ByPawn))
             {
                 yield return new FloatMenuOption(FloatMenuOptionLabel(myPawn) + $" ({"NoPath".Translate()})", null, MenuOptionPriority.Default, null, null, 0f, null, null);
             }

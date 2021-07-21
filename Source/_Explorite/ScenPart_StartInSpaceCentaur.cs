@@ -17,111 +17,8 @@ namespace Explorite
     ///<summary>使半人马开局在其巡洋舰中。</summary>
     public class ScenPart_StartInSpaceCentaur : ScenPart
     {
-        public override void PostGameStart()
+        private void CentaurAlphaShipPostProcess(Map spaceMap)
         {
-            if (SoS2Reflection.inaccessible)
-                return;
-
-            if (WorldSwitchUtility.SelectiveWorldGenFlag)
-                return;
-            ShipCombatManager.CanSalvageEnemyShip = false;
-            ShipCombatManager.ShouldSalvageEnemyShip = false;
-            ShipCombatManager.InCombat = false;
-            ShipCombatManager.InEncounter = false;
-            List<Pawn> startingPawns = Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer);
-            int newTile = -1;
-            for (int i = 0; i < 420; i++)
-            {
-                if (!Find.World.worldObjects.AnyMapParentAt(i))
-                {
-                    newTile = i;
-                    break;
-                }
-            }
-            Map spaceMap = GetOrGenerateMapUtility.GetOrGenerateMap(newTile, DefDatabase<WorldObjectDef>.GetNamed("ShipOrbiting"));
-            ((WorldObjectOrbitingShip)spaceMap.Parent).radius = 150;
-            ((WorldObjectOrbitingShip)spaceMap.Parent).theta = 2.75f;
-            //Building core = null;
-            Current.ProgramState = ProgramState.MapInitializing;
-            SoS2Reflection.GenerateShip(DefDatabase<EnemyShipDef>.GetNamed("CentaursScenarioRetroCruise"), spaceMap, null, Faction.OfPlayer, null, out _);
-            Current.ProgramState = ProgramState.Playing;
-            IntVec2 secs = (IntVec2)typeof(MapDrawer).GetProperty("SectionCount", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(spaceMap.mapDrawer);
-            Section[,] secArray = new Section[secs.x, secs.z];
-            typeof(MapDrawer).GetField("sections", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(spaceMap.mapDrawer, secArray);
-            for (int i = 0; i < secs.x; i++)
-            {
-                for (int j = 0; j < secs.z; j++)
-                {
-                    if (secArray[i, j] == null)
-                    {
-                        secArray[i, j] = new Section(new IntVec3(i, 0, j), spaceMap);
-                    }
-                }
-            }
-            List<IntVec3> cryptoPos = GetAllCryptoCells(spaceMap);
-            foreach (Pawn p in startingPawns)
-            {
-                if (p.InContainerEnclosed)
-                {
-                    p.ParentHolder.GetDirectlyHeldThings().Remove(p);
-                }
-                else
-                {
-                    p.DeSpawn();
-                    p.SpawnSetup(spaceMap, true);
-                }
-            }
-            List<List<Thing>> list = new List<List<Thing>>();
-            foreach (Pawn startingAndOptionalPawn in Find.GameInitData.startingAndOptionalPawns)
-            {
-                List<Thing> list2 = new List<Thing>
-                {
-                    startingAndOptionalPawn
-                };
-                list.Add(list2);
-            }
-            List<Thing> list3 = new List<Thing>();
-            foreach (ScenPart allPart in Find.Scenario.AllParts)
-            {
-                list3.AddRange(allPart.PlayerStartingThings());
-            }
-            int num = 0;
-            foreach (Thing item in list3)
-            {
-                if (!(item is Pawn))
-                {
-                    if (item.def.CanHaveFaction)
-                    {
-                        item.SetFactionDirect(Faction.OfPlayer);
-                    }
-                    list[num].Add(item);
-                    num++;
-                    if (num >= list.Count)
-                    {
-                        num = 0;
-                    }
-                }
-            }
-            foreach (List<Thing> thingies in list)
-            {
-                IntVec3 casketPos = cryptoPos.RandomElement();
-                cryptoPos.Remove(casketPos);
-                if (cryptoPos.Count() == 0)
-                    cryptoPos = GetAllCryptoCells(spaceMap); //Out of caskets, time to start double-dipping
-                foreach (Thing thingy in thingies)
-                {
-                    thingy.SetForbidden(true, false);
-                    GenPlace.TryPlaceThing(thingy, casketPos, spaceMap, ThingPlaceMode.Near);
-                }
-                FloodFillerFog.FloodUnfog(casketPos, spaceMap);
-            }
-            Find.CurrentMap.Parent.Destroy();
-            CameraJumper.TryJump(spaceMap.Center, spaceMap);
-            spaceMap.weatherManager.curWeather = WeatherDef.Named("OuterSpaceWeather");
-            spaceMap.weatherManager.lastWeather = WeatherDef.Named("OuterSpaceWeather");
-            H_Vacuum_PathFinder.ResetMap(spaceMap);
-            Find.MapUI.Notify_SwitchedMap();
-
             spaceMap.fogGrid.ClearAllFog();
 
             /*foreach (Letter letter in Find.LetterStack.LettersListForReading)
@@ -328,6 +225,114 @@ namespace Explorite
                 }
                 catch { }
             }*/
+        }
+
+        public override void PostGameStart()
+        {
+            if (SoS2Reflection.inaccessible)
+                return;
+
+            if (WorldSwitchUtility.SelectiveWorldGenFlag)
+                return;
+            ShipCombatManager.CanSalvageEnemyShip = false;
+            ShipCombatManager.ShouldSalvageEnemyShip = false;
+            ShipCombatManager.InCombat = false;
+            ShipCombatManager.InEncounter = false;
+            List<Pawn> startingPawns = Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer);
+            int newTile = -1;
+            for (int i = 0; i < 420; i++)
+            {
+                if (!Find.World.worldObjects.AnyMapParentAt(i))
+                {
+                    newTile = i;
+                    break;
+                }
+            }
+            Map spaceMap = GetOrGenerateMapUtility.GetOrGenerateMap(newTile, DefDatabase<WorldObjectDef>.GetNamed("ShipOrbiting"));
+            ((WorldObjectOrbitingShip)spaceMap.Parent).radius = 150;
+            ((WorldObjectOrbitingShip)spaceMap.Parent).theta = 2.75f;
+            //Building core = null;
+            Current.ProgramState = ProgramState.MapInitializing;
+            SoS2Reflection.GenerateShip(DefDatabase<EnemyShipDef>.GetNamed("CentaursScenarioRetroCruise"), spaceMap, null, Faction.OfPlayer, null, out _);
+            Current.ProgramState = ProgramState.Playing;
+            IntVec2 secs = (IntVec2)typeof(MapDrawer).GetProperty("SectionCount", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(spaceMap.mapDrawer);
+            Section[,] secArray = new Section[secs.x, secs.z];
+            typeof(MapDrawer).GetField("sections", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(spaceMap.mapDrawer, secArray);
+            for (int i = 0; i < secs.x; i++)
+            {
+                for (int j = 0; j < secs.z; j++)
+                {
+                    if (secArray[i, j] == null)
+                    {
+                        secArray[i, j] = new Section(new IntVec3(i, 0, j), spaceMap);
+                    }
+                }
+            }
+            List<IntVec3> cryptoPos = GetAllCryptoCells(spaceMap);
+            foreach (Pawn p in startingPawns)
+            {
+                if (p.InContainerEnclosed)
+                {
+                    p.ParentHolder.GetDirectlyHeldThings().Remove(p);
+                }
+                else
+                {
+                    p.DeSpawn();
+                    p.SpawnSetup(spaceMap, true);
+                }
+            }
+            List<List<Thing>> list = new List<List<Thing>>();
+            foreach (Pawn startingAndOptionalPawn in Find.GameInitData.startingAndOptionalPawns)
+            {
+                List<Thing> list2 = new List<Thing>
+                {
+                    startingAndOptionalPawn
+                };
+                list.Add(list2);
+            }
+            List<Thing> list3 = new List<Thing>();
+            foreach (ScenPart allPart in Find.Scenario.AllParts)
+            {
+                list3.AddRange(allPart.PlayerStartingThings());
+            }
+            int num = 0;
+            foreach (Thing item in list3)
+            {
+                if (!(item is Pawn))
+                {
+                    if (item.def.CanHaveFaction)
+                    {
+                        item.SetFactionDirect(Faction.OfPlayer);
+                    }
+                    list[num].Add(item);
+                    num++;
+                    if (num >= list.Count)
+                    {
+                        num = 0;
+                    }
+                }
+            }
+            foreach (List<Thing> thingies in list)
+            {
+                IntVec3 casketPos = cryptoPos.RandomElement();
+                cryptoPos.Remove(casketPos);
+                if (cryptoPos.Count() == 0)
+                    cryptoPos = GetAllCryptoCells(spaceMap); //Out of caskets, time to start double-dipping
+                foreach (Thing thingy in thingies)
+                {
+                    thingy.SetForbidden(true, false);
+                    GenPlace.TryPlaceThing(thingy, casketPos, spaceMap, ThingPlaceMode.Near);
+                }
+                FloodFillerFog.FloodUnfog(casketPos, spaceMap);
+            }
+            Find.CurrentMap.Parent.Destroy();
+            CameraJumper.TryJump(spaceMap.Center, spaceMap);
+            spaceMap.weatherManager.curWeather = WeatherDef.Named("OuterSpaceWeather");
+            spaceMap.weatherManager.lastWeather = WeatherDef.Named("OuterSpaceWeather");
+            H_Vacuum_PathFinder.ResetMap(spaceMap);
+            Find.MapUI.Notify_SwitchedMap();
+
+            CentaurAlphaShipPostProcess(spaceMap);
         }
 
         List<IntVec3> GetAllCryptoCells(Map spaceMap)

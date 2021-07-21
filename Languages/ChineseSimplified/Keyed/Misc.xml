@@ -18,6 +18,7 @@
   
   <Magnuassembly_CompRefuelable_PassiveRecharge_ChargeCompleted>{0}已经完成了充能。</Magnuassembly_CompRefuelable_PassiveRecharge_ChargeCompleted>
 
+  <Magnuassembly_HazardAbsorbType>危害吸收: {0}</Magnuassembly_HazardAbsorbType>
   <Magnuassembly_CriticalExposureIn>临界曝光</Magnuassembly_CriticalExposureIn>
   <Magnuassembly_RestoringIn>完全恢复</Magnuassembly_RestoringIn>
   <Magnuassembly_NextCreativityInspirationIn>预期</Magnuassembly_NextCreativityInspirationIn>
@@ -39,8 +40,16 @@
   <Magnuassembly_NewTrishotArrived_Label>新三射弓已送达</Magnuassembly_NewTrishotArrived_Label>
   <Magnuassembly_NewTrishotArrived_Text>由于你的上一个三射弓已被摧毁，一个新的三射弓已送达殖民地。</Magnuassembly_NewTrishotArrived_Text>
   
-  <Magnuassembly_HypothermiaAbsorptionDepleted>低温灾害曝光</Magnuassembly_HypothermiaAbsorptionDepleted>
-  <Magnuassembly_HypothermiaAbsorptionDepletedDesc>以下殖民者的抗寒能力已耗尽:\n\n{0}\n确保他们穿着适合这个季节的服装并保证室内区域的正常供暖。</Magnuassembly_HypothermiaAbsorptionDepletedDesc>
+  <Magnuassembly_HypothermiaAbsorptionDepleted>灾害曝光</Magnuassembly_HypothermiaAbsorptionDepleted>
+  <Magnuassembly_HypothermiaAbsorptionDepletedDesc>以下殖民者的危险防护能力已耗尽:\n\n{0}</Magnuassembly_HypothermiaAbsorptionDepletedDesc>
+
+  <Magnuassembly_SubsystemInitialzingProgressLabel>初始化</Magnuassembly_SubsystemInitialzingProgressLabel>
+  
+  <Magnuassembly_HediffComp_PassiveMeditationFocus_TipString>被动冥想: {0}精神力/天</Magnuassembly_HediffComp_PassiveMeditationFocus_TipString>
+  <Magnuassembly_HediffComp_RepairApparelsOvertime_TipString>装备修复: {0}/天</Magnuassembly_HediffComp_RepairApparelsOvertime_TipString>
+  
+  <TabSubsystem>子系统</TabSubsystem>
+  <NoSubsystemLabel>无子系统</NoSubsystemLabel>
   
   
 </LanguageData>

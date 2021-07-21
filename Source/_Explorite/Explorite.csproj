@@ -27,12 +27,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Assemblies\</OutputPath>
+    <OutputPath>..\..\1.3\Assemblies\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>8.0</LangVersion>
-    <DocumentationFile>..\..\Assemblies\Explorite.xml</DocumentationFile>
+    <DocumentationFile>..\..\1.3\Assemblies\Explorite.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -97,15 +97,16 @@
     <Compile Include="AdditionalAbility.cs" />
     <Compile Include="AdditionalVerbRemaster.cs" />
     <Compile Include="Alert_HypothermiaAbsorptionDepletedColonists.cs" />
-    <Compile Include="AlienRace.cs" />
     <Compile Include="BackstoryCracker.cs" />
     <Compile Include="Building_TriBattery.cs" />
+    <Compile Include="Building_TurretGun_HyperTrishot.cs" />
     <Compile Include="ColorGenerator.cs" />
     <Compile Include="CompAbilityEffect_GiveHediff_ParasiticStab.cs" />
     <Compile Include="CompAbilityEffect_GiveHediff_WholeMap.cs" />
     <Compile Include="CompAbilityEffect_TogglePsySensitivity.cs" />
     <Compile Include="CompArt_Qualityless.cs" />
     <Compile Include="CompAssignableToPawn_Bed_Guoguo.cs" />
+    <Compile Include="CompDestroyOnSpawn.cs" />
     <Compile Include="CompDropThingsOnDestroy.cs" />
     <Compile Include="CompEnsureAbility.cs" />
     <Compile Include="CompHealWearedOvertime.cs" />
@@ -114,8 +115,10 @@
     <Compile Include="CompPassiveMeditationFocusGain.cs" />
     <Compile Include="CompPawnRepairApparelsOvertime.cs" />
     <Compile Include="CompPawnShield.cs" />
+    <Compile Include="CompPawnSubsystemManager.cs" />
     <Compile Include="CompProperties_Healer.cs" />
     <Compile Include="CompRefuelable_PassiveRecharge.cs" />
+    <Compile Include="CompReloadable_InitOnEmpty.cs" />
     <Compile Include="CompSecretTrishot.cs" />
     <Compile Include="CompSelfHealOvertime.cs" />
     <Compile Include="CompSelfHealOvertime_1.cs" />
@@ -131,7 +134,7 @@
     <Compile Include="ExploriteDefof.cs" />
     <Compile Include="ExploriteDefsCracker.cs" />
     <Compile Include="ExploriteInitializer.cs" />
-    <Compile Include="ExploritePatches_DebugActions.cs" />
+    <Compile Include="ExploriteDebugActions.cs" />
     <Compile Include="ExploritePatches_Misc.cs" />
     <Compile Include="ExploriteMod.cs" />
     <Compile Include="ExploritePatches_PawnRenderer.cs" />
@@ -139,10 +142,13 @@
     <Compile Include="FoodPoisonImmuneForSayers.cs" />
     <Compile Include="GameComponent_CentaurStory.cs" />
     <Compile Include="HediffCompProperties_SeverityFromEntropy_CentarusOnly.cs" />
+    <Compile Include="HediffCompProperties_StageRange.cs" />
     <Compile Include="HediffComp_AgeStop.cs" />
     <Compile Include="HediffComp_FactorBySeverity.cs" />
     <Compile Include="HediffComp_FleshSeedParasitized.cs" />
     <Compile Include="HediffComp_HediffGiverEnsureForAlwaysRequired.cs" />
+    <Compile Include="HediffComp_PassiveMeditationFocusGain.cs" />
+    <Compile Include="HediffComp_RepairApparelsOvertime.cs" />
     <Compile Include="HediffComp_TendDuration_CantTend.cs" />
     <Compile Include="HediffComp_SeverityHalfLife.cs" />
     <Compile Include="HediffComp_SpawnThingOnDeath.cs" />
@@ -150,12 +156,14 @@
     <Compile Include="HediffWithComps.cs" />
     <Compile Include="HManipulator.cs" />
     <Compile Include="IngredientValueGetter_MarketValue.cs" />
+    <Compile Include="ITab_Pawn_Subsystem.cs" />
     <Compile Include="JobGiver_Nuzzle_Humanoid.cs" />
     <Compile Include="Need_CentaurCreativityInspiration.cs" />
     <Compile Include="Need_HypothermiaAbsorption.cs" />
     <Compile Include="QuestPart.cs" />
     <Compile Include="QuestReward.cs" />
     <Compile Include="QuestNode.cs" />
+    <Compile Include="Recipe_ForceScarSurgery.cs" />
     <Compile Include="Recipe_RepairTrishot.cs" />
     <Compile Include="Recipe_RemoveBodyPart_MX.cs" />
     <Compile Include="ExploritePatches_PawnGenerator.cs" />
@@ -170,6 +178,7 @@
     <Compile Include="SomeThingBlank.cs" />
     <Compile Include="StatPart_ApparelStatOffset_PsychicDeafIncluded.cs" />
     <Compile Include="StatPart_WorkSpeedByMood_Centaur.cs" />
+    <Compile Include="SubsystemUtility.cs" />
     <Compile Include="ThoughtWorker_AlwaysActive_Centaur.cs" />
     <Compile Include="Verb.cs" />
     <Compile Include="Verb_SensitivityToggle.cs" />

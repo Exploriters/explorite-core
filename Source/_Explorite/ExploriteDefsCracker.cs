@@ -17,11 +17,13 @@ namespace Explorite
         {
             //CrackOrangice();
             PostprocessCentaurRecipe();
+            PostprocessCentaurCorpse();
         }
 
         static void PostprocessCentaurRecipe()
         {
-            if (AlienCentaurDef == null)
+            //if (AlienCentaurDef == null)
+            if (!InstelledMods.RimCentaurs)
                 return;
             List<RecipeDef> recipesToRemove = new List<RecipeDef>();
 
@@ -36,6 +38,21 @@ namespace Explorite
             if (recipesToRemove.Any())
             {
                 AlienCentaurDef.recipes.RemoveAll(r => recipesToRemove.Contains(r));
+            }
+        }
+
+        static void PostprocessCentaurCorpse()
+        {
+            if (!AlienCentaurCorpseDef.IsNonMal())
+            {
+                return;
+            }
+            AlienCentaurCorpseDef.useHitPoints = false;
+
+            StatModifier statMod = AlienCentaurCorpseDef.statBases.Find(stat => stat.stat == StatDefOf.Flammability);
+            if (statMod != null)
+            {
+                statMod.value = 0f;
             }
         }
 
