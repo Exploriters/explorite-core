@@ -59,6 +59,11 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn).App(ref last_patch_method), new[] { typeof(PawnGenerationRequest) }),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(GeneratePawnPostfix)));
 
+                harmonyInstance.Patch(typeof(PawnRenderer).GetMethod(nameof(PawnRenderer.DrawEquipmentAiming).App(ref last_patch_method)),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(DrawEquipmentAimingPrefix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(Thing), "get_DefaultGraphic".App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(get_Graphic_PostFix)));
+
                 harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Learn).App(ref last_patch_method)),
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(SkillLearnPrefix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Interval).App(ref last_patch_method)),
@@ -1698,8 +1703,7 @@ namespace Explorite
             return instance.def.defName.Contains("Frostblast");
         }
         ///<summary>改变爆炸效果选择的覆盖范围。</summary>
-        [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> DamageWorkerExplosionCellsToHitTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> DamageWorkerExplosionCellsToHitTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {
             MethodInfo lineOfSightInfo = AccessTools.Method(typeof(GenSight), nameof(GenSight.LineOfSight),
                 new Type[] { typeof(IntVec3), typeof(IntVec3), typeof(Map), typeof(bool), typeof(Func<IntVec3, bool>), typeof(int), typeof(int) });

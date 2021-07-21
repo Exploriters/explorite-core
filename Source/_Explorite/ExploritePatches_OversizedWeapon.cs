@@ -61,20 +61,8 @@ namespace Explorite
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE1006")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0058")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0060")]
-    [StaticConstructorOnStartup]
-    internal static partial class HarmonyCompOversizedWeapon
+    internal static partial class ExploritePatches
     {
-        static HarmonyCompOversizedWeapon()
-        {
-            //var harmony = new Harmony("Explorite.rimworld.mod.OversizedWeaponGraphicPatch");
-
-            harmonyInstance.Patch(typeof(PawnRenderer).GetMethod(nameof(PawnRenderer.DrawEquipmentAiming)),
-                prefix: new HarmonyMethod(typeof(HarmonyCompOversizedWeapon), nameof(DrawEquipmentAimingPrefix)));
-
-            harmonyInstance.Patch(AccessTools.Method(typeof(Thing), "get_DefaultGraphic"),
-                postfix: new HarmonyMethod(typeof(HarmonyCompOversizedWeapon), nameof(get_Graphic_PostFix)));
-        }
-
         public static bool IsOversizedWeapon(ThingDef thingDef)
         {
             return thingDef?.weaponTags?.Contains("ExploriteOversizedWeapon") ?? false;
