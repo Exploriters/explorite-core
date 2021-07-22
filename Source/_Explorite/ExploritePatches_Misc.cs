@@ -256,6 +256,12 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(DamageWorker), nameof(DamageWorker.ExplosionCellsToHit).App(ref last_patch_method), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(DamageWorkerExplosionCellsToHitTranspiler)));
 
+                harmonyInstance.Patch(AccessTools.Method(typeof(IdeoUtility), nameof(IdeoUtility.IsMemeAllowedFor).App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(IdeoUtilityIsMemeAllowedForPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(IdeoSymbolPartDef), nameof(IdeoSymbolPartDef.CanBeChosenForIdeo).App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(IdeoSymbolPartDefCanBeChosenForIdeoPostfix)));
+
                 //harmonyInstance.Patch(AccessTools.Method(typeof(DamageWorker), nameof(DamageWorker.ExplosionCellsToHit).App(ref last_patch_method), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
                 //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
                 //harmonyInstance.Patch(AccessTools.Method(typeof(DamageWorker_Tes1), nameof(DamageWorker_Tes1.ExplosionCellsToHit).App(ref last_patch_method), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
@@ -1962,5 +1968,43 @@ namespace Explorite
             }
         }
         */
+
+        ///<summary>更改阵营能够使用的文化模因。</summary>
+        [HarmonyPostfix]public static void IdeoUtilityIsMemeAllowedForPostfix(MemeDef meme, FactionDef faction, ref bool __result)
+        {
+            if (faction == CentaurPlayerColonyDef)
+            {
+                if (meme != CentaurMemeDef && meme != CentaurStructureMemeDef && meme != DefDatabase<MemeDef>.GetNamed("Structure_Ideological"))
+                {
+                    __result = false;
+                    return;
+                }
+            }
+            else
+            {
+                if (meme == CentaurMemeDef || meme == CentaurStructureMemeDef)
+                {
+                    __result = false;
+                    return;
+                }
+            }
+        }
+
+        ///<summary>更改阵营能够使用的图标。</summary>
+        [HarmonyPostfix]public static void IdeoSymbolPartDefCanBeChosenForIdeoPostfix(Ideo ideo, ref IdeoSymbolPartDef __instance, ref bool __result)
+        {
+            if (__result)
+            {
+                if (ideo.memes.Contains(CentaurMemeDef)
+                    && __instance != CentaurIdeoIconDef
+                    && __instance != ExploriteBlueDef
+                    && __instance != ExploriteOrangeDef
+                    )
+                {
+                    __result = false;
+                    return;
+                }
+            }
+        }
     }
 }

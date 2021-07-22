@@ -334,6 +334,12 @@
         <member name="M:Explorite.ExploritePatches.AlienRaceHarmonyPatchesChooseStyleItemPrefix(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>临时函数。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.IdeoUtilityIsMemeAllowedForPostfix(RimWorld.MemeDef,RimWorld.FactionDef,System.Boolean@)">
+            <summary>更改阵营能够使用的文化模因。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoSymbolPartDefCanBeChosenForIdeoPostfix(RimWorld.Ideo,RimWorld.IdeoSymbolPartDef@,System.Boolean@)">
+            <summary>更改阵营能够使用的图标。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>

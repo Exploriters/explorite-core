@@ -69,14 +69,12 @@ namespace Explorite
                     leastamount = (int)absheal;
                 }
 
-                Random rnd = new Random();
-
                 double chancePerTick = detlaHpAmount % 1;
                 parent.HitPoints += leastamount;
 
                 for (int k = 0; k < chancePerTick; k++)
                 {
-                    if (rnd.Next(0, 10000) / 10000.0 < chancePerTick)
+                    if (Rand.Range(0, 10000) / 10000.0 < chancePerTick)
                     {
                         parent.HitPoints += 1;
                     }

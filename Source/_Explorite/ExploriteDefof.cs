@@ -90,6 +90,11 @@ namespace Explorite
         public static readonly ResearchProjectDef CentaurStoryProjectStep1Def = GetModDef<ResearchProjectDef>(InstelledMods.RimCentaurs, "CentaurStoryStep1st");
         public static readonly ResearchProjectDef CentaurStoryProjectStep2Def = GetModDef<ResearchProjectDef>(InstelledMods.RimCentaurs, "CentaurStoryStep2nd");
         public static readonly ResearchProjectDef CentaurStoryProjectStep3Def = GetModDef<ResearchProjectDef>(InstelledMods.RimCentaurs, "CentaurStoryStep3rd");
+        public static readonly MemeDef CentaurMemeDef = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "Centaur");
+        public static readonly MemeDef CentaurStructureMemeDef = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "Structure_Centaur");
+        public static readonly IdeoIconDef CentaurIdeoIconDef = GetModDef<IdeoIconDef>(InstelledMods.RimCentaurs, "EASTREND");
+        public static readonly ColorDef ExploriteBlueDef = GetModDef<ColorDef>(InstelledMods.RimCentaurs, "ExploriteBlue");
+        public static readonly ColorDef ExploriteOrangeDef = GetModDef<ColorDef>(InstelledMods.RimCentaurs, "ExploriteOrange");
 
         public static readonly HediffDef HediffCentaurSubsystem_NeedsCapacitor_Def = GetModDef<HediffDef>(InstelledMods.RimCentaurs, "CentaurSubsystem_NeedsCapacitor");
         public static readonly HediffDef HediffCentaurSubsystem_HazardAdaptation_Def = GetModDef<HediffDef>(InstelledMods.RimCentaurs, "CentaurSubsystem_HazardAdaptation");

@@ -29,10 +29,9 @@ namespace Explorite
         {
             if (parent == null)
                 return;
-            Random rnd = new Random();
             for (int k = 0; k < doCount; k++)
             {
-                if (rnd.Next(0, 10000) / 10000f < chancePerTick * parent.Severity)
+                if (Rand.Range(0, 10000) / 10000f < chancePerTick * parent.Severity)
                 {
                     parent.Severity += severityAdjust;
                 }
