@@ -1996,9 +1996,7 @@ namespace Explorite
             if (__result)
             {
                 if (ideo.memes.Contains(CentaurMemeDef)
-                    && __instance != CentaurIdeoIconDef
-                    && __instance != ExploriteBlueDef
-                    && __instance != ExploriteOrangeDef
+                    && !__instance.memes.Contains(CentaurMemeDef)
                     )
                 {
                     __result = false;
