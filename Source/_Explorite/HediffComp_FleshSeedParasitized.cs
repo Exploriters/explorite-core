@@ -92,6 +92,15 @@ namespace Explorite
                     MoteMaker.MakeStaticMote(new Vector3(drawPos.x + vector.x, drawPos.y, drawPos.z + vector.y), Pawn.Map, Props.mote);
                 }
             }
+            if (Props.fleck != null)
+            {
+                Vector3 drawPos = Pawn.DrawPos;
+                for (int i = 0; i < Props.moteCount; i++)
+                {
+                    Vector2 vector = Rand.InsideUnitCircle * Props.moteOffsetRange.RandomInRange * Rand.Sign;
+                    FleckMaker.Static(new Vector3(drawPos.x + vector.x, drawPos.y, drawPos.z + vector.y), Pawn.Map, Props.fleck);
+                }
+            }
             if (Props.filth != null)
             {
                 FilthMaker.TryMakeFilth(Pawn.Position, Pawn.Map, Props.filth, Props.filthCount);

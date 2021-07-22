@@ -101,8 +101,9 @@ namespace Explorite
         public static readonly MemeDef CentaurMemeDef = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "Centaur");
         public static readonly MemeDef CentaurStructureMemeDef = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "Structure_Centaur");
         public static readonly IdeoIconDef CentaurIdeoIconDef = GetModDef<IdeoIconDef>(InstelledMods.RimCentaurs, "Exploriter");
-        public static readonly ColorDef ExploriteBlueDef = GetModDef<ColorDef>(InstelledMods.RimCentaurs, "ExploriteBlue");
-        public static readonly ColorDef ExploriteOrangeDef = GetModDef<ColorDef>(InstelledMods.RimCentaurs, "ExploriteOrange");
+        //public static readonly ColorDef CentaurBlueDef = GetModDef<ColorDef>(InstelledMods.RimCentaurs, "CentaurBlue");
+        //public static readonly ColorDef ExploriteBlueDef = GetModDef<ColorDef>(InstelledMods.RimCentaurs, "ExploriteBlue");
+        //public static readonly ColorDef ExploriteOrangeDef = GetModDef<ColorDef>(InstelledMods.RimCentaurs, "ExploriteOrange");
 
         public static readonly HediffDef HediffCentaurSubsystem_NeedsCapacitor_Def = GetModDef<HediffDef>(InstelledMods.RimCentaurs, "CentaurSubsystem_NeedsCapacitor");
         public static readonly HediffDef HediffCentaurSubsystem_HazardAdaptation_Def = GetModDef<HediffDef>(InstelledMods.RimCentaurs, "CentaurSubsystem_HazardAdaptation");
@@ -119,6 +120,8 @@ namespace Explorite
         public static readonly FactionDef SayersPlayerColonyDef = GetModDef<FactionDef>(InstelledMods.Sayers, "SayersClan");
         public static readonly FactionDef SayersPlayerColonySingleDef = GetModDef<FactionDef>(InstelledMods.Sayers);
         public static readonly BodyDef SayersBodyDef = GetModDef<BodyDef>(InstelledMods.Sayers, "Body_Sayers");
+        public static readonly MemeDef SayersMeme1Def = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "Experimental_SayersMeme");
+        public static readonly MemeDef SayersMeme2Def = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "CarnivorousAnimal_SayersMeme");
 
         public static readonly ThingDef AlienGuoguoDef = GetModDef<ThingDef>(InstelledMods.GuoGuo, "Alien_Guoguo");
         public static readonly FactionDef GuoguoPlayerColonyDef = GetModDef<FactionDef>(InstelledMods.GuoGuo, "GuoguoPlayerColony");

@@ -1820,6 +1820,7 @@ namespace Explorite
             */
             yield break;
         }
+        
         ///<summary>临时函数。</summary>
         [HarmonyTranspiler]public static IEnumerable<CodeInstruction> AlienRaceHarmonyPatchesChooseStyleItemPrefix(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {
@@ -1980,13 +1981,14 @@ namespace Explorite
                     return;
                 }
             }
-            else
+
+            if (meme.category != MemeCategory.Structure
+                && (meme == CentaurMemeDef || meme == SayersMeme1Def || meme == SayersMeme2Def)
+                && (!(faction.requiredMemes?.Contains(meme) ?? false) || !(faction.allowedMemes?.Contains(meme) ?? false))
+                )
             {
-                if (meme == CentaurMemeDef || meme == CentaurStructureMemeDef)
-                {
-                    __result = false;
-                    return;
-                }
+                __result = false;
+                return;
             }
         }
 
@@ -1995,8 +1997,8 @@ namespace Explorite
         {
             if (__result)
             {
-                if (ideo.memes.Contains(CentaurMemeDef)
-                    && !__instance.memes.Contains(CentaurMemeDef)
+                if ((ideo.memes?.Contains(CentaurMemeDef) ?? false)
+                  && !(__instance.memes?.Contains(CentaurMemeDef) ?? false)
                     )
                 {
                     __result = false;
