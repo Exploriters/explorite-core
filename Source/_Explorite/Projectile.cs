@@ -90,13 +90,12 @@ namespace Explorite
     ///<summary>该弹射物会在空中随机加速或减速，大量发射时之间会错开。</summary>
     public class Projectile_Explosive_Waggingshot : Projectile_Explosive
     {
-        static readonly Random Randy = new Random();
         public override void Tick()
         {
             base.Tick();
             if (!landed)
             {
-                ticksToImpact = Math.Max(ticksToImpact + Randy.Next(-1, 1), 0);
+                ticksToImpact = Math.Max(ticksToImpact + Rand.Range(-1, 1), 0);
             }
         }
     }

@@ -107,6 +107,7 @@ namespace Explorite
             }
             return valueString;
         }
+        /*
         public static Color CastingPixel(Color color)
         {
             System.Random Randy = new System.Random();
@@ -118,6 +119,7 @@ namespace Explorite
             color.a = Math.Max(0.5f, color.a);
             return color;
         }
+        */
         /*
         /// <summary>
         /// https://blog.csdn.net/qq_39776199/article/details/81506293
@@ -417,8 +419,7 @@ namespace Explorite
          */
         public static bool CentaurTraitPredicate(TraitDef tDef, out int degree)
         {
-            if (tDef == DefDatabase<TraitDef>.GetNamed("Masochist")
-             || tDef == TraitDefOf.Masochist
+            if (tDef == TraitDefOf.Masochist
              || tDef == TraitDefOf.Industriousness
              || tDef == TraitDefOf.Kind
              || tDef == TraitDefOf.Asexual

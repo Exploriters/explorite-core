@@ -64,10 +64,9 @@ namespace Explorite
              pawn.health.AddHediff(this.hediff, null, null);
             HealthUtility.AdjustSeverity(pawn, this.hediff, 1f);*/
 
-            Random rnd = new Random();
             for (int k = 0; k < doCount; k++)
             {
-                if (rnd.Next(0, 10000) / 10000f < AttemptSuccessChance(cause.Severity))
+                if (Rand.Range(0, 10000) / 10000f < AttemptSuccessChance(cause.Severity))
                 {
                     if (doTryApply)
                         TryApply(pawn);

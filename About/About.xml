@@ -20,6 +20,12 @@
         <steamWorkshopUrl isNull="True" />
         <downloadUrl isNull="True" />
     </li>-->
+    <!--<li>
+        <packageId>Ludeon.RimWorld.Ideology</packageId>
+        <displayName>Ideology</displayName>
+        <steamWorkshopUrl isNull="True" />
+        <downloadUrl isNull="True" />
+    </li>-->
     <li>
         <packageId>brrainz.harmony</packageId>
         <displayName>Harmony</displayName>
@@ -43,6 +49,7 @@
 	<li>brrainz.harmony</li>
 	<li>Ludeon.RimWorld</li>
 	<li>Ludeon.RimWorld.Royalty</li>
+	<li>Ludeon.RimWorld.Ideology</li>
 	<li>UnlimitedHugs.HugsLib</li>
 	<li>erdelf.HumanoidAlienRaces</li>
 	<li>kentington.saveourship2</li>

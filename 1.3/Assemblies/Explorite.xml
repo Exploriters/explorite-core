@@ -99,7 +99,10 @@
             勿与<see cref = "T:Explorite.CompPawnRepairApparelsOvertime" />混淆，后者为种族能力。
             </summary>
         </member>
-        <member name="M:Explorite.HarmonyCompOversizedWeapon.DrawEquipmentAimingPrefix(Verse.PawnRenderer,Verse.Thing,UnityEngine.Vector3,System.Single)">
+        <member name="T:Explorite.ExploritePatches">
+            <summary>包含多个补丁的合集类。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.DrawEquipmentAimingPrefix(Verse.PawnRenderer,Verse.Thing,UnityEngine.Vector3,System.Single)">
             <summary>
                 Adds another "layer" to the equipment aiming if they have a
                 weapon with a CompActivatableEffect.
@@ -108,190 +111,6 @@
             <param name="eq"></param>
             <param name="drawLoc"></param>
             <param name="aimAngle"></param>
-        </member>
-        <member name="T:Explorite.CompProperties_PassiveMeditationFocusGain">
-            <summary>为<see cref = "T:Explorite.CompPassiveMeditationFocusGain" />接收参数。</summary>
-        </member>
-        <member name="T:Explorite.CompPassiveMeditationFocusGain">
-            <summary>使生物持续获取精神力。</summary>
-        </member>
-        <member name="T:Explorite.CompProperties_PawnRepairApparelsOvertime">
-            <summary>为<see cref = "T:Explorite.CompPawnRepairApparelsOvertime" />接收参数。</summary>
-        </member>
-        <member name="T:Explorite.CompPawnRepairApparelsOvertime">
-            <summary>使生物持续修复身上的衣物。</summary>
-        </member>
-        <member name="T:Explorite.CompProperties_PawnShield">
-            <summary>为<see cref = "T:Explorite.CompPawnShield" />接收参数。</summary>
-        </member>
-        <member name="T:Explorite.CompPawnShield">
-            <summary>
-            使物种可以具有护盾。
-            护盾值需要由其他属性提供。若无，则护盾不可用。
-            </summary>
-        </member>
-        <member name="T:Explorite.Gizmo_EnergyShieldStatusPawn">
-            <summary>
-            显示生物护盾的界面UI
-            </summary>
-        </member>
-        <member name="T:Explorite.CompProperties_PawnSubsystemManager">
-            <summary>为<see cref = "T:Explorite.CompSelfHealOvertime" />接收参数。</summary>
-        </member>
-        <member name="T:Explorite.CompPawnSubsystemManager">
-            <summary>半人马的子系统控制器。</summary>
-        </member>
-        <member name="T:Explorite.CompProperties_Healer">
-            <summary>治疗类效果参数的基类。<br />
-            为<see cref = "T:Explorite.CompSelfHealOvertime" />，<see cref = "T:Explorite.CompHealWearedOvertime" />，<see cref = "T:Explorite.CompPawnRepairApparelsOvertime" />，等类型及其子类接收参数。</summary>
-        </member>
-        <member name="F:Explorite.CompProperties_Healer.detlaHpPerSec">
-            <summary>每秒恢复的生命值，一刻恢复的生命值的60倍。</summary>
-        </member>
-        <member name="F:Explorite.CompProperties_Healer.ticksBetweenHeal">
-            <summary>恢复生命值的最低间隔。指定该值可以使生命值呈阶段性恢复。</summary>
-        </member>
-        <member name="T:Explorite.CompProperties_Refuelable_PassiveRecharge">
-            <summary>为<see cref = "T:Explorite.CompRefuelable_PassiveRecharge" />接收参数。</summary>
-        </member>
-        <member name="T:Explorite.CompRefuelable_PassiveRecharge">
-            <summary>高速恢复燃料的<see cref = "T:RimWorld.CompRefuelable" />变种。</summary>
-        </member>
-        <member name="T:Explorite.CompReloadable_InitOnEmpty">
-            <summary>初始化装填数量为0的<see cref = "T:RimWorld.CompReloadable" />。</summary>
-        </member>
-        <member name="T:Explorite.CompProperties_SecretTrishot">
-            <summary>为<see cref = "T:Explorite.CompSecretTrishot" />接收参数。</summary>
-        </member>
-        <member name="T:Explorite.CompSecretTrishot">
-            <summary>电池里藏着一把三射弓。</summary>
-        </member>
-        <member name="T:Explorite.CompSelfHealOvertime">
-            <summary>
-            使物品的生命值随着时间逐渐恢复。<br />
-            该类为抽象类，<see cref = "T:Explorite.CompSelfHealOvertime1" />和<see cref = "T:Explorite.CompSelfHealOvertime2" />分别以不同的方式完成了实现。
-            </summary>
-        </member>
-        <member name="T:Explorite.CompProperties_SelfHealOvertime">
-            <summary>为<see cref = "T:Explorite.CompSelfHealOvertime" />及其子类接收参数。</summary>
-        </member>
-        <member name="T:Explorite.CompSelfHealOvertime1">
-            <summary>
-            使物品的生命值随着时间逐渐恢复，该实现完全基于整型。<br />
-            另请参阅: <seealso cref = "T:Explorite.CompSelfHealOvertime2" />，使用了浮点数的实现。
-            </summary>
-        </member>
-        <member name="T:Explorite.CompSelfHealOvertime2">
-            <summary>
-            使物品的生命值随着时间逐渐恢复，该实现使用了浮点数。<br />
-            另请参阅: <seealso cref = "T:Explorite.CompSelfHealOvertime1" />，完全基于整型的实现。
-            </summary>
-        </member>
-        <member name="T:Explorite.CompSnowExpand_Overtick">
-            <summary>以极高速率在地面上产生积雪。</summary>
-        </member>
-        <member name="T:Explorite.CompThingHolder">
-            <summary>提供容器，在物体被摧毁时释放内容。</summary>
-        </member>
-        <member name="T:Explorite.CompProperties_UnbreakableViaDamage">
-            <summary>为<see cref = "T:Explorite.CompUnbreakableViaDamage" />接收参数。</summary>
-        </member>
-        <member name="T:Explorite.CompUnbreakableViaDamage">
-            <summary>使物品不被伤害摧毁。<br />效果目前不可用。</summary>
-        </member>
-        <member name="T:Explorite.DamageWorker_Frostbite_LauncherSafe">
-            <summary>不会杀伤攻击者的冻伤效果。<br /></summary>
-        </member>
-        <member name="T:Explorite.DamageWorker_Frostbrainer">
-            <summary>只能杀伤大脑的伤害。</summary>
-        </member>
-        <member name="T:Explorite.DamageWorker_Scarshot">
-            <summary>干涉伤痕永久性几率的伤害。</summary>
-        </member>
-        <member name="T:Explorite.ExploriteCore">
-            <summary>Explorite Core核心函数集。</summary>
-        </member>
-        <member name="M:Explorite.ExploriteCore.FormattingTickTimeDiv(System.Double,System.String,System.String)">
-            <summary>
-            将一个游戏刻格式化为速率值的字符串。
-            </summary>
-            <param name="tickNumber">需要被格式化的刻数。</param>
-            <param name="toStringFormat">返回值字符串的格式。</param>
-            <param name="midFix">返回值字符串内作为除号的分隔符。</param>
-            <returns>被格式化为可读文本的速率。</returns>
-        </member>
-        <member name="M:Explorite.ExploriteCore.FormattingTickTime(System.Double,System.String)">
-            <summary>
-            将一个游戏刻格式化为时间值的字符串。
-            </summary>
-            <param name="tickNumber">需要被格式化的刻数。</param>
-            <param name="toStringFormat">返回值字符串的格式。</param>
-            <returns>被格式化为可读文本的时间。</returns>
-        </member>
-        <member name="M:Explorite.ExploriteCore.PawnCanOccupy(Verse.Pawn,Verse.IntVec3)">
-            <summary>
-            检测人物是否可以占用目标位置。
-            </summary>
-            <param name="pawn">需要被检测的人物。</param>
-            <param name="c">一个位置。</param>
-            <returns>是否可以占用目标位置。</returns>
-        </member>
-        <member name="M:Explorite.ExploriteCore.ScanOccupiablePosition(Verse.Pawn,Verse.IntVec3)">
-            <summary>
-            扫描目标周围可被占用的位置。
-            </summary>
-            <param name="pawn">需要被检测的人物。</param>
-            <param name="target">一个位置。</param>
-            <returns>最近的可被占用的位置。若无，则返回<c>null</c>。</returns>
-        </member>
-        <member name="M:Explorite.ExploriteCore.TeleportPawn(Verse.Pawn,Verse.IntVec3)">
-            <summary>
-            将人物传送到目标位置附近。
-            </summary>
-            <param name="pawn">需要被传送的人物。</param>
-            <param name="target">一个位置。</param>
-            <returns>是否成功地完成了传送。</returns>
-        </member>
-        <member name="M:Explorite.ExploriteCore.VaildCentaurApparelPredicate(Verse.ThingDef)">
-            <summary>
-            检测物品是否为合法的半人马服装。
-            </summary>
-            <param name="thing">需要被检测的物品。</param>
-            <returns>该物品是否为合法的半人马服装。</returns>
-        </member>
-        <member name="M:Explorite.ExploriteCore.CentaurTraitPredicate(RimWorld.TraitDef,System.Nullable{System.Int32})">
-            <summary>
-            检测特征是否为半人马特征。
-            </summary>
-            <param name="tDef">需要被检测的特征。</param>
-            <param name="degree">需要被检测的特征程度。</param>
-            <returns>该特征是否为半人马服装。</returns>
-        </member>
-        <member name="M:Explorite.ExploriteCore.CentaurTraitPredicate(RimWorld.TraitDef,System.Int32@)">
-            <summary>
-            检测特征是否为半人马特征。
-            </summary>
-            <param name="tDef">需要被检测的特征。</param>
-            <param name="degree">需要被检测的特征程度。</param>
-            <returns>该特征是否为半人马特征。</returns>
-        </member>
-        <member name="M:Explorite.ExploriteDebugActions.ClearAllFogClickPlace">
-            <summary>清除所有迷雾。</summary>
-        </member>
-        <member name="M:Explorite.ExploriteDebugActions.ClearAllFog">
-            <summary>清除所有迷雾。</summary>
-        </member>
-        <member name="M:Explorite.ExploriteDebugActions.SnowWholeMap">
-            <summary>完全积雪。</summary>
-        </member>
-        <member name="M:Explorite.ExploriteDebugActions.FrozenWholeMapWater">
-            <summary>将整个地图的所有水体都变成冰。</summary>
-        </member>
-        <member name="M:Explorite.ExploriteDebugActions.FinishHyperManipulatorInstell(Verse.Pawn)">
-            <summary>完成半人马身体部件极其漫长的整备时间。</summary>
-        </member>
-        <member name="T:Explorite.ExploritePatches">
-            <summary>包含多个补丁的合集类。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PrinterTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>打印函数的构造。</summary>
@@ -512,6 +331,15 @@
         <member name="M:Explorite.ExploritePatches.DamageWorkerExplosionCellsToHitTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>改变爆炸效果选择的覆盖范围。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.AlienRaceHarmonyPatchesChooseStyleItemPrefix(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>临时函数。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoUtilityIsMemeAllowedForPostfix(RimWorld.MemeDef,RimWorld.FactionDef,System.Boolean@)">
+            <summary>更改阵营能够使用的文化模因。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoSymbolPartDefCanBeChosenForIdeoPostfix(RimWorld.Ideo,RimWorld.IdeoSymbolPartDef@,System.Boolean@)">
+            <summary>更改阵营能够使用的图标。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>
@@ -519,6 +347,187 @@
             <summary>
             对人物生成器的补丁。
             </summary>
+        </member>
+        <member name="T:Explorite.CompProperties_PassiveMeditationFocusGain">
+            <summary>为<see cref = "T:Explorite.CompPassiveMeditationFocusGain" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompPassiveMeditationFocusGain">
+            <summary>使生物持续获取精神力。</summary>
+        </member>
+        <member name="T:Explorite.CompProperties_PawnRepairApparelsOvertime">
+            <summary>为<see cref = "T:Explorite.CompPawnRepairApparelsOvertime" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompPawnRepairApparelsOvertime">
+            <summary>使生物持续修复身上的衣物。</summary>
+        </member>
+        <member name="T:Explorite.CompProperties_PawnShield">
+            <summary>为<see cref = "T:Explorite.CompPawnShield" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompPawnShield">
+            <summary>
+            使物种可以具有护盾。
+            护盾值需要由其他属性提供。若无，则护盾不可用。
+            </summary>
+        </member>
+        <member name="T:Explorite.Gizmo_EnergyShieldStatusPawn">
+            <summary>
+            显示生物护盾的界面UI
+            </summary>
+        </member>
+        <member name="T:Explorite.CompProperties_PawnSubsystemManager">
+            <summary>为<see cref = "T:Explorite.CompSelfHealOvertime" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompPawnSubsystemManager">
+            <summary>半人马的子系统控制器。</summary>
+        </member>
+        <member name="T:Explorite.CompProperties_Healer">
+            <summary>治疗类效果参数的基类。<br />
+            为<see cref = "T:Explorite.CompSelfHealOvertime" />，<see cref = "T:Explorite.CompHealWearedOvertime" />，<see cref = "T:Explorite.CompPawnRepairApparelsOvertime" />，等类型及其子类接收参数。</summary>
+        </member>
+        <member name="F:Explorite.CompProperties_Healer.detlaHpPerSec">
+            <summary>每秒恢复的生命值，一刻恢复的生命值的60倍。</summary>
+        </member>
+        <member name="F:Explorite.CompProperties_Healer.ticksBetweenHeal">
+            <summary>恢复生命值的最低间隔。指定该值可以使生命值呈阶段性恢复。</summary>
+        </member>
+        <member name="T:Explorite.CompProperties_Refuelable_PassiveRecharge">
+            <summary>为<see cref = "T:Explorite.CompRefuelable_PassiveRecharge" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompRefuelable_PassiveRecharge">
+            <summary>高速恢复燃料的<see cref = "T:RimWorld.CompRefuelable" />变种。</summary>
+        </member>
+        <member name="T:Explorite.CompReloadable_InitOnEmpty">
+            <summary>初始化装填数量为0的<see cref = "T:RimWorld.CompReloadable" />。</summary>
+        </member>
+        <member name="T:Explorite.CompProperties_SecretTrishot">
+            <summary>为<see cref = "T:Explorite.CompSecretTrishot" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompSecretTrishot">
+            <summary>电池里藏着一把三射弓。</summary>
+        </member>
+        <member name="T:Explorite.CompSelfHealOvertime">
+            <summary>
+            使物品的生命值随着时间逐渐恢复。<br />
+            该类为抽象类，<see cref = "T:Explorite.CompSelfHealOvertime1" />和<see cref = "T:Explorite.CompSelfHealOvertime2" />分别以不同的方式完成了实现。
+            </summary>
+        </member>
+        <member name="T:Explorite.CompProperties_SelfHealOvertime">
+            <summary>为<see cref = "T:Explorite.CompSelfHealOvertime" />及其子类接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompSelfHealOvertime1">
+            <summary>
+            使物品的生命值随着时间逐渐恢复，该实现完全基于整型。<br />
+            另请参阅: <seealso cref = "T:Explorite.CompSelfHealOvertime2" />，使用了浮点数的实现。
+            </summary>
+        </member>
+        <member name="T:Explorite.CompSelfHealOvertime2">
+            <summary>
+            使物品的生命值随着时间逐渐恢复，该实现使用了浮点数。<br />
+            另请参阅: <seealso cref = "T:Explorite.CompSelfHealOvertime1" />，完全基于整型的实现。
+            </summary>
+        </member>
+        <member name="T:Explorite.CompSnowExpand_Overtick">
+            <summary>以极高速率在地面上产生积雪。</summary>
+        </member>
+        <member name="T:Explorite.CompThingHolder">
+            <summary>提供容器，在物体被摧毁时释放内容。</summary>
+        </member>
+        <member name="T:Explorite.CompProperties_UnbreakableViaDamage">
+            <summary>为<see cref = "T:Explorite.CompUnbreakableViaDamage" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompUnbreakableViaDamage">
+            <summary>使物品不被伤害摧毁。<br />效果目前不可用。</summary>
+        </member>
+        <member name="T:Explorite.DamageWorker_Frostbite_LauncherSafe">
+            <summary>不会杀伤攻击者的冻伤效果。<br /></summary>
+        </member>
+        <member name="T:Explorite.DamageWorker_Frostbrainer">
+            <summary>只能杀伤大脑的伤害。</summary>
+        </member>
+        <member name="T:Explorite.DamageWorker_Scarshot">
+            <summary>干涉伤痕永久性几率的伤害。</summary>
+        </member>
+        <member name="T:Explorite.ExploriteCore">
+            <summary>Explorite Core核心函数集。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteCore.FormattingTickTimeDiv(System.Double,System.String,System.String)">
+            <summary>
+            将一个游戏刻格式化为速率值的字符串。
+            </summary>
+            <param name="tickNumber">需要被格式化的刻数。</param>
+            <param name="toStringFormat">返回值字符串的格式。</param>
+            <param name="midFix">返回值字符串内作为除号的分隔符。</param>
+            <returns>被格式化为可读文本的速率。</returns>
+        </member>
+        <member name="M:Explorite.ExploriteCore.FormattingTickTime(System.Double,System.String)">
+            <summary>
+            将一个游戏刻格式化为时间值的字符串。
+            </summary>
+            <param name="tickNumber">需要被格式化的刻数。</param>
+            <param name="toStringFormat">返回值字符串的格式。</param>
+            <returns>被格式化为可读文本的时间。</returns>
+        </member>
+        <member name="M:Explorite.ExploriteCore.PawnCanOccupy(Verse.Pawn,Verse.IntVec3)">
+            <summary>
+            检测人物是否可以占用目标位置。
+            </summary>
+            <param name="pawn">需要被检测的人物。</param>
+            <param name="c">一个位置。</param>
+            <returns>是否可以占用目标位置。</returns>
+        </member>
+        <member name="M:Explorite.ExploriteCore.ScanOccupiablePosition(Verse.Pawn,Verse.IntVec3)">
+            <summary>
+            扫描目标周围可被占用的位置。
+            </summary>
+            <param name="pawn">需要被检测的人物。</param>
+            <param name="target">一个位置。</param>
+            <returns>最近的可被占用的位置。若无，则返回<c>null</c>。</returns>
+        </member>
+        <member name="M:Explorite.ExploriteCore.TeleportPawn(Verse.Pawn,Verse.IntVec3)">
+            <summary>
+            将人物传送到目标位置附近。
+            </summary>
+            <param name="pawn">需要被传送的人物。</param>
+            <param name="target">一个位置。</param>
+            <returns>是否成功地完成了传送。</returns>
+        </member>
+        <member name="M:Explorite.ExploriteCore.VaildCentaurApparelPredicate(Verse.ThingDef)">
+            <summary>
+            检测物品是否为合法的半人马服装。
+            </summary>
+            <param name="thing">需要被检测的物品。</param>
+            <returns>该物品是否为合法的半人马服装。</returns>
+        </member>
+        <member name="M:Explorite.ExploriteCore.CentaurTraitPredicate(RimWorld.TraitDef,System.Nullable{System.Int32})">
+            <summary>
+            检测特征是否为半人马特征。
+            </summary>
+            <param name="tDef">需要被检测的特征。</param>
+            <param name="degree">需要被检测的特征程度。</param>
+            <returns>该特征是否为半人马服装。</returns>
+        </member>
+        <member name="M:Explorite.ExploriteCore.CentaurTraitPredicate(RimWorld.TraitDef,System.Int32@)">
+            <summary>
+            检测特征是否为半人马特征。
+            </summary>
+            <param name="tDef">需要被检测的特征。</param>
+            <param name="degree">需要被检测的特征程度。</param>
+            <returns>该特征是否为半人马特征。</returns>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.ClearAllFogClickPlace">
+            <summary>清除所有迷雾。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.ClearAllFog">
+            <summary>清除所有迷雾。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.SnowWholeMap">
+            <summary>完全积雪。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.FrozenWholeMapWater">
+            <summary>将整个地图的所有水体都变成冰。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.FinishHyperManipulatorInstell(Verse.Pawn)">
+            <summary>完成半人马身体部件极其漫长的整备时间。</summary>
         </member>
         <member name="T:Explorite.ExploriteMod">
             <summary>Explorite模组信息类。</summary>

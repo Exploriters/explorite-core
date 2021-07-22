@@ -59,6 +59,11 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn).App(ref last_patch_method), new[] { typeof(PawnGenerationRequest) }),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(GeneratePawnPostfix)));
 
+                harmonyInstance.Patch(typeof(PawnRenderer).GetMethod(nameof(PawnRenderer.DrawEquipmentAiming).App(ref last_patch_method)),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(DrawEquipmentAimingPrefix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(Thing), "get_DefaultGraphic".App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(get_Graphic_PostFix)));
+
                 harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Learn).App(ref last_patch_method)),
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(SkillLearnPrefix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Interval).App(ref last_patch_method)),
@@ -251,6 +256,12 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(DamageWorker), nameof(DamageWorker.ExplosionCellsToHit).App(ref last_patch_method), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(DamageWorkerExplosionCellsToHitTranspiler)));
 
+                harmonyInstance.Patch(AccessTools.Method(typeof(IdeoUtility), nameof(IdeoUtility.IsMemeAllowedFor).App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(IdeoUtilityIsMemeAllowedForPostfix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(IdeoSymbolPartDef), nameof(IdeoSymbolPartDef.CanBeChosenForIdeo).App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(IdeoSymbolPartDefCanBeChosenForIdeoPostfix)));
+
                 //harmonyInstance.Patch(AccessTools.Method(typeof(DamageWorker), nameof(DamageWorker.ExplosionCellsToHit).App(ref last_patch_method), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
                 //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
                 //harmonyInstance.Patch(AccessTools.Method(typeof(DamageWorker_Tes1), nameof(DamageWorker_Tes1.ExplosionCellsToHit).App(ref last_patch_method), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
@@ -269,6 +280,10 @@ namespace Explorite
                     // 依赖 类 AlienRace.RaceRestrictionSettings
                     harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("AlienRace.RaceRestrictionSettings"), "CanWear".App(ref last_patch_method)),
                         postfix: new HarmonyMethod(patchType, last_patch = nameof(RaceRestrictionSettingsCanWearPostfix)));
+
+                    //// 依赖 类 AlienRace.RaceRestrictionSettings
+                    //harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("AlienRace.HarmonyPatches"), "ChooseStyleItemPrefix".App(ref last_patch_method)),
+                    //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(AlienRaceHarmonyPatchesChooseStyleItemPrefix)));
                 }
                 if (InstelledMods.SoS2)
                 {
@@ -1698,8 +1713,7 @@ namespace Explorite
             return instance.def.defName.Contains("Frostblast");
         }
         ///<summary>改变爆炸效果选择的覆盖范围。</summary>
-        [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> DamageWorkerExplosionCellsToHitTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> DamageWorkerExplosionCellsToHitTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {
             MethodInfo lineOfSightInfo = AccessTools.Method(typeof(GenSight), nameof(GenSight.LineOfSight),
                 new Type[] { typeof(IntVec3), typeof(IntVec3), typeof(Map), typeof(bool), typeof(Func<IntVec3, bool>), typeof(int), typeof(int) });
@@ -1784,6 +1798,7 @@ namespace Explorite
                 yield return ins;
                 continue;
             }
+
             /*
             Log.Message("[Explorite]instr result:\n" + stringBuilder.ToString());
             if (patchActionStage1 == 3)
@@ -1805,138 +1820,191 @@ namespace Explorite
             */
             yield break;
         }
-
-
-    }
-    /*
-        public static void LocalTest1()
+        ///<summary>临时函数。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> AlienRaceHarmonyPatchesChooseStyleItemPrefix(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {
-            IntVec3 intVec2 = Fun5();
-            Map map = Fun4();
-
-            if (intVec2.Walkable(map))
+            foreach (CodeInstruction ins in instr)
             {
-                Fun3();
+                if (ins.operand == HairDefOf.Shaved as object)
+                {
+                    ins.operand = DefDatabase<HairDef>.GetNamed("Flowy");
+                    yield return ins;
+                }
+                else
+                {
+                    yield return ins;
+                }
+            }
+            yield break;
+        }
+        /*
+            public static void LocalTest1()
+            {
+                IntVec3 intVec2 = Fun5();
+                Map map = Fun4();
+
+                if (intVec2.Walkable(map))
+                {
+                    Fun3();
+                }
+            }
+            public static void LocalTest2()
+            {
+                IntVec3 intVec2 = Fun5();
+                Map map = Fun4();
+
+                if (ExplosionCellsToHitInsideOverrider(intVec2, map) || intVec2.Walkable(map))
+                {
+                    Fun3();
+                }
+            }
+            public static void Fun3()
+            {
+            }
+            public static Map Fun4()
+            {
+                return new Map();
+            }
+            public static IntVec3 Fun5()
+            {
+                return new IntVec3();
+            }
+            public static void Fun6(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8)
+            {
+                Fun6(a1, a2, a3, a4, a5, a6, a7, a8);
+            }
+            */
+        /*
+        class DamageWorker_Tes1 : DamageWorker
+        {
+            public override IEnumerable<IntVec3> ExplosionCellsToHit(IntVec3 center, Map map, float radius, IntVec3? needLOSToCell1 = null, IntVec3? needLOSToCell2 = null)
+            {
+                List<IntVec3> openCells = GetType().GetField("openCells", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this) as List<IntVec3>;
+                List<IntVec3> adjWallCells = GetType().GetField("adjWallCells", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this) as List<IntVec3>;
+
+                openCells.Clear();
+                adjWallCells.Clear();
+                int num = GenRadial.NumCellsInRadius(radius);
+                for (int i = 0; i < num; i++)
+                {
+                    IntVec3 intVec = center + GenRadial.RadialPattern[i];
+                    if (intVec.InBounds(map) && GenSight.LineOfSight(center, intVec, map, true, null, 0, 0))
+                    {
+                        if (needLOSToCell1 != null || needLOSToCell2 != null)
+                        {
+                            bool flag = needLOSToCell1 != null && GenSight.LineOfSight(needLOSToCell1.Value, intVec, map, false, null, 0, 0);
+                            bool flag2 = needLOSToCell2 != null && GenSight.LineOfSight(needLOSToCell2.Value, intVec, map, false, null, 0, 0);
+                            if (!flag && !flag2)
+                            {
+                                goto IL_B1;
+                            }
+                        }
+                        openCells.Add(intVec);
+                    }
+                IL_B1:;
+                }
+                for (int j = 0; j < openCells.Count; j++)
+                {
+                    IntVec3 intVec2 = openCells[j];
+                    if (intVec2.Walkable(map))
+                    {
+                        for (int k = 0; k < 4; k++)
+                        {
+                            IntVec3 intVec3 = intVec2 + GenAdj.CardinalDirections[k];
+                            if (intVec3.InHorDistOf(center, radius) && intVec3.InBounds(map) && !intVec3.Standable(map) && intVec3.GetEdifice(map) != null && !openCells.Contains(intVec3) && !adjWallCells.Contains(intVec3))
+                            {
+                                adjWallCells.Add(intVec3);
+                            }
+                        }
+                    }
+                }
+                return openCells.Concat(adjWallCells);
             }
         }
-        public static void LocalTest2()
+        class DamageWorker_Tes2 : DamageWorker
         {
-            IntVec3 intVec2 = Fun5();
-            Map map = Fun4();
-
-            if (ExplosionCellsToHitInsideOverrider(intVec2, map) || intVec2.Walkable(map))
+            public override IEnumerable<IntVec3> ExplosionCellsToHit(IntVec3 center, Map map, float radius, IntVec3? needLOSToCell1 = null, IntVec3? needLOSToCell2 = null)
             {
-                Fun3();
+                List<IntVec3> openCells = GetType().GetField("openCells", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this) as List<IntVec3>;
+                List<IntVec3> adjWallCells = GetType().GetField("adjWallCells", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this) as List<IntVec3>;
+
+                openCells.Clear();
+                adjWallCells.Clear();
+                int num = GenRadial.NumCellsInRadius(radius);
+                for (int i = 0; i < num; i++)
+                {
+                    IntVec3 intVec = center + GenRadial.RadialPattern[i];
+                    if (ExploritePatches.ExplosionCellsToHitEverythingOverrider(this) || (intVec.InBounds(map) && GenSight.LineOfSight(center, intVec, map, true, null, 0, 0)))
+                    {
+                        if (needLOSToCell1 != null || needLOSToCell2 != null)
+                        {
+                            bool flag = needLOSToCell1 != null && GenSight.LineOfSight(needLOSToCell1.Value, intVec, map, false, null, 0, 0);
+                            bool flag2 = needLOSToCell2 != null && GenSight.LineOfSight(needLOSToCell2.Value, intVec, map, false, null, 0, 0);
+                            if (!flag && !flag2)
+                            {
+                                goto IL_B1;
+                            }
+                        }
+                        openCells.Add(intVec);
+                    }
+                IL_B1:;
+                }
+                for (int j = 0; j < openCells.Count; j++)
+                {
+                    IntVec3 intVec2 = openCells[j];
+                    if (intVec2.Walkable(map))
+                    {
+                        for (int k = 0; k < 4; k++)
+                        {
+                            IntVec3 intVec3 = intVec2 + GenAdj.CardinalDirections[k];
+                            if (intVec3.InHorDistOf(center, radius) && intVec3.InBounds(map) && !intVec3.Standable(map) && intVec3.GetEdifice(map) != null && !openCells.Contains(intVec3) && !adjWallCells.Contains(intVec3))
+                            {
+                                adjWallCells.Add(intVec3);
+                            }
+                        }
+                    }
+                }
+                return openCells.Concat(adjWallCells);
             }
-        }
-        public static void Fun3()
-        {
-        }
-        public static Map Fun4()
-        {
-            return new Map();
-        }
-        public static IntVec3 Fun5()
-        {
-            return new IntVec3();
-        }
-        public static void Fun6(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8)
-        {
-            Fun6(a1, a2, a3, a4, a5, a6, a7, a8);
         }
         */
-    /*
-    class DamageWorker_Tes1 : DamageWorker
-    {
-        public override IEnumerable<IntVec3> ExplosionCellsToHit(IntVec3 center, Map map, float radius, IntVec3? needLOSToCell1 = null, IntVec3? needLOSToCell2 = null)
-        {
-            List<IntVec3> openCells = GetType().GetField("openCells", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this) as List<IntVec3>;
-            List<IntVec3> adjWallCells = GetType().GetField("adjWallCells", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this) as List<IntVec3>;
 
-            openCells.Clear();
-            adjWallCells.Clear();
-            int num = GenRadial.NumCellsInRadius(radius);
-            for (int i = 0; i < num; i++)
+        ///<summary>更改阵营能够使用的文化模因。</summary>
+        [HarmonyPostfix]public static void IdeoUtilityIsMemeAllowedForPostfix(MemeDef meme, FactionDef faction, ref bool __result)
+        {
+            if (faction == CentaurPlayerColonyDef)
             {
-                IntVec3 intVec = center + GenRadial.RadialPattern[i];
-                if (intVec.InBounds(map) && GenSight.LineOfSight(center, intVec, map, true, null, 0, 0))
+                if (meme != CentaurMemeDef && meme != CentaurStructureMemeDef && meme != DefDatabase<MemeDef>.GetNamed("Structure_Ideological"))
                 {
-                    if (needLOSToCell1 != null || needLOSToCell2 != null)
-                    {
-                        bool flag = needLOSToCell1 != null && GenSight.LineOfSight(needLOSToCell1.Value, intVec, map, false, null, 0, 0);
-                        bool flag2 = needLOSToCell2 != null && GenSight.LineOfSight(needLOSToCell2.Value, intVec, map, false, null, 0, 0);
-                        if (!flag && !flag2)
-                        {
-                            goto IL_B1;
-                        }
-                    }
-                    openCells.Add(intVec);
-                }
-            IL_B1:;
-            }
-            for (int j = 0; j < openCells.Count; j++)
-            {
-                IntVec3 intVec2 = openCells[j];
-                if (intVec2.Walkable(map))
-                {
-                    for (int k = 0; k < 4; k++)
-                    {
-                        IntVec3 intVec3 = intVec2 + GenAdj.CardinalDirections[k];
-                        if (intVec3.InHorDistOf(center, radius) && intVec3.InBounds(map) && !intVec3.Standable(map) && intVec3.GetEdifice(map) != null && !openCells.Contains(intVec3) && !adjWallCells.Contains(intVec3))
-                        {
-                            adjWallCells.Add(intVec3);
-                        }
-                    }
+                    __result = false;
+                    return;
                 }
             }
-            return openCells.Concat(adjWallCells);
+            else
+            {
+                if (meme == CentaurMemeDef || meme == CentaurStructureMemeDef)
+                {
+                    __result = false;
+                    return;
+                }
+            }
+        }
+
+        ///<summary>更改阵营能够使用的图标。</summary>
+        [HarmonyPostfix]public static void IdeoSymbolPartDefCanBeChosenForIdeoPostfix(Ideo ideo, ref IdeoSymbolPartDef __instance, ref bool __result)
+        {
+            if (__result)
+            {
+                if (ideo.memes.Contains(CentaurMemeDef)
+                    && __instance != CentaurIdeoIconDef
+                    && __instance != ExploriteBlueDef
+                    && __instance != ExploriteOrangeDef
+                    )
+                {
+                    __result = false;
+                    return;
+                }
+            }
         }
     }
-    class DamageWorker_Tes2 : DamageWorker
-    {
-        public override IEnumerable<IntVec3> ExplosionCellsToHit(IntVec3 center, Map map, float radius, IntVec3? needLOSToCell1 = null, IntVec3? needLOSToCell2 = null)
-        {
-            List<IntVec3> openCells = GetType().GetField("openCells", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this) as List<IntVec3>;
-            List<IntVec3> adjWallCells = GetType().GetField("adjWallCells", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this) as List<IntVec3>;
-
-            openCells.Clear();
-            adjWallCells.Clear();
-            int num = GenRadial.NumCellsInRadius(radius);
-            for (int i = 0; i < num; i++)
-            {
-                IntVec3 intVec = center + GenRadial.RadialPattern[i];
-                if (ExploritePatches.ExplosionCellsToHitEverythingOverrider(this) || (intVec.InBounds(map) && GenSight.LineOfSight(center, intVec, map, true, null, 0, 0)))
-                {
-                    if (needLOSToCell1 != null || needLOSToCell2 != null)
-                    {
-                        bool flag = needLOSToCell1 != null && GenSight.LineOfSight(needLOSToCell1.Value, intVec, map, false, null, 0, 0);
-                        bool flag2 = needLOSToCell2 != null && GenSight.LineOfSight(needLOSToCell2.Value, intVec, map, false, null, 0, 0);
-                        if (!flag && !flag2)
-                        {
-                            goto IL_B1;
-                        }
-                    }
-                    openCells.Add(intVec);
-                }
-            IL_B1:;
-            }
-            for (int j = 0; j < openCells.Count; j++)
-            {
-                IntVec3 intVec2 = openCells[j];
-                if (intVec2.Walkable(map))
-                {
-                    for (int k = 0; k < 4; k++)
-                    {
-                        IntVec3 intVec3 = intVec2 + GenAdj.CardinalDirections[k];
-                        if (intVec3.InHorDistOf(center, radius) && intVec3.InBounds(map) && !intVec3.Standable(map) && intVec3.GetEdifice(map) != null && !openCells.Contains(intVec3) && !adjWallCells.Contains(intVec3))
-                        {
-                            adjWallCells.Add(intVec3);
-                        }
-                    }
-                }
-            }
-            return openCells.Concat(adjWallCells);
-        }
-    }
-    */
 }
