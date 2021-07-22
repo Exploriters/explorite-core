@@ -417,8 +417,7 @@ namespace Explorite
          */
         public static bool CentaurTraitPredicate(TraitDef tDef, out int degree)
         {
-            if (tDef == DefDatabase<TraitDef>.GetNamed("Masochist")
-             || tDef == TraitDefOf.Masochist
+            if (tDef == TraitDefOf.Masochist
              || tDef == TraitDefOf.Industriousness
              || tDef == TraitDefOf.Kind
              || tDef == TraitDefOf.Asexual
