@@ -51,6 +51,9 @@
         <member name="T:Explorite.CompAbilityEffect_MoteOnTarget_ParasiticStab">
             <summary>Sayers的群体植物液注入的粒子效果功能实现。</summary>
         </member>
+        <member name="T:Explorite.CompAbilityEffect_FleckOnTarget_ParasiticStab">
+            <summary>Sayers的群体植物液注入的粒子效果功能实现。</summary>
+        </member>
         <member name="T:Explorite.CompAbilityEffect_GiveHediff_ParasiticStab">
             <summary>Sayers的群体植物液注入的主要功能实现。</summary>
         </member>
