@@ -26,23 +26,31 @@ namespace Explorite
             }
             else
             {
-                Type t = typeof(T);
-                if (malrefs.TryGetValue(t, out Def value))
-                {
-                    if ((value as T) != null)
-                    {
-                        return value as T;
-                    }
-                }
-
-                T def = new T
-                {
-                    defName = "EXPLO_MALREF",
-                    description = $"Encountered bad reference of {nameof(T)}."
-                };
-                malrefs.Add(t, def);
-                return def;
+                return GetModDef<T>();
             }
+        }
+        private static T GetModDef<T>(bool _) where T : Def, new()
+        {
+            return GetModDef<T>();
+        }
+        private static T GetModDef<T>() where T : Def, new()
+        {
+            Type t = typeof(T);
+            if (malrefs.TryGetValue(t, out Def value))
+            {
+                if ((value as T) != null)
+                {
+                    return value as T;
+                }
+            }
+
+            T def = new T
+            {
+                defName = "EXPLO_MALREF",
+                description = $"Encountered bad reference of {nameof(T)}."
+            };
+            malrefs.Add(t, def);
+            return def;
         }
 
         public static bool IsNonMal(this Def def)
@@ -93,25 +101,27 @@ namespace Explorite
         public static readonly MemeDef CentaurMemeDef = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "Centaur");
         public static readonly MemeDef CentaurStructureMemeDef = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "Structure_Centaur");
         public static readonly IdeoIconDef CentaurIdeoIconDef = GetModDef<IdeoIconDef>(InstelledMods.RimCentaurs, "Exploriter");
-        public static readonly ColorDef ExploriteBlueDef = GetModDef<ColorDef>(InstelledMods.RimCentaurs, "ExploriteBlue");
-        public static readonly ColorDef ExploriteOrangeDef = GetModDef<ColorDef>(InstelledMods.RimCentaurs, "ExploriteOrange");
+        //public static readonly ColorDef CentaurBlueDef = GetModDef<ColorDef>(InstelledMods.RimCentaurs, "CentaurBlue");
+        //public static readonly ColorDef ExploriteBlueDef = GetModDef<ColorDef>(InstelledMods.RimCentaurs, "ExploriteBlue");
+        //public static readonly ColorDef ExploriteOrangeDef = GetModDef<ColorDef>(InstelledMods.RimCentaurs, "ExploriteOrange");
 
         public static readonly HediffDef HediffCentaurSubsystem_NeedsCapacitor_Def = GetModDef<HediffDef>(InstelledMods.RimCentaurs, "CentaurSubsystem_NeedsCapacitor");
         public static readonly HediffDef HediffCentaurSubsystem_HazardAdaptation_Def = GetModDef<HediffDef>(InstelledMods.RimCentaurs, "CentaurSubsystem_HazardAdaptation");
         public static readonly HediffDef HediffCentaurSubsystem_AntiMass_Def = GetModDef<HediffDef>(InstelledMods.RimCentaurs, "CentaurSubsystem_AntiMass");
 
         public static readonly ThingDef AlienSayersDef = GetModDef<ThingDef>(InstelledMods.Sayers, "Alien_Sayers");
-        public static readonly ThingDef AlienFlowerBorhAnimalDef = GetModDef<ThingDef>(InstelledMods.Sayers, "Alien_FlowerBorhAnimal");
+        public static readonly ThingDef AlienMichellesDef = GetModDef<ThingDef>(InstelledMods.Sayers);
+        public static readonly ThingDef AlienFlowerBorhAnimalDef = GetModDef<ThingDef>(InstelledMods.Sayers);
         public static readonly ThingDef FleshTreeDef = GetModDef<ThingDef>(InstelledMods.Sayers, "Plant_BloodyTree");
         public static readonly ThingDef BloodyTreeMeatDef = GetModDef<ThingDef>(InstelledMods.Sayers, "BloodyTree_Meat");
         public static readonly ThingDef PlantReactionComputerDef = GetModDef<ThingDef>(InstelledMods.Sayers, "PlantReactionComputer");
         public static readonly DamageDef InjectionDamageDef = GetModDef<DamageDef>(InstelledMods.Sayers, "Injection");
         public static readonly HediffDef InjectionHediffDef = GetModDef<HediffDef>(InstelledMods.Sayers, "Injection");
         public static readonly FactionDef SayersPlayerColonyDef = GetModDef<FactionDef>(InstelledMods.Sayers, "SayersClan");
-        public static readonly FactionDef SayersPlayerColonySingleDef = GetModDef<FactionDef>(InstelledMods.Sayers, "SayersRefugees");
+        public static readonly FactionDef SayersPlayerColonySingleDef = GetModDef<FactionDef>(InstelledMods.Sayers);
         public static readonly BodyDef SayersBodyDef = GetModDef<BodyDef>(InstelledMods.Sayers, "Body_Sayers");
-
-        public static readonly ThingDef AlienMichellesDef = GetModDef<ThingDef>(InstelledMods.Sayers, "Alien_Michelles");
+        public static readonly MemeDef SayersMeme1Def = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "Experimental_SayersMeme");
+        public static readonly MemeDef SayersMeme2Def = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "CarnivorousAnimal_SayersMeme");
 
         public static readonly ThingDef AlienGuoguoDef = GetModDef<ThingDef>(InstelledMods.GuoGuo, "Alien_Guoguo");
         public static readonly FactionDef GuoguoPlayerColonyDef = GetModDef<FactionDef>(InstelledMods.GuoGuo, "GuoguoPlayerColony");

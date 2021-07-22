@@ -34,6 +34,17 @@ namespace Explorite
             }
         }
     }
+    ///<summary>Sayers的群体植物液注入的粒子效果功能实现。</summary>
+    public class CompAbilityEffect_FleckOnTarget_ParasiticStab : CompAbilityEffect_FleckOnTarget
+    {
+        public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
+        {
+            if (target.Pawn != null)
+            {
+                base.Apply(target, dest);
+            }
+        }
+    }
     ///<summary>Sayers的群体植物液注入的主要功能实现。</summary>
     public class CompAbilityEffect_GiveHediff_ParasiticStab : CompAbilityEffect_GiveHediff
     {
