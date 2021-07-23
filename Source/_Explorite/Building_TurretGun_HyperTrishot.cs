@@ -8,6 +8,6 @@ namespace Explorite
 {
     public class Building_TurretGun_HyperTrishot : Building_TurretGun
     {
-        
+
     }
 }

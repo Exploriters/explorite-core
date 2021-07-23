@@ -195,7 +195,7 @@ namespace Explorite
                 {
                     subsystemHediff = null;
                 }
-                else if(subsystemHediff?.SubsystemState == SubsystemState.Initialzing)
+                else if (subsystemHediff?.SubsystemState == SubsystemState.Initialzing)
                 {
                     initialzing = true;
                 }
@@ -290,7 +290,7 @@ namespace Explorite
                     Widgets.Label(rectFillBarHealthTip, $"{partHealth} / {partHealthMax}");
                 }
                 // 初始化进度渲染
-                if(initialzing)
+                if (initialzing)
                 {
                     const float barScale = 454f;
                     Text.Font = GameFont.Tiny;
@@ -326,7 +326,7 @@ namespace Explorite
                 }
 
             }
-            catch(NullReferenceException e)
+            catch (NullReferenceException e)
             {
                 GUI.DrawTexture(rect, SubsystemTabBackground_Error);
                 Rect rect2 = new Rect()

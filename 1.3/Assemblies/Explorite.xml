@@ -65,6 +65,21 @@
         <member name="T:Explorite.CompAssignableToPawn_Bed_Guoguo">
             <summary>果果床的类型，只有果果人可以使用。</summary>
         </member>
+        <member name="T:Explorite.CompProperties_Command">
+            <summary>为<see cref = "T:Explorite.Verb_RemoteActivator" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompCommand">
+            <summary>不需要装填的<see cref = "T:RimWorld.CompReloadable" />代替。</summary>
+        </member>
+        <member name="T:Explorite.Command_CompCommand">
+            <summary>不需要装填的<see cref = "T:RimWorld.Command_Reloadable" />代替。</summary>
+        </member>
+        <member name="T:Explorite.CompProperties_ReloadableNotReloadable">
+            <summary>为<see cref = "T:Explorite.CompReloadableNotReloadable" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompReloadableNotReloadable">
+            <summary>不需要装填的<see cref = "T:RimWorld.CompReloadable" />代替。</summary>
+        </member>
         <member name="T:Explorite.CompProperties_DestroyOnSpawn">
             <summary>为<see cref = "T:Explorite.CompDestroyOnSpawn" />接收参数。</summary>
         </member>
@@ -106,6 +121,12 @@
             <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect" />接收参数。</summary>
         </member>
         <member name="T:Explorite.CompRemoteActivationEffect">
+            <summary>远程效果设备，响应<see cref = "T:Explorite.Verb_RemoteActivator" />。</summary>
+        </member>
+        <member name="T:Explorite.HediffCompProperties_RemoteActivationEffect">
+            <summary>为<see cref = "T:Explorite.HediffComp_RemoteActivationEffect" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.HediffComp_RemoteActivationEffect">
             <summary>远程效果设备，响应<see cref = "T:Explorite.Verb_RemoteActivator" />。</summary>
         </member>
         <member name="T:Explorite.CompRemoteActivationEffect_Apparel">
@@ -570,6 +591,12 @@
         </member>
         <member name="T:Explorite.HediffComp_StageRange_CustomDesc">
             <summary>在范围内时显示额外描述。</summary>
+        </member>
+        <member name="T:Explorite.HediffCompProperties_DisappearsOnSourceApparelLost">
+            <summary>为<see cref = "T:Explorite.HediffComp_SpawnThingOnDeath" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.HediffComp_DisappearsOnSourceApparelLost">
+            <summary>来源衣物不存在后移除hediff。</summary>
         </member>
         <member name="T:Explorite.HediffCompProperties_FactorBySeverity">
             <summary>为<see cref = "T:Explorite.HediffComp_FactorBySeverity" />接收参数。</summary>

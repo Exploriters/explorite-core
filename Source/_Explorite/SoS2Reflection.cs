@@ -24,7 +24,7 @@ namespace Explorite
             }
             //core = (Building)
             methodGenerateShip.Invoke(null, new object[] {
-                shipDef, map, tradeShip, fac, lord, null
+                shipDef, map, tradeShip, fac, lord, core
             });
         }
 
