@@ -11,12 +11,17 @@ namespace Explorite
 {
     public interface IRemoteActivationEffect
     {
-        public bool CanActiveNow(IEnumerable<string> tags);
-        public bool TryActive(IEnumerable<string> tags);
-        public bool ActiveEffect();
+        bool CanActiveNow(IEnumerable<string> tags);
+        bool ActiveEffect();
     }
     public static class RemoteActiveUtility
     {
+        public static bool TryActive(this IRemoteActivationEffect activeDevice, IEnumerable<string> tags)
+        {
+            if (activeDevice.CanActiveNow(tags))
+                return activeDevice.ActiveEffect();
+            return false;
+        }
         public static bool ActiveTriggers(IEnumerable<IRemoteActivationEffect> effects, List<string> tags)
         {
             bool flag = false;
