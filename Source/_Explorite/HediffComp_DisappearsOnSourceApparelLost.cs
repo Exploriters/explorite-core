@@ -20,19 +20,31 @@ namespace Explorite
     ///<summary>来源衣物不存在后移除hediff。</summary>
     public class HediffComp_DisappearsOnSourceApparelLost : HediffComp
     {
-        public List<Apparel> sources;
+        public List<Apparel> sources = null;
         //base.Pawn.health.RemoveHediff(this.parent);
         public override bool CompShouldRemove => base.CompShouldRemove || CheckSources();
         private bool CheckSources()
 		{
-			sources.RemoveAll(app => app == null || app.Wearer != parent.pawn);
-			return sources.Any();
+			if (sources == null)
+				return false;
+			sources.RemoveAll(app => app.DestroyedOrNull() || app.Wearer != parent.pawn);
+			return !sources.Any();
 		}
 		public void AddSources(Apparel source)
 		{
+			if (sources == null)
+				sources = new List<Apparel>();
 			if (!sources.Contains(source))
                 sources.Add(source);
-			CheckSources();
+		}
+		public override void CompPostMerged(Hediff other)
+		{
+			base.CompPostMerged(other);
+			HediffComp_DisappearsOnSourceApparelLost hediffComp_Disappears = other.TryGetComp<HediffComp_DisappearsOnSourceApparelLost>();
+			if (hediffComp_Disappears != null && hediffComp_Disappears.sources != null)
+			{
+				sources = (sources ?? new List<Apparel>()).Concat(hediffComp_Disappears.sources).ToList();
+			}
 		}
 		public override void CompExposeData()
 		{
@@ -40,7 +52,7 @@ namespace Explorite
 		}
 		public override string CompDebugString()
 		{
-			return "sources: " + string.Join(", ", sources.Select(s => s.LabelShort));
+			return "sources: " + string.Join(", ", sources?.Select(s => s.ThingID) ?? new List<string>());
 		}
 	}
 

@@ -209,5 +209,13 @@ namespace Explorite
             }
             yield break;
         }
+        public override IEnumerable<StatDrawEntry> SpecialDisplayStats()
+        {
+            yield break;
+        }
+        public override string CompInspectStringExtra()
+        {
+            return null;
+        }
     }
 }
