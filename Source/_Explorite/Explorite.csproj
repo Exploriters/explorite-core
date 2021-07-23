@@ -111,6 +111,7 @@
     <Compile Include="CompEnsureAbility.cs" />
     <Compile Include="CompHealWearedOvertime.cs" />
     <Compile Include="CompHMTrishotUser.cs" />
+    <Compile Include="CompRemoteActivationEffect.cs" />
     <Compile Include="ExploritePatches_OversizedWeapon.cs" />
     <Compile Include="CompPassiveMeditationFocusGain.cs" />
     <Compile Include="CompPawnRepairApparelsOvertime.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="SubsystemUtility.cs" />
     <Compile Include="ThoughtWorker_AlwaysActive_Centaur.cs" />
     <Compile Include="Verb.cs" />
+    <Compile Include="Verb_RemoteActivator.cs" />
     <Compile Include="Verb_SensitivityToggle.cs" />
     <Compile Include="_AssemblyInfo.cs" />
   </ItemGroup>

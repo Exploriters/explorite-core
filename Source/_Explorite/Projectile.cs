@@ -37,13 +37,12 @@ namespace Explorite
             {
                 if (launcher is Pawn pawn)
                 {
-                    Map map = Map;
                     IntVec3 pos = Position;
-                    if (launcher.Map.uniqueID == map.uniqueID)
+                    if (pawn.Map == Map)
                     {
-                        if (TeleportPawn(pawn, pos))
+                        if (TeleportPawn(pawn, Map, pos))
                         {
-                            map.fogGrid.RevealFogCluster(launcher.Position);
+                            Map.fogGrid.RevealFogCluster(pawn.Position);
                         }
                     }
                 }
