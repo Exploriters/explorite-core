@@ -106,6 +106,7 @@
     <Compile Include="CompAbilityEffect_TogglePsySensitivity.cs" />
     <Compile Include="CompArt_Qualityless.cs" />
     <Compile Include="CompAssignableToPawn_Bed_Guoguo.cs" />
+    <Compile Include="CompCommand.cs" />
     <Compile Include="CompDestroyOnSpawn.cs" />
     <Compile Include="CompDropThingsOnDestroy.cs" />
     <Compile Include="CompEnsureAbility.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="HediffCompProperties_SeverityFromEntropy_CentarusOnly.cs" />
     <Compile Include="HediffCompProperties_StageRange.cs" />
     <Compile Include="HediffComp_AgeStop.cs" />
+    <Compile Include="HediffComp_DisappearsOnSourceApparelLost.cs" />
     <Compile Include="HediffComp_FactorBySeverity.cs" />
     <Compile Include="HediffComp_FleshSeedParasitized.cs" />
     <Compile Include="HediffComp_HediffGiverEnsureForAlwaysRequired.cs" />
@@ -173,6 +175,7 @@
     <Compile Include="Plant_FleshTree.cs" />
     <Compile Include="Projectile.cs" />
     <Compile Include="Projectile_Explosive_RoofBypass.cs" />
+    <Compile Include="RemoteActiveUtility.cs" />
     <Compile Include="ResearchProjectDef.cs" />
     <Compile Include="ScenPart.cs" />
     <Compile Include="JobGiver_GetFood_Sayers.cs" />

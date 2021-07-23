@@ -26,7 +26,7 @@ namespace Explorite
         VerbProperties_RemoteApparelActivator VerbProps => verbProps as VerbProperties_RemoteApparelActivator;
         public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
         {
-            if (!ValidateTarget(target, showMessages))
+            if (!base.ValidateTarget(target, showMessages))
             {
                 return false;
             }
@@ -36,27 +36,26 @@ namespace Explorite
                 {
                     return true;
                 }
-            }
-            if (showMessages)
-            {
-                Messages.Message("AbilityCantApplyOnMissingActivationDevice".Translate(), target.Thing, MessageTypeDefOf.RejectInput, false);
+                if (showMessages)
+                {
+                    Messages.Message("AbilityCantApplyOnMissingActivationDevice".Translate(), target.Thing, MessageTypeDefOf.RejectInput, false);
+                }
             }
             return false;
         }
         protected override bool TryCastShot()
         {
-            if (ValidateTarget(currentTarget))
+            if (!ValidateTarget(currentTarget))
             {
                 return false;
             }
-            IEnumerable<CompRemoteActivationEffect> effectComps = currentTarget.Thing.RemoteTriggers(VerbProps.tags);
-            bool flag = false;
-            foreach (CompRemoteActivationEffect effectComp in effectComps)
+            IEnumerable<IRemoteActivationEffect> effects = currentTarget.Thing.RemoteTriggers(VerbProps.tags);
+            /*CompReloadable reloadableCompSource = base.ReloadableCompSource;
+            if (reloadableCompSource != null)
             {
-                if (effectComp?.TryActive(VerbProps.tags) ?? false)
-                    flag = true;
-            }
-            return flag;
+                reloadableCompSource.UsedOnce();
+            }*/
+            return RemoteActiveUtility.ActiveTriggers(effects, VerbProps.tags);
         }
     }
 }

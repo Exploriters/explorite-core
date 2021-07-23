@@ -418,7 +418,7 @@ namespace Explorite
          */
         public static bool CentaurTraitPredicate(TraitDef tDef, int? degree = null)
         {
-            return CentaurTraitPredicate(tDef, out int tergetDegree) && ( !degree.HasValue || degree == tergetDegree);
+            return CentaurTraitPredicate(tDef, out int tergetDegree) && (!degree.HasValue || degree == tergetDegree);
         }
         /**
          * <summary>

@@ -56,13 +56,7 @@ namespace Explorite
             tracedTrishots.RemoveAll(thing => !ValidTrishotPredicate(thing));
             return tracedTrishots = tracedTrishots.Distinct().ToList();
         }
-        public IEnumerable<Thing> ValidTrishots
-        {
-            get
-            {
-                return CleanUp();
-            }
-        }
+        public IEnumerable<Thing> ValidTrishots => CleanUp();
         public bool TryAdd(Thing thing)
         {
             if (ValidTrishotPredicate(thing))
