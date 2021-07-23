@@ -113,7 +113,7 @@ namespace Explorite
             compClass = typeof(CompRemoteActivationEffect_Apparel_ApplyHediff);
         }
 
-        public Hediff hediff;
+        public HediffDef hediff;
         public BodyPartDef part;
     }
     ///<summary>响应效果时为穿戴者施加hediff。</summary>
