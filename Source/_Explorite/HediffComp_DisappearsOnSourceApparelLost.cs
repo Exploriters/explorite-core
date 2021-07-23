@@ -3,6 +3,8 @@
  * --siiftun1857
  */
 using RimWorld;
+using System.Collections.Generic;
+using System.Linq;
 using Verse;
 
 namespace Explorite
@@ -18,22 +20,27 @@ namespace Explorite
     ///<summary>来源衣物不存在后移除hediff。</summary>
     public class HediffComp_DisappearsOnSourceApparelLost : HediffComp
     {
-        public Apparel source;
-		//base.Pawn.health.RemoveHediff(this.parent);
-		public override bool CompShouldRemove
+        public List<Apparel> sources;
+        //base.Pawn.health.RemoveHediff(this.parent);
+        public override bool CompShouldRemove => base.CompShouldRemove || CheckSources();
+        private bool CheckSources()
 		{
-			get
-			{
-				return base.CompShouldRemove || source == null || source.Wearer != parent.pawn;
-			}
+			sources.RemoveAll(app => app == null || app.Wearer != parent.pawn);
+			return sources.Any();
+		}
+		public void AddSources(Apparel source)
+		{
+			if (!sources.Contains(source))
+                sources.Add(source);
+			CheckSources();
 		}
 		public override void CompExposeData()
 		{
-			Scribe_References.Look<Apparel>(ref source, "source", false);
+			Scribe_Collections.Look(ref sources, "sources", LookMode.Reference);
 		}
 		public override string CompDebugString()
 		{
-			return "source: " + source.LabelShort;
+			return "sources: " + string.Join(", ", sources.Select(s => s.LabelShort));
 		}
 	}
 

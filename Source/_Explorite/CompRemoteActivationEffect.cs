@@ -113,11 +113,7 @@ namespace Explorite
         public override bool ActiveEffect()
         {
             BodyPartRecord partrec = Props.part == null ? null : Wearer.def.race.body.AllParts.Where(p => p.def == Props.part).RandomElement();
-            HediffComp_DisappearsOnSourceApparelLost discomp = Wearer.health.AddHediff(Props.hediff, partrec).TryGetComp<HediffComp_DisappearsOnSourceApparelLost>();
-            if (discomp != null)
-            {
-                discomp.source = parent as Apparel;
-            }
+            Wearer.health.AddHediff(Props.hediff, partrec).TryGetComp<HediffComp_DisappearsOnSourceApparelLost>()?.AddSources(parent as Apparel);
             return true;
         }
     }
