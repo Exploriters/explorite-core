@@ -197,16 +197,17 @@ namespace Explorite
          * 检测人物是否可以占用目标位置。
          * </summary>
          * <param name="pawn">需要被检测的人物。</param>
-         * <param name="c">一个位置。</param>
+         * <param name="map">指定的地图。</param>
+         * <param name="loc">一个位置。</param>
          * <returns>是否可以占用目标位置。</returns>
          */
-        public static bool PawnCanOccupy(Pawn pawn, IntVec3 c)
+        public static bool PawnCanOccupy(Pawn pawn, Map map, IntVec3 loc)
         {
-            if (!c.Walkable(pawn.Map))
+            if (!loc.Walkable(map))
             {
                 return false;
             }
-            Building edifice = c.GetEdifice(pawn.Map);
+            Building edifice = loc.GetEdifice(map);
             if (edifice != null)
             {
                 if (edifice is Building_Door building_Door && !building_Door.PawnCanOpen(pawn) && !building_Door.Open)
@@ -221,21 +222,22 @@ namespace Explorite
          * 扫描目标周围可被占用的位置。
          * </summary>
          * <param name="pawn">需要被检测的人物。</param>
-         * <param name="target">一个位置。</param>
+         * <param name="map">指定的地图。</param>
+         * <param name="loc">一个位置。</param>
          * <returns>最近的可被占用的位置。若无，则返回<c>null</c>。</returns>
          */
-        public static IntVec3? ScanOccupiablePosition(Pawn pawn, IntVec3 target)
+        public static IntVec3? ScanOccupiablePosition(Pawn pawn, Map map, IntVec3 loc)
         {
             IntVec3? flag = null;
             IntVec3 intVec;
             for (int i = 0; i < GenRadial.RadialPattern.Length; i++)
             {
-                intVec = target + GenRadial.RadialPattern[i];
-                if (PawnCanOccupy(pawn, intVec))
+                intVec = loc + GenRadial.RadialPattern[i];
+                if (PawnCanOccupy(pawn, map, intVec))
                 {
-                    if (intVec == target)
+                    if (intVec == loc)
                     {
-                        return target;
+                        return loc;
                     }
                     flag = intVec;
                     break;
@@ -248,17 +250,26 @@ namespace Explorite
          * 将人物传送到目标位置附近。
          * </summary>
          * <param name="pawn">需要被传送的人物。</param>
-         * <param name="target">一个位置。</param>
+         * <param name="map">指定的地图。</param>
+         * <param name="loc">一个位置。</param>
          * <returns>是否成功地完成了传送。</returns>
          */
-        public static bool TeleportPawn(Pawn pawn, IntVec3 target)
+        public static bool TeleportPawn(Pawn pawn, Map map, IntVec3 loc)
         {
             bool flag = false;
-            IntVec3? relocated = ScanOccupiablePosition(pawn, target);
+            IntVec3? relocated = ScanOccupiablePosition(pawn, map, loc);
             if (relocated != null)
             {
-                pawn.SetPositionDirect((IntVec3)relocated);
-                pawn.Notify_Teleported();
+                if (pawn.Map == map)
+                {
+                    pawn.SetPositionDirect((IntVec3)relocated);
+                    pawn.Notify_Teleported();
+                }
+                else
+                {
+                    pawn.DeSpawn();
+                    GenSpawn.Spawn(pawn, loc, map);
+                }
                 flag = true;
             }
 

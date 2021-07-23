@@ -51,5 +51,6 @@
   <TabSubsystem>子系统</TabSubsystem>
   <NoSubsystemLabel>无子系统</NoSubsystemLabel>
   
+  <AbilityCantApplyOnMissingActivationDevice>目标不具有能被这种激活器激活的设备。</AbilityCantApplyOnMissingActivationDevice>
   
 </LanguageData>

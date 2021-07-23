@@ -102,6 +102,21 @@
             勿与<see cref = "T:Explorite.CompPawnRepairApparelsOvertime" />混淆，后者为种族能力。
             </summary>
         </member>
+        <member name="T:Explorite.CompProperties_RemoteActivationEffect">
+            <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompRemoteActivationEffect">
+            <summary>远程效果设备，响应<see cref = "T:Explorite.Verb_RemoteActivator" />。</summary>
+        </member>
+        <member name="T:Explorite.CompRemoteActivationEffect_Apparel">
+            <summary>远程效果服装设备，仅在被穿戴时才会响应。</summary>
+        </member>
+        <member name="T:Explorite.CompProperties_RemoteActivationEffect_Apparel_ApplyHediff">
+            <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_Apparel_ApplyHediff" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompRemoteActivationEffect_Apparel_ApplyHediff">
+            <summary>响应效果时为穿戴者施加hediff。</summary>
+        </member>
         <member name="T:Explorite.ExploritePatches">
             <summary>包含多个补丁的合集类。</summary>
         </member>
@@ -470,28 +485,31 @@
             <param name="toStringFormat">返回值字符串的格式。</param>
             <returns>被格式化为可读文本的时间。</returns>
         </member>
-        <member name="M:Explorite.ExploriteCore.PawnCanOccupy(Verse.Pawn,Verse.IntVec3)">
+        <member name="M:Explorite.ExploriteCore.PawnCanOccupy(Verse.Pawn,Verse.Map,Verse.IntVec3)">
             <summary>
             检测人物是否可以占用目标位置。
             </summary>
             <param name="pawn">需要被检测的人物。</param>
-            <param name="c">一个位置。</param>
+            <param name="map">指定的地图。</param>
+            <param name="loc">一个位置。</param>
             <returns>是否可以占用目标位置。</returns>
         </member>
-        <member name="M:Explorite.ExploriteCore.ScanOccupiablePosition(Verse.Pawn,Verse.IntVec3)">
+        <member name="M:Explorite.ExploriteCore.ScanOccupiablePosition(Verse.Pawn,Verse.Map,Verse.IntVec3)">
             <summary>
             扫描目标周围可被占用的位置。
             </summary>
             <param name="pawn">需要被检测的人物。</param>
-            <param name="target">一个位置。</param>
+            <param name="map">指定的地图。</param>
+            <param name="loc">一个位置。</param>
             <returns>最近的可被占用的位置。若无，则返回<c>null</c>。</returns>
         </member>
-        <member name="M:Explorite.ExploriteCore.TeleportPawn(Verse.Pawn,Verse.IntVec3)">
+        <member name="M:Explorite.ExploriteCore.TeleportPawn(Verse.Pawn,Verse.Map,Verse.IntVec3)">
             <summary>
             将人物传送到目标位置附近。
             </summary>
             <param name="pawn">需要被传送的人物。</param>
-            <param name="target">一个位置。</param>
+            <param name="map">指定的地图。</param>
+            <param name="loc">一个位置。</param>
             <returns>是否成功地完成了传送。</returns>
         </member>
         <member name="M:Explorite.ExploriteCore.VaildCentaurApparelPredicate(Verse.ThingDef)">
@@ -754,6 +772,12 @@
         </member>
         <member name="T:Explorite.Verb_Shoot_Rainbow2">
             <summary>设置首发和后续发射不一致。</summary>
+        </member>
+        <member name="T:Explorite.VerbProperties_RemoteApparelActivator">
+            <summary>为<see cref = "T:Explorite.Verb_RemoteActivator" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.Verb_RemoteActivator">
+            <summary>远程效果激活设备，激活<see cref = "T:Explorite.CompRemoteActivationEffect" />。</summary>
         </member>
     </members>
 </doc>

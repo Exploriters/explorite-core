@@ -51,5 +51,6 @@
   <TabSubsystem>Subsystems</TabSubsystem>
   <NoSubsystemLabel>No subsystem</NoSubsystemLabel>
   
+  <AbilityCantApplyOnMissingActivationDevice>Targed didnot have any activation device valid to this activator.</AbilityCantApplyOnMissingActivationDevice>
   
 </LanguageData>
