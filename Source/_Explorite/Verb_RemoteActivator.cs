@@ -49,13 +49,12 @@ namespace Explorite
             {
                 return false;
             }
-            IEnumerable<IRemoteActivationEffect> effects = currentTarget.Thing.RemoteTriggers(VerbProps.tags);
             /*CompReloadable reloadableCompSource = base.ReloadableCompSource;
             if (reloadableCompSource != null)
             {
                 reloadableCompSource.UsedOnce();
             }*/
-            return RemoteActiveUtility.ActiveTriggers(effects, VerbProps.tags);
+            return RemoteActiveUtility.ActiveTriggers(currentTarget.Thing.RemoteTriggers(VerbProps.tags), VerbProps.tags);
         }
     }
 }

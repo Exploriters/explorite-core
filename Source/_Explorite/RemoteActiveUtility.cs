@@ -11,12 +11,17 @@ namespace Explorite
 {
     public interface IRemoteActivationEffect
     {
-        public bool CanActiveNow(IEnumerable<string> tags);
-        public bool TryActive(IEnumerable<string> tags);
-        public bool ActiveEffect();
+        bool CanActiveNow(IEnumerable<string> tags);
+        bool ActiveEffect();
     }
     public static class RemoteActiveUtility
     {
+        public static bool TryActive(this IRemoteActivationEffect activeDevice, IEnumerable<string> tags)
+        {
+            if (activeDevice.CanActiveNow(tags))
+                return activeDevice.ActiveEffect();
+            return false;
+        }
         public static bool ActiveTriggers(IEnumerable<IRemoteActivationEffect> effects, List<string> tags)
         {
             bool flag = false;
@@ -30,6 +35,10 @@ namespace Explorite
         public static bool CompPredicate(object trigger, List<string> tags)
         {
             return trigger is IRemoteActivationEffect compa && compa.CanActiveNow(tags);
+        }
+        public static IRemoteActivationEffect CompSelecter(object trigger)
+        {
+            return trigger as IRemoteActivationEffect;
         }
         public static bool AnyTriggers(this Thing thing, List<string> tags)
         {
@@ -63,26 +72,26 @@ namespace Explorite
         {
             if (thing is ThingWithComps thingWithComps)
             {
-                foreach (ThingComp comp in thingWithComps.AllComps.Where(comp => CompPredicate(comp, tags)))
+                foreach (IRemoteActivationEffect effect in thingWithComps.AllComps.Where(comp => CompPredicate(comp, tags)).Select(CompSelecter))
                 {
-                    yield return comp as CompRemoteActivationEffect;
+                    yield return effect;
                 }
                 if (thing is Pawn pawn)
                 {
                     foreach (Apparel apparel in pawn.apparel.WornApparel)
                     {
-                        foreach (ThingComp comp in apparel.AllComps.Where(comp => CompPredicate(comp, tags)))
+                        foreach (IRemoteActivationEffect effect in apparel.AllComps.Where(comp => CompPredicate(comp, tags)).Select(CompSelecter))
                         {
-                            yield return comp as CompRemoteActivationEffect;
+                            yield return effect;
                         }
                     }
                     foreach (Hediff hediff in pawn.health.hediffSet.hediffs)
                     {
                         if (hediff is HediffWithComps hediffWithComps)
                         {
-                            foreach (HediffComp comp in hediffWithComps.comps.Where(comp => CompPredicate(comp, tags)))
+                            foreach (IRemoteActivationEffect effect in hediffWithComps.comps.Where(comp => CompPredicate(comp, tags)).Select(CompSelecter))
                             {
-                                yield return comp as HediffComp_RemoteActivationEffect;
+                                yield return effect;
                             }
                         }
                     }

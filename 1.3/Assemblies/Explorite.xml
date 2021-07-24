@@ -138,6 +138,18 @@
         <member name="T:Explorite.CompRemoteActivationEffect_Apparel_ApplyHediff">
             <summary>响应效果时为穿戴者施加hediff。</summary>
         </member>
+        <member name="T:Explorite.CompProperties_RemoteActivationEffect_Destroy">
+            <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_Destroy" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompRemoteActivationEffect_Destroy">
+            <summary>响应效果时自毁。</summary>
+        </member>
+        <member name="T:Explorite.CompProperties_RemoteActivationEffect_InvokeExplode">
+            <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_InvokeExplode" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompRemoteActivationEffect_InvokeExplode">
+            <summary>响应效果时爆炸。</summary>
+        </member>
         <member name="T:Explorite.ExploritePatches">
             <summary>包含多个补丁的合集类。</summary>
         </member>

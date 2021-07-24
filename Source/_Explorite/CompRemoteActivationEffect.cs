@@ -5,6 +5,8 @@
 using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using UnityEngine;
 using Verse;
 
 namespace Explorite
@@ -33,12 +35,6 @@ namespace Explorite
                     return true;
                 }
             }
-            return false;
-        }
-        public bool TryActive(IEnumerable<string> tags)
-        {
-            if (CanActiveNow(tags))
-                return ActiveEffect();
             return false;
         }
         public virtual bool ActiveEffect()
@@ -71,12 +67,6 @@ namespace Explorite
                     return true;
                 }
             }
-            return false;
-        }
-        public bool TryActive(IEnumerable<string> tags)
-        {
-            if (CanActiveNow(tags))
-                return ActiveEffect();
             return false;
         }
         public virtual bool ActiveEffect()
@@ -117,6 +107,50 @@ namespace Explorite
             Hediff hediff = HediffMaker.MakeHediff(Props.hediff, Wearer, partrec);
             hediff.TryGetComp<HediffComp_DisappearsOnSourceApparelLost>()?.AddSources(parent as Apparel);
             Wearer.health.AddHediff(hediff);
+            return true;
+        }
+    }
+
+    ///<summary>为<see cref = "CompRemoteActivationEffect_Destroy" />接收参数。</summary>
+    public class CompProperties_RemoteActivationEffect_Destroy : CompProperties_RemoteActivationEffect
+    {
+        public CompProperties_RemoteActivationEffect_Destroy()
+        {
+            compClass = typeof(CompRemoteActivationEffect_Destroy);
+        }
+        public DestroyMode destroyMode = DestroyMode.KillFinalize;
+    }
+    ///<summary>响应效果时自毁。</summary>
+    public class CompRemoteActivationEffect_Destroy : CompRemoteActivationEffect
+    {
+        CompProperties_RemoteActivationEffect_Destroy Props => props as CompProperties_RemoteActivationEffect_Destroy;
+        public override bool ActiveEffect()
+        {
+            if (!parent.Destroyed)
+                parent.Destroy(Props.destroyMode);
+            return true;
+        }
+    }
+    ///<summary>为<see cref = "CompRemoteActivationEffect_InvokeExplode" />接收参数。</summary>
+    public class CompProperties_RemoteActivationEffect_InvokeExplode : CompProperties_RemoteActivationEffect
+    {
+        public CompProperties_RemoteActivationEffect_InvokeExplode()
+        {
+            compClass = typeof(CompRemoteActivationEffect_InvokeExplode);
+        }
+    }
+    ///<summary>响应效果时爆炸。</summary>
+    public class CompRemoteActivationEffect_InvokeExplode : CompRemoteActivationEffect
+    {
+        public override bool ActiveEffect()
+        {
+            foreach (ThingComp comp in parent.AllComps)
+            {
+                if (comp is CompExplosive explosive)
+                {
+                    typeof(CompExplosive).GetMethod("Detonate", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(explosive, new object[]{ parent.MapHeld , true});
+                }
+            }
             return true;
         }
     }
