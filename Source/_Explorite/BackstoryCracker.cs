@@ -39,7 +39,7 @@ namespace Explorite
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            Log.Message("[Explorite]Backstory flooder triggered.");
+            //Log.Message("[Explorite]Backstory flooder triggered.");
 
             uint solvedBackstoryCount = 0;
             //过时内容
@@ -202,9 +202,9 @@ namespace Explorite
                 solved += $"{str}, ";
                 solvedBackstoryCount++;
             }
-            Log.Message($"[Explorite]Solved CentaurAdulthoodCivil: {(solved + "&").Replace(", &", ".")}");
+            //Log.Message($"[Explorite]Solved CentaurAdulthoodCivil: {(solved + "&").Replace(", &", ".")}");
             stopwatch.Stop();
-            Log.Message($"[Explorite]Backstory flood complete, solved total {solvedBackstoryCount} backstories, in {stopwatch.ElapsedMilliseconds}ms.");
+            Log.Message($"[Explorite]Backstory flood complete, solved total {solvedBackstoryCount} backstories (expected 29), in {stopwatch.ElapsedMilliseconds}ms.");
 
         }
 

@@ -391,6 +391,12 @@
         <member name="M:Explorite.ExploritePatches.IdeoSymbolPartDefCanBeChosenForIdeoPostfix(RimWorld.Ideo,RimWorld.IdeoSymbolPartDef@,System.Boolean@)">
             <summary>更改阵营能够使用的图标。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.ThoughtWorkerWearingColorCurrentStateInternalTranspilerB(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>使服装颜色想法进行对<see cref = "T:Verse.CompColorable" />的非空检查，方案2。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.Dialog_StylingStationDrawApparelColorTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>使服装颜色选单进行对<see cref = "T:RimWorld.Dialog_StylingStation" />的非空检查。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>
