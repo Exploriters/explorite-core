@@ -275,6 +275,18 @@ namespace Explorite
                 //harmonyInstance.Patch(AccessTools.Method(typeof(ExploritePatches), nameof(Fun6).App(ref last_patch_method)),
                 //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
 
+                //harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_WearingColor), "CurrentStateInternal".App(ref last_patch_method)),
+                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
+                //harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_WearingColorX2), "CurrentStateInternal".App(ref last_patch_method)),
+                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_WearingColor), "CurrentStateInternal".App(ref last_patch_method)),
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorkerWearingColorCurrentStateInternalTranspilerB)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(Dialog_StylingStation), "DrawApparelColor".App(ref last_patch_method)),
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(Dialog_StylingStationDrawApparelColorTranspiler)));
+
+
+
                 if (InstelledMods.HAR)
                 {
                     // 依赖 类 AlienRace.RaceRestrictionSettings
@@ -2006,5 +2018,170 @@ namespace Explorite
                 }
             }
         }
+        /*
+        ///<summary>使服装颜色想法进行对<see cref = "CompColorable" />的非空检查，方案1。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> ThoughtWorkerWearingColorCurrentStateInternalTranspilerA(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            MethodInfo tryGetCompInfo = AccessTools.Method(typeof(ThingCompUtility), nameof(ThingCompUtility.TryGetComp)).MakeGenericMethod(typeof(CompColorable));
+            MethodInfo wornApparelCountInfo = AccessTools.Method(typeof(Pawn_ApparelTracker), "get_WornApparelCount");
+            byte patchActionStage = 0;
+
+            Label label8 = ilg.DefineLabel();
+            Label label9 = ilg.DefineLabel();
+            LocalBuilder local6 = ilg.DeclareLocal(typeof(int));
+            LocalBuilder local3 = ilg.DeclareLocal(typeof(CompColorable));
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0 && ins.opcode == OpCodes.Stloc_1)
+                {
+                    patchActionStage++;
+                    yield return ins.Appsb(stringBuilder);
+                    yield return new CodeInstruction(OpCodes.Ldc_I4_0).Appsb(stringBuilder);
+                    yield return new CodeInstruction(OpCodes.Stloc_S, local6).Appsb(stringBuilder);
+                    continue;
+                }
+                else if (patchActionStage == 1 && ins.opcode == OpCodes.Call && ins.operand == tryGetCompInfo as object)
+                {
+                    patchActionStage++;
+                    yield return ins.Appsb(stringBuilder);
+                    continue;
+                }
+                else if (patchActionStage == 2 && ins.opcode == OpCodes.Stloc_3)
+                {
+                    patchActionStage++;
+                    yield return new CodeInstruction(OpCodes.Stloc_S, local3).Appsb(stringBuilder);
+                    continue;
+                }
+                else if (patchActionStage == 3 && ins.opcode == OpCodes.Ldloc_3)
+                {
+                    patchActionStage++;
+                    yield return new CodeInstruction(OpCodes.Ldloc_S, local3).Appsb(stringBuilder);
+                    yield return new CodeInstruction(OpCodes.Brtrue_S, label8).Appsb(stringBuilder);
+                    yield return new CodeInstruction(OpCodes.Ldloc_S, local6).Appsb(stringBuilder);
+                    yield return new CodeInstruction(OpCodes.Ldc_I4_1).Appsb(stringBuilder);
+                    yield return new CodeInstruction(OpCodes.Add).Appsb(stringBuilder);
+                    yield return new CodeInstruction(OpCodes.Stloc_S, local6).Appsb(stringBuilder);
+                    yield return new CodeInstruction(OpCodes.Br_S, label9).Appsb(stringBuilder);
+                    yield return new CodeInstruction(OpCodes.Ldloc_S, local3) { labels = { label8 } }.Appsb(stringBuilder);
+                    continue;
+                }
+                else if (patchActionStage == 4 && ins.opcode == OpCodes.Ldloc_3 && ins.operand == null)
+                {
+                    patchActionStage++;
+                    yield return new CodeInstruction(OpCodes.Ldloc_S, local3).Appsb(stringBuilder);
+                    continue;
+                }
+                else if (patchActionStage == 5 && ins.opcode == OpCodes.Ldloca_S && ((LocalBuilder)ins.operand).LocalIndex == 2)
+                {
+                    patchActionStage++;
+                    ins.labels.Add(label9);
+                    yield return ins.Appsb(stringBuilder);
+                    continue;
+                }
+                else if (patchActionStage == 6 && ins.opcode == OpCodes.Callvirt && ins.operand == wornApparelCountInfo as object)
+                {
+                    patchActionStage++;
+                    yield return ins.Appsb(stringBuilder);
+                    continue;
+                }
+                else if (patchActionStage == 7 && ins.opcode == OpCodes.Conv_R4)
+                {
+                    patchActionStage++;
+                    yield return ins.Appsb(stringBuilder);
+                    yield return new CodeInstruction(OpCodes.Ldloc_2).Appsb(stringBuilder);
+                    yield return new CodeInstruction(OpCodes.Conv_R4).Appsb(stringBuilder);
+                    yield return new CodeInstruction(OpCodes.Sub).Appsb(stringBuilder);
+                    continue;
+                }
+                else
+                {
+                    yield return ins.Appsb(stringBuilder);
+                    continue;
+                }
+            }
+            Log.Message($"[Explorite]instr result ({patchActionStage}):\n" + stringBuilder.ToString());
+            yield break;
+        }
+        */
+        public static int PawnNonColorableApparelCount(this Pawn p)
+        {
+            return p.apparel.WornApparel.Where(app => app.TryGetComp<CompColorable>() == null).Count();
+        }
+        public static List<Apparel> PawnNonColorableApparels(this Pawn_ApparelTracker apparel)
+        {
+            return apparel.WornApparel.Where(app => app.TryGetComp<CompColorable>() != null).ToList();
+        }
+        ///<summary>使服装颜色想法进行对<see cref = "CompColorable" />的非空检查，方案2。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> ThoughtWorkerWearingColorCurrentStateInternalTranspilerB(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            MethodInfo tryGetCompInfo = AccessTools.Method(typeof(ThingCompUtility), nameof(ThingCompUtility.TryGetComp)).MakeGenericMethod(typeof(CompColorable));
+            MethodInfo wornApparelCountInfo = AccessTools.Method(typeof(Pawn_ApparelTracker), "get_WornApparelCount");
+            byte patchActionStage = 0;
+            Label label8 = ilg.DefineLabel();
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0 && ins.opcode == OpCodes.Call && ins.operand == tryGetCompInfo as object)
+                {
+                    patchActionStage++;
+                    yield return ins;
+                    continue;
+                }
+                else if (patchActionStage == 1 && ins.opcode == OpCodes.Ldloc_3)
+                {
+                    patchActionStage++;
+                    yield return new CodeInstruction(OpCodes.Ldloc_3);
+                    yield return new CodeInstruction(OpCodes.Brfalse_S, label8);
+                    yield return ins;
+                    continue;
+                }
+                else if (patchActionStage == 2 && ins.opcode == OpCodes.Ldloca_S && ((LocalBuilder)ins.operand).LocalIndex == 2)
+                {
+                    patchActionStage++;
+                    ins.labels.Add(label8);
+                    yield return ins;
+                    continue;
+                }
+                else if (patchActionStage == 3 && ins.opcode == OpCodes.Callvirt && ins.operand == wornApparelCountInfo as object)
+                {
+                    patchActionStage++;
+                    yield return ins;
+                    yield return new CodeInstruction(OpCodes.Ldarg_1);
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<Pawn, int>)PawnNonColorableApparelCount).GetMethodInfo());
+                    yield return new CodeInstruction(OpCodes.Sub);
+                    continue;
+                }
+                else
+                {
+                    yield return ins;
+                    continue;
+                }
+            }
+            yield break;
+        }
+        ///<summary>使服装颜色选单进行对<see cref = "Dialog_StylingStation" />的非空检查。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> Dialog_StylingStationDrawApparelColorTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            MethodInfo wornApparelInfo = AccessTools.Method(typeof(Pawn_ApparelTracker), "get_WornApparel");
+            byte patchActionStage = 0;
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0 && ins.opcode == OpCodes.Callvirt && ins.operand == wornApparelInfo as object)
+                {
+                    patchActionStage++;
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<Pawn_ApparelTracker, List<Apparel>>)PawnNonColorableApparels).GetMethodInfo());
+                    continue;
+                }
+                else
+                {
+                    yield return ins;
+                    continue;
+                }
+            }
+            yield break;
+        }
+
     }
 }
