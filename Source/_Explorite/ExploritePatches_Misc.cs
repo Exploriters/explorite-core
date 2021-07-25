@@ -257,6 +257,8 @@ namespace Explorite
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(IdeoUtility), nameof(IdeoUtility.IsMemeAllowedFor).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(IdeoUtilityIsMemeAllowedForPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(IdeoUtility), "CanAdd".App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(IdeoUtilityCanAddPostfix)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(IdeoSymbolPartDef), nameof(IdeoSymbolPartDef.CanBeChosenForIdeo).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(IdeoSymbolPartDefCanBeChosenForIdeoPostfix)));
@@ -288,7 +290,7 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(RitualBehaviorWorker_Conversion), nameof(RitualBehaviorWorker_Conversion.CanStartRitualNow).App(ref last_patch_method)),
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(RitualBehaviorWorkerCanStartRitualNowTranspiler_Conversion)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(RitualBehaviorWorker_Speech), nameof(RitualBehaviorWorker_Speech.CanStartRitualNow).App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(RitualBehaviorWorkerCanStartRitualNowTranspiler_Conversion)));
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(RitualBehaviorWorkerCanStartRitualNowTranspiler_Speech)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(IdeoFoundation), nameof(IdeoFoundation.RandomizeCulture).App(ref last_patch_method)),
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(IdeoFoundationRandomizeCultureTranspiler)));
@@ -1921,18 +1923,18 @@ namespace Explorite
         }
         */
 
-        ///<summary>更改阵营能够使用的文化模因。</summary>
+        ///<summary>更改阵营能够使用的模因。</summary>
         [HarmonyPostfix]public static void IdeoUtilityIsMemeAllowedForPostfix(MemeDef meme, FactionDef faction, ref bool __result)
         {
+            /*
             if (faction == CentaurPlayerColonyDef)
             {
-                if (meme != CentaurMemeDef && meme != CentaurStructureMemeDef && meme != DefDatabase<MemeDef>.GetNamed("Structure_Ideological"))
+                if (meme != CentaurMemeDef && meme != CentaurStructureMemeDef)
                 {
                     __result = false;
                     return;
                 }
             }
-
             if (meme.category != MemeCategory.Structure
                 && (meme == CentaurMemeDef || meme == SayersMeme1Def || meme == SayersMeme2Def)
                 && (!(faction.requiredMemes?.Contains(meme) ?? false) || !(faction.allowedMemes?.Contains(meme) ?? false))
@@ -1941,8 +1943,43 @@ namespace Explorite
                 __result = false;
                 return;
             }
-        }
+            */
 
+            if (__result && meme is MemeDef_Ex memeEx && !(memeEx.exclusiveTo?.Contains(faction) ?? false))
+            {
+                __result = false;
+                return;
+            }
+        }
+        ///<summary>更改模因能够兼容的模因。</summary>
+        [HarmonyPostfix] public static void IdeoUtilityCanAddPostfix(MemeDef meme, List<MemeDef> memes, FactionDef forFaction, ref bool __result)
+        {
+            if (__result)
+            {
+                string islocateGroup = meme is MemeDef_Ex meEx ? meEx.islocateGroup : null;
+                if (islocateGroup == null)
+                {
+                    if(memes.Any(meme => meme is MemeDef_Ex meEx && meEx.islocateGroup != null))
+                        __result = false;
+                    return;
+                }
+                else
+                {
+                    IEnumerable<MemeDef> issueMemes = memes.Where(meme => meme.category != MemeCategory.Structure || (meme is MemeDef_Ex meEx && meEx.islocateGroup != null));
+                    if (issueMemes.Any())
+                    {
+                        foreach (MemeDef issmeme in issueMemes)
+                        {
+                            if (!(issueMemes is MemeDef_Ex issMeEx) || issMeEx.islocateGroup != islocateGroup)
+                            {
+                                __result = false;
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
         ///<summary>更改阵营能够使用的图标。</summary>
         [HarmonyPostfix]public static void IdeoSymbolPartDefCanBeChosenForIdeoPostfix(Ideo ideo, ref IdeoSymbolPartDef __instance, ref bool __result)
         {

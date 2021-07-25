@@ -386,7 +386,10 @@
             <summary>临时函数。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.IdeoUtilityIsMemeAllowedForPostfix(RimWorld.MemeDef,RimWorld.FactionDef,System.Boolean@)">
-            <summary>更改阵营能够使用的文化模因。</summary>
+            <summary>更改阵营能够使用的模因。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoUtilityCanAddPostfix(RimWorld.MemeDef,System.Collections.Generic.List{RimWorld.MemeDef},RimWorld.FactionDef,System.Boolean@)">
+            <summary>更改模因能够兼容的模因。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.IdeoSymbolPartDefCanBeChosenForIdeoPostfix(RimWorld.Ideo,RimWorld.IdeoSymbolPartDef@,System.Boolean@)">
             <summary>更改阵营能够使用的图标。</summary>
@@ -715,6 +718,9 @@
         </member>
         <member name="T:Explorite.JobGiver_Nuzzle_Humanoid">
             <summary>具有额外限制条件的人型生物亲昵配置。</summary>
+        </member>
+        <member name="T:Explorite.MemeDef_Ex">
+            <summary><see cref = "T:RimWorld.MemeDef" />增强。</summary>
         </member>
         <member name="T:Explorite.Need_CentaurCreativityInspiration">
             <summary>长期幸福的创造灵感奖励。</summary>

@@ -161,6 +161,7 @@
     <Compile Include="IngredientValueGetter_MarketValue.cs" />
     <Compile Include="ITab_Pawn_Subsystem.cs" />
     <Compile Include="JobGiver_Nuzzle_Humanoid.cs" />
+    <Compile Include="MemeDef_Ex.cs" />
     <Compile Include="Need_CentaurCreativityInspiration.cs" />
     <Compile Include="Need_HypothermiaAbsorption.cs" />
     <Compile Include="QuestPart.cs" />
