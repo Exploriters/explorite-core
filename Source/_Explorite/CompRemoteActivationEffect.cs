@@ -90,7 +90,7 @@ namespace Explorite
             compClass = typeof(CompRemoteActivationEffect_Apparel_ApplyDamage);
         }
 
-        public DamageDef damageDef;
+        public DamageDef damageType;
         public FloatRange? damageAmount;
         public BodyPartDef part;
         public IntRange? count;
@@ -110,7 +110,7 @@ namespace Explorite
                     break;
                 Wearer.TakeDamage(
                 new DamageInfo(
-                    Props.damageDef, Props.damageAmount?.RandomInRange ?? Props.damageDef.defaultDamage,
+                    Props.damageType, Props.damageAmount?.RandomInRange ?? Props.damageType.defaultDamage,
                     hitPart: partrec,
                     //instigator: 
                     weapon: parent.def

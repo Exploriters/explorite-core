@@ -836,10 +836,16 @@
         <member name="T:Explorite.Verb_Shoot_Rainbow2">
             <summary>设置首发和后续发射不一致。</summary>
         </member>
-        <member name="T:Explorite.VerbProperties_RemoteApparelActivator">
+        <member name="T:Explorite.VerbProperties_RemoteActivator">
             <summary>为<see cref = "T:Explorite.Verb_RemoteActivator" />接收参数。</summary>
         </member>
         <member name="T:Explorite.Verb_RemoteActivator">
+            <summary>远程效果激活设备，激活<see cref = "T:Explorite.CompRemoteActivationEffect" />。</summary>
+        </member>
+        <member name="T:Explorite.VerbProperties_RemoteActivator_Area">
+            <summary>为<see cref = "T:Explorite.Verb_RemoteActivator" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.Verb_RemoteActivator_Area">
             <summary>远程效果激活设备，激活<see cref = "T:Explorite.CompRemoteActivationEffect" />。</summary>
         </member>
     </members>
