@@ -285,14 +285,13 @@ namespace Explorite
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(DialogStylingStationDrawApparelColorTranspiler)));
 
 
-                //harmonyInstance.Patch(AccessTools.Method(typeof(ExploritePatches), nameof(ExploritePatches.CanStartRitualNow1).App(ref last_patch_method)),
-                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
-                //harmonyInstance.Patch(AccessTools.Method(typeof(ExploritePatches), nameof(ExploritePatches.CanStartRitualNow2).App(ref last_patch_method)),
-                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(RitualBehaviorWorker_Conversion), nameof(RitualBehaviorWorker_Conversion.CanStartRitualNow).App(ref last_patch_method)),
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(RitualBehaviorWorkerCanStartRitualNowTranspiler_Conversion)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(RitualBehaviorWorker_Speech), nameof(RitualBehaviorWorker_Speech.CanStartRitualNow).App(ref last_patch_method)),
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(RitualBehaviorWorkerCanStartRitualNowTranspiler_Conversion)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(IdeoFoundation), nameof(IdeoFoundation.RandomizeCulture).App(ref last_patch_method)),
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(IdeoFoundationRandomizeCultureTranspiler)));
 
                 if (InstelledMods.HAR)
                 {
@@ -2165,6 +2164,33 @@ namespace Explorite
         public static IEnumerable<CodeInstruction> RitualBehaviorWorkerCanStartRitualNowTranspiler_Conversion(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {
             return RitualBehaviorWorkerCanStartRitualNowTranspiler(instr, ilg, "IdeoRole_Moralist");
+        }
+
+        public static IEnumerable<CultureDef> CultureDefsWithoutExclusive(this IEnumerable<CultureDef> defs)
+        {
+            return defs.Where(def => !(def?.allowedPlaceTags.Contains("ExExclusive") ?? false));
+        }
+        ///<summary>禁止无预设文化阵营随机选择阵营限定文化。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> IdeoFoundationRandomizeCultureTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            byte patchActionStage = 0;
+            MethodInfo allCultureDefsInfo = AccessTools.Method(typeof(DefDatabase<CultureDef>), "get_AllDefsListForReading");
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0 && ins.opcode == OpCodes.Call && ins.operand == allCultureDefsInfo as object)
+                {
+                    patchActionStage++;
+                    yield return ins;
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<IEnumerable<CultureDef>, IEnumerable<CultureDef>>)CultureDefsWithoutExclusive).GetMethodInfo());
+                    continue;
+                }
+                else
+                {
+                    yield return ins;
+                    continue;
+                }
+            }
+            yield break;
         }
     }
 }
