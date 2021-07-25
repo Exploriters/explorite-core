@@ -123,12 +123,6 @@
         <member name="T:Explorite.CompRemoteActivationEffect">
             <summary>远程效果设备，响应<see cref = "T:Explorite.Verb_RemoteActivator" />。</summary>
         </member>
-        <member name="T:Explorite.HediffCompProperties_RemoteActivationEffect">
-            <summary>为<see cref = "T:Explorite.HediffComp_RemoteActivationEffect" />接收参数。</summary>
-        </member>
-        <member name="T:Explorite.HediffComp_RemoteActivationEffect">
-            <summary>远程效果设备，响应<see cref = "T:Explorite.Verb_RemoteActivator" />。</summary>
-        </member>
         <member name="T:Explorite.CompRemoteActivationEffect_Apparel">
             <summary>远程效果服装设备，仅在被穿戴时才会响应。</summary>
         </member>
@@ -137,6 +131,12 @@
         </member>
         <member name="T:Explorite.CompRemoteActivationEffect_Apparel_ApplyHediff">
             <summary>响应效果时为穿戴者施加hediff。</summary>
+        </member>
+        <member name="T:Explorite.CompProperties_RemoteActivationEffect_Apparel_ApplyDamage">
+            <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_Apparel_ApplyDamage" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompRemoteActivationEffect_Apparel_ApplyDamage">
+            <summary>响应效果时为穿戴者施加伤害。</summary>
         </member>
         <member name="T:Explorite.CompProperties_RemoteActivationEffect_Destroy">
             <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_Destroy" />接收参数。</summary>
@@ -392,7 +392,7 @@
             <summary>使服装颜色想法进行对<see cref = "T:Verse.CompColorable" />的非空检查，方案2。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.DialogStylingStationDrawApparelColorTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>使服装颜色选单进行对<see cref = "T:RimWorld.Dialog_StylingStation" />的非空检查。</summary>
+            <summary>使梳妆台服装颜色选单进行对<see cref = "T:RimWorld.Dialog_StylingStation" />的非空检查。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.RitualBehaviorWorkerCanStartRitualNowTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator,System.String)">
             <summary>使仪式可用性进行对<see cref = "T:System.Collections.Generic.List`1" />的合法性检查。</summary>
@@ -648,6 +648,12 @@
         </member>
         <member name="T:Explorite.HediffComp_PassiveMeditationFocusGain">
             <summary>使生物持续获取精神力。</summary>
+        </member>
+        <member name="T:Explorite.HediffCompProperties_RemoteActivationEffect">
+            <summary>为<see cref = "T:Explorite.HediffComp_RemoteActivationEffect" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.HediffComp_RemoteActivationEffect">
+            <summary>远程效果设备，响应<see cref = "T:Explorite.Verb_RemoteActivator" />。</summary>
         </member>
         <member name="T:Explorite.HediffCompProperties_RepairApparelsOvertime">
             <summary>为<see cref = "T:Explorite.HediffComp_RepairApparelsOvertime" />接收参数。</summary>

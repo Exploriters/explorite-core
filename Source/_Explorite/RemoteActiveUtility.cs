@@ -25,10 +25,13 @@ namespace Explorite
         public static bool ActiveTriggers(IEnumerable<IRemoteActivationEffect> effects, List<string> tags)
         {
             bool flag = false;
-            foreach (IRemoteActivationEffect effect in effects)
+            List<IRemoteActivationEffect> effectList = effects.ToList();
+            foreach (IRemoteActivationEffect effect in effectList)
             {
                 if (effect?.TryActive(tags) ?? false)
+                {
                     flag = true;
+                }
             }
             return flag;
         }

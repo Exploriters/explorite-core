@@ -151,6 +151,7 @@
     <Compile Include="HediffComp_FleshSeedParasitized.cs" />
     <Compile Include="HediffComp_HediffGiverEnsureForAlwaysRequired.cs" />
     <Compile Include="HediffComp_PassiveMeditationFocusGain.cs" />
+    <Compile Include="HediffComp_RemoteActivationEffect.cs" />
     <Compile Include="HediffComp_RepairApparelsOvertime.cs" />
     <Compile Include="HediffComp_TendDuration_CantTend.cs" />
     <Compile Include="HediffComp_SeverityHalfLife.cs" />

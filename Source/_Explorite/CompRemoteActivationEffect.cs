@@ -23,7 +23,7 @@ namespace Explorite
         public List<string> tags;
     }
     ///<summary>远程效果设备，响应<see cref = "Verb_RemoteActivator" />。</summary>
-    public class CompRemoteActivationEffect : ThingComp, IRemoteActivationEffect
+    public abstract class CompRemoteActivationEffect : ThingComp, IRemoteActivationEffect
     {
         CompProperties_RemoteActivationEffect Props => props as CompProperties_RemoteActivationEffect;
         public virtual bool CanActiveNow(IEnumerable<string> tags)
@@ -37,46 +37,11 @@ namespace Explorite
             }
             return false;
         }
-        public virtual bool ActiveEffect()
-        {
-            return true;
-        }
-    }
-
-    ///<summary>为<see cref = "HediffComp_RemoteActivationEffect" />接收参数。</summary>
-    public class HediffCompProperties_RemoteActivationEffect : HediffCompProperties
-    {
-        public HediffCompProperties_RemoteActivationEffect()
-        {
-            compClass = typeof(HediffComp_RemoteActivationEffect);
-        }
-
-        [NoTranslate]
-        public List<string> tags;
-    }
-    ///<summary>远程效果设备，响应<see cref = "Verb_RemoteActivator" />。</summary>
-    public class HediffComp_RemoteActivationEffect : HediffComp, IRemoteActivationEffect
-    {
-        HediffCompProperties_RemoteActivationEffect Props => props as HediffCompProperties_RemoteActivationEffect;
-        public virtual bool CanActiveNow(IEnumerable<string> tags)
-        {
-            foreach (string tag in tags)
-            {
-                if (Props.tags.Contains(tag))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        public virtual bool ActiveEffect()
-        {
-            return true;
-        }
+        public abstract bool ActiveEffect();
     }
 
     ///<summary>远程效果服装设备，仅在被穿戴时才会响应。</summary>
-    public class CompRemoteActivationEffect_Apparel : CompRemoteActivationEffect
+    public abstract class CompRemoteActivationEffect_Apparel : CompRemoteActivationEffect
     {
         public Pawn Wearer => parent is Apparel apparel ? apparel.Wearer : null;
         public override bool CanActiveNow(IEnumerable<string> tags)
@@ -95,6 +60,7 @@ namespace Explorite
 
         public HediffDef hediff;
         public BodyPartDef part;
+        public IntRange? count;
     }
     ///<summary>响应效果时为穿戴者施加hediff。</summary>
     public class CompRemoteActivationEffect_Apparel_ApplyHediff : CompRemoteActivationEffect_Apparel
@@ -102,11 +68,55 @@ namespace Explorite
         CompProperties_RemoteActivationEffect_Apparel_ApplyHediff Props => props as CompProperties_RemoteActivationEffect_Apparel_ApplyHediff;
         public override bool ActiveEffect()
         {
-            BodyPartRecord partrec = Props.part == null ? null : Wearer.def.race.body.AllParts.Where(p => p.def == Props.part).RandomElement();
+            IEnumerable<BodyPartRecord> partrecs = Props.part == null ? new List<BodyPartRecord>(){ null } : Wearer.def.race.body.AllParts.Where(p => p.def == Props.part).InRandomOrder();
+            int count = Props.count?.RandomInRange ?? int.MaxValue;
+            foreach (BodyPartRecord partrec in partrecs)
+            {
+                count--;
+                if (count < 0)
+                    break;
+                Hediff hediff = HediffMaker.MakeHediff(Props.hediff, Wearer, partrec);
+                hediff.TryGetComp<HediffComp_DisappearsOnSourceApparelLost>()?.AddSources(parent as Apparel);
+                Wearer.health.AddHediff(hediff);
+            }
+            return true;
+        }
+    }
+    ///<summary>为<see cref = "CompRemoteActivationEffect_Apparel_ApplyDamage" />接收参数。</summary>
+    public class CompProperties_RemoteActivationEffect_Apparel_ApplyDamage : CompProperties_RemoteActivationEffect
+    {
+        public CompProperties_RemoteActivationEffect_Apparel_ApplyDamage()
+        {
+            compClass = typeof(CompRemoteActivationEffect_Apparel_ApplyDamage);
+        }
 
-            Hediff hediff = HediffMaker.MakeHediff(Props.hediff, Wearer, partrec);
-            hediff.TryGetComp<HediffComp_DisappearsOnSourceApparelLost>()?.AddSources(parent as Apparel);
-            Wearer.health.AddHediff(hediff);
+        public DamageDef damageDef;
+        public FloatRange? damageAmount;
+        public BodyPartDef part;
+        public IntRange? count;
+    }
+    ///<summary>响应效果时为穿戴者施加伤害。</summary>
+    public class CompRemoteActivationEffect_Apparel_ApplyDamage : CompRemoteActivationEffect_Apparel
+    {
+        CompProperties_RemoteActivationEffect_Apparel_ApplyDamage Props => props as CompProperties_RemoteActivationEffect_Apparel_ApplyDamage;
+        public override bool ActiveEffect()
+        {
+            IEnumerable<BodyPartRecord> partrecs = Props.part == null ? new List<BodyPartRecord>(){ null } : Wearer.def.race.body.AllParts.Where(p => p.def == Props.part).InRandomOrder();
+            int count = Props.count?.RandomInRange ?? int.MaxValue;
+            foreach (BodyPartRecord partrec in partrecs)
+            {
+                count--;
+                if (count < 0)
+                    break;
+                Wearer.TakeDamage(
+                new DamageInfo(
+                    Props.damageDef, Props.damageAmount?.RandomInRange ?? Props.damageDef.defaultDamage,
+                    hitPart: partrec,
+                    //instigator: 
+                    weapon: parent.def
+                    )
+                );
+            }
             return true;
         }
     }

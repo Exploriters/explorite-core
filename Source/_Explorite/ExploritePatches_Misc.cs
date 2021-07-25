@@ -1934,27 +1934,11 @@ namespace Explorite
         {
             if (__result)
             {
-                string islocateGroup = meme is MemeDef_Ex meEx ? meEx.islocateGroup : null;
-                if (islocateGroup == null)
+                string islocateGroup = meme is MemeDef_Ex meEx ? meEx.islocateGroup : "";
+                if(memes.Select(meme => meme is MemeDef_Ex meEx ? meEx.islocateGroup : meme.category != MemeCategory.Structure ? "" : null).Any(g => g != null && g != islocateGroup))
                 {
-                    if(memes.Any(meme => meme is MemeDef_Ex meEx && meEx.islocateGroup != null))
-                        __result = false;
+                    __result = false;
                     return;
-                }
-                else
-                {
-                    IEnumerable<MemeDef> issueMemes = memes.Where(meme => meme.category != MemeCategory.Structure || (meme is MemeDef_Ex meEx && meEx.islocateGroup != null));
-                    if (issueMemes.Any())
-                    {
-                        foreach (MemeDef issmeme in issueMemes)
-                        {
-                            if (!(issueMemes is MemeDef_Ex issMeEx) || issMeEx.islocateGroup != islocateGroup)
-                            {
-                                __result = false;
-                                return;
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -2064,10 +2048,6 @@ namespace Explorite
         {
             return p.apparel.WornApparel.Where(app => app.TryGetComp<CompColorable>() == null).Count();
         }
-        public static List<Apparel> PawnNonColorableApparels(Pawn_ApparelTracker apparel)
-        {
-            return apparel.WornApparel.Where(app => app.TryGetComp<CompColorable>() != null).ToList();
-        }
         ///<summary>使服装颜色想法进行对<see cref = "CompColorable" />的非空检查，方案2。</summary>
         [HarmonyTranspiler]public static IEnumerable<CodeInstruction> ThoughtWorkerWearingColorCurrentStateInternalTranspilerB(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {
@@ -2115,7 +2095,11 @@ namespace Explorite
             }
             yield break;
         }
-        ///<summary>使服装颜色选单进行对<see cref = "Dialog_StylingStation" />的非空检查。</summary>
+        public static List<Apparel> PawnNonColorableApparels(Pawn_ApparelTracker apparel)
+        {
+            return apparel.WornApparel.Where(app => app.TryGetComp<CompColorable>() != null).ToList();
+        }
+        ///<summary>使梳妆台服装颜色选单进行对<see cref = "Dialog_StylingStation" />的非空检查。</summary>
         [HarmonyTranspiler]public static IEnumerable<CodeInstruction> DialogStylingStationDrawApparelColorTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {
             MethodInfo wornApparelInfo = AccessTools.Method(typeof(Pawn_ApparelTracker), "get_WornApparel");
