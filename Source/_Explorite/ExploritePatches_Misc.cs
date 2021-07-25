@@ -101,11 +101,11 @@ namespace Explorite
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(RecipeDefAvailableNowPostfix)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdMinor".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(MentalBreaker_BreakThresholdMinorPostfix)));
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(MentalBreaker_BreakThresholdPostfix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdMajor".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(MentalBreaker_BreakThresholdMajorPostfix)));
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(MentalBreaker_BreakThresholdPostfix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdExtreme".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(MentalBreaker_BreakThresholdExtremePostfix)));
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(MentalBreaker_BreakThresholdPostfix)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn), "get_AssigningCandidates".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(AssignToPawnCandidatesPostfix)));
@@ -554,30 +554,8 @@ namespace Explorite
             }
         }
 
-        ///<summary>移除半人马精神轻度崩溃阈值。</summary>
-        [HarmonyPostfix]public static void MentalBreaker_BreakThresholdMinorPostfix(MentalBreaker __instance, ref float __result)
-        {
-            if (
-                __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-                && pawn.def == AlienCentaurDef
-                )
-            {
-                __result = Math.Min(__result, -0.15f);
-            }
-        }
-        ///<summary>移除半人马精神中度崩溃阈值。</summary>
-        [HarmonyPostfix]public static void MentalBreaker_BreakThresholdMajorPostfix(MentalBreaker __instance, ref float __result)
-        {
-            if (
-                __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-                && pawn.def == AlienCentaurDef
-                )
-            {
-                __result = Math.Min(__result, -0.15f);
-            }
-        }
-        ///<summary>移除半人马精神重度崩溃阈值。</summary>
-        [HarmonyPostfix]public static void MentalBreaker_BreakThresholdExtremePostfix(MentalBreaker __instance, ref float __result)
+        ///<summary>移除半人马精神崩溃阈值。</summary>
+        [HarmonyPostfix]public static void MentalBreaker_BreakThresholdPostfix(MentalBreaker __instance, ref float __result)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn

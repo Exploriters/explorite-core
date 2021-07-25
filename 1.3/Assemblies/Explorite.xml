@@ -211,14 +211,8 @@
         <member name="M:Explorite.ExploritePatches.ThoughtWorker_SpaceThoughts_CurrentStateInternalPostfix(RimWorld.ThoughtWorker,RimWorld.ThoughtState@,Verse.Pawn)">
             <summary>移除半人马在SoS2太空中的负面情绪。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.MentalBreaker_BreakThresholdMinorPostfix(Verse.AI.MentalBreaker,System.Single@)">
-            <summary>移除半人马精神轻度崩溃阈值。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.MentalBreaker_BreakThresholdMajorPostfix(Verse.AI.MentalBreaker,System.Single@)">
-            <summary>移除半人马精神中度崩溃阈值。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.MentalBreaker_BreakThresholdExtremePostfix(Verse.AI.MentalBreaker,System.Single@)">
-            <summary>移除半人马精神重度崩溃阈值。</summary>
+        <member name="M:Explorite.ExploritePatches.MentalBreaker_BreakThresholdPostfix(Verse.AI.MentalBreaker,System.Single@)">
+            <summary>移除半人马精神崩溃阈值。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PsychicSensitivityPostfix(RimWorld.StatPart,RimWorld.StatRequest,System.Single@)">
             <summary>使心灵敏感度属性受到心灵失聪hediff影响。</summary>
