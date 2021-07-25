@@ -69,7 +69,7 @@ namespace Explorite
         public override void PostExposeData()
         {
             base.PostExposeData();
-            Scribe_Deep.Look<VerbTracker>(ref verbTracker, "verbTracker", new object[]
+            Scribe_Deep.Look(ref verbTracker, "verbTracker", new object[]
             {
                 this
             });

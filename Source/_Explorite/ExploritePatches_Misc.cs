@@ -37,8 +37,7 @@ namespace Explorite
             return obj;
         }
         ///<summary>打印函数的构造。</summary>
-        [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> PrinterTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> PrinterTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -283,9 +282,17 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_WearingColor), "CurrentStateInternal".App(ref last_patch_method)),
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorkerWearingColorCurrentStateInternalTranspilerB)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(Dialog_StylingStation), "DrawApparelColor".App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(Dialog_StylingStationDrawApparelColorTranspiler)));
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(DialogStylingStationDrawApparelColorTranspiler)));
 
 
+                //harmonyInstance.Patch(AccessTools.Method(typeof(ExploritePatches), nameof(ExploritePatches.CanStartRitualNow1).App(ref last_patch_method)),
+                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
+                //harmonyInstance.Patch(AccessTools.Method(typeof(ExploritePatches), nameof(ExploritePatches.CanStartRitualNow2).App(ref last_patch_method)),
+                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(RitualBehaviorWorker_Conversion), nameof(RitualBehaviorWorker_Conversion.CanStartRitualNow).App(ref last_patch_method)),
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(RitualBehaviorWorkerCanStartRitualNowTranspiler_Conversion)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(RitualBehaviorWorker_Speech), nameof(RitualBehaviorWorker_Speech.CanStartRitualNow).App(ref last_patch_method)),
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(RitualBehaviorWorkerCanStartRitualNowTranspiler_Conversion)));
 
                 if (InstelledMods.HAR)
                 {
@@ -321,8 +328,7 @@ namespace Explorite
         }
 
         ///<summary>阻止半人马的技能衰退。</summary>
-        [HarmonyPrefix]
-        public static void SkillLearnPrefix(SkillRecord __instance, ref float xp)
+        [HarmonyPrefix]public static void SkillLearnPrefix(SkillRecord __instance, ref float xp)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -335,8 +341,7 @@ namespace Explorite
         }
 
         ///<summary>移除半人马每日技能训练上限。</summary>
-        [HarmonyPostfix]
-        public static void SkillIntervalPostfix(SkillRecord __instance)
+        [HarmonyPostfix]public static void SkillIntervalPostfix(SkillRecord __instance)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -348,16 +353,14 @@ namespace Explorite
         }
 
         ///<summary>移除半人马的疼痛带来心灵熵消散增益。</summary>
-        [HarmonyPostfix]
-        public static void NoPainBounsForCentaursPostfix(Pawn_PsychicEntropyTracker __instance, ref float __result)
+        [HarmonyPostfix]public static void NoPainBounsForCentaursPostfix(Pawn_PsychicEntropyTracker __instance, ref float __result)
         {
             if (__instance.Pawn.def == AlienCentaurDef)
                 __result = 1f;
         }
 
         ///<summary>禁用阵营生成流浪者加入事件。</summary>
-        [HarmonyPostfix]
-        public static void WandererJoinCannotFirePostfix(IncidentParms parms, ref bool __result)
+        [HarmonyPostfix]public static void WandererJoinCannotFirePostfix(IncidentParms parms, ref bool __result)
         {
             if (Faction.OfPlayer.def == CentaurPlayerColonyDef
              || Faction.OfPlayer.def == SayersPlayerColonyDef
@@ -368,8 +371,7 @@ namespace Explorite
         }
 
         ///<summary>使半人马可以在太空中靠动力装甲存活。</summary>
-        [HarmonyPostfix]
-        public static void HasSpaceSuitSlowPostfix(Pawn pawn, ref bool __result)
+        [HarmonyPostfix]public static void HasSpaceSuitSlowPostfix(Pawn pawn, ref bool __result)
         {
             if (pawn.def == AlienCentaurDef)
             {
@@ -385,8 +387,7 @@ namespace Explorite
         }
 
         ///<summary>移除半人马和Sayers的户外需求。</summary>
-        [HarmonyPostfix]
-        public static void NeedOutdoors_DisabledPostfix(Need_Outdoors __instance, ref bool __result)
+        [HarmonyPostfix]public static void NeedOutdoors_DisabledPostfix(Need_Outdoors __instance, ref bool __result)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -398,8 +399,7 @@ namespace Explorite
         }
 
         ///<summary>移除半人马的心情需求显示精神崩溃阈值描述。</summary>
-        [HarmonyPostfix]
-        public static void NeedMood_GetTipStringPostfix(Need_Mood __instance, ref string __result)
+        [HarmonyPostfix]public static void NeedMood_GetTipStringPostfix(Need_Mood __instance, ref string __result)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -411,8 +411,7 @@ namespace Explorite
         }
 
         ///<summary>更改渲染想法预补丁。</summary>
-        [HarmonyPrefix]
-        public static void NeedsCardUtilityDrawThoughtListingPrefix(ref Rect listingRect, Pawn pawn, ref Vector2 thoughtScrollPosition)
+        [HarmonyPrefix]public static void NeedsCardUtilityDrawThoughtListingPrefix(ref Rect listingRect, Pawn pawn, ref Vector2 thoughtScrollPosition)
         {
             //改变半人马的想法显示渲染高度
             if (pawn.def == AlienCentaurDef)
@@ -425,8 +424,7 @@ namespace Explorite
             }
         }
         ///<summary>更改渲染模式预补丁。</summary>
-        [HarmonyPrefix]
-        public static void Need_DrawOnGUIPrefix(Need __instance, ref Rect rect, ref int maxThresholdMarkers, ref float customMargin, ref bool drawArrows, ref bool doTooltip)
+        [HarmonyPrefix]public static void Need_DrawOnGUIPrefix(Need __instance, ref Rect rect, ref int maxThresholdMarkers, ref float customMargin, ref bool drawArrows, ref bool doTooltip)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -441,8 +439,7 @@ namespace Explorite
             }
         }
         ///<summary>更改渲染模式后期处理补丁。</summary>
-        [HarmonyPostfix]
-        public static void Need_DrawOnGUIPostfix(Need __instance, Rect rect, int maxThresholdMarkers, float customMargin, bool drawArrows, bool doTooltip)
+        [HarmonyPostfix]public static void Need_DrawOnGUIPostfix(Need __instance, Rect rect, int maxThresholdMarkers, float customMargin, bool drawArrows, bool doTooltip)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn &&
@@ -478,15 +475,13 @@ namespace Explorite
         }
 
         ///<summary>记录在刻函数开始前的需求值。</summary>
-        [HarmonyPrefix]
-        public static void Need_NeedIntervalPrefix(Need_Seeker __instance, ref float __state)
+        [HarmonyPrefix]public static void Need_NeedIntervalPrefix(Need_Seeker __instance, ref float __state)
         {
             __state = __instance.CurLevel;
         }
 
         ///<summary>对需求刻函数进行后期处理。</summary>
-        [HarmonyPostfix]
-        public static void Need_NeedIntervalPostfix(Need_Seeker __instance, float __state)
+        [HarmonyPostfix]public static void Need_NeedIntervalPostfix(Need_Seeker __instance, float __state)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -522,8 +517,7 @@ namespace Explorite
             }
         }
         ///<summary>增强半人马食物需求储备量。</summary>
-        [HarmonyPostfix]
-        public static void NeedMaxLevelPostfix(Need_Food __instance, ref float __result)
+        [HarmonyPostfix]public static void NeedMaxLevelPostfix(Need_Food __instance, ref float __result)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -537,8 +531,7 @@ namespace Explorite
         }
 
         ///<summary>移除半人马舒适度需求的负面情绪。</summary>
-        [HarmonyPostfix]
-        public static void ThoughtWorker_NeedComfort_CurrentStateInternalPostfix(ThoughtWorker_NeedComfort __instance, ref ThoughtState __result, Pawn p)
+        [HarmonyPostfix]public static void ThoughtWorker_NeedComfort_CurrentStateInternalPostfix(ThoughtWorker_NeedComfort __instance, ref ThoughtState __result, Pawn p)
         {
             if (false &&
                 p.def == AlienCentaurDef && __result.Active && __result.StageIndex == 0
@@ -549,8 +542,7 @@ namespace Explorite
         }
 
         ///<summary>移除半人马在SoS2太空中的负面情绪。</summary>
-        [HarmonyPostfix]
-        public static void ThoughtWorker_SpaceThoughts_CurrentStateInternalPostfix(ThoughtWorker __instance, ref ThoughtState __result, Pawn p)
+        [HarmonyPostfix]public static void ThoughtWorker_SpaceThoughts_CurrentStateInternalPostfix(ThoughtWorker __instance, ref ThoughtState __result, Pawn p)
         {
             if (
                 p.def == AlienCentaurDef && __result.Active &&
@@ -562,8 +554,7 @@ namespace Explorite
         }
 
         ///<summary>移除半人马精神轻度崩溃阈值。</summary>
-        [HarmonyPostfix]
-        public static void MentalBreaker_BreakThresholdMinorPostfix(MentalBreaker __instance, ref float __result)
+        [HarmonyPostfix]public static void MentalBreaker_BreakThresholdMinorPostfix(MentalBreaker __instance, ref float __result)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -574,8 +565,7 @@ namespace Explorite
             }
         }
         ///<summary>移除半人马精神中度崩溃阈值。</summary>
-        [HarmonyPostfix]
-        public static void MentalBreaker_BreakThresholdMajorPostfix(MentalBreaker __instance, ref float __result)
+        [HarmonyPostfix]public static void MentalBreaker_BreakThresholdMajorPostfix(MentalBreaker __instance, ref float __result)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -586,8 +576,7 @@ namespace Explorite
             }
         }
         ///<summary>移除半人马精神重度崩溃阈值。</summary>
-        [HarmonyPostfix]
-        public static void MentalBreaker_BreakThresholdExtremePostfix(MentalBreaker __instance, ref float __result)
+        [HarmonyPostfix]public static void MentalBreaker_BreakThresholdExtremePostfix(MentalBreaker __instance, ref float __result)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -599,8 +588,7 @@ namespace Explorite
         }
 
         ///<summary>使心灵敏感度属性受到心灵失聪hediff影响。</summary>
-        [HarmonyPostfix]
-        public static void PsychicSensitivityPostfix(StatPart __instance, StatRequest req, ref float val)
+        [HarmonyPostfix]public static void PsychicSensitivityPostfix(StatPart __instance, StatRequest req, ref float val)
         {
             try
             {
@@ -622,8 +610,7 @@ namespace Explorite
         }
 
         ///<summary>使半人马和Sayers可以使用额外类型的冥想媒介。</summary>
-        [HarmonyPostfix]
-        public static void MeditationFocusCanPawnUsePostfix(MeditationFocusDef __instance, ref bool __result, Pawn p)
+        [HarmonyPostfix]public static void MeditationFocusCanPawnUsePostfix(MeditationFocusDef __instance, ref bool __result, Pawn p)
         {
             if ((p.def == AlienCentaurDef || p.def == AlienSayersDef || p.def == AlienGuoguoDef
                 ) && (__instance == DefDatabase<MeditationFocusDef>.GetNamed("Natural")     //自然
@@ -640,8 +627,7 @@ namespace Explorite
         }
 
         ///<summary>更改特定配方的显示可用性。</summary>
-        [HarmonyPostfix]
-        public static void RecipeDefAvailableNowPostfix(RecipeDef __instance, ref bool __result)
+        [HarmonyPostfix]public static void RecipeDefAvailableNowPostfix(RecipeDef __instance, ref bool __result)
         {
             /*if (__instance.defName == "InstallHyperManipulatorSurgery")
             {
@@ -650,8 +636,7 @@ namespace Explorite
         }
 
         ///<summary>为半人马和Sayers补充启用冥想类型的原因。</summary>
-        [HarmonyPostfix]
-        public static void MeditationFocusExplanationPostfix(MeditationFocusDef __instance, ref string __result, Pawn pawn)
+        [HarmonyPostfix]public static void MeditationFocusExplanationPostfix(MeditationFocusDef __instance, ref string __result, Pawn pawn)
         {
             if ((pawn.def == AlienCentaurDef || pawn.def == AlienSayersDef || pawn.def == AlienGuoguoDef
                 ) && (__instance == DefDatabase<MeditationFocusDef>.GetNamed("Natural")     //自然
@@ -671,8 +656,7 @@ namespace Explorite
         }
 
         ///<summary>对绑定选单进行补丁。</summary>
-        [HarmonyPostfix]
-        public static void AssignToPawnCandidatesPostfix(CompAssignableToPawn __instance, ref IEnumerable<Pawn> __result)
+        [HarmonyPostfix]public static void AssignToPawnCandidatesPostfix(CompAssignableToPawn __instance, ref IEnumerable<Pawn> __result)
         {
             //从单人床选单中移除半人马。
             if (__instance is CompAssignableToPawn_Bed comp
@@ -696,8 +680,7 @@ namespace Explorite
         }
 
         ///<summary>使半人马占满床位。</summary>
-        [HarmonyPostfix]
-        public static void AssignBedToPawnHasFreeSlotPostfix(CompAssignableToPawn __instance, ref bool __result)
+        [HarmonyPostfix]public static void AssignBedToPawnHasFreeSlotPostfix(CompAssignableToPawn __instance, ref bool __result)
         {
             if (__result == true &&
                 __instance is CompAssignableToPawn_Bed)
@@ -708,8 +691,7 @@ namespace Explorite
         }
 
         ///<summary>使半人马不能与他人同时被添加至同一个床。</summary>
-        [HarmonyPostfix]
-        public static void AssignBedToPawnTryAssignPawnPostfix(CompAssignableToPawn_Bed __instance, Pawn pawn)
+        [HarmonyPostfix]public static void AssignBedToPawnTryAssignPawnPostfix(CompAssignableToPawn_Bed __instance, Pawn pawn)
         {
             List<Pawn> pawnsToRemove = new List<Pawn>();
             if (pawn?.def == AlienCentaurDef)
@@ -738,8 +720,7 @@ namespace Explorite
         }
 
         ///<summary>使半人马不能使用小尺寸床铺，使果果床铺不能被其他种族使用。</summary>
-        [HarmonyPostfix]
-        public static void RestUtilityCanUseBedEverPostfix(ref bool __result, Pawn p, ThingDef bedDef)
+        [HarmonyPostfix]public static void RestUtilityCanUseBedEverPostfix(ref bool __result, Pawn p, ThingDef bedDef)
         {
             if (p.def == AlienCentaurDef && bedDef.Size.Area < 3)
             {
@@ -752,8 +733,7 @@ namespace Explorite
         }
 
         ///<summary>使指定植物的生长无视环境温度。</summary>
-        [HarmonyPostfix]
-        public static void PlantGrowthRateFactorNoTemperaturePostfix(Plant __instance, ref float __result)
+        [HarmonyPostfix]public static void PlantGrowthRateFactorNoTemperaturePostfix(Plant __instance, ref float __result)
         {
             if (__instance is Plant_FleshTree)
             {
@@ -790,8 +770,7 @@ namespace Explorite
         }
         */
         ///<summary>使被收纳的秘密三射弓物体掉落故障三射弓。</summary>
-        [HarmonyPrefix]
-        public static void MinifiedThingDestroyPrefix(MinifiedThing __instance)
+        [HarmonyPrefix]public static void MinifiedThingDestroyPrefix(MinifiedThing __instance)
         {
             if (__instance.InnerThing is ISecretTrishot trishotOwner)
             {
@@ -800,8 +779,7 @@ namespace Explorite
         }
 
         ///<summary>使三联电池同样被视为<see cref = "Alert_NeedBatteries" />可接受的电池类型。</summary>
-        [HarmonyPostfix]
-        public static void AlertNeedBatteriesPostfix(Alert_NeedBatteries __instance, ref bool __result, Map map)
+        [HarmonyPostfix]public static void AlertNeedBatteriesPostfix(Alert_NeedBatteries __instance, ref bool __result, Map map)
         {
             if (__result == true &&
                 map.listerBuildings.ColonistsHaveBuilding(thing => thing is Building_TriBattery))
@@ -811,8 +789,7 @@ namespace Explorite
         }
 
         ///<summary>使Sayers优先选择尸体作为食物。</summary>
-        [HarmonyPostfix]
-        public static void GetFoodTryGiveJobPostfix(JobGiver_GetFood __instance, ref Job __result, Pawn pawn)
+        [HarmonyPostfix]public static void GetFoodTryGiveJobPostfix(JobGiver_GetFood __instance, ref Job __result, Pawn pawn)
         {
             if (pawn?.def != AlienSayersDef)
             {
@@ -876,8 +853,7 @@ namespace Explorite
         }
 
         ///<summary>阻止半人马疼痛休克。</summary>
-        [HarmonyPostfix]
-        public static void PawnHealthTrackerInPainShockPostfix(Pawn_HealthTracker __instance, ref bool __result)
+        [HarmonyPostfix]public static void PawnHealthTrackerInPainShockPostfix(Pawn_HealthTracker __instance, ref bool __result)
         {
             if (
                 __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -888,8 +864,7 @@ namespace Explorite
         }
 
         ///<summary>阻止半人马和Michelles得到任何永久性疤痕。</summary>
-        [HarmonyPrefix]
-        public static void HediffComp_GetsPermanentIsPermanentPrefix(HediffComp_GetsPermanent __instance, ref bool value)
+        [HarmonyPrefix]public static void HediffComp_GetsPermanentIsPermanentPrefix(HediffComp_GetsPermanent __instance, ref bool value)
         {
             if (__instance.Pawn.def == AlienCentaurDef
              || __instance.Pawn.def == AlienMichellesDef)
@@ -898,8 +873,7 @@ namespace Explorite
             }
         }
         ///<summary>设置不允许<see cref = "HediffComp_TendDuration_CantTend" />症状被治疗。</summary>
-        [HarmonyPostfix]
-        public static void HediffComp_TendDurationAllowTendPostfix(HediffComp_TendDuration __instance, ref bool __result)
+        [HarmonyPostfix]public static void HediffComp_TendDurationAllowTendPostfix(HediffComp_TendDuration __instance, ref bool __result)
         {
             if (false &&
                 __instance is HediffComp_TendDuration_CantTend
@@ -909,8 +883,7 @@ namespace Explorite
             }
         }
         ///<summary>阻止半人马大脑休克。</summary>
-        [HarmonyPrefix]
-        public static void HediffComp_ReactOnDamageNotify_PawnPostApplyDamagePrefix(HediffComp_ReactOnDamage __instance, ref DamageInfo dinfo, float totalDamageDealt)
+        [HarmonyPrefix]public static void HediffComp_ReactOnDamageNotify_PawnPostApplyDamagePrefix(HediffComp_ReactOnDamage __instance, ref DamageInfo dinfo, float totalDamageDealt)
         {
             if (__instance.Pawn.def == AlienCentaurDef
              && __instance.Props.damageDefIncoming == DamageDefOf.EMP && dinfo.Def == DamageDefOf.EMP)
@@ -920,8 +893,7 @@ namespace Explorite
         }
 
         ///<summary>增强半人马负重能力。</summary>
-        [HarmonyPostfix]
-        public static void MassUtilityCapacityPostfix(ref float __result, Pawn p, ref StringBuilder explanation)
+        [HarmonyPostfix]public static void MassUtilityCapacityPostfix(ref float __result, Pawn p, ref StringBuilder explanation)
         {
             if (p.def == AlienCentaurDef || p.def == AlienSayersDef)
             {
@@ -939,8 +911,7 @@ namespace Explorite
         }
 
         ///<summary>使半人马的身体被渲染为其头发颜色。</summary>
-        [HarmonyPostfix]
-        public static void PawnGraphicSetResolveAllGraphicsPostfix(PawnGraphicSet __instance)
+        [HarmonyPostfix]public static void PawnGraphicSetResolveAllGraphicsPostfix(PawnGraphicSet __instance)
         {
             if (
                 __instance.pawn.def == AlienCentaurDef)
@@ -966,8 +937,7 @@ namespace Explorite
         }
 
         ///<summary>对设施连接性的后期处理。</summary>
-        [HarmonyPostfix]
-        public static void CompAffectedByFacilitiesCanPotentiallyLinkToStaticPostfix(ref bool __result, ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot, ThingDef myDef, IntVec3 myPos, Rot4 myRot)
+        [HarmonyPostfix]public static void CompAffectedByFacilitiesCanPotentiallyLinkToStaticPostfix(ref bool __result, ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot, ThingDef myDef, IntVec3 myPos, Rot4 myRot)
         {
             if (__result == true &&
                 facilityDef?.placeWorkers?.Contains(typeof(PlaceWorker_FacingPort)) == true &&
@@ -978,8 +948,7 @@ namespace Explorite
         }
 
         ///<summary>对人物渲染器的服装选单的补丁。</summary>
-        [HarmonyPostfix]
-        public static void PawnGraphicSetResolveApparelGraphicsPostfix(PawnGraphicSet __instance)
+        [HarmonyPostfix]public static void PawnGraphicSetResolveApparelGraphicsPostfix(PawnGraphicSet __instance)
         {
             if (__instance.pawn.apparel.WornApparel.Any(ap => ap.def == CentaurHeaddressDef))
             {
@@ -1001,8 +970,7 @@ namespace Explorite
         }
 
         ///<summary>使半人马始终被视为具有特征等级。</summary>
-        [HarmonyPostfix]
-        public static void TraitSetDegreeOfTraitPostfix(TraitSet __instance, ref int __result, TraitDef tDef)
+        [HarmonyPostfix]public static void TraitSetDegreeOfTraitPostfix(TraitSet __instance, ref int __result, TraitDef tDef)
         {
             if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
                 && pawn.def == AlienCentaurDef)
@@ -1012,8 +980,7 @@ namespace Explorite
             }
         }
         ///<summary>使半人马始终被视为具有特征。</summary>
-        [HarmonyPostfix]
-        public static void TraitSetHasTraitPostfix(TraitSet __instance, ref bool __result, TraitDef tDef)
+        [HarmonyPostfix]public static void TraitSetHasTraitPostfix(TraitSet __instance, ref bool __result, TraitDef tDef)
         {
             if (__result == false
                 && __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -1026,8 +993,7 @@ namespace Explorite
             }
         }
         ///<summary>使半人马始终被视为具有特征等级。</summary>
-        [HarmonyPostfix]
-        public static void TraitSetHasTraitDegreePostfix(TraitSet __instance, ref bool __result, TraitDef tDef, int degree)
+        [HarmonyPostfix]public static void TraitSetHasTraitDegreePostfix(TraitSet __instance, ref bool __result, TraitDef tDef, int degree)
         {
             if (__result == false
                 && __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -1040,8 +1006,7 @@ namespace Explorite
             }
         }
         ///<summary>为半人马特征制作样本。</summary>
-        [HarmonyPostfix]
-        public static void TraitSetGetTraitPostfix(TraitSet __instance, ref Trait __result, TraitDef tDef)
+        [HarmonyPostfix]public static void TraitSetGetTraitPostfix(TraitSet __instance, ref Trait __result, TraitDef tDef)
         {
             if (__result == null
                 && __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -1054,8 +1019,7 @@ namespace Explorite
             }
         }
         ///<summary>为半人马特征等级制作样本。</summary>
-        [HarmonyPostfix]
-        public static void TraitSetGetTraitDegreePostfix(TraitSet __instance, ref Trait __result, TraitDef tDef, int degree)
+        [HarmonyPostfix]public static void TraitSetGetTraitDegreePostfix(TraitSet __instance, ref Trait __result, TraitDef tDef, int degree)
         {
             if (__result == null
                 && __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
@@ -1068,8 +1032,7 @@ namespace Explorite
             }
         }
         ///<summary>在信息页移除半人马的寿命显示。</summary>
-        [HarmonyPostfix]
-        public static void RacePropertiesSpecialDisplayStatsPostfix(RaceProperties __instance, ref IEnumerable<StatDrawEntry> __result, ThingDef parentDef, StatRequest req)
+        [HarmonyPostfix]public static void RacePropertiesSpecialDisplayStatsPostfix(RaceProperties __instance, ref IEnumerable<StatDrawEntry> __result, ThingDef parentDef, StatRequest req)
         {
             /*_ = new StatDrawEntry(
                 StatCategoryDefOf.BasicsPawn, 
@@ -1089,8 +1052,7 @@ namespace Explorite
             }
         }
         ///<summary>在信息页移除半人马的疼痛休克阈值和精神崩溃阈值显示。</summary>
-        [HarmonyPostfix]
-        public static void StatWorkerShouldShowForPostfix(StatWorker __instance, ref bool __result, StatRequest req)
+        [HarmonyPostfix]public static void StatWorkerShouldShowForPostfix(StatWorker __instance, ref bool __result, StatRequest req)
         {
             if (__result &&
                 req.HasThing && req.Thing is Pawn pawn && pawn.def == AlienCentaurDef &&
@@ -1101,8 +1063,7 @@ namespace Explorite
             }
         }
         ///<summary>从截肢手术清单中移除半人马的锁骨和子系统。</summary>
-        [HarmonyPostfix]
-        public static void RecipeRemoveBodyPartGetPartsToApplyOnPostfix(Recipe_Surgery __instance, ref IEnumerable<BodyPartRecord> __result, Pawn pawn, RecipeDef recipe)
+        [HarmonyPostfix]public static void RecipeRemoveBodyPartGetPartsToApplyOnPostfix(Recipe_Surgery __instance, ref IEnumerable<BodyPartRecord> __result, Pawn pawn, RecipeDef recipe)
         {
             if (pawn.def == AlienCentaurDef)
             {
@@ -1115,8 +1076,7 @@ namespace Explorite
             }
         }
         ///<summary>添加默认服装方案。</summary>
-        [HarmonyPostfix]
-        public static void OutfitDatabaseGenerateStartingOutfitsPostfix(OutfitDatabase __instance)
+        [HarmonyPostfix]public static void OutfitDatabaseGenerateStartingOutfitsPostfix(OutfitDatabase __instance)
         {
             if (InstelledMods.RimCentaurs)
             {
@@ -1257,8 +1217,7 @@ namespace Explorite
         }
         */
         ///<summary>使半人马即使携带了物品也会被视为威胁。</summary>
-        [HarmonyPostfix]
-        public static void PawnThreatDisabledPostfix(Pawn __instance, ref bool __result, IAttackTargetSearcher disabledFor)
+        [HarmonyPostfix]public static void PawnThreatDisabledPostfix(Pawn __instance, ref bool __result, IAttackTargetSearcher disabledFor)
         {
             if (__instance.def == AlienCentaurDef)
             {
@@ -1303,8 +1262,7 @@ namespace Explorite
             }
         }
         ///<summary>使半人马服装正确显示覆盖的部位。</summary>
-        [HarmonyPrefix]
-        public static void ApparelPropertiesGetCoveredOuterPartsStringPostfix(ApparelProperties __instance, ref BodyDef body)
+        [HarmonyPrefix]public static void ApparelPropertiesGetCoveredOuterPartsStringPostfix(ApparelProperties __instance, ref BodyDef body)
         {
             if (__instance.tags.Contains("CentaurBodyFit"))
             {
@@ -1316,8 +1274,7 @@ namespace Explorite
             }
         }
         ///<summary>显示MakeThing的调用堆栈。</summary>
-        [HarmonyPrefix]
-        public static void ThingMakerMakeThingPrefix(ThingDef def)
+        [HarmonyPrefix]public static void ThingMakerMakeThingPrefix(ThingDef def)
         {
             if (def == TrishotThing2Def)
             {
@@ -1325,8 +1282,7 @@ namespace Explorite
             }
         }
         ///<summary>显示MakeThing的调用堆栈。</summary>
-        [HarmonyPostfix]
-        public static void ThingMakerMakeThingPostfix(Thing __result)
+        [HarmonyPostfix]public static void ThingMakerMakeThingPostfix(Thing __result)
         {
             if (__result.def == OrangiceDef)
             {
@@ -1360,8 +1316,7 @@ namespace Explorite
         }
         */
         ///<summary>将被制作出来的三射弓添加到追踪中。</summary>
-        [HarmonyPostfix]
-        public static void GenRecipePostProcessProductPostfix(Thing __result, Thing product, RecipeDef recipeDef, Pawn worker)
+        [HarmonyPostfix]public static void GenRecipePostProcessProductPostfix(Thing __result, Thing product, RecipeDef recipeDef, Pawn worker)
         {
             try
             {
@@ -1370,8 +1325,7 @@ namespace Explorite
             catch { }
         }
         ///<summary>降低故障三射弓的好感度加成。</summary>
-        [HarmonyPostfix]
-        public static void FactionGiftUtilityGetBaseGoodwillChangePostfix(ref float __result, Thing anyThing, int count, float singlePrice, Faction theirFaction)
+        [HarmonyPostfix]public static void FactionGiftUtilityGetBaseGoodwillChangePostfix(ref float __result, Thing anyThing, int count, float singlePrice, Faction theirFaction)
         {
             if (anyThing?.def?.weaponTags?.Contains("CentaurTracedTrishot") == true)
             {
@@ -1381,8 +1335,7 @@ namespace Explorite
             }
         }
         ///<summary>移除半人马随机好心情灵感。</summary>
-        [HarmonyPostfix]
-        public static void InspirationHandlerGetRandomAvailableInspirationDefPostfix(InspirationHandler __instance, ref InspirationDef __result)
+        [HarmonyPostfix]public static void InspirationHandlerGetRandomAvailableInspirationDefPostfix(InspirationHandler __instance, ref InspirationDef __result)
         {
             if (__instance.pawn.def == AlienCentaurDef)
             {
@@ -1390,8 +1343,7 @@ namespace Explorite
             }
         }
         ///<summary>设置三射弓伤害源为满级三射弓。</summary>
-        [HarmonyPrefix]
-        public static void DamageInfoCtorPrefix(ref ThingDef weapon)
+        [HarmonyPrefix]public static void DamageInfoCtorPrefix(ref ThingDef weapon)
         {
             if (weapon?.weaponTags?.Contains("CentaurTracedTrishot") == true)
             {
@@ -1399,8 +1351,7 @@ namespace Explorite
             }
         }
         ///<summary>设置日志中三射弓伤害源为满级三射弓。</summary>
-        [HarmonyPrefix]
-        public static void BattleLogEntry_ExplosionImpactCtorPrefix(ref ThingDef weaponDef)
+        [HarmonyPrefix]public static void BattleLogEntry_ExplosionImpactCtorPrefix(ref ThingDef weaponDef)
         {
             if (weaponDef?.weaponTags?.Contains("CentaurTracedTrishot") == true)
             {
@@ -1419,8 +1370,7 @@ namespace Explorite
         }
         */
         ///<summary>修正健康面板中的身体部位排序。</summary>
-        [HarmonyPostfix]
-        public static void HealthCardUtilityGetListPriorityPostfix(ref float __result, BodyPartRecord rec)
+        [HarmonyPostfix]public static void HealthCardUtilityGetListPriorityPostfix(ref float __result, BodyPartRecord rec)
         {
             if (rec?.groups?.Contains(CentaurCorePartGroupDef) ?? false)
             {
@@ -1444,8 +1394,7 @@ namespace Explorite
             }
         }
         ///<summary>移除半人马自我治疗的70%效果惩罚。</summary>
-        [HarmonyPrefix]
-        public static void TendUtilityCalculateBaseTendQualityPrefix(Pawn doctor, Pawn patient, ref float medicinePotency, ref float medicineQualityMax)
+        [HarmonyPrefix]public static void TendUtilityCalculateBaseTendQualityPrefix(Pawn doctor, Pawn patient, ref float medicinePotency, ref float medicineQualityMax)
         {
             if (doctor == patient && doctor?.def == AlienCentaurDef)
             {
@@ -1453,8 +1402,7 @@ namespace Explorite
             }
         }
         ///<summary>检测任务奖励中的橙冰。</summary>
-        [HarmonyPostfix]
-        public static void QuestPartDropPodsSetThingsPostfix(IEnumerable<Thing> value)
+        [HarmonyPostfix]public static void QuestPartDropPodsSetThingsPostfix(IEnumerable<Thing> value)
         {
             IEnumerable<Thing> orangices = value.Where(t => t.def == OrangiceDef);
             foreach (Thing thing in orangices)
@@ -1463,8 +1411,7 @@ namespace Explorite
             }
         }
         ///<summary>阻止特定项目被研究。</summary>
-        [HarmonyPostfix]
-        public static void ResearchProjectDefCanStartNowPostfix(ResearchProjectDef __instance, ref bool __result)
+        [HarmonyPostfix]public static void ResearchProjectDefCanStartNowPostfix(ResearchProjectDef __instance, ref bool __result)
         {
             if (__result && __instance?.tags?.Any(t => t.defName == "ExploriteNeverResearchable") == true)
             {
@@ -1472,8 +1419,7 @@ namespace Explorite
             }
         }
         ///<summary>自动判断服装是否适合半人马。</summary>
-        [HarmonyPostfix]
-        public static void RaceRestrictionSettingsCanWearPostfix(ThingDef apparel, ThingDef race, ref bool __result)
+        [HarmonyPostfix]public static void RaceRestrictionSettingsCanWearPostfix(ThingDef apparel, ThingDef race, ref bool __result)
         {
             if (race == AlienCentaurDef)
             {
@@ -1481,8 +1427,7 @@ namespace Explorite
             }
         }
         ///<summary>使自动弩机炮台无视屋顶限制。</summary>
-        [HarmonyPostfix]
-        public static void BuildingTurretGunIsMortarOrProjectileFliesOverheadPostfix(Building_TurretGun __instance, ref bool __result)
+        [HarmonyPostfix]public static void BuildingTurretGunIsMortarOrProjectileFliesOverheadPostfix(Building_TurretGun __instance, ref bool __result)
         {
             if (__instance.def == HyperTrishotTurretBuildingDef)
             {
@@ -1490,8 +1435,7 @@ namespace Explorite
             }
         }
         ///<summary>使自动弩机炮台可以手动选择目标。</summary>
-        [HarmonyPostfix]
-        public static void BuildingTurretGunCanSetForcedTargetPostfix(Building_TurretGun __instance, ref bool __result)
+        [HarmonyPostfix]public static void BuildingTurretGunCanSetForcedTargetPostfix(Building_TurretGun __instance, ref bool __result)
         {
             if (__instance.def == HyperTrishotTurretBuildingDef)
             {
@@ -1514,8 +1458,7 @@ namespace Explorite
             }
         }
         ///<summary>使自动弩机炮台无视屋顶限制而开火。</summary>
-        [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> BuildingTurretGunTryStartShootSomethingTranspiler(IEnumerable<CodeInstruction> instr)
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> BuildingTurretGunTryStartShootSomethingTranspiler(IEnumerable<CodeInstruction> instr)
         {
             MethodBase projectileFliesOverheadMethod = AccessTools.Method(typeof(VerbUtility), nameof(VerbUtility.ProjectileFliesOverhead));
             //Log.Message($"[Explorite]Transpiler patch target: {projectileFliesOverheadMethod?.Name}.");
@@ -1578,8 +1521,7 @@ namespace Explorite
         private static readonly PawnCapacityDef ManipulationAlt = new PawnCapacityDef() { defName = "EManipulationAlt" };
         private static readonly PawnCapacityDef MovingAlt = new PawnCapacityDef() { defName = "EMovingAlt" };
         ///<summary>干预半人马健康能力计算预处理。</summary>
-        [HarmonyPrefix]
-        public static void PawnCapacityUtilityCalculateCapacityLevelPrefix(ref float? __state, HediffSet diffSet, ref PawnCapacityDef capacity, ref List<CapacityImpactor> impactors, bool forTradePrice)
+        [HarmonyPrefix]public static void PawnCapacityUtilityCalculateCapacityLevelPrefix(ref float? __state, HediffSet diffSet, ref PawnCapacityDef capacity, ref List<CapacityImpactor> impactors, bool forTradePrice)
         {
             __state = null;
             if (diffSet?.pawn?.def == AlienCentaurDef
@@ -1606,8 +1548,7 @@ namespace Explorite
             }
         }
         ///<summary>干预半人马健康能力计算后期处理。</summary>
-        [HarmonyPostfix]
-        public static void PawnCapacityUtilityCalculateCapacityLevelPostfix(ref float __result, ref float? __state, HediffSet diffSet, ref PawnCapacityDef capacity, ref List<CapacityImpactor> impactors, bool forTradePrice)
+        [HarmonyPostfix]public static void PawnCapacityUtilityCalculateCapacityLevelPostfix(ref float __result, ref float? __state, HediffSet diffSet, ref PawnCapacityDef capacity, ref List<CapacityImpactor> impactors, bool forTradePrice)
         {
             if (__state.HasValue)
             {
@@ -1650,8 +1591,7 @@ namespace Explorite
             return !(instance is Projectile projectile) || !(projectile?.def?.tradeTags?.Contains("ExRoofBypass") ?? false);
         }
         ///<summary>干涉弹射物命中屋顶的效果。</summary>
-        [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> ProjectileImpactSomethingTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> ProjectileImpactSomethingTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {
             FieldInfo flyOverheadInfo = AccessTools.Field(typeof(ProjectileProperties), nameof(ProjectileProperties.flyOverhead));
             byte patchActionStage = 0;
@@ -1832,7 +1772,7 @@ namespace Explorite
             */
             yield break;
         }
-        
+
         ///<summary>临时函数。</summary>
         [HarmonyTranspiler]public static IEnumerable<CodeInstruction> AlienRaceHarmonyPatchesChooseStyleItemPrefix(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {
@@ -2106,11 +2046,11 @@ namespace Explorite
             yield break;
         }
         */
-        public static int PawnNonColorableApparelCount(this Pawn p)
+        public static int PawnNonColorableApparelCount(Pawn p)
         {
             return p.apparel.WornApparel.Where(app => app.TryGetComp<CompColorable>() == null).Count();
         }
-        public static List<Apparel> PawnNonColorableApparels(this Pawn_ApparelTracker apparel)
+        public static List<Apparel> PawnNonColorableApparels(Pawn_ApparelTracker apparel)
         {
             return apparel.WornApparel.Where(app => app.TryGetComp<CompColorable>() != null).ToList();
         }
@@ -2162,7 +2102,7 @@ namespace Explorite
             yield break;
         }
         ///<summary>使服装颜色选单进行对<see cref = "Dialog_StylingStation" />的非空检查。</summary>
-        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> Dialog_StylingStationDrawApparelColorTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> DialogStylingStationDrawApparelColorTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {
             MethodInfo wornApparelInfo = AccessTools.Method(typeof(Pawn_ApparelTracker), "get_WornApparel");
             byte patchActionStage = 0;
@@ -2182,6 +2122,49 @@ namespace Explorite
             }
             yield break;
         }
-
+        public static bool NoRitualIdeo(Precept_Ritual ritual, PreceptDef precept)
+        {
+            return !ritual.ideo.RolesListForReading.Any((Precept_Role r) => r.def == precept);
+        }
+        ///<summary>使仪式可用性进行对<see cref = "List&#60;Precept_Role&#62;" />的合法性检查。</summary>
+        public static IEnumerable<CodeInstruction> RitualBehaviorWorkerCanStartRitualNowTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg, string preceptDefName)
+        {
+            Label label = ilg.DefineLabel();
+            byte patchActionStage = 0;
+            yield return new CodeInstruction(OpCodes.Ldarg_2);
+            yield return new CodeInstruction(OpCodes.Ldsfld, typeof(PreceptDefOf).GetField("IdeoRole_Moralist"));
+            yield return new CodeInstruction(OpCodes.Call, ((Func<Precept_Ritual, PreceptDef, bool>)NoRitualIdeo).GetMethodInfo());
+            yield return new CodeInstruction(OpCodes.Brfalse_S, label);
+            yield return new CodeInstruction(OpCodes.Ldstr, "CantStartRitualNoConvertee");
+            yield return new CodeInstruction(OpCodes.Ldsfld, typeof(PreceptDefOf).GetField("IdeoRole_Moralist"));
+            yield return new CodeInstruction(OpCodes.Ldfld, typeof(Def).GetField("label"));
+            yield return new CodeInstruction(OpCodes.Call, typeof(NamedArgument).GetMethod("op_Implicit", new Type[] { typeof(String) }));
+            yield return new CodeInstruction(OpCodes.Call, ((Func<string, NamedArgument, TaggedString>)TranslatorFormattedStringExtensions.Translate).GetMethodInfo());
+            yield return new CodeInstruction(OpCodes.Call, typeof(TaggedString).GetMethod("op_Implicit", new Type[] { typeof(TaggedString) }));
+            yield return new CodeInstruction(OpCodes.Ret);
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0)
+                {
+                    patchActionStage++;
+                    ins.labels.Add(label);
+                }
+                yield return ins;
+                continue;
+            }
+            yield break;
+        }
+        ///<summary>使仪式可用性进行对<see cref = "List&#60;Precept_Role&#62;" />的合法性检查。</summary>
+        [HarmonyTranspiler]
+        public static IEnumerable<CodeInstruction> RitualBehaviorWorkerCanStartRitualNowTranspiler_Speech(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            return RitualBehaviorWorkerCanStartRitualNowTranspiler(instr, ilg, "IdeoRole_Leader");
+        }
+        ///<summary>使仪式可用性进行对<see cref = "List&#60;Precept_Role&#62;" />的合法性检查。</summary>
+        [HarmonyTranspiler]
+        public static IEnumerable<CodeInstruction> RitualBehaviorWorkerCanStartRitualNowTranspiler_Conversion(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            return RitualBehaviorWorkerCanStartRitualNowTranspiler(instr, ilg, "IdeoRole_Moralist");
+        }
     }
 }
