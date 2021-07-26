@@ -295,6 +295,10 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(IdeoFoundation), nameof(IdeoFoundation.RandomizeCulture).App(ref last_patch_method)),
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(IdeoFoundationRandomizeCultureTranspiler)));
 
+                harmonyInstance.Patch(AccessTools.Method(typeof(Page_ConfigureIdeo), nameof(Page_ConfigureIdeo.PostOpen).App(ref last_patch_method)),
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PageConfigureIdeoPostOpenTranspiler)));
+
+
                 if (InstelledMods.HAR)
                 {
                     // 依赖 类 AlienRace.RaceRestrictionSettings
@@ -2181,6 +2185,60 @@ namespace Explorite
                     patchActionStage++;
                     yield return ins;
                     yield return new CodeInstruction(OpCodes.Call, ((Func<IEnumerable<CultureDef>, IEnumerable<CultureDef>>)CultureDefsWithoutExclusive).GetMethodInfo());
+                    continue;
+                }
+                else
+                {
+                    yield return ins;
+                    continue;
+                }
+            }
+            yield break;
+        }
+        public static void GenIdeoBeforePlayerAction(Page_ConfigureIdeo page, Ideo ideo)
+        {
+            if (Faction.OfPlayer.def == CentaurPlayerColonyDef || Faction.OfPlayer.def == SayersPlayerColonyDef)
+            {
+                if (Find.IdeoManager.IdeosListForReading.Any(ideo => Faction.OfPlayer.ideos.AllIdeos.Contains(ideo)))
+                {
+                    return;
+                }
+                if (ModsConfig.IdeologyActive)
+                {
+                    ideo = IdeoGenerator.GenerateIdeo(new IdeoGenerationParms()
+                    {
+                        forFaction = Faction.OfPlayer.def
+                    });
+                }
+                else
+                {
+                    ideo = IdeoGenerator.GenerateNoExpansionIdeo((((Func<List<CultureDef>, List<CultureDef>>)((x) => x.Any() ? x : null))(Faction.OfPlayer.def.allowedCultures) ?? DefDatabase<CultureDef>.AllDefs.Where(def => !(def?.allowedPlaceTags.Contains("ExExclusive") ?? false))).RandomElement(), new IdeoGenerationParms()
+                    {
+                        forFaction = Faction.OfPlayer.def,
+                        forceNoExpansionIdeo = true
+                    });
+                }
+                Find.IdeoManager.Add(ideo);
+                Faction.OfPlayer.ideos.SetPrimary(ideo);
+                page.SelectOrMakeNewIdeo(ideo);
+            }
+        }
+        ///<summary>为文化选择界面先生成文化。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> PageConfigureIdeoPostOpenTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            byte patchActionStage = 0;
+            MethodInfo allCultureDefsInfo = AccessTools.Method(typeof(DefDatabase<CultureDef>), "get_AllDefsListForReading");
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0 && ins.opcode == OpCodes.Ldstr && ins.operand == "PageStart-ConfigureIdeo" as object)
+                {
+                    patchActionStage++;
+                    yield return new CodeInstruction(OpCodes.Ldarg_0) { labels = ins.labels.ToList() };
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldfld, typeof(Page_ConfigureIdeo).GetField("ideo"));
+                    yield return new CodeInstruction(OpCodes.Call, ((Action<Page_ConfigureIdeo, Ideo>)GenIdeoBeforePlayerAction).GetMethodInfo());
+                    ins.labels.Clear();
+                    yield return ins;
                     continue;
                 }
                 else
