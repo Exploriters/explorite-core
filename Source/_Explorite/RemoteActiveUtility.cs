@@ -51,24 +51,24 @@ namespace Explorite
         {
             if (thing is ThingWithComps thingWithComps)
             {
-                foreach (IRemoteActivationEffect effect in thingWithComps.AllComps.Where(comp => CompPredicate(comp, tags)).Select(CompSelecter))
+                foreach (IRemoteActivationEffect effect in thingWithComps.AllComps?.Where(comp => CompPredicate(comp, tags)).Select(CompSelecter) ?? Enumerable.Empty<IRemoteActivationEffect>())
                 {
                     yield return effect;
                 }
                 if (thing is Pawn pawn)
                 {
-                    foreach (Apparel apparel in pawn.apparel.WornApparel)
+                    foreach (Apparel apparel in pawn.apparel?.WornApparel ?? Enumerable.Empty<Apparel>())
                     {
-                        foreach (IRemoteActivationEffect effect in apparel.AllComps.Where(comp => CompPredicate(comp, tags)).Select(CompSelecter))
+                        foreach (IRemoteActivationEffect effect in apparel.AllComps?.Where(comp => CompPredicate(comp, tags)).Select(CompSelecter) ?? Enumerable.Empty<IRemoteActivationEffect>())
                         {
                             yield return effect;
                         }
                     }
-                    foreach (Hediff hediff in pawn.health.hediffSet.hediffs)
+                    foreach (Hediff hediff in pawn.health?.hediffSet.hediffs ?? Enumerable.Empty<Hediff>())
                     {
                         if (hediff is HediffWithComps hediffWithComps)
                         {
-                            foreach (IRemoteActivationEffect effect in hediffWithComps.comps.Where(comp => CompPredicate(comp, tags)).Select(CompSelecter))
+                            foreach (IRemoteActivationEffect effect in hediffWithComps.comps?.Where(comp => CompPredicate(comp, tags)).Select(CompSelecter) ?? Enumerable.Empty<IRemoteActivationEffect>())
                             {
                                 yield return effect;
                             }

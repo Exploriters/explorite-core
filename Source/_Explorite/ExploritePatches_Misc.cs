@@ -2130,11 +2130,11 @@ namespace Explorite
             Label label = ilg.DefineLabel();
             byte patchActionStage = 0;
             yield return new CodeInstruction(OpCodes.Ldarg_2);
-            yield return new CodeInstruction(OpCodes.Ldsfld, typeof(PreceptDefOf).GetField("IdeoRole_Moralist"));
+            yield return new CodeInstruction(OpCodes.Ldsfld, typeof(PreceptDefOf).GetField(preceptDefName));
             yield return new CodeInstruction(OpCodes.Call, ((Func<Precept_Ritual, PreceptDef, bool>)NoRitualIdeo).GetMethodInfo());
             yield return new CodeInstruction(OpCodes.Brfalse_S, label);
             yield return new CodeInstruction(OpCodes.Ldstr, "CantStartRitualNoConvertee");
-            yield return new CodeInstruction(OpCodes.Ldsfld, typeof(PreceptDefOf).GetField("IdeoRole_Moralist"));
+            yield return new CodeInstruction(OpCodes.Ldsfld, typeof(PreceptDefOf).GetField(preceptDefName));
             yield return new CodeInstruction(OpCodes.Ldfld, typeof(Def).GetField("label"));
             yield return new CodeInstruction(OpCodes.Call, typeof(NamedArgument).GetMethod("op_Implicit", new Type[] { typeof(String) }));
             yield return new CodeInstruction(OpCodes.Call, ((Func<string, NamedArgument, TaggedString>)TranslatorFormattedStringExtensions.Translate).GetMethodInfo());

@@ -170,9 +170,9 @@ namespace Explorite
             {
                 if (pawn?.RaceProps?.hediffGiverSets != null)
                 {
-                    foreach (HediffGiverSetDef hediffGiverSetDef in pawn?.RaceProps?.hediffGiverSets)
+                    foreach (HediffGiverSetDef hediffGiverSetDef in pawn?.RaceProps?.hediffGiverSets ?? Enumerable.Empty<HediffGiverSetDef>())
                     {
-                        foreach (HediffGiver hediffGiver in hediffGiverSetDef?.hediffGivers)
+                        foreach (HediffGiver hediffGiver in hediffGiverSetDef?.hediffGivers ?? Enumerable.Empty<HediffGiver>())
                         {
                             if (hediffGiver is HediffGiver_EnsureForAlways giver)
                             {
