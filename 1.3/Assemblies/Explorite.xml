@@ -144,10 +144,22 @@
         <member name="T:Explorite.CompRemoteActivationEffect_Destroy">
             <summary>响应效果时自毁。</summary>
         </member>
+        <member name="T:Explorite.CompProperties_RemoteActivationEffect_Kill">
+            <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_Kill" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompRemoteActivationEffect_Kill">
+            <summary>响应效果时自毁。</summary>
+        </member>
         <member name="T:Explorite.CompProperties_RemoteActivationEffect_InvokeExplode">
             <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_InvokeExplode" />接收参数。</summary>
         </member>
         <member name="T:Explorite.CompRemoteActivationEffect_InvokeExplode">
+            <summary>响应效果时调用爆炸。</summary>
+        </member>
+        <member name="T:Explorite.CompProperties_RemoteActivationEffect_Explode">
+            <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_Explode" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompRemoteActivationEffect_Explode">
             <summary>响应效果时爆炸。</summary>
         </member>
         <member name="T:Explorite.ExploritePatches">
@@ -559,6 +571,13 @@
             <param name="map">指定的地图。</param>
             <param name="loc">一个位置。</param>
             <returns>是否成功地完成了传送。</returns>
+        </member>
+        <member name="M:Explorite.ExploriteCore.FinalSpawnedParent(Verse.Thing)">
+            <summary>
+            获取目标的最后一个已生成的上级容器。
+            </summary>
+            <param name="thing">需要被查找的物体。</param>
+            <returns>找到的物体。</returns>
         </member>
         <member name="M:Explorite.ExploriteCore.VaildCentaurApparelPredicate(Verse.ThingDef)">
             <summary>

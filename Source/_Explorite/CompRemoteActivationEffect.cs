@@ -3,6 +3,7 @@
  * --siiftun1857
  */
 using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -128,7 +129,7 @@ namespace Explorite
         {
             compClass = typeof(CompRemoteActivationEffect_Destroy);
         }
-        public DestroyMode destroyMode = DestroyMode.KillFinalize;
+        public DestroyMode destroyMode = DestroyMode.Vanish;
     }
     ///<summary>响应效果时自毁。</summary>
     public class CompRemoteActivationEffect_Destroy : CompRemoteActivationEffect
@@ -141,6 +142,24 @@ namespace Explorite
             return true;
         }
     }
+    ///<summary>为<see cref = "CompRemoteActivationEffect_Kill" />接收参数。</summary>
+    public class CompProperties_RemoteActivationEffect_Kill : CompProperties_RemoteActivationEffect
+    {
+        public CompProperties_RemoteActivationEffect_Kill()
+        {
+            compClass = typeof(CompRemoteActivationEffect_Kill);
+        }
+    }
+    ///<summary>响应效果时自毁。</summary>
+    public class CompRemoteActivationEffect_Kill : CompRemoteActivationEffect
+    {
+        public override bool ActiveEffect()
+        {
+            if (!parent.Destroyed)
+                parent.Kill();
+            return true;
+        }
+    }
     ///<summary>为<see cref = "CompRemoteActivationEffect_InvokeExplode" />接收参数。</summary>
     public class CompProperties_RemoteActivationEffect_InvokeExplode : CompProperties_RemoteActivationEffect
     {
@@ -149,7 +168,7 @@ namespace Explorite
             compClass = typeof(CompRemoteActivationEffect_InvokeExplode);
         }
     }
-    ///<summary>响应效果时爆炸。</summary>
+    ///<summary>响应效果时调用爆炸。</summary>
     public class CompRemoteActivationEffect_InvokeExplode : CompRemoteActivationEffect
     {
         public override bool ActiveEffect()
@@ -162,6 +181,133 @@ namespace Explorite
                 }
             }
             return true;
+        }
+    }
+    ///<summary>为<see cref = "CompRemoteActivationEffect_Explode" />接收参数。</summary>
+    public class CompProperties_RemoteActivationEffect_Explode : CompProperties_RemoteActivationEffect
+    {
+        public float explosiveRadius = 1.9f;
+        public DamageDef explosiveDamageType;
+        public int damageAmountBase = -1;
+        public float armorPenetrationBase = -1f;
+        public ThingDef postExplosionSpawnThingDef;
+        public float postExplosionSpawnChance;
+        public int postExplosionSpawnThingCount = 1;
+        public bool applyDamageToExplosionCellsNeighbors;
+        public ThingDef preExplosionSpawnThingDef;
+        public float preExplosionSpawnChance;
+        public int preExplosionSpawnThingCount = 1;
+        public float chanceToStartFire;
+        public bool damageFalloff;
+        public float explosiveExpandPerStackcount;
+        public float explosiveExpandPerFuel;
+        public EffecterDef explosionEffect;
+        public SoundDef explosionSound;
+        public float destroyThingOnExplosionSize = float.PositiveInfinity;
+        public bool immuneToExplodeFromSelf;
+        public CompProperties_RemoteActivationEffect_Explode()
+        {
+            compClass = typeof(CompRemoteActivationEffect_Explode);
+        }
+    }
+    ///<summary>响应效果时爆炸。</summary>
+    public class CompRemoteActivationEffect_Explode : CompRemoteActivationEffect
+    {
+        CompProperties_RemoteActivationEffect_Explode Props => props as CompProperties_RemoteActivationEffect_Explode;
+        public override bool ActiveEffect()
+        {
+            Detonate();
+            return true;
+        }
+        public float ExplosiveRadius
+        {
+            get
+            {
+                float explosiveRadius = Props.explosiveRadius;
+                if (parent.stackCount > 1 && Props.explosiveExpandPerStackcount > 0f)
+                {
+                    explosiveRadius += Mathf.Sqrt((float)(parent.stackCount - 1) * Props.explosiveExpandPerStackcount);
+                }
+                if (Props.explosiveExpandPerFuel > 0f && parent.GetComp<CompRefuelable>() != null)
+                {
+                    explosiveRadius += Mathf.Sqrt(parent.GetComp<CompRefuelable>().Fuel * Props.explosiveExpandPerFuel);
+                }
+                return explosiveRadius;
+            }
+        }
+
+        protected void Detonate(bool ignoreUnspawned = false)
+        {
+            if (!ignoreUnspawned && !parent.SpawnedOrAnyParentSpawned)
+            {
+                return;
+            }
+            Map map = parent.MapHeld;
+            IntVec3 pos;
+            float explosiveRadius = ExplosiveRadius;
+            if (Props.explosiveExpandPerFuel > 0f && parent.GetComp<CompRefuelable>() != null)
+            {
+                parent.GetComp<CompRefuelable>().ConsumeFuel(parent.GetComp<CompRefuelable>().Fuel);
+            }
+            try
+            {
+                pos = parent.FinalSpawnedParent()?.Position ?? throw new NullReferenceException("MANUAL");
+            }
+            catch (NullReferenceException)
+            {
+                return;
+            }
+            finally
+            {
+                if (Props.destroyThingOnExplosionSize <= explosiveRadius && !parent.Destroyed)
+                {
+                    parent.Kill(null, null);
+                }
+            }
+            if (map == null)
+            {
+                Log.Warning("Tried to detonate CompRemoteActivationEffect_Explode in a null map.");
+                return;
+            }
+            if (Props.explosionEffect != null)
+            {
+                Effecter effecter = Props.explosionEffect.Spawn();
+                effecter.Trigger(new TargetInfo(pos, map, false), new TargetInfo(pos, map, false));
+                effecter.Cleanup();
+            }
+            Thing instigator;
+            /*if (this.instigator != null && (!this.instigator.HostileTo(this.parent.Faction) || this.parent.Faction == Faction.OfPlayer))
+            {
+                parent = this.instigator;
+            }
+            else*/
+            {
+                instigator = parent;
+            }
+            GenExplosion.DoExplosion(
+                center: pos,
+                map: map,
+                radius: explosiveRadius,
+                damType: Props.explosiveDamageType,
+                instigator: instigator,
+                damAmount: Props.damageAmountBase,
+                armorPenetration: Props.armorPenetrationBase,
+                explosionSound: Props.explosionSound,
+                weapon: parent.def,
+                projectile: null,
+                intendedTarget: null,
+                postExplosionSpawnThingDef: Props.postExplosionSpawnThingDef,
+                postExplosionSpawnChance: Props.postExplosionSpawnChance,
+                postExplosionSpawnThingCount: Props.postExplosionSpawnThingCount,
+                applyDamageToExplosionCellsNeighbors: Props.applyDamageToExplosionCellsNeighbors,
+                preExplosionSpawnThingDef: Props.preExplosionSpawnThingDef,
+                preExplosionSpawnChance: Props.preExplosionSpawnChance,
+                preExplosionSpawnThingCount: Props.preExplosionSpawnThingCount,
+                chanceToStartFire: Props.chanceToStartFire,
+                damageFalloff: Props.damageFalloff,
+                direction: null,
+                ignoredThings: Props.immuneToExplodeFromSelf ? new List<Thing>() { parent } : null//this.thingsIgnoredByExplosion
+                );
         }
     }
 }
