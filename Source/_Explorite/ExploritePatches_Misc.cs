@@ -298,6 +298,11 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(Page_ConfigureIdeo), nameof(Page_ConfigureIdeo.PostOpen).App(ref last_patch_method)),
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(PageConfigureIdeoPostOpenTranspiler)));
 
+                harmonyInstance.Patch(AccessTools.Method(typeof(Dialog_ChooseMemes), "CanUseMeme".App(ref last_patch_method)),
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(DialogChooseMemesPlayerNHiddenOffTranspiler)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(Dialog_ChooseMemes), "CanRemoveMeme".App(ref last_patch_method)),
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(DialogChooseMemesPlayerNHiddenOffTranspiler)));
+
 
                 if (InstelledMods.HAR)
                 {
@@ -2247,6 +2252,63 @@ namespace Explorite
                     continue;
                 }
             }
+            yield break;
+        }
+        public static bool SpecPFacInGame()
+        {
+            return Find.FactionManager.AllFactions.Any(fac => fac.def == CentaurPlayerColonyDef || fac.def == SayersPlayerColonyDef);
+        }
+        ///<summary>特定阵营存在时，锁定文化选项。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> DialogChooseMemesPlayerNHiddenOffTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            byte patchActionStage = 0;
+            MethodInfo EnumeratorCurrentInfo = AccessTools.Method(typeof(IEnumerator<Faction>), "get_Current");
+            FieldInfo FactionDefIsPlayerInfo = AccessTools.Field(typeof(FactionDef), "isPlayer");
+            FieldInfo FactionDefHiddenInfo = AccessTools.Field(typeof(FactionDef), "hidden");
+            Label label = ilg.DefineLabel();
+            StringBuilder sb = new StringBuilder();
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0 && ins.opcode == OpCodes.Callvirt && ins.operand == EnumeratorCurrentInfo as object)
+                {
+                    patchActionStage++;
+                    yield return ins.Appsb(sb);
+                    continue;
+                }
+                else if (patchActionStage == 1)
+                {
+                    patchActionStage++;
+                    yield return ins.Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<bool>)SpecPFacInGame).GetMethodInfo()).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Brtrue_S, label).Appsb(sb);
+                    continue;
+                }
+                else if ((patchActionStage == 2 || patchActionStage == 3) && ins.opcode == OpCodes.Ldfld && (ins.operand == FactionDefIsPlayerInfo as object || ins.operand == FactionDefHiddenInfo as object))
+                {
+                    patchActionStage++;
+                    yield return ins.Appsb(sb);
+                    continue;
+                }
+                else if(patchActionStage == 4 && (ins.opcode == OpCodes.Brtrue || ins.opcode == OpCodes.Brtrue_S))
+                {
+                    patchActionStage++;
+                    yield return ins.Appsb(sb);
+                    continue;
+                }
+                else if (patchActionStage == 5)
+                {
+                    patchActionStage++;
+                    ins.labels.Add(label);
+                    yield return ins.Appsb(sb);
+                    continue;
+                }
+                else
+                {
+                    yield return ins.Appsb(sb);
+                    continue;
+                }
+            }
+            Log.Message($"[Explorite]instr result:\n" + sb.ToString());
             yield break;
         }
     }

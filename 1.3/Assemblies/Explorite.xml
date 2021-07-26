@@ -421,6 +421,9 @@
         <member name="M:Explorite.ExploritePatches.PageConfigureIdeoPostOpenTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>为文化选择界面先生成文化。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.DialogChooseMemesPlayerNHiddenOffTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>特定阵营存在时，锁定文化选项。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>
