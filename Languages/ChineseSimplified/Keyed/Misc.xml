@@ -53,4 +53,6 @@
   
   <AbilityCantApplyOnMissingActivationDevice>目标不具有能被这种激活器激活的设备。</AbilityCantApplyOnMissingActivationDevice>
   
+  <MessageIdeoForcedIdeoNotSelected>{0}不能选择非预设的文化。</MessageIdeoForcedIdeoNotSelected>
+  
 </LanguageData>

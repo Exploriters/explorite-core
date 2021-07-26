@@ -314,7 +314,8 @@ namespace Explorite
                 //harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.IdeoUIUtility.<>c__DisplayClass59_0"), "<DoName>g__CultureAllowed|1".App(ref last_patch_method)),
                 //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
 
-
+                harmonyInstance.Patch(AccessTools.Method(typeof(Page_ConfigureIdeo), "CanDoNext".App(ref last_patch_method)),
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PageConfigureIdeoCanDoNextTranspiler)));
 
                 if (InstelledMods.HAR)
                 {
@@ -2459,5 +2460,47 @@ namespace Explorite
             return true;
         }
         */
+
+        public static bool PageConfigureIdeoCanDoNextPatch(Page_ConfigureIdeo page)
+        {
+            Faction player = Find.FactionManager.OfPlayer;
+            if ((player.def == CentaurPlayerColonyDef || player.def == SayersPlayerColonyDef)
+              && page.ideo != player.ideos.PrimaryIdeo)
+            {
+                Messages.Message("MessageIdeoForcedIdeoNotSelected".Translate(player.Name).CapitalizeFirst(), MessageTypeDefOf.RejectInput, false);
+                return true;
+            }
+            return false;
+        }
+        ///<summary>阻止半人马和Sayers阵营选择其他文化。</summary>
+        [HarmonyTranspiler]
+        public static IEnumerable<CodeInstruction> PageConfigureIdeoCanDoNextTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            byte patchActionStage = 0;
+            MethodInfo FactionOfPlayerInfo = AccessTools.Method(typeof(Faction), "get_OfPlayer");
+            Label label = ilg.DefineLabel();
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0 && ins.opcode == OpCodes.Call && ins.operand == FactionOfPlayerInfo as object)
+                {
+                    patchActionStage++;
+                    yield return new CodeInstruction(OpCodes.Ldarg_0) { labels = ins.labels.ToList() }; ins.labels.Clear();
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<Page_ConfigureIdeo, bool>)PageConfigureIdeoCanDoNextPatch).GetMethodInfo());
+                    yield return new CodeInstruction(OpCodes.Brfalse_S, label);
+                    yield return new CodeInstruction(OpCodes.Ldc_I4_0);
+                    yield return new CodeInstruction(OpCodes.Ret);
+                    ins.labels.Add(label);
+                    yield return ins;
+                    continue;
+                }
+                else
+                {
+                    yield return ins;
+                    continue;
+                }
+            }
+            yield break;
+        }
+
     }
 }
