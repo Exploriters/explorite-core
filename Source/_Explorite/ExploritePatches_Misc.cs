@@ -306,6 +306,15 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(IdeoUIUtility), nameof(IdeoUIUtility.FactionForRandomization).App(ref last_patch_method)),
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(IdeoUIUtilityFactionForRandomizationTranspiler)));
 
+                harmonyInstance.Patch(AccessTools.Method(typeof(IdeoUIUtility), "DoName".App(ref last_patch_method)),
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(StrangeMethodFinderTranspiler)));
+                harmonyInstance.Patch(strangeMethod,
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(IdeoUIUtility_MT_LT_c__DisplayClass59_0__MT_DoName_LT_g____CultureAllowed_1_Transpiler)));
+
+                //harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.IdeoUIUtility.<>c__DisplayClass59_0"), "<DoName>g__CultureAllowed|1".App(ref last_patch_method)),
+                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
+
+
 
                 if (InstelledMods.HAR)
                 {
@@ -2357,5 +2366,98 @@ namespace Explorite
             //Log.Message($"[Explorite]instr result:\n" + sb.ToString());
             yield break;
         }
+
+        static MethodInfo strangeMethod = null;
+        ///<summary>寻找一个奇怪的方法。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> StrangeMethodFinderTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            MethodInfo method = null;
+            bool find = false;
+            foreach (CodeInstruction ins in instr)
+            {
+                if (!find && ins.opcode == OpCodes.Callvirt)
+                {
+                    method = ins.operand as MethodInfo;
+                }
+                if (!find && ins.opcode == OpCodes.Ldstr && ins.operand == "NotAllowedForFaction" as object)
+                {
+                    find = true;
+                }
+                yield return ins;
+            }
+            strangeMethod = method;
+            yield break;
+        }
+        ///<summary>特定阵营存在时，锁定文化选项。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> IdeoUIUtility_MT_LT_c__DisplayClass59_0__MT_DoName_LT_g____CultureAllowed_1_Transpiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            byte patchActionStage = 0;
+            MethodInfo EnumeratorCurrentInfo = AccessTools.Method(typeof(IEnumerator<Faction>), "get_Current");
+            FieldInfo FactionDefHiddenInfo = AccessTools.Field(typeof(FactionDef), "hidden");
+            Label label = ilg.DefineLabel();
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0 && ins.opcode == OpCodes.Callvirt && ins.operand == EnumeratorCurrentInfo as object)
+                {
+                    patchActionStage++;
+                    yield return ins;
+                    continue;
+                }
+                else if (patchActionStage == 1)
+                {
+                    patchActionStage++;
+                    yield return ins;
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<bool>)SpecPFacInGame).GetMethodInfo());
+                    yield return new CodeInstruction(OpCodes.Brtrue_S, label);
+                    continue;
+                }
+                else if (patchActionStage == 2 && ins.opcode == OpCodes.Ldfld && ins.operand == FactionDefHiddenInfo as object)
+                {
+                    patchActionStage++;
+                    yield return ins;
+                    continue;
+                }
+                else if (patchActionStage == 3 && (ins.opcode == OpCodes.Brtrue || ins.opcode == OpCodes.Brtrue_S))
+                {
+                    patchActionStage++;
+                    yield return ins;
+                    continue;
+                }
+                else if (patchActionStage == 4)
+                {
+                    patchActionStage++;
+                    ins.labels.Add(label);
+                    yield return ins;
+                    continue;
+                }
+                else
+                {
+                    yield return ins;
+                    continue;
+                }
+            }
+            yield break;
+        }
+        /*
+        static bool DoName_g__CultureAllowed_1(CultureDef cultureDef)
+        {
+            if (IdeoUIUtility.devEditMode)
+            {
+                return true;
+            }
+            if (Find.World == null)
+            {
+                return Find.FactionManager.OfPlayer.def.allowedCultures.Contains(cultureDef);
+            }
+            foreach (Faction faction in Find.FactionManager.AllFactions)
+            {
+                if (!faction.def.hidden && !faction.def.allowedCultures.NullOrEmpty<CultureDef>() && faction.ideos != null && (faction.ideos.IsPrimary(this.ideo) || faction.ideos.IsMinor(this.ideo)) && !faction.def.allowedCultures.Contains(cultureDef))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        */
     }
 }
