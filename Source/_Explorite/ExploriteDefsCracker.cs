@@ -7,6 +7,7 @@ using RimWorld;
 using static Explorite.ExploriteCore;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Explorite
 {
@@ -27,7 +28,7 @@ namespace Explorite
                 return;
             List<RecipeDef> recipesToRemove = new List<RecipeDef>();
 
-            foreach (RecipeDef recipe in AlienCentaurDef?.recipes)
+            foreach (RecipeDef recipe in AlienCentaurDef?.recipes ?? Enumerable.Empty<RecipeDef>())
             {
                 if (recipe?.addsHediff == HediffDefOf.LoveEnhancer)
                 {

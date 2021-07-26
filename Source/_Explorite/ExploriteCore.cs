@@ -282,6 +282,44 @@ namespace Explorite
             methodFloodUnfogAdjacent.Invoke(fogGrid, new object[] { target });
         }
 
+        
+        /**
+         * <summary>
+         * 获取目标的最后一个已生成的上级容器。
+         * </summary>
+         * <param name="thing">需要被查找的物体。</param>
+         * <returns>找到的物体。</returns>
+         */
+        public static Thing FinalSpawnedParent(this Thing thing)
+        {
+            if (thing == null || thing.Spawned)
+            {
+                return thing;
+            }
+            IThingHolder holder = thing.ParentHolder;
+            while (holder != null)
+            {
+                if (holder is Thing thingParent && thingParent.Spawned)
+                {
+                    return thingParent;
+                }
+                else if (holder is ThingComp thingComp && thingComp.parent.Spawned)
+                {
+                    return thingComp.parent;
+                }
+                else if (holder is Pawn_ApparelTracker apparelTracker && apparelTracker.pawn.Spawned)
+                {
+                    return apparelTracker.pawn;
+                }
+                else
+                {
+                    holder = holder.ParentHolder;
+                }
+            }
+            return null;
+        }
+        
+
         // 与Color.HSVToRGB重复
         /*
         public static Color hsb2rgb(float h, float s, float v, float a = 1f)

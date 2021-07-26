@@ -3,6 +3,7 @@
  * --siiftun1857
  */
 using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -25,10 +26,12 @@ namespace Explorite
         public static bool ActiveTriggers(IEnumerable<IRemoteActivationEffect> effects, List<string> tags)
         {
             bool flag = false;
-            foreach (IRemoteActivationEffect effect in effects)
+            foreach (IRemoteActivationEffect effect in effects.ToList())
             {
                 if (effect?.TryActive(tags) ?? false)
+                {
                     flag = true;
+                }
             }
             return flag;
         }
@@ -42,54 +45,30 @@ namespace Explorite
         }
         public static bool AnyTriggers(this Thing thing, List<string> tags)
         {
-            if (thing is ThingWithComps thingWithComps)
-            {
-                if (thingWithComps.AllComps.Any(comp => CompPredicate(comp, tags)))
-                {
-                    return true;
-                }
-                if (thing is Pawn pawn)
-                {
-                    foreach (Apparel apparel in pawn.apparel.WornApparel)
-                    {
-                        if (apparel.AllComps.Any(comp => CompPredicate(comp, tags)))
-                        {
-                            return true;
-                        }
-                    }
-                    foreach (Hediff hediff in pawn.health.hediffSet.hediffs)
-                    {
-                        if (hediff is HediffWithComps hediffWithComps && hediffWithComps.comps.Any(comp => CompPredicate(comp, tags)))
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
+            return thing.RemoteTriggers(tags).Any();
         }
         public static IEnumerable<IRemoteActivationEffect> RemoteTriggers(this Thing thing, List<string> tags)
         {
             if (thing is ThingWithComps thingWithComps)
             {
-                foreach (IRemoteActivationEffect effect in thingWithComps.AllComps.Where(comp => CompPredicate(comp, tags)).Select(CompSelecter))
+                foreach (IRemoteActivationEffect effect in thingWithComps.AllComps?.Where(comp => CompPredicate(comp, tags)).Select(CompSelecter) ?? Enumerable.Empty<IRemoteActivationEffect>())
                 {
                     yield return effect;
                 }
                 if (thing is Pawn pawn)
                 {
-                    foreach (Apparel apparel in pawn.apparel.WornApparel)
+                    foreach (Apparel apparel in pawn.apparel?.WornApparel ?? Enumerable.Empty<Apparel>())
                     {
-                        foreach (IRemoteActivationEffect effect in apparel.AllComps.Where(comp => CompPredicate(comp, tags)).Select(CompSelecter))
+                        foreach (IRemoteActivationEffect effect in apparel.AllComps?.Where(comp => CompPredicate(comp, tags)).Select(CompSelecter) ?? Enumerable.Empty<IRemoteActivationEffect>())
                         {
                             yield return effect;
                         }
                     }
-                    foreach (Hediff hediff in pawn.health.hediffSet.hediffs)
+                    foreach (Hediff hediff in pawn.health?.hediffSet.hediffs ?? Enumerable.Empty<Hediff>())
                     {
                         if (hediff is HediffWithComps hediffWithComps)
                         {
-                            foreach (IRemoteActivationEffect effect in hediffWithComps.comps.Where(comp => CompPredicate(comp, tags)).Select(CompSelecter))
+                            foreach (IRemoteActivationEffect effect in hediffWithComps.comps?.Where(comp => CompPredicate(comp, tags)).Select(CompSelecter) ?? Enumerable.Empty<IRemoteActivationEffect>())
                             {
                                 yield return effect;
                             }

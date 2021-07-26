@@ -17,7 +17,7 @@ namespace Explorite
     {
         public DamageDef injuryOnHit;
         public IntRange injuryCount;
-        public FloatRange injuryDamage;
+        public FloatRange? injuryDamage;
         public CompProperties_AbilityGiveHediff_ParasiticStab()
         {
             compClass = typeof(CompAbilityEffect_GiveHediff_ParasiticStab);
@@ -96,7 +96,7 @@ namespace Explorite
                 {
                     targetPawn.TakeDamage(
                     new DamageInfo(
-                        Props.injuryOnHit, Props.injuryDamage.RandomInRange,
+                        Props.injuryOnHit, Props.injuryDamage?.RandomInRange ?? Props.injuryOnHit.defaultDamage,
                         instigator: parent.pawn,
                         weapon: parent.pawn.def
                         )

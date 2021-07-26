@@ -123,12 +123,6 @@
         <member name="T:Explorite.CompRemoteActivationEffect">
             <summary>远程效果设备，响应<see cref = "T:Explorite.Verb_RemoteActivator" />。</summary>
         </member>
-        <member name="T:Explorite.HediffCompProperties_RemoteActivationEffect">
-            <summary>为<see cref = "T:Explorite.HediffComp_RemoteActivationEffect" />接收参数。</summary>
-        </member>
-        <member name="T:Explorite.HediffComp_RemoteActivationEffect">
-            <summary>远程效果设备，响应<see cref = "T:Explorite.Verb_RemoteActivator" />。</summary>
-        </member>
         <member name="T:Explorite.CompRemoteActivationEffect_Apparel">
             <summary>远程效果服装设备，仅在被穿戴时才会响应。</summary>
         </member>
@@ -138,16 +132,34 @@
         <member name="T:Explorite.CompRemoteActivationEffect_Apparel_ApplyHediff">
             <summary>响应效果时为穿戴者施加hediff。</summary>
         </member>
+        <member name="T:Explorite.CompProperties_RemoteActivationEffect_Apparel_ApplyDamage">
+            <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_Apparel_ApplyDamage" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompRemoteActivationEffect_Apparel_ApplyDamage">
+            <summary>响应效果时为穿戴者施加伤害。</summary>
+        </member>
         <member name="T:Explorite.CompProperties_RemoteActivationEffect_Destroy">
             <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_Destroy" />接收参数。</summary>
         </member>
         <member name="T:Explorite.CompRemoteActivationEffect_Destroy">
             <summary>响应效果时自毁。</summary>
         </member>
+        <member name="T:Explorite.CompProperties_RemoteActivationEffect_Kill">
+            <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_Kill" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompRemoteActivationEffect_Kill">
+            <summary>响应效果时自毁。</summary>
+        </member>
         <member name="T:Explorite.CompProperties_RemoteActivationEffect_InvokeExplode">
             <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_InvokeExplode" />接收参数。</summary>
         </member>
         <member name="T:Explorite.CompRemoteActivationEffect_InvokeExplode">
+            <summary>响应效果时调用爆炸。</summary>
+        </member>
+        <member name="T:Explorite.CompProperties_RemoteActivationEffect_Explode">
+            <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_Explode" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompRemoteActivationEffect_Explode">
             <summary>响应效果时爆炸。</summary>
         </member>
         <member name="T:Explorite.ExploritePatches">
@@ -211,14 +223,8 @@
         <member name="M:Explorite.ExploritePatches.ThoughtWorker_SpaceThoughts_CurrentStateInternalPostfix(RimWorld.ThoughtWorker,RimWorld.ThoughtState@,Verse.Pawn)">
             <summary>移除半人马在SoS2太空中的负面情绪。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.MentalBreaker_BreakThresholdMinorPostfix(Verse.AI.MentalBreaker,System.Single@)">
-            <summary>移除半人马精神轻度崩溃阈值。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.MentalBreaker_BreakThresholdMajorPostfix(Verse.AI.MentalBreaker,System.Single@)">
-            <summary>移除半人马精神中度崩溃阈值。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.MentalBreaker_BreakThresholdExtremePostfix(Verse.AI.MentalBreaker,System.Single@)">
-            <summary>移除半人马精神重度崩溃阈值。</summary>
+        <member name="M:Explorite.ExploritePatches.MentalBreaker_BreakThresholdPostfix(Verse.AI.MentalBreaker,System.Single@)">
+            <summary>移除半人马精神崩溃阈值。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PsychicSensitivityPostfix(RimWorld.StatPart,RimWorld.StatRequest,System.Single@)">
             <summary>使心灵敏感度属性受到心灵失聪hediff影响。</summary>
@@ -386,10 +392,49 @@
             <summary>临时函数。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.IdeoUtilityIsMemeAllowedForPostfix(RimWorld.MemeDef,RimWorld.FactionDef,System.Boolean@)">
-            <summary>更改阵营能够使用的文化模因。</summary>
+            <summary>更改阵营能够使用的模因。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoUtilityCanAddPostfix(RimWorld.MemeDef,System.Collections.Generic.List{RimWorld.MemeDef},RimWorld.FactionDef,System.Boolean@)">
+            <summary>更改模因能够兼容的模因。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.IdeoSymbolPartDefCanBeChosenForIdeoPostfix(RimWorld.Ideo,RimWorld.IdeoSymbolPartDef@,System.Boolean@)">
             <summary>更改阵营能够使用的图标。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ThoughtWorkerWearingColorCurrentStateInternalTranspilerB(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>使服装颜色想法进行对<see cref = "T:Verse.CompColorable" />的非空检查，方案2。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.DialogStylingStationDrawApparelColorTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>使梳妆台服装颜色选单进行对<see cref = "T:RimWorld.Dialog_StylingStation" />的非空检查。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RitualBehaviorWorkerCanStartRitualNowTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator,System.String)">
+            <summary>使仪式可用性进行对<see cref = "T:System.Collections.Generic.List`1" />的合法性检查。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RitualBehaviorWorkerCanStartRitualNowTranspiler_Speech(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>使仪式可用性进行对<see cref = "T:System.Collections.Generic.List`1" />的合法性检查。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RitualBehaviorWorkerCanStartRitualNowTranspiler_Conversion(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>使仪式可用性进行对<see cref = "T:System.Collections.Generic.List`1" />的合法性检查。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoFoundationRandomizeCultureTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>禁止无预设文化阵营随机选择阵营限定文化。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PageConfigureIdeoPostOpenTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>为文化选择界面先生成文化。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.DialogChooseMemesPlayerNHiddenOffTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>特定阵营存在时，锁定文化选项。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoUIUtilityFactionForRandomizationTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>防止隐藏阵营随机为特殊玩家阵营。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.StrangeMethodFinderTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>寻找一个奇怪的方法。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoUIUtility_MT_LT_c__DisplayClass59_0__MT_DoName_LT_g____CultureAllowed_1_Transpiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>特定阵营存在时，锁定文化选项。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PageConfigureIdeoCanDoNextTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>阻止半人马和Sayers阵营选择其他文化。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
@@ -545,6 +590,13 @@
             <param name="loc">一个位置。</param>
             <returns>是否成功地完成了传送。</returns>
         </member>
+        <member name="M:Explorite.ExploriteCore.FinalSpawnedParent(Verse.Thing)">
+            <summary>
+            获取目标的最后一个已生成的上级容器。
+            </summary>
+            <param name="thing">需要被查找的物体。</param>
+            <returns>找到的物体。</returns>
+        </member>
         <member name="M:Explorite.ExploriteCore.VaildCentaurApparelPredicate(Verse.ThingDef)">
             <summary>
             检测物品是否为合法的半人马服装。
@@ -634,6 +686,12 @@
         <member name="T:Explorite.HediffComp_PassiveMeditationFocusGain">
             <summary>使生物持续获取精神力。</summary>
         </member>
+        <member name="T:Explorite.HediffCompProperties_RemoteActivationEffect">
+            <summary>为<see cref = "T:Explorite.HediffComp_RemoteActivationEffect" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.HediffComp_RemoteActivationEffect">
+            <summary>远程效果设备，响应<see cref = "T:Explorite.Verb_RemoteActivator" />。</summary>
+        </member>
         <member name="T:Explorite.HediffCompProperties_RepairApparelsOvertime">
             <summary>为<see cref = "T:Explorite.HediffComp_RepairApparelsOvertime" />接收参数。</summary>
         </member>
@@ -697,6 +755,9 @@
         </member>
         <member name="T:Explorite.JobGiver_Nuzzle_Humanoid">
             <summary>具有额外限制条件的人型生物亲昵配置。</summary>
+        </member>
+        <member name="T:Explorite.MemeDef_Ex">
+            <summary><see cref = "T:RimWorld.MemeDef" />增强。</summary>
         </member>
         <member name="T:Explorite.Need_CentaurCreativityInspiration">
             <summary>长期幸福的创造灵感奖励。</summary>
@@ -812,10 +873,16 @@
         <member name="T:Explorite.Verb_Shoot_Rainbow2">
             <summary>设置首发和后续发射不一致。</summary>
         </member>
-        <member name="T:Explorite.VerbProperties_RemoteApparelActivator">
+        <member name="T:Explorite.VerbProperties_RemoteActivator">
             <summary>为<see cref = "T:Explorite.Verb_RemoteActivator" />接收参数。</summary>
         </member>
         <member name="T:Explorite.Verb_RemoteActivator">
+            <summary>远程效果激活设备，激活<see cref = "T:Explorite.CompRemoteActivationEffect" />。</summary>
+        </member>
+        <member name="T:Explorite.VerbProperties_RemoteActivator_Area">
+            <summary>为<see cref = "T:Explorite.Verb_RemoteActivator" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.Verb_RemoteActivator_Area">
             <summary>远程效果激活设备，激活<see cref = "T:Explorite.CompRemoteActivationEffect" />。</summary>
         </member>
     </members>

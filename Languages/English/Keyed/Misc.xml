@@ -53,4 +53,6 @@
   
   <AbilityCantApplyOnMissingActivationDevice>Targed didnot have any activation device valid to this activator.</AbilityCantApplyOnMissingActivationDevice>
   
+  <MessageIdeoForcedIdeoNotSelected>{0} cannot use ideo which not preset.</MessageIdeoForcedIdeoNotSelected>
+  
 </LanguageData>
