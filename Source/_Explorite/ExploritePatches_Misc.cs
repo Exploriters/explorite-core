@@ -36,6 +36,24 @@ namespace Explorite
             stringBuilder.AppendLine(obj.ToString());
             return obj;
         }
+
+        //harmonyInstance.Patch(AccessTools.Method(typeof(DamageWorker), nameof(DamageWorker.ExplosionCellsToHit).App(ref last_patch_method), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
+        //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
+        //harmonyInstance.Patch(AccessTools.Method(typeof(DamageWorker_Tes1), nameof(DamageWorker_Tes1.ExplosionCellsToHit).App(ref last_patch_method), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
+        //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
+        //harmonyInstance.Patch(AccessTools.Method(typeof(DamageWorker_Tes2), nameof(DamageWorker_Tes2.ExplosionCellsToHit).App(ref last_patch_method), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
+        //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
+        //harmonyInstance.Patch(AccessTools.Method(typeof(ExploritePatches), nameof(LocalTest1).App(ref last_patch_method)),
+        //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
+        //harmonyInstance.Patch(AccessTools.Method(typeof(ExploritePatches), nameof(LocalTest2).App(ref last_patch_method)),
+        //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
+        //harmonyInstance.Patch(AccessTools.Method(typeof(ExploritePatches), nameof(Fun6).App(ref last_patch_method)),
+        //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
+
+        //harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_WearingColor), "CurrentStateInternal".App(ref last_patch_method)),
+        //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
+        //harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_WearingColorX2), "CurrentStateInternal".App(ref last_patch_method)),
+        //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
         ///<summary>打印函数的构造。</summary>
         [HarmonyTranspiler]public static IEnumerable<CodeInstruction> PrinterTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {
@@ -262,24 +280,6 @@ namespace Explorite
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(IdeoSymbolPartDef), nameof(IdeoSymbolPartDef.CanBeChosenForIdeo).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(IdeoSymbolPartDefCanBeChosenForIdeoPostfix)));
-
-                //harmonyInstance.Patch(AccessTools.Method(typeof(DamageWorker), nameof(DamageWorker.ExplosionCellsToHit).App(ref last_patch_method), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
-                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
-                //harmonyInstance.Patch(AccessTools.Method(typeof(DamageWorker_Tes1), nameof(DamageWorker_Tes1.ExplosionCellsToHit).App(ref last_patch_method), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
-                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
-                //harmonyInstance.Patch(AccessTools.Method(typeof(DamageWorker_Tes2), nameof(DamageWorker_Tes2.ExplosionCellsToHit).App(ref last_patch_method), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
-                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
-                //harmonyInstance.Patch(AccessTools.Method(typeof(ExploritePatches), nameof(LocalTest1).App(ref last_patch_method)),
-                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
-                //harmonyInstance.Patch(AccessTools.Method(typeof(ExploritePatches), nameof(LocalTest2).App(ref last_patch_method)),
-                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
-                //harmonyInstance.Patch(AccessTools.Method(typeof(ExploritePatches), nameof(Fun6).App(ref last_patch_method)),
-                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
-
-                //harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_WearingColor), "CurrentStateInternal".App(ref last_patch_method)),
-                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
-                //harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_WearingColorX2), "CurrentStateInternal".App(ref last_patch_method)),
-                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_WearingColor), "CurrentStateInternal".App(ref last_patch_method)),
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorkerWearingColorCurrentStateInternalTranspilerB)));
@@ -1969,12 +1969,16 @@ namespace Explorite
         {
             if (__result)
             {
-                if ((ideo.memes?.Contains(CentaurMemeDef) ?? false)
-                  && !(__instance.memes?.Contains(CentaurMemeDef) ?? false)
-                    )
+                MemeDef[] memes = { CentaurStructureMemeDef, SayersStructureMemeDef };
+                foreach (MemeDef meme in memes)
                 {
-                    __result = false;
-                    return;
+                    if (((ideo.memes?.Contains(meme) ?? false) || ideo.StructureMeme == meme)
+                      && !(__instance.memes?.Contains(meme) ?? false)
+                        )
+                    {
+                        __result = false;
+                        return;
+                    }
                 }
             }
         }
