@@ -303,6 +303,9 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(Dialog_ChooseMemes), "CanRemoveMeme".App(ref last_patch_method)),
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(DialogChooseMemesPlayerNHiddenOffTranspiler)));
 
+                harmonyInstance.Patch(AccessTools.Method(typeof(IdeoUIUtility), nameof(IdeoUIUtility.FactionForRandomization).App(ref last_patch_method)),
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(IdeoUIUtilityFactionForRandomizationTranspiler)));
+
 
                 if (InstelledMods.HAR)
                 {
@@ -2266,49 +2269,92 @@ namespace Explorite
             FieldInfo FactionDefIsPlayerInfo = AccessTools.Field(typeof(FactionDef), "isPlayer");
             FieldInfo FactionDefHiddenInfo = AccessTools.Field(typeof(FactionDef), "hidden");
             Label label = ilg.DefineLabel();
-            StringBuilder sb = new StringBuilder();
             foreach (CodeInstruction ins in instr)
             {
                 if (patchActionStage == 0 && ins.opcode == OpCodes.Callvirt && ins.operand == EnumeratorCurrentInfo as object)
                 {
                     patchActionStage++;
-                    yield return ins.Appsb(sb);
+                    yield return ins;
                     continue;
                 }
                 else if (patchActionStage == 1)
                 {
                     patchActionStage++;
-                    yield return ins.Appsb(sb);
-                    yield return new CodeInstruction(OpCodes.Call, ((Func<bool>)SpecPFacInGame).GetMethodInfo()).Appsb(sb);
-                    yield return new CodeInstruction(OpCodes.Brtrue_S, label).Appsb(sb);
+                    yield return ins;
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<bool>)SpecPFacInGame).GetMethodInfo());
+                    yield return new CodeInstruction(OpCodes.Brtrue_S, label);
                     continue;
                 }
                 else if ((patchActionStage == 2 || patchActionStage == 3) && ins.opcode == OpCodes.Ldfld && (ins.operand == FactionDefIsPlayerInfo as object || ins.operand == FactionDefHiddenInfo as object))
                 {
                     patchActionStage++;
-                    yield return ins.Appsb(sb);
+                    yield return ins;
                     continue;
                 }
                 else if(patchActionStage == 4 && (ins.opcode == OpCodes.Brtrue || ins.opcode == OpCodes.Brtrue_S))
                 {
                     patchActionStage++;
-                    yield return ins.Appsb(sb);
+                    yield return ins;
                     continue;
                 }
                 else if (patchActionStage == 5)
                 {
                     patchActionStage++;
                     ins.labels.Add(label);
-                    yield return ins.Appsb(sb);
+                    yield return ins;
                     continue;
                 }
                 else
                 {
-                    yield return ins.Appsb(sb);
+                    yield return ins;
                     continue;
                 }
             }
-            Log.Message($"[Explorite]instr result:\n" + sb.ToString());
+            //Log.Message($"[Explorite]instr result:\n" + sb.ToString());
+            yield break;
+        }
+
+        ///<summary>防止隐藏阵营随机为特殊玩家阵营。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> IdeoUIUtilityFactionForRandomizationTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            byte patchActionStage = 0;
+            MethodInfo FindFactionManagerInfo = AccessTools.Method(typeof(Find), "get_FactionManager");
+            MethodInfo FactionManagerGetAllFactionsInfo = AccessTools.Method(typeof(FactionManager), "get_AllFactions");
+            Label label1 = ilg.DefineLabel();
+            Label label2 = ilg.DefineLabel();
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0 && ins.opcode == OpCodes.Call && ins.operand == FindFactionManagerInfo as object)
+                {
+                    patchActionStage++;
+                    yield return ins;
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<bool>)SpecPFacInGame).GetMethodInfo());
+                    yield return new CodeInstruction(OpCodes.Brfalse_S, label1);
+                    yield return new CodeInstruction(OpCodes.Callvirt, FactionManagerGetAllFactionsInfo);
+                    yield return new CodeInstruction(OpCodes.Br_S, label2);
+                    continue;
+                }
+                else if (patchActionStage == 1)
+                {
+                    patchActionStage++;
+                    ins.labels.Add(label1);
+                    yield return ins;
+                    continue;
+                }
+                else if (patchActionStage == 2)
+                {
+                    patchActionStage++;
+                    ins.labels.Add(label2);
+                    yield return ins;
+                    continue;
+                }
+                else
+                {
+                    yield return ins;
+                    continue;
+                }
+            }
+            //Log.Message($"[Explorite]instr result:\n" + sb.ToString());
             yield break;
         }
     }
