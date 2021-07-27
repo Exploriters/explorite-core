@@ -47,6 +47,7 @@ namespace Explorite
             T def = new T
             {
                 defName = "EXPLO_MALREF",
+                label = "EXPLO_MALREF",
                 description = $"Encountered bad reference of {nameof(T)}."
             };
             malrefs.Add(t, def);

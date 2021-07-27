@@ -2583,8 +2583,6 @@ namespace Explorite
             MethodInfo StatExtensionGetStatValueInfo = AccessTools.Method(typeof(StatExtension), "GetStatValue");
             MethodInfo StatRequestGetThingInfo = AccessTools.Method(typeof(StatRequest), "get_Thing");
 
-            StringBuilder sb = new StringBuilder();
-
             foreach (CodeInstruction ins in instr)
             {
                 if (patchActionStage == 0)
@@ -2607,25 +2605,24 @@ namespace Explorite
                 if (proximityStat > 0 && patchActionStage == 0 && ins.opcode == OpCodes.Call && ins.operand == StatExtensionGetStatValueInfo as object)
                 {
                     patchActionStage++;
-                    yield return ins.Appsb(sb);
-                    yield return new CodeInstruction(OpCodes.Ldarg_0).Appsb(sb);
-                    yield return new CodeInstruction(OpCodes.Ldarga_S,1).Appsb(sb);
-                    yield return new CodeInstruction(OpCodes.Call, StatRequestGetThingInfo).Appsb(sb);
-                    yield return ins4.Dequeue().Appsb(sb);
-                    yield return ins4.Dequeue().Appsb(sb);
-                    yield return ins4.Dequeue().Appsb(sb);
-                    yield return ins4.Dequeue().Appsb(sb);
-                    yield return ins4.Dequeue().Appsb(sb); ins4.Clear();
-                    yield return new CodeInstruction(OpCodes.Call, ((Func<float, StatWorker, Thing, StatDef, float>)PostProcessStatFactor).GetMethodInfo()).Appsb(sb);
+                    yield return ins;
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldarga_S,1);
+                    yield return new CodeInstruction(OpCodes.Call, StatRequestGetThingInfo);
+                    yield return ins4.Dequeue();
+                    yield return ins4.Dequeue();
+                    yield return ins4.Dequeue();
+                    yield return ins4.Dequeue();
+                    yield return ins4.Dequeue(); ins4.Clear();
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<float, StatWorker, Thing, StatDef, float>)PostProcessStatFactor).GetMethodInfo());
                     continue;
                 }
                 else
                 {
-                    yield return ins.Appsb(sb);
+                    yield return ins;
                     continue;
                 }
             }
-            Log.Message($"[Explorite]instr result:\n" + sb.ToString());
             yield break;
         }
         ///<summary>改变心灵敏感度对半人马心灵熵阈值的影响的数值显示。</summary>
@@ -2639,8 +2636,6 @@ namespace Explorite
             MethodInfo StatRequestGetThingInfo = AccessTools.Method(typeof(StatRequest), "get_Thing");
 
             object opId = null;
-
-            StringBuilder sb = new StringBuilder();
 
             foreach (CodeInstruction ins in instr)
             {
@@ -2664,21 +2659,20 @@ namespace Explorite
                 if (patchActionStage == 1 && ins.opcode == OpCodes.Callvirt && ins.operand == StatWorkerGetValueInfo as object)
                 {
                     patchActionStage++;
-                    yield return ins.Appsb(sb);
-                    yield return new CodeInstruction(OpCodes.Ldarg_0).Appsb(sb);
-                    yield return new CodeInstruction(OpCodes.Ldarga_S, 1).Appsb(sb);
-                    yield return new CodeInstruction(OpCodes.Call, StatRequestGetThingInfo).Appsb(sb);
-                    yield return new CodeInstruction(OpCodes.Ldloc_S, opId).Appsb(sb);
-                    yield return new CodeInstruction(OpCodes.Call, ((Func<float, StatWorker, Thing, StatDef, float>)PostProcessStatFactor).GetMethodInfo()).Appsb(sb);
+                    yield return ins;
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldarga_S, 1);
+                    yield return new CodeInstruction(OpCodes.Call, StatRequestGetThingInfo);
+                    yield return new CodeInstruction(OpCodes.Ldloc_S, opId);
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<float, StatWorker, Thing, StatDef, float>)PostProcessStatFactor).GetMethodInfo());
                     continue;
                 }
                 else
                 {
-                    yield return ins.Appsb(sb);
+                    yield return ins;
                     continue;
                 }
             }
-            Log.Message($"[Explorite]instr result:\n" + sb.ToString());
             yield break;
         }
 
