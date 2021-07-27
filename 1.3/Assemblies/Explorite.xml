@@ -445,6 +445,12 @@
         <member name="M:Explorite.ExploritePatches.PageConfigureIdeoCanDoNextTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>阻止半人马和Sayers阵营选择其他文化。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.StatWorkerGetValueUnfinalizedTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>改变心灵敏感度对半人马心灵熵阈值的影响。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.StatWorkerGetExplanationUnfinalizedTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>改变心灵敏感度对半人马心灵熵阈值的影响的数值显示。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>

@@ -326,6 +326,11 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(Page_ConfigureIdeo), "CanDoNext".App(ref last_patch_method)),
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(PageConfigureIdeoCanDoNextTranspiler)));
 
+                harmonyInstance.Patch(AccessTools.Method(typeof(StatWorker), nameof(StatWorker.GetValueUnfinalized).App(ref last_patch_method)),
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(StatWorkerGetValueUnfinalizedTranspiler)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(StatWorker), nameof(StatWorker.GetExplanationUnfinalized).App(ref last_patch_method)),
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(StatWorkerGetExplanationUnfinalizedTranspiler)));
+
                 if (InstelledMods.HAR)
                 {
                     // 依赖 类 AlienRace.RaceRestrictionSettings
@@ -2408,7 +2413,6 @@ namespace Explorite
                     continue;
                 }
             }
-            //Log.Message($"[Explorite]instr result:\n" + sb.ToString());
             yield break;
         }
 
@@ -2543,6 +2547,138 @@ namespace Explorite
                     continue;
                 }
             }
+            yield break;
+        }
+        public static float PostProcessStatFactor(float value, StatWorker instance, Thing thing, StatDef factorDef)
+        {
+            if (instance.GetType().GetField("stat", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(instance) is StatDef stat
+             && thing is  Pawn pawn && pawn.def == AlienCentaurDef
+             && factorDef == StatDefOf.PsychicSensitivity && stat == StatDefOf.PsychicEntropyMax)
+                {
+                if (value * 3 < 1)
+                {
+                    return value * 3;
+                }
+                else if (value < 3)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return value - 2;
+                }
+
+            }
+            return value;
+        }
+        ///<summary>改变心灵敏感度对半人马心灵熵阈值的影响。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> StatWorkerGetValueUnfinalizedTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            byte patchActionStage = 0;
+            byte proximityStat = 0;
+
+            Queue<CodeInstruction> ins4 = new Queue<CodeInstruction>();
+
+            FieldInfo StatFactorsInfo = typeof(StatDef).GetField("statFactors");
+            MethodInfo StatExtensionGetStatValueInfo = AccessTools.Method(typeof(StatExtension), "GetStatValue");
+            MethodInfo StatRequestGetThingInfo = AccessTools.Method(typeof(StatRequest), "get_Thing");
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0)
+                {
+                    if (proximityStat > 0)
+                    {
+                        proximityStat--;
+                    }
+                    ins4.Enqueue(ins);
+                    if (ins.opcode == OpCodes.Ldfld && ins.operand == StatFactorsInfo as object)
+                    {
+                        proximityStat = 5;
+                    }
+                }
+                if (ins4.Count() > 7)
+                {
+                    ins4.Dequeue();
+                }
+
+                if (proximityStat > 0 && patchActionStage == 0 && ins.opcode == OpCodes.Call && ins.operand == StatExtensionGetStatValueInfo as object)
+                {
+                    patchActionStage++;
+                    yield return ins.Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Ldarg_0).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Ldarga_S,1).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Call, StatRequestGetThingInfo).Appsb(sb);
+                    yield return ins4.Dequeue().Appsb(sb);
+                    yield return ins4.Dequeue().Appsb(sb);
+                    yield return ins4.Dequeue().Appsb(sb);
+                    yield return ins4.Dequeue().Appsb(sb);
+                    yield return ins4.Dequeue().Appsb(sb); ins4.Clear();
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<float, StatWorker, Thing, StatDef, float>)PostProcessStatFactor).GetMethodInfo()).Appsb(sb);
+                    continue;
+                }
+                else
+                {
+                    yield return ins.Appsb(sb);
+                    continue;
+                }
+            }
+            Log.Message($"[Explorite]instr result:\n" + sb.ToString());
+            yield break;
+        }
+        ///<summary>改变心灵敏感度对半人马心灵熵阈值的影响的数值显示。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> StatWorkerGetExplanationUnfinalizedTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            byte patchActionStage = 0;
+            byte proximityStat = 0;
+
+            FieldInfo StatFactorsInfo = typeof(StatDef).GetField("statFactors");
+            MethodInfo StatWorkerGetValueInfo = AccessTools.Method(typeof(StatWorker), "GetValue", new Type[] { typeof(StatRequest), typeof(bool) });
+            MethodInfo StatRequestGetThingInfo = AccessTools.Method(typeof(StatRequest), "get_Thing");
+
+            object opId = null;
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0)
+                {
+                    if (proximityStat > 0)
+                    {
+                        proximityStat--;
+                    }
+                    if (ins.opcode == OpCodes.Ldfld && ins.operand == StatFactorsInfo as object)
+                    {
+                        proximityStat = 4;
+                    }
+                    if (proximityStat > 0 && ins.opcode == OpCodes.Stloc_S)
+                    {
+                        opId = ins.operand;
+                        patchActionStage++;
+                    }
+                }
+
+                if (patchActionStage == 1 && ins.opcode == OpCodes.Callvirt && ins.operand == StatWorkerGetValueInfo as object)
+                {
+                    patchActionStage++;
+                    yield return ins.Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Ldarg_0).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Ldarga_S, 1).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Call, StatRequestGetThingInfo).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Ldloc_S, opId).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<float, StatWorker, Thing, StatDef, float>)PostProcessStatFactor).GetMethodInfo()).Appsb(sb);
+                    continue;
+                }
+                else
+                {
+                    yield return ins.Appsb(sb);
+                    continue;
+                }
+            }
+            Log.Message($"[Explorite]instr result:\n" + sb.ToString());
             yield break;
         }
 
