@@ -184,8 +184,14 @@
         <member name="M:Explorite.ExploritePatches.SkillIntervalPostfix(RimWorld.SkillRecord)">
             <summary>移除半人马每日技能训练上限。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.NoPainBounsForCentaursPostfix(RimWorld.Pawn_PsychicEntropyTracker,System.Single@)">
+        <member name="M:Explorite.ExploritePatches.StatPartPainPainFactorPostfix(Verse.Pawn,System.Single@)">
             <summary>移除半人马的疼痛带来心灵熵消散增益。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.StatPartPainExplanationPartPostfix(RimWorld.StatRequest,System.String@)">
+            <summary>移除半人马的疼痛带来心灵熵消散增益的描述文本。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PsychicEntropyGizmoTryGetPainMultiplierPostfix(RimWorld.PsychicEntropyGizmo,System.Single@,System.Boolean@)">
+            <summary>移除半人马的心灵熵Gizno的疼痛激励显示。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.WandererJoinCannotFirePostfix(RimWorld.IncidentParms,System.Boolean@)">
             <summary>禁用阵营生成流浪者加入事件。</summary>
@@ -396,6 +402,9 @@
         </member>
         <member name="M:Explorite.ExploritePatches.IdeoUtilityCanAddPostfix(RimWorld.MemeDef,System.Collections.Generic.List{RimWorld.MemeDef},RimWorld.FactionDef,System.Boolean@)">
             <summary>更改模因能够兼容的模因。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PawnWoundDrawerRenderOverBodyPrefix(RimWorld.PawnWoundDrawer@)">
+            <summary>禁止伤害渲染。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.IdeoSymbolPartDefCanBeChosenForIdeoPostfix(RimWorld.Ideo,RimWorld.IdeoSymbolPartDef@,System.Boolean@)">
             <summary>更改阵营能够使用的图标。</summary>

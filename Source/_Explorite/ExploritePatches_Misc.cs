@@ -86,9 +86,15 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Interval).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(SkillIntervalPostfix)));
 
-                //TODO: MISSING PATCHING TARGET!
+                //MISSING PATCHING TARGET
                 //harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_PsychicEntropyTracker), "get_PainMultiplier".App(ref last_patch_method)),
                 //    postfix: new HarmonyMethod(patchType, last_patch = nameof(NoPainBounsForCentaursPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(StatPart_Pain), nameof(StatPart_Pain.PainFactor).App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(StatPartPainPainFactorPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(StatPart_Pain), nameof(StatPart_Pain.ExplanationPart).App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(StatPartPainExplanationPartPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(PsychicEntropyGizmo), "TryGetPainMultiplier".App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PsychicEntropyGizmoTryGetPainMultiplierPostfix)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(IncidentWorker_WandererJoin), "CanFireNowSub".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(WandererJoinCannotFirePostfix)));
@@ -278,6 +284,9 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(IdeoUtility), "CanAdd".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(IdeoUtilityCanAddPostfix)));
 
+                harmonyInstance.Patch(AccessTools.Method(typeof(PawnWoundDrawer), nameof(PawnWoundDrawer.RenderOverBody).App(ref last_patch_method)),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(PawnWoundDrawerRenderOverBodyPrefix)));
+
                 harmonyInstance.Patch(AccessTools.Method(typeof(IdeoSymbolPartDef), nameof(IdeoSymbolPartDef.CanBeChosenForIdeo).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(IdeoSymbolPartDefCanBeChosenForIdeoPostfix)));
 
@@ -374,23 +383,48 @@ namespace Explorite
                 __instance.xpSinceMidnight = 0f;
             }
         }
-
+        /*
         ///<summary>移除半人马的疼痛带来心灵熵消散增益。</summary>
         [HarmonyPostfix]public static void NoPainBounsForCentaursPostfix(Pawn_PsychicEntropyTracker __instance, ref float __result)
         {
             if (__instance.Pawn.def == AlienCentaurDef)
                 __result = 1f;
         }
+        */
+        ///<summary>移除半人马的疼痛带来心灵熵消散增益。</summary>
+        [HarmonyPostfix]public static void StatPartPainPainFactorPostfix(Pawn pawn, ref float __result)
+        {
+            if (pawn.def == AlienCentaurDef)
+                __result = 1f;
+        }
+        ///<summary>移除半人马的疼痛带来心灵熵消散增益的描述文本。</summary>
+        [HarmonyPostfix]public static void StatPartPainExplanationPartPostfix(StatRequest req, ref string __result)
+        {
+            if (req.HasThing && req.Thing is Pawn pawn && pawn.def == AlienCentaurDef)
+                __result = null;
+        }
+        ///<summary>移除半人马的心灵熵Gizno的疼痛激励显示。</summary>
+        [HarmonyPostfix]public static void PsychicEntropyGizmoTryGetPainMultiplierPostfix(PsychicEntropyGizmo __instance, ref float painMultiplier, ref bool __result)
+        {
+            if (__instance.GetType().GetField("tracker", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn_PsychicEntropyTracker tracker &&
+                tracker.Pawn.def == AlienCentaurDef)
+            {
+                painMultiplier = 1f;
+                __result = false;
+            }
+        }
 
         ///<summary>禁用阵营生成流浪者加入事件。</summary>
         [HarmonyPostfix]public static void WandererJoinCannotFirePostfix(IncidentParms parms, ref bool __result)
         {
+            /*
             if (Faction.OfPlayer.def == CentaurPlayerColonyDef
              || Faction.OfPlayer.def == SayersPlayerColonyDef
              || Faction.OfPlayer.def == SayersPlayerColonySingleDef
              || Faction.OfPlayer.def == GuoguoPlayerColonyDef
                 )
                 __result = false;
+            */
         }
 
         ///<summary>使半人马可以在太空中靠动力装甲存活。</summary>
@@ -1963,6 +1997,12 @@ namespace Explorite
                     return;
                 }
             }
+        }
+        ///<summary>禁止伤害渲染。</summary>
+        [HarmonyPostfix]public static bool PawnWoundDrawerRenderOverBodyPrefix(ref PawnWoundDrawer __instance)
+        {
+            return !(__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn)
+                || pawn.def != AlienCentaurDef && pawn.def != AlienSayersDef && pawn.def != AlienGuoguoDef;
         }
         ///<summary>更改阵营能够使用的图标。</summary>
         [HarmonyPostfix]public static void IdeoSymbolPartDefCanBeChosenForIdeoPostfix(Ideo ideo, ref IdeoSymbolPartDef __instance, ref bool __result)
