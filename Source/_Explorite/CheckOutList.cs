@@ -223,7 +223,7 @@ namespace Explorite
                     {
                         case "li":
                             XmlAttribute xmlAttribute = node.Attributes["MayRequire"];
-                            Verse.DirectXmlCrossRefLoader.RegisterListWantsCrossRef<T>(objects, node.InnerText, xmlRoot.Name, (xmlAttribute != null) ? xmlAttribute.Value : null);
+                            Verse.DirectXmlCrossRefLoader.RegisterListWantsCrossRef<T>(objects, node.InnerText, xmlRoot.Name, xmlAttribute?.Value);
                             break;
 
                         case "list":

@@ -81,10 +81,14 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(Thing), "get_DefaultGraphic".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(get_Graphic_PostFix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Learn).App(ref last_patch_method)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(SkillLearnPrefix)));
+                //harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Learn).App(ref last_patch_method)),
+                //    prefix: new HarmonyMethod(patchType, last_patch = nameof(SkillLearnPrefix)));
+                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(SkillIntervalPostfix)));
+                //    prefix: new HarmonyMethod(patchType, last_patch = nameof(SkillRecordIntervalPrefix)),
                 harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Interval).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(SkillIntervalPostfix)));
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(SkillRecordIntervalTranspiler)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), "get_LearningSaturatedToday".App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(SkillRecordLearningSaturatedTodayPostfix)));
 
                 //MISSING PATCHING TARGET
                 //harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_PsychicEntropyTracker), "get_PainMultiplier".App(ref last_patch_method)),
@@ -131,14 +135,19 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdExtreme".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(MentalBreaker_BreakThresholdPostfix)));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn), "get_AssigningCandidates".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(AssignToPawnCandidatesPostfix)));
+                //harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn), "get_AssigningCandidates".App(ref last_patch_method)),
+                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(AssignToPawnCandidatesPostfix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn), "get_HasFreeSlot".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(AssignBedToPawnHasFreeSlotPostfix)));
+                    //postfix: new HarmonyMethod(patchType, last_patch = nameof(AssignBedToPawnHasFreeSlotPostfix)),
+                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(AssignBedToPawnHasFreeSlotTranspiler)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn_Bed), nameof(CompAssignableToPawn_Bed.TryAssignPawn).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(AssignBedToPawnTryAssignPawnPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn_Bed), nameof(CompAssignableToPawn_Bed.CanAssignTo).App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(AssignBedToPawnCanAssignToPostfix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(RestUtility), nameof(RestUtility.CanUseBedEver).App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(RestUtilityCanUseBedEverPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(BedUtility), nameof(BedUtility.WillingToShareBed).App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(BedUtilityWillingToShareBedPostfix)));
 
                 harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_GrowthRateFactor_Temperature".App(ref last_patch_method)),
                     postfix: new HarmonyMethod(patchType, last_patch = nameof(PlantGrowthRateFactorNoTemperaturePostfix)));
@@ -331,6 +340,11 @@ namespace Explorite
                 harmonyInstance.Patch(AccessTools.Method(typeof(StatWorker), nameof(StatWorker.GetExplanationUnfinalized).App(ref last_patch_method)),
                     transpiler: new HarmonyMethod(patchType, last_patch = nameof(StatWorkerGetExplanationUnfinalizedTranspiler)));
 
+                harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_Precept_GroinUncovered), nameof(ThoughtWorker_Precept_GroinUncovered.HasUncoveredGroin).App(ref last_patch_method)),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorkerPreceptHasUncoveredPrefix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_Precept_GroinOrChestUncovered), nameof(ThoughtWorker_Precept_GroinOrChestUncovered.HasUncoveredGroinOrChest).App(ref last_patch_method)),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorkerPreceptHasUncoveredPrefix)));
+                
                 if (InstelledMods.HAR)
                 {
                     // 依赖 类 AlienRace.RaceRestrictionSettings
@@ -363,7 +377,7 @@ namespace Explorite
                     ));
             }
         }
-
+        /*
         ///<summary>阻止半人马的技能衰退。</summary>
         [HarmonyPrefix]public static void SkillLearnPrefix(SkillRecord __instance, ref float xp)
         {
@@ -377,6 +391,7 @@ namespace Explorite
             }
         }
 
+
         ///<summary>移除半人马每日技能训练上限。</summary>
         [HarmonyPostfix]public static void SkillIntervalPostfix(SkillRecord __instance)
         {
@@ -388,6 +403,71 @@ namespace Explorite
                 __instance.xpSinceMidnight = 0f;
             }
         }
+        */
+        /*
+        ///<summary>阻止半人马的技能衰退。</summary>
+        [HarmonyPrefix]public static bool SkillRecordIntervalPrefix(SkillRecord __instance)
+        {
+            if (
+                __instance.GetType().GetField("pawn", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                && pawn.def == AlienCentaurDef
+                )
+            {
+                return false;
+            }
+            return true;
+        }
+        */
+        ///<summary>阻止半人马的技能衰退。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> SkillRecordIntervalTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            FieldInfo pawnInfo = typeof(SkillRecord).GetField("pawn", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            FieldInfo thingDefInfo = typeof(Thing).GetField("def", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            Label label1 = ilg.DefineLabel();
+            Label label2 = ilg.DefineLabel();
+            byte patchActionStage = 0;
+
+            yield return new CodeInstruction(OpCodes.Ldarg_0);
+            yield return new CodeInstruction(OpCodes.Ldfld, pawnInfo);
+            yield return new CodeInstruction(OpCodes.Ldfld, thingDefInfo);
+            yield return new CodeInstruction(OpCodes.Ldsfld, typeof(ExploriteCore).GetField(nameof(AlienCentaurDef)));
+            yield return new CodeInstruction(OpCodes.Bne_Un, label1);
+            yield return new CodeInstruction(OpCodes.Ldc_R4, 0f);
+            yield return new CodeInstruction(OpCodes.Br_S, label2);
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0)
+                {
+                    patchActionStage++;
+                    ins.labels.Add(label1);
+                    yield return ins;
+                }
+                else if (patchActionStage == 1 && ins.opcode == OpCodes.Stloc_0)
+                {
+                    patchActionStage++;
+                    ins.labels.Add(label2);
+                    yield return ins;
+                }
+                else
+                {
+                    yield return ins;
+                }
+                continue;
+            }
+            yield break;
+        }
+        ///<summary>移除半人马每日技能训练上限。</summary>
+        [HarmonyPostfix]public static void SkillRecordLearningSaturatedTodayPostfix(SkillRecord __instance, ref bool __result)
+        {
+            if (__result &&
+                __instance.GetType().GetField("pawn", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+                && pawn.def == AlienCentaurDef
+                )
+            {
+                __result = false;
+            }
+        }
+
         /*
         ///<summary>移除半人马的疼痛带来心灵熵消散增益。</summary>
         [HarmonyPostfix]public static void NoPainBounsForCentaursPostfix(Pawn_PsychicEntropyTracker __instance, ref float __result)
@@ -657,8 +737,8 @@ namespace Explorite
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Artistic")   //艺术
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Dignified")  //庄严
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Morbid")     //病态
-                                                                                            //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Minimal")  //简约
-                                                                                            //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Flame")    //火焰
+                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Minimal")  //简约
+                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Flame")    //火焰
                     )
                 )
             {
@@ -683,8 +763,8 @@ namespace Explorite
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Artistic")   //艺术
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Dignified")  //庄严
                     || __instance == DefDatabase<MeditationFocusDef>.GetNamed("Morbid")     //病态
-                                                                                            //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Minimal")  //简约
-                                                                                            //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Flame")    //火焰
+                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Minimal")  //简约
+                    //|| __instance == DefDatabase<MeditationFocusDef>.GetNamed("Flame")    //火焰
                     )
                 )
             {
@@ -694,7 +774,7 @@ namespace Explorite
                     ;
             }
         }
-
+        /*
         ///<summary>对绑定选单进行补丁。</summary>
         [HarmonyPostfix]public static void AssignToPawnCandidatesPostfix(CompAssignableToPawn __instance, ref IEnumerable<Pawn> __result)
         {
@@ -706,7 +786,7 @@ namespace Explorite
                 __result = __result?.Where(pawn => pawn?.def != AlienCentaurDef);
             }
             //向王座选单中加入半人马。
-            /* if (__instance is CompAssignableToPawn_Throne
+            / * if (__instance is CompAssignableToPawn_Throne
                 && __instance.parent.Spawned)
             {
                 List<Pawn> result = __result.ToList();
@@ -716,57 +796,95 @@ namespace Explorite
                         result.Add(pawn);
                 }
                 __result = result;
-            } */
+            } * /
         }
 
         ///<summary>使半人马占满床位。</summary>
         [HarmonyPostfix]public static void AssignBedToPawnHasFreeSlotPostfix(CompAssignableToPawn __instance, ref bool __result)
         {
-            if (__result == true &&
+            if (__result &&
                 __instance is CompAssignableToPawn_Bed)
             {
                 //__result = __instance.AssignedPawns.Count() + __instance.AssignedPawns.Where(pawn => pawn.def == AlienCentaurDef).Count() < __instance.Props.maxAssignedPawnsCount;
-                __result = __instance?.AssignedPawns?.Where(pawn => pawn.def == AlienCentaurDef)?.Count() >= 1;
+                __result = (!__instance?.AssignedPawns?.Any(pawn => pawn.def == AlienCentaurDef)) ?? true;
             }
         }
-
-        ///<summary>使半人马不能与他人同时被添加至同一个床。</summary>
-        [HarmonyPostfix]public static void AssignBedToPawnTryAssignPawnPostfix(CompAssignableToPawn_Bed __instance, Pawn pawn)
+        */
+        public static int CentaursInList(CompAssignableToPawn instance)
         {
-            List<Pawn> pawnsToRemove = new List<Pawn>();
+            if (instance is CompAssignableToPawn_Bed)
+            {
+                return instance.AssignedPawns.Where(p => p.def == AlienCentaurDef).Count();
+            }
+            return 0;
+        }
+        ///<summary>使半人马占用更多床位。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> AssignBedToPawnHasFreeSlotTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            byte patchActionStage = 0;
+            MethodInfo PawnsCountInfo = AccessTools.Method(typeof(List<Pawn>), "get_Count");
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0 && ins.opcode == OpCodes.Callvirt && ins.operand == PawnsCountInfo as object)
+                {
+                    patchActionStage++;
+                    yield return ins;
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<CompAssignableToPawn, int>)CentaursInList).GetMethodInfo());
+                    yield return new CodeInstruction(OpCodes.Add);
+                    continue;
+                }
+                else
+                {
+                    yield return ins;
+                    continue;
+                }
+            }
+            yield break;
+        }
+        ///<summary>使半人马与他人同时被添加至同一个床时被移除绑定。</summary>
+        [HarmonyPostfix]public static void AssignBedToPawnTryAssignPawnPostfix(CompAssignableToPawn __instance, Pawn pawn)
+        {
             if (pawn?.def == AlienCentaurDef)
             {
-                foreach (Pawn one_pawn in __instance.AssignedPawns)
+                foreach (Pawn one_pawn in __instance.AssignedPawns.Where(one_pawn => one_pawn != pawn).ToList())
                 {
-                    if (one_pawn != pawn)
-                        pawnsToRemove.Add(one_pawn);
+                    __instance?.TryUnassignPawn(one_pawn);
                 }
             }
             else
             {
-                foreach (Pawn one_pawn in __instance.AssignedPawns)
+                foreach (Pawn one_pawn in __instance.AssignedPawns.Where(one_pawn => one_pawn.def == AlienCentaurDef).ToList())
                 {
-                    if (one_pawn?.def == AlienCentaurDef)
-                        pawnsToRemove.Add(one_pawn);
+                    __instance?.TryUnassignPawn(one_pawn);
                 }
 
             }
-
-            foreach (Pawn one_pawn in pawnsToRemove)
-            {
-                __instance?.TryUnassignPawn(one_pawn);
-            }
-
         }
-
-        ///<summary>使半人马不能使用小尺寸床铺，使果果床铺不能被其他种族使用。</summary>
+        ///<summary>使半人马不能使用小尺寸床铺。</summary>
+        [HarmonyPostfix]public static void AssignBedToPawnCanAssignToPostfix(CompAssignableToPawn __instance, ref AcceptanceReport __result, Pawn pawn)
+        {
+            if (pawn.def == AlienCentaurDef && __instance.parent.def.Size.Area < 3)
+            {
+                __result = "TooLargeForBed".Translate();
+            }
+        }
+        ///<summary>使半人马不能使用小尺寸床铺。</summary>
         [HarmonyPostfix]public static void RestUtilityCanUseBedEverPostfix(ref bool __result, Pawn p, ThingDef bedDef)
         {
             if (p.def == AlienCentaurDef && bedDef.Size.Area < 3)
             {
                 __result = false;
             }
-            if (p.def != AlienGuoguoDef && bedDef.HasComp(typeof(CompAssignableToPawn_Bed_Guoguo)))
+        }
+        ///<summary>使半人马拒绝与他人共用床铺，使Sayers拒绝与非同族共用床铺。</summary>
+        [HarmonyPostfix]public static void BedUtilityWillingToShareBedPostfix(ref bool __result, Pawn pawn1, Pawn pawn2)
+        {
+            if (pawn1 != pawn2 && (pawn1.def == AlienCentaurDef || pawn2.def == AlienCentaurDef))
+            {
+                __result = false;
+            }
+            if (pawn1.def == AlienSayersDef ^ pawn2.def == AlienSayersDef)
             {
                 __result = false;
             }
@@ -2521,8 +2639,7 @@ namespace Explorite
             return false;
         }
         ///<summary>阻止半人马和Sayers阵营选择其他文化。</summary>
-        [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> PageConfigureIdeoCanDoNextTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> PageConfigureIdeoCanDoNextTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {
             byte patchActionStage = 0;
             MethodInfo FactionOfPlayerInfo = AccessTools.Method(typeof(Faction), "get_OfPlayer");
@@ -2676,5 +2793,15 @@ namespace Explorite
             yield break;
         }
 
+        ///<summary>使半人马和Sayers不被判断为裸体。</summary>
+        [HarmonyPrefix]public static bool ThoughtWorkerPreceptHasUncoveredPrefix(Pawn p, ref bool __result)
+        {
+            if (p.def == AlienCentaurDef || p.def == AlienSayersDef)
+            {
+                __result = false;
+                return false;
+            }
+            return false;
+        }
     }
 }

@@ -261,10 +261,10 @@
         <member name="M:Explorite.ExploritePatches.PrinterTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>打印函数的构造。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.SkillLearnPrefix(RimWorld.SkillRecord,System.Single@)">
+        <member name="M:Explorite.ExploritePatches.SkillRecordIntervalTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>阻止半人马的技能衰退。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.SkillIntervalPostfix(RimWorld.SkillRecord)">
+        <member name="M:Explorite.ExploritePatches.SkillRecordLearningSaturatedTodayPostfix(RimWorld.SkillRecord,System.Boolean@)">
             <summary>移除半人马每日技能训练上限。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.StatPartPainPainFactorPostfix(Verse.Pawn,System.Single@)">
@@ -327,17 +327,20 @@
         <member name="M:Explorite.ExploritePatches.MeditationFocusExplanationPostfix(RimWorld.MeditationFocusDef,System.String@,Verse.Pawn)">
             <summary>为半人马和Sayers补充启用冥想类型的原因。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.AssignToPawnCandidatesPostfix(RimWorld.CompAssignableToPawn,System.Collections.Generic.IEnumerable{Verse.Pawn}@)">
-            <summary>对绑定选单进行补丁。</summary>
+        <member name="M:Explorite.ExploritePatches.AssignBedToPawnHasFreeSlotTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>使半人马占用更多床位。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.AssignBedToPawnHasFreeSlotPostfix(RimWorld.CompAssignableToPawn,System.Boolean@)">
-            <summary>使半人马占满床位。</summary>
+        <member name="M:Explorite.ExploritePatches.AssignBedToPawnTryAssignPawnPostfix(RimWorld.CompAssignableToPawn,Verse.Pawn)">
+            <summary>使半人马与他人同时被添加至同一个床时被移除绑定。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.AssignBedToPawnTryAssignPawnPostfix(RimWorld.CompAssignableToPawn_Bed,Verse.Pawn)">
-            <summary>使半人马不能与他人同时被添加至同一个床。</summary>
+        <member name="M:Explorite.ExploritePatches.AssignBedToPawnCanAssignToPostfix(RimWorld.CompAssignableToPawn,Verse.AcceptanceReport@,Verse.Pawn)">
+            <summary>使半人马不能使用小尺寸床铺。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.RestUtilityCanUseBedEverPostfix(System.Boolean@,Verse.Pawn,Verse.ThingDef)">
-            <summary>使半人马不能使用小尺寸床铺，使果果床铺不能被其他种族使用。</summary>
+            <summary>使半人马不能使用小尺寸床铺。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.BedUtilityWillingToShareBedPostfix(System.Boolean@,Verse.Pawn,Verse.Pawn)">
+            <summary>使半人马拒绝与他人共用床铺，使Sayers拒绝与非同族共用床铺。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PlantGrowthRateFactorNoTemperaturePostfix(RimWorld.Plant,System.Single@)">
             <summary>使指定植物的生长无视环境温度。</summary>
@@ -533,6 +536,9 @@
         </member>
         <member name="M:Explorite.ExploritePatches.StatWorkerGetExplanationUnfinalizedTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>改变心灵敏感度对半人马心灵熵阈值的影响的数值显示。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ThoughtWorkerPreceptHasUncoveredPrefix(Verse.Pawn,System.Boolean@)">
+            <summary>使半人马和Sayers不被判断为裸体。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
