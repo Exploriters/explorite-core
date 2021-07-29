@@ -76,7 +76,7 @@
         <transmitsPower>false</transmitsPower>
       </li>
       <li Class="Explorite.CompProperties_RequireBuildingInPowerNet">
-        <requiredBuildings Mode="All">
+        <!--<requiredBuildings Mode="All">
           <li>Test2_2_Tower</li>
           <li>CommsConsole</li>
 	      <list Mode="Any">
@@ -94,7 +94,7 @@
 		    <li>Barricade</li>
             <li>Campfire</li>
 		  </list>
-        </requiredBuildings>
+        </requiredBuildings>-->
         <errorReportString>Missing powered command tower</errorReportString>
       </li>
     </comps>

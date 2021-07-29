@@ -661,31 +661,28 @@
             <param name="toStringFormat">返回值字符串的格式。</param>
             <returns>被格式化为可读文本的时间。</returns>
         </member>
-        <member name="M:Explorite.ExploriteCore.PawnCanOccupy(Verse.Pawn,Verse.Map,Verse.IntVec3)">
+        <member name="M:Explorite.ExploriteCore.PawnCanOccupy(Verse.Pawn,Verse.TargetInfo)">
             <summary>
             检测人物是否可以占用目标位置。
             </summary>
             <param name="pawn">需要被检测的人物。</param>
-            <param name="map">指定的地图。</param>
-            <param name="loc">一个位置。</param>
+            <param name="target">位置参数。</param>
             <returns>是否可以占用目标位置。</returns>
         </member>
-        <member name="M:Explorite.ExploriteCore.ScanOccupiablePosition(Verse.Pawn,Verse.Map,Verse.IntVec3)">
+        <member name="M:Explorite.ExploriteCore.ScanOccupiablePosition(Verse.Pawn,Verse.TargetInfo)">
             <summary>
             扫描目标周围可被占用的位置。
             </summary>
             <param name="pawn">需要被检测的人物。</param>
-            <param name="map">指定的地图。</param>
-            <param name="loc">一个位置。</param>
+            <param name="target">位置参数。</param>
             <returns>最近的可被占用的位置。若无，则返回<c>null</c>。</returns>
         </member>
-        <member name="M:Explorite.ExploriteCore.TeleportPawn(Verse.Pawn,Verse.Map,Verse.IntVec3)">
+        <member name="M:Explorite.ExploriteCore.TeleportPawn(Verse.Pawn,Verse.TargetInfo)">
             <summary>
             将人物传送到目标位置附近。
             </summary>
             <param name="pawn">需要被传送的人物。</param>
-            <param name="map">指定的地图。</param>
-            <param name="loc">一个位置。</param>
+            <param name="target">位置参数。</param>
             <returns>是否成功地完成了传送。</returns>
         </member>
         <member name="M:Explorite.ExploriteCore.FinalSpawnedParent(Verse.Thing)">
