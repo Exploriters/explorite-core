@@ -40,7 +40,7 @@ namespace Explorite
                     IntVec3 pos = Position;
                     if (pawn.Map == Map)
                     {
-                        if (TeleportPawn(pawn, Map, pos))
+                        if (TeleportPawn(pawn, new TargetInfo(pos, Map)))
                         {
                             Map.fogGrid.RevealFogCluster(pawn.Position);
                         }

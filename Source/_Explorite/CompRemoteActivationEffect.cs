@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using Verse;
+using Verse.Sound;
 
 namespace Explorite
 {
@@ -69,6 +70,10 @@ namespace Explorite
         CompProperties_RemoteActivationEffect_Apparel_ApplyHediff Props => props as CompProperties_RemoteActivationEffect_Apparel_ApplyHediff;
         public override bool ActiveEffect()
         {
+            if (Props.hediff.HasComp(typeof(HediffComp_DisappearsOnDeath)) && Wearer.Dead)
+            {
+                return false;
+            }
             IEnumerable<BodyPartRecord> partrecs = Props.part == null ? new List<BodyPartRecord>(){ null } : Wearer.def.race.body.AllParts.Where(p => p.def == Props.part).InRandomOrder();
             int count = Props.count?.RandomInRange ?? int.MaxValue;
             foreach (BodyPartRecord partrec in partrecs)
@@ -122,6 +127,74 @@ namespace Explorite
         }
     }
 
+    ///<summary>为<see cref = "CompRemoteActivationEffect_PlayEffects" />接收参数。</summary>
+    public class CompProperties_RemoteActivationEffect_PlayEffects : CompProperties_RemoteActivationEffect
+    {
+        public CompProperties_RemoteActivationEffect_PlayEffects()
+        {
+            compClass = typeof(CompRemoteActivationEffect_PlayEffects);
+        }
+        public SoundDef sound;
+        public List<SoundDef> sounds;
+        public FleckDef fleck;
+        public List<FleckDef> flecks;
+        public ThingDef mote;
+        public List<ThingDef> motes;
+        public float scale = 1f;
+        public bool forcedLocateionRelated = false;
+    }
+    ///<summary>响应效果时发出声音以及效果。</summary>
+    public class CompRemoteActivationEffect_PlayEffects : CompRemoteActivationEffect
+    {
+        CompProperties_RemoteActivationEffect_PlayEffects Props => props as CompProperties_RemoteActivationEffect_PlayEffects;
+        public override bool ActiveEffect()
+        {
+            Thing finalParent = parent.FinalSpawnedParent();
+            if (finalParent == null)
+            {
+                return false;
+            }
+            SpawnAll(Props.forcedLocateionRelated ? new TargetInfo(finalParent.Position, finalParent.Map, false) : new TargetInfo(finalParent));
+            return true;
+        }
+        private IEnumerable<T> Combine<T>(T obj, IEnumerable<T> objs)
+        {
+            return ((obj != null ? new T[] { obj } : Enumerable.Empty<T>()).Concat(objs ?? Enumerable.Empty<T>())).Where(obj => obj != null);
+        }
+        private void SpawnAll(TargetInfo target)
+        {
+            foreach (SoundDef sound in Combine(Props.sound, Props.sounds))
+            {
+                sound.PlayOneShot(target);
+            }
+            foreach (ThingDef mote in Combine(Props.mote, Props.motes))
+            {
+                SpawnMote(target, mote);
+            }
+            foreach (FleckDef fleck in Combine(Props.fleck, Props.flecks))
+            {
+                SpawnFleck(target, fleck);
+            }
+        }
+        private void SpawnFleck(TargetInfo target, FleckDef def)
+        {
+            if (target.HasThing)
+            {
+                FleckMaker.AttachedOverlay(target.Thing, def, Vector3.zero, Props.scale, -1f);
+                return;
+            }
+            FleckMaker.Static(target.Cell, target.Map, def, Props.scale);
+        }
+        private void SpawnMote(TargetInfo target, ThingDef def)
+        {
+            if (target.HasThing)
+            {
+                MoteMaker.MakeAttachedOverlay(target.Thing, def, Vector3.zero, Props.scale, -1f);
+                return;
+            }
+            MoteMaker.MakeStaticMote(target.Cell, target.Map, def, Props.scale);
+        }
+    }
     ///<summary>为<see cref = "CompRemoteActivationEffect_Destroy" />接收参数。</summary>
     public class CompProperties_RemoteActivationEffect_Destroy : CompProperties_RemoteActivationEffect
     {
@@ -275,15 +348,15 @@ namespace Explorite
                 effecter.Trigger(new TargetInfo(pos, map, false), new TargetInfo(pos, map, false));
                 effecter.Cleanup();
             }
-            Thing instigator;
+            Thing instigator = null;
             /*if (this.instigator != null && (!this.instigator.HostileTo(this.parent.Faction) || this.parent.Faction == Faction.OfPlayer))
             {
                 parent = this.instigator;
             }
-            else*/
+            else
             {
                 instigator = parent;
-            }
+            }*/
             GenExplosion.DoExplosion(
                 center: pos,
                 map: map,

@@ -55,7 +55,7 @@ namespace Explorite
                 {
                     yield return effect;
                 }
-                if (thing is Pawn pawn)
+                if ((thing as Pawn ?? (thing as Corpse)?.InnerPawn) is Pawn pawn)
                 {
                     foreach (Apparel apparel in pawn.apparel?.WornApparel ?? Enumerable.Empty<Apparel>())
                     {

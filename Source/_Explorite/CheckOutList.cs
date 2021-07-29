@@ -182,8 +182,8 @@ namespace Explorite
                         case "and":
                             mode = CheckOutListMode.All;
                             break;
-                        case "Any":
                         case "any":
+                        case "or":
                             mode = CheckOutListMode.Any;
                             break;
                         case "neither":

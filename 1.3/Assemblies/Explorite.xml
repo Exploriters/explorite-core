@@ -209,6 +209,12 @@
         <member name="T:Explorite.CompRemoteActivationEffect_Apparel_ApplyDamage">
             <summary>响应效果时为穿戴者施加伤害。</summary>
         </member>
+        <member name="T:Explorite.CompProperties_RemoteActivationEffect_PlayEffects">
+            <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_PlayEffects" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompRemoteActivationEffect_PlayEffects">
+            <summary>响应效果时发出声音以及效果。</summary>
+        </member>
         <member name="T:Explorite.CompProperties_RemoteActivationEffect_Destroy">
             <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_Destroy" />接收参数。</summary>
         </member>
