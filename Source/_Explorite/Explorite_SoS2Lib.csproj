@@ -76,6 +76,7 @@
     <Compile Include="Building_ShipTurretTorpedo.cs" />
     <Compile Include="ScenPart_StartInSpaceCentaur.cs" />
     <Compile Include="SoS2Reflection.cs" />
+    <Compile Include="_AssemblyInfo_SoS2_Lib.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

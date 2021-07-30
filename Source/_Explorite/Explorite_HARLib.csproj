@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlienRace.cs" />
+    <Compile Include="_AssemblyInfo_HAR_Lib.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

@@ -736,6 +736,21 @@
         <member name="M:Explorite.ExploriteDebugActions.FinishHyperManipulatorInstell(Verse.Pawn)">
             <summary>完成半人马身体部件极其漫长的整备时间。</summary>
         </member>
+        <member name="M:Explorite.ExploriteDebugActions.MoveUp">
+            <summary>向上移动选中的物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.MoveRight">
+            <summary>向右移动选中的物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.MoveDown">
+            <summary>向下移动选中的物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.MoveLeft">
+            <summary>向左移动选中的物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.RuinThis">
+            <summary>。</summary>
+        </member>
         <member name="T:Explorite.ExploriteMod">
             <summary>Explorite模组信息类。</summary>
         </member>

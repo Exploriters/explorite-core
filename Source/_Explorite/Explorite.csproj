@@ -191,6 +191,7 @@
     <Compile Include="Verb.cs" />
     <Compile Include="Verb_RemoteActivator.cs" />
     <Compile Include="Verb_SensitivityToggle.cs" />
+    <Compile Include="_AssemblyInfo_Core_Lib.cs" />
     <Compile Include="_AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
