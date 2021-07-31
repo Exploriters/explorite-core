@@ -159,7 +159,7 @@ namespace Explorite
         }
         private IEnumerable<T> Combine<T>(T obj, IEnumerable<T> objs)
         {
-            return ((obj != null ? new T[] { obj } : Enumerable.Empty<T>()).Concat(objs ?? Enumerable.Empty<T>())).Where(obj => obj != null);
+            return (obj != null ? new T[] { obj } : Enumerable.Empty<T>()).Concat(objs ?? Enumerable.Empty<T>()).Where(obj => obj != null);
         }
         private void SpawnAll(TargetInfo target)
         {

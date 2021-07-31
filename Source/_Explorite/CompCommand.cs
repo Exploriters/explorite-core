@@ -113,7 +113,7 @@ namespace Explorite
             }
             else
             {
-                command_CompCommand.icon = ((verb.UIIcon != BaseContent.BadTex) ? verb.UIIcon : gear.def.uiIcon);
+                command_CompCommand.icon = (verb.UIIcon != BaseContent.BadTex) ? verb.UIIcon : gear.def.uiIcon;
                 command_CompCommand.iconAngle = gear.def.uiIconAngle;
                 command_CompCommand.iconOffset = gear.def.uiIconOffset;
                 command_CompCommand.defaultIconColor = gear.DrawColor;

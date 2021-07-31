@@ -6,6 +6,7 @@ using HarmonyLib;
 using RimWorld;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -26,7 +27,80 @@ namespace Explorite
     [StaticConstructorOnStartup]
     internal static partial class ExploritePatches
     {
+        public enum ExplortiePatchActionRecordState : byte
+        {
+            Unresolved = 0,
+            Success = 1,
+            Failed = 2,
+        }
+        public class ExplortiePatchActionRecord
+        {
+            public MethodBase original;
+            public string prefix;
+            public string postfix;
+            public string transpiler;
+            public string finalizer;
+            public ExplortiePatchActionRecordState state;
+
+            public ExplortiePatchActionRecord(MethodBase original, string prefix = null, string postfix = null, string transpiler = null, string finalizer = null)
+            {
+                this.original = original;
+                this.prefix = prefix;
+                this.postfix = postfix;
+                this.transpiler = transpiler;
+                this.finalizer = finalizer;
+                state = ExplortiePatchActionRecordState.Unresolved;
+            }
+            public MethodInfo Patch()
+            {
+                state = ExplortiePatchActionRecordState.Success;
+                try
+                {
+                    return harmonyInstance.Patch(
+                        original: original,
+                        prefix: prefix == null ? null : new HarmonyMethod(patchType, prefix),
+                        postfix: postfix == null ? null : new HarmonyMethod(patchType, postfix),
+                        transpiler: transpiler == null ? null : new HarmonyMethod(patchType, transpiler),
+                        finalizer: finalizer == null ? null : new HarmonyMethod(patchType, finalizer)
+                        );
+                }
+                catch (Exception e)
+                {
+                    Log.Error(string.Concat(
+                        "[Explorite]Patch sequence failare at ",
+                        $"{original.FullDescription()}, ",
+                        prefix != null ? "prefix: " + prefix + ", " : "",
+                        postfix != null ? "postfix: " + postfix + ", " : "",
+                        transpiler != null ? "transpiler: " + transpiler + ", " : "",
+                        finalizer != null ? "finalizer: " + finalizer + ", " : "",
+                        ", ",
+                        $"an exception ({e.GetType().Name}) occurred.\n",
+                        $"Message:\n   {e.Message}\n",
+                        $"Stack Trace:\n{e.StackTrace}\n"
+                        ));
+                }
+                state = ExplortiePatchActionRecordState.Failed;
+                return null;
+            }
+        }
+        internal static readonly List<ExplortiePatchActionRecord> records = new List<ExplortiePatchActionRecord>();
         internal static readonly Type patchType = typeof(ExploritePatches);
+
+        static string PrintPatches()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (ExplortiePatchActionRecord record in records)
+            {
+                stringBuilder.AppendLine(string.Concat(
+                    $"{record.original.FullDescription()}",
+                    record.prefix != null ? $"\n - prefix: {record.prefix}" : "",
+                    record.postfix != null ? $"\n - postfix: {record.postfix}" : "",
+                    record.transpiler != null ? $"\n - transpiler: {record.transpiler}" : "",
+                    record.finalizer != null ? $"\n - finalizer: {record.finalizer}" : ""
+                    ));
+            }
+            return stringBuilder.ToString();
+        }
         private static string App(this string str, ref string target)
         {
             return target = str;
@@ -36,24 +110,23 @@ namespace Explorite
             stringBuilder.AppendLine(obj.ToString());
             return obj;
         }
+        //Patch(AccessTools.Method(typeof(DamageWorker), nameof(DamageWorker.ExplosionCellsToHit), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
+        //    transpiler: nameof(PrinterTranspiler));
+        //Patch(AccessTools.Method(typeof(DamageWorker_Tes1), nameof(DamageWorker_Tes1.ExplosionCellsToHit), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
+        //    transpiler: nameof(PrinterTranspiler));
+        //Patch(AccessTools.Method(typeof(DamageWorker_Tes2), nameof(DamageWorker_Tes2.ExplosionCellsToHit), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
+        //    transpiler: nameof(PrinterTranspiler));
+        //Patch(AccessTools.Method(typeof(ExploritePatches), nameof(LocalTest1)),
+        //    transpiler: nameof(PrinterTranspiler));
+        //Patch(AccessTools.Method(typeof(ExploritePatches), nameof(LocalTest2)),
+        //    transpiler: nameof(PrinterTranspiler));
+        //Patch(AccessTools.Method(typeof(ExploritePatches), nameof(Fun6)),
+        //    transpiler: nameof(PrinterTranspiler));
 
-        //harmonyInstance.Patch(AccessTools.Method(typeof(DamageWorker), nameof(DamageWorker.ExplosionCellsToHit).App(ref last_patch_method), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
-        //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
-        //harmonyInstance.Patch(AccessTools.Method(typeof(DamageWorker_Tes1), nameof(DamageWorker_Tes1.ExplosionCellsToHit).App(ref last_patch_method), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
-        //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
-        //harmonyInstance.Patch(AccessTools.Method(typeof(DamageWorker_Tes2), nameof(DamageWorker_Tes2.ExplosionCellsToHit).App(ref last_patch_method), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
-        //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
-        //harmonyInstance.Patch(AccessTools.Method(typeof(ExploritePatches), nameof(LocalTest1).App(ref last_patch_method)),
-        //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
-        //harmonyInstance.Patch(AccessTools.Method(typeof(ExploritePatches), nameof(LocalTest2).App(ref last_patch_method)),
-        //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
-        //harmonyInstance.Patch(AccessTools.Method(typeof(ExploritePatches), nameof(Fun6).App(ref last_patch_method)),
-        //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
-
-        //harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_WearingColor), "CurrentStateInternal".App(ref last_patch_method)),
-        //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
-        //harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_WearingColorX2), "CurrentStateInternal".App(ref last_patch_method)),
-        //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
+        //Patch(AccessTools.Method(typeof(ThoughtWorker_WearingColor), "CurrentStateInternal"),
+        //    transpiler: nameof(PrinterTranspiler));
+        //Patch(AccessTools.Method(typeof(ThoughtWorker_WearingColorX2), "CurrentStateInternal"),
+        //    transpiler: nameof(PrinterTranspiler));
         ///<summary>打印函数的构造。</summary>
         [HarmonyTranspiler]public static IEnumerable<CodeInstruction> PrinterTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
         {
@@ -67,322 +140,342 @@ namespace Explorite
             Log.Message("[Explorite]instr result:\n" + stringBuilder.ToString());
             yield break;
         }
+        static MethodInfo Patch(MethodBase original, string prefix = null, string postfix = null, string transpiler = null, string finalizer = null)
+        {
+            ExplortiePatchActionRecord record = new ExplortiePatchActionRecord(original, prefix, postfix, transpiler, finalizer);
+            records.Add(record);
+            return record.Patch();
+        }
         static ExploritePatches()
         {
-            string last_patch = "NULL-FIX";
-            string last_patch_method = "NO-METHOD";
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             try
             {
-                harmonyInstance.Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn).App(ref last_patch_method), new[] { typeof(PawnGenerationRequest) }),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(GeneratePawnPostfix)));
+                Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new[] { typeof(PawnGenerationRequest) }),
+                    postfix: nameof(GeneratePawnPostfix));
 
-                harmonyInstance.Patch(typeof(PawnRenderer).GetMethod(nameof(PawnRenderer.DrawEquipmentAiming).App(ref last_patch_method)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(DrawEquipmentAimingPrefix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Thing), "get_DefaultGraphic".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(get_Graphic_PostFix)));
+                Patch(typeof(PawnRenderer).GetMethod(nameof(PawnRenderer.DrawEquipmentAiming)),
+                    prefix: nameof(DrawEquipmentAimingPrefix));
+                Patch(AccessTools.Method(typeof(Thing), "get_DefaultGraphic"),
+                    postfix: nameof(get_Graphic_PostFix));
 
-                //harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Learn).App(ref last_patch_method)),
-                //    prefix: new HarmonyMethod(patchType, last_patch = nameof(SkillLearnPrefix)));
-                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(SkillIntervalPostfix)));
-                //    prefix: new HarmonyMethod(patchType, last_patch = nameof(SkillRecordIntervalPrefix)),
-                harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Interval).App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(SkillRecordIntervalTranspiler)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(SkillRecord), "get_LearningSaturatedToday".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(SkillRecordLearningSaturatedTodayPostfix)));
+                //Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Learn)),
+                //    prefix: nameof(SkillLearnPrefix));
+                //    postfix: nameof(SkillIntervalPostfix));
+                //    prefix: nameof(SkillRecordIntervalPrefix),
+                Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Interval)),
+                    transpiler: nameof(SkillRecordIntervalTranspiler));
+                Patch(AccessTools.Method(typeof(SkillRecord), "get_LearningSaturatedToday"),
+                    postfix: nameof(SkillRecordLearningSaturatedTodayPostfix));
 
                 //MISSING PATCHING TARGET
-                //harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_PsychicEntropyTracker), "get_PainMultiplier".App(ref last_patch_method)),
-                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(NoPainBounsForCentaursPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(StatPart_Pain), nameof(StatPart_Pain.PainFactor).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(StatPartPainPainFactorPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(StatPart_Pain), nameof(StatPart_Pain.ExplanationPart).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(StatPartPainExplanationPartPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(PsychicEntropyGizmo), "TryGetPainMultiplier".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PsychicEntropyGizmoTryGetPainMultiplierPostfix)));
+                //Patch(AccessTools.Method(typeof(Pawn_PsychicEntropyTracker), "get_PainMultiplier"),
+                //    postfix: nameof(NoPainBounsForCentaursPostfix));
+                Patch(AccessTools.Method(typeof(StatPart_Pain), nameof(StatPart_Pain.PainFactor)),
+                    postfix: nameof(StatPartPainPainFactorPostfix));
+                Patch(AccessTools.Method(typeof(StatPart_Pain), nameof(StatPart_Pain.ExplanationPart)),
+                    postfix: nameof(StatPartPainExplanationPartPostfix));
+                Patch(AccessTools.Method(typeof(PsychicEntropyGizmo), "TryGetPainMultiplier"),
+                    postfix: nameof(PsychicEntropyGizmoTryGetPainMultiplierPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(IncidentWorker_WandererJoin), "CanFireNowSub".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(WandererJoinCannotFirePostfix)));
+                Patch(AccessTools.Method(typeof(IncidentWorker_WandererJoin), "CanFireNowSub"),
+                    postfix: nameof(WandererJoinCannotFirePostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Outdoors), "get_Disabled".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(NeedOutdoors_DisabledPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Mood), nameof(Need_Mood.GetTipString).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(NeedMood_GetTipStringPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Need), nameof(Need.DrawOnGUI).App(ref last_patch_method)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(Need_DrawOnGUIPrefix)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(Need_DrawOnGUIPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(NeedsCardUtility), "DrawThoughtListing".App(ref last_patch_method)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(NeedsCardUtilityDrawThoughtListingPrefix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Seeker), nameof(Need_Seeker.NeedInterval).App(ref last_patch_method)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(Need_NeedIntervalPrefix)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(Need_NeedIntervalPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Need_Food), "get_MaxLevel".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(NeedMaxLevelPostfix)));
+                Patch(AccessTools.Method(typeof(Need_Outdoors), "get_Disabled"),
+                    postfix: nameof(NeedOutdoors_DisabledPostfix));
+                Patch(AccessTools.Method(typeof(Need_Mood), nameof(Need_Mood.GetTipString)),
+                    postfix: nameof(NeedMood_GetTipStringPostfix));
+                Patch(AccessTools.Method(typeof(Need), nameof(Need.DrawOnGUI)),
+                    prefix: nameof(Need_DrawOnGUIPrefix),
+                    postfix: nameof(Need_DrawOnGUIPostfix));
+                Patch(AccessTools.Method(typeof(NeedsCardUtility), "DrawThoughtListing"),
+                    prefix: nameof(NeedsCardUtilityDrawThoughtListingPrefix));
+                Patch(AccessTools.Method(typeof(Need_Seeker), nameof(Need_Seeker.NeedInterval)),
+                    prefix: nameof(Need_NeedIntervalPrefix),
+                    postfix: nameof(Need_NeedIntervalPostfix));
+                Patch(AccessTools.Method(typeof(Need_Food), "get_MaxLevel"),
+                    postfix: nameof(NeedMaxLevelPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_NeedComfort), "CurrentStateInternal".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorker_NeedComfort_CurrentStateInternalPostfix)));
+                Patch(AccessTools.Method(typeof(ThoughtWorker_NeedComfort), "CurrentStateInternal"),
+                    postfix: nameof(ThoughtWorker_NeedComfort_CurrentStateInternalPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.CanPawnUse).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(MeditationFocusCanPawnUsePostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.EnablingThingsExplanation).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(MeditationFocusExplanationPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(RecipeDef), "get_AvailableNow".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(RecipeDefAvailableNowPostfix)));
+                Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.CanPawnUse)),
+                    postfix: nameof(MeditationFocusCanPawnUsePostfix));
+                Patch(AccessTools.Method(typeof(MeditationFocusDef), nameof(MeditationFocusDef.EnablingThingsExplanation)),
+                    postfix: nameof(MeditationFocusExplanationPostfix));
+                Patch(AccessTools.Method(typeof(RecipeDef), "get_AvailableNow"),
+                    postfix: nameof(RecipeDefAvailableNowPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdMinor".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(MentalBreaker_BreakThresholdPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdMajor".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(MentalBreaker_BreakThresholdPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdExtreme".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(MentalBreaker_BreakThresholdPostfix)));
+                Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdMinor"),
+                    postfix: nameof(MentalBreaker_BreakThresholdPostfix));
+                Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdMajor"),
+                    postfix: nameof(MentalBreaker_BreakThresholdPostfix));
+                Patch(AccessTools.Method(typeof(MentalBreaker), "get_BreakThresholdExtreme"),
+                    postfix: nameof(MentalBreaker_BreakThresholdPostfix));
 
-                //harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn), "get_AssigningCandidates".App(ref last_patch_method)),
-                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(AssignToPawnCandidatesPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn), "get_HasFreeSlot".App(ref last_patch_method)),
-                    //postfix: new HarmonyMethod(patchType, last_patch = nameof(AssignBedToPawnHasFreeSlotPostfix)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(AssignBedToPawnHasFreeSlotTranspiler)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn_Bed), nameof(CompAssignableToPawn_Bed.TryAssignPawn).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(AssignBedToPawnTryAssignPawnPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(CompAssignableToPawn_Bed), nameof(CompAssignableToPawn_Bed.CanAssignTo).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(AssignBedToPawnCanAssignToPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(RestUtility), nameof(RestUtility.CanUseBedEver).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(RestUtilityCanUseBedEverPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(BedUtility), nameof(BedUtility.WillingToShareBed).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(BedUtilityWillingToShareBedPostfix)));
+                //Patch(AccessTools.Method(typeof(CompAssignableToPawn), "get_AssigningCandidates"),
+                //    postfix: nameof(AssignToPawnCandidatesPostfix));
+                Patch(AccessTools.Method(typeof(CompAssignableToPawn), "get_HasFreeSlot"),
+                    //postfix: nameof(AssignBedToPawnHasFreeSlotPostfix),
+                    transpiler: nameof(AssignBedToPawnHasFreeSlotTranspiler));
+                Patch(AccessTools.Method(typeof(CompAssignableToPawn_Bed), nameof(CompAssignableToPawn_Bed.TryAssignPawn)),
+                    postfix: nameof(AssignBedToPawnTryAssignPawnPostfix));
+                Patch(AccessTools.Method(typeof(CompAssignableToPawn_Bed), nameof(CompAssignableToPawn_Bed.CanAssignTo)),
+                    postfix: nameof(AssignBedToPawnCanAssignToPostfix));
+                Patch(AccessTools.Method(typeof(RestUtility), nameof(RestUtility.CanUseBedEver)),
+                    postfix: nameof(RestUtilityCanUseBedEverPostfix));
+                Patch(AccessTools.Method(typeof(BedUtility), nameof(BedUtility.WillingToShareBed)),
+                    postfix: nameof(BedUtilityWillingToShareBedPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_GrowthRateFactor_Temperature".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PlantGrowthRateFactorNoTemperaturePostfix)));
-                //harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_Resting".App(ref last_patch_method)),
-                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(PlantNoRestingPostfix)));
-                //harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_GrowthRate".App(ref last_patch_method)),
-                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(PlantGrowthRateFactorEnsurePostfix)));
-                //harmonyInstance.Patch(AccessTools.Method(typeof(Plant), "get_LeaflessNow".App(ref last_patch_method)),
-                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(PlantLeaflessNowPostfix)));
+                Patch(AccessTools.Method(typeof(Plant), "get_GrowthRateFactor_Temperature"),
+                    postfix: nameof(PlantGrowthRateFactorNoTemperaturePostfix));
+                //Patch(AccessTools.Method(typeof(Plant), "get_Resting"),
+                //    postfix: nameof(PlantNoRestingPostfix));
+                //Patch(AccessTools.Method(typeof(Plant), "get_GrowthRate"),
+                //    postfix: nameof(PlantGrowthRateFactorEnsurePostfix));
+                //Patch(AccessTools.Method(typeof(Plant), "get_LeaflessNow"),
+                //    postfix: nameof(PlantLeaflessNowPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(MinifiedThing), nameof(MinifiedThing.Destroy).App(ref last_patch_method)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(MinifiedThingDestroyPrefix)));
+                Patch(AccessTools.Method(typeof(MinifiedThing), nameof(MinifiedThing.Destroy)),
+                    prefix: nameof(MinifiedThingDestroyPrefix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Alert_NeedBatteries), "NeedBatteries".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(AlertNeedBatteriesPostfix)));
+                Patch(AccessTools.Method(typeof(Alert_NeedBatteries), "NeedBatteries"),
+                    postfix: nameof(AlertNeedBatteriesPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(JobGiver_GetFood), "TryGiveJob".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(GetFoodTryGiveJobPostfix)));
+                Patch(AccessTools.Method(typeof(JobGiver_GetFood), "TryGiveJob"),
+                    postfix: nameof(GetFoodTryGiveJobPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_HealthTracker), "get_InPainShock".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnHealthTrackerInPainShockPostfix)));
+                Patch(AccessTools.Method(typeof(Pawn_HealthTracker), "get_InPainShock"),
+                    postfix: nameof(PawnHealthTrackerInPainShockPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(MassUtility), nameof(MassUtility.Capacity).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(MassUtilityCapacityPostfix)));
+                Patch(AccessTools.Method(typeof(MassUtility), nameof(MassUtility.Capacity)),
+                    postfix: nameof(MassUtilityCapacityPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(HediffComp_GetsPermanent), "set_IsPermanent".App(ref last_patch_method)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(HediffComp_GetsPermanentIsPermanentPrefix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(HediffComp_TendDuration), "get_AllowTend".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(HediffComp_TendDurationAllowTendPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(HediffComp_ReactOnDamage), nameof(HediffComp_ReactOnDamage.Notify_PawnPostApplyDamage).App(ref last_patch_method)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(HediffComp_ReactOnDamageNotify_PawnPostApplyDamagePrefix)));
+                Patch(AccessTools.Method(typeof(HediffComp_GetsPermanent), "set_IsPermanent"),
+                    prefix: nameof(HediffComp_GetsPermanentIsPermanentPrefix));
+                Patch(AccessTools.Method(typeof(HediffComp_TendDuration), "get_AllowTend"),
+                    postfix: nameof(HediffComp_TendDurationAllowTendPostfix));
+                Patch(AccessTools.Method(typeof(HediffComp_ReactOnDamage), nameof(HediffComp_ReactOnDamage.Notify_PawnPostApplyDamage)),
+                    prefix: nameof(HediffComp_ReactOnDamageNotify_PawnPostApplyDamagePrefix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(StatPart_ApparelStatOffset), nameof(StatPart.TransformValue).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PsychicSensitivityPostfix)));
+                Patch(AccessTools.Method(typeof(StatPart_ApparelStatOffset), nameof(StatPart.TransformValue)),
+                    postfix: nameof(PsychicSensitivityPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(PawnGraphicSet), nameof(PawnGraphicSet.ResolveAllGraphics).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnGraphicSetResolveAllGraphicsPostfix)));
+                Patch(AccessTools.Method(typeof(PawnGraphicSet), nameof(PawnGraphicSet.ResolveAllGraphics)),
+                    postfix: nameof(PawnGraphicSetResolveAllGraphicsPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(CompAffectedByFacilities), nameof(CompAffectedByFacilities.CanPotentiallyLinkTo_Static).App(ref last_patch_method), new Type[] { typeof(ThingDef), typeof(IntVec3), typeof(Rot4), typeof(ThingDef), typeof(IntVec3), typeof(Rot4) }),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(CompAffectedByFacilitiesCanPotentiallyLinkToStaticPostfix)));
+                Patch(AccessTools.Method(typeof(CompAffectedByFacilities), nameof(CompAffectedByFacilities.CanPotentiallyLinkTo_Static), new Type[] { typeof(ThingDef), typeof(IntVec3), typeof(Rot4), typeof(ThingDef), typeof(IntVec3), typeof(Rot4) }),
+                    postfix: nameof(CompAffectedByFacilitiesCanPotentiallyLinkToStaticPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(PawnGraphicSet), nameof(PawnGraphicSet.ResolveApparelGraphics).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnGraphicSetResolveApparelGraphicsPostfix)));
+                Patch(AccessTools.Method(typeof(PawnGraphicSet), nameof(PawnGraphicSet.ResolveApparelGraphics)),
+                    postfix: nameof(PawnGraphicSetResolveApparelGraphicsPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.DegreeOfTrait).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetDegreeOfTraitPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.HasTrait).App(ref last_patch_method), new Type[] { typeof(TraitDef) }),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetHasTraitPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.HasTrait).App(ref last_patch_method), new Type[] { typeof(TraitDef), typeof(int) }),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetHasTraitDegreePostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.GetTrait).App(ref last_patch_method), new Type[] { typeof(TraitDef) }),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetGetTraitPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.GetTrait).App(ref last_patch_method), new Type[] { typeof(TraitDef), typeof(int) }),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(TraitSetGetTraitDegreePostfix)));
+                Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.DegreeOfTrait)),
+                    postfix: nameof(TraitSetDegreeOfTraitPostfix));
+                Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.HasTrait), new Type[] { typeof(TraitDef) }),
+                    postfix: nameof(TraitSetHasTraitPostfix));
+                Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.HasTrait), new Type[] { typeof(TraitDef), typeof(int) }),
+                    postfix: nameof(TraitSetHasTraitDegreePostfix));
+                Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.GetTrait), new Type[] { typeof(TraitDef) }),
+                    postfix: nameof(TraitSetGetTraitPostfix));
+                Patch(AccessTools.Method(typeof(TraitSet), nameof(TraitSet.GetTrait), new Type[] { typeof(TraitDef), typeof(int) }),
+                    postfix: nameof(TraitSetGetTraitDegreePostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(RaceProperties), nameof(RaceProperties.SpecialDisplayStats).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(RacePropertiesSpecialDisplayStatsPostfix)));
+                Patch(AccessTools.Method(typeof(RaceProperties), nameof(RaceProperties.SpecialDisplayStats)),
+                    postfix: nameof(RacePropertiesSpecialDisplayStatsPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(StatWorker), nameof(StatWorker.ShouldShowFor).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(StatWorkerShouldShowForPostfix)));
+                Patch(AccessTools.Method(typeof(StatWorker), nameof(StatWorker.ShouldShowFor)),
+                    postfix: nameof(StatWorkerShouldShowForPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.Recipe_RemoveBodyPart"), "GetPartsToApplyOn".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(RecipeRemoveBodyPartGetPartsToApplyOnPostfix)));
+                Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.Recipe_RemoveBodyPart"), "GetPartsToApplyOn"),
+                    postfix: nameof(RecipeRemoveBodyPartGetPartsToApplyOnPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(OutfitDatabase), "GenerateStartingOutfits".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(OutfitDatabaseGenerateStartingOutfitsPostfix)));
-                //harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_OutfitTracker), "get_CurrentOutfit".App(ref last_patch_method)),
-                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnOutfitTrackerGetCurrentOutfitPostfix)));
+                Patch(AccessTools.Method(typeof(OutfitDatabase), "GenerateStartingOutfits"),
+                    postfix: nameof(OutfitDatabaseGenerateStartingOutfitsPostfix));
+                //Patch(AccessTools.Method(typeof(Pawn_OutfitTracker), "get_CurrentOutfit"),
+                //    postfix: nameof(PawnOutfitTrackerGetCurrentOutfitPostfix));
 
-                //harmonyInstance.Patch(AccessTools.Method(typeof(GenHostility), nameof(GenHostility.HostileTo), new Type[] { typeof(Thing), typeof(Thing) }),
-                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(GenHostilityHostileToPostfix)));
+                //Patch(AccessTools.Method(typeof(GenHostility), nameof(GenHostility.HostileTo), new Type[] { typeof(Thing), typeof(Thing) }),
+                //    postfix: nameof(GenHostilityHostileToPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.ThreatDisabled).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnThreatDisabledPostfix)));
+                Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.ThreatDisabled)),
+                    postfix: nameof(PawnThreatDisabledPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(ApparelProperties), nameof(ApparelProperties.GetCoveredOuterPartsString).App(ref last_patch_method)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(ApparelPropertiesGetCoveredOuterPartsStringPostfix)));
+                Patch(AccessTools.Method(typeof(ApparelProperties), nameof(ApparelProperties.GetCoveredOuterPartsString)),
+                    prefix: nameof(ApparelPropertiesGetCoveredOuterPartsStringPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(ThingMaker), nameof(ThingMaker.MakeThing).App(ref last_patch_method)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(ThingMakerMakeThingPrefix)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(ThingMakerMakeThingPostfix)));
+                Patch(AccessTools.Method(typeof(ThingMaker), nameof(ThingMaker.MakeThing)),
+                    prefix: nameof(ThingMakerMakeThingPrefix),
+                    postfix: nameof(ThingMakerMakeThingPostfix));
 
-                //harmonyInstance.Patch(AccessTools.Method(typeof(GenRecipe), nameof(GenRecipe.MakeRecipeProducts).App(ref last_patch_method)),
-                //    prefix: new HarmonyMethod(patchType, last_patch = nameof(GenRecipeMakeRecipeProductsPrefix)),
-                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(GenRecipeMakeRecipeProductsPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(GenRecipe), "PostProcessProduct".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(GenRecipePostProcessProductPostfix)));
+                //Patch(AccessTools.Method(typeof(GenRecipe), nameof(GenRecipe.MakeRecipeProducts)),
+                //    prefix: nameof(GenRecipeMakeRecipeProductsPrefix),
+                //    postfix: nameof(GenRecipeMakeRecipeProductsPostfix));
+                Patch(AccessTools.Method(typeof(GenRecipe), "PostProcessProduct"),
+                    postfix: nameof(GenRecipePostProcessProductPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(RimWorld.Planet.FactionGiftUtility), "GetBaseGoodwillChange".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(FactionGiftUtilityGetBaseGoodwillChangePostfix)));
+                Patch(AccessTools.Method(typeof(RimWorld.Planet.FactionGiftUtility), "GetBaseGoodwillChange"),
+                    postfix: nameof(FactionGiftUtilityGetBaseGoodwillChangePostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(InspirationHandler), nameof(InspirationHandler.GetRandomAvailableInspirationDef).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(InspirationHandlerGetRandomAvailableInspirationDefPostfix)));
+                Patch(AccessTools.Method(typeof(InspirationHandler), nameof(InspirationHandler.GetRandomAvailableInspirationDef)),
+                    postfix: nameof(InspirationHandlerGetRandomAvailableInspirationDefPostfix));
 
-                nameof(DamageInfo).App(ref last_patch_method);
-                harmonyInstance.Patch(AccessTools.Constructor(typeof(DamageInfo),
+                Patch(AccessTools.Constructor(typeof(DamageInfo),
                     parameters: new Type[] { typeof(DamageDef), typeof(float), typeof(float), typeof(float), typeof(Thing), typeof(BodyPartRecord), typeof(ThingDef), typeof(SourceCategory), typeof(Thing), typeof(bool), typeof(bool) }),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(DamageInfoCtorPrefix)));
+                    prefix: nameof(DamageInfoCtorPrefix));
 
-                nameof(BattleLogEntry_ExplosionImpact).App(ref last_patch_method);
-                harmonyInstance.Patch(AccessTools.Constructor(typeof(BattleLogEntry_ExplosionImpact),
+                Patch(AccessTools.Constructor(typeof(BattleLogEntry_ExplosionImpact),
                     parameters: new Type[] { typeof(Thing), typeof(Thing), typeof(ThingDef), typeof(ThingDef), typeof(DamageDef) }),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(BattleLogEntry_ExplosionImpactCtorPrefix)));
+                    prefix: nameof(BattleLogEntry_ExplosionImpactCtorPrefix));
 
-                //harmonyInstance.Patch(AccessTools.Method(typeof(Projectile), nameof(Projectile.Launch).App(ref last_patch_method),
+                //Patch(AccessTools.Method(typeof(Projectile), nameof(Projectile.Launch),
                 //    parameters: new Type[] { typeof(Thing), typeof(Vector3), typeof(LocalTargetInfo), typeof(LocalTargetInfo), typeof(ProjectileHitFlags), typeof(Thing), typeof(ThingDef)}),
-                //    postfix: new HarmonyMethod(patchType, last_patch = nameof(ProjectileLaunchPostfix)));
+                //    postfix: nameof(ProjectileLaunchPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(HealthCardUtility), "GetListPriority".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(HealthCardUtilityGetListPriorityPostfix)));
+                Patch(AccessTools.Method(typeof(HealthCardUtility), "GetListPriority"),
+                    postfix: nameof(HealthCardUtilityGetListPriorityPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(TendUtility), nameof(TendUtility.CalculateBaseTendQuality).App(ref last_patch_method), new Type[] { typeof(Pawn), typeof(Pawn), typeof(float), typeof(float) }),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(TendUtilityCalculateBaseTendQualityPrefix)));
+                Patch(AccessTools.Method(typeof(TendUtility), nameof(TendUtility.CalculateBaseTendQuality), new Type[] { typeof(Pawn), typeof(Pawn), typeof(float), typeof(float) }),
+                    prefix: nameof(TendUtilityCalculateBaseTendQualityPrefix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(QuestPart_DropPods), "set_Things".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(QuestPartDropPodsSetThingsPostfix)));
+                Patch(AccessTools.Method(typeof(QuestPart_DropPods), "set_Things"),
+                    postfix: nameof(QuestPartDropPodsSetThingsPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(ResearchProjectDef), "get_CanStartNow".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(ResearchProjectDefCanStartNowPostfix)));
+                Patch(AccessTools.Method(typeof(ResearchProjectDef), "get_CanStartNow"),
+                    postfix: nameof(ResearchProjectDefCanStartNowPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Building_TurretGun), "get_IsMortarOrProjectileFliesOverhead".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(BuildingTurretGunIsMortarOrProjectileFliesOverheadPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Building_TurretGun), "get_CanSetForcedTarget".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(BuildingTurretGunCanSetForcedTargetPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Building_TurretGun), "TryStartShootSomething".App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(BuildingTurretGunTryStartShootSomethingTranspiler)));
+                Patch(AccessTools.Method(typeof(Building_TurretGun), "get_IsMortarOrProjectileFliesOverhead"),
+                    postfix: nameof(BuildingTurretGunIsMortarOrProjectileFliesOverheadPostfix));
+                Patch(AccessTools.Method(typeof(Building_TurretGun), "get_CanSetForcedTarget"),
+                    postfix: nameof(BuildingTurretGunCanSetForcedTargetPostfix));
+                Patch(AccessTools.Method(typeof(Building_TurretGun), "TryStartShootSomething"),
+                    transpiler: nameof(BuildingTurretGunTryStartShootSomethingTranspiler));
 
-                //harmonyInstance.Patch(AccessTools.Method(typeof(PawnCapacitiesHandler), nameof(PawnCapacitiesHandler.GetLevel).App(ref last_patch_method)),
-                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PawnCapacitiesHandlerGetLevelTranspiler)));
+                //Patch(AccessTools.Method(typeof(PawnCapacitiesHandler), nameof(PawnCapacitiesHandler.GetLevel)),
+                //    transpiler: nameof(PawnCapacitiesHandlerGetLevelTranspiler));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(PawnCapacityUtility), nameof(PawnCapacityUtility.CalculateCapacityLevel).App(ref last_patch_method)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(PawnCapacityUtilityCalculateCapacityLevelPrefix)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(PawnCapacityUtilityCalculateCapacityLevelPostfix)));
+                Patch(AccessTools.Method(typeof(PawnCapacityUtility), nameof(PawnCapacityUtility.CalculateCapacityLevel)),
+                    prefix: nameof(PawnCapacityUtilityCalculateCapacityLevelPrefix),
+                    postfix: nameof(PawnCapacityUtilityCalculateCapacityLevelPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Projectile), "ImpactSomething".App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(ProjectileImpactSomethingTranspiler)));
+                Patch(AccessTools.Method(typeof(Projectile), "ImpactSomething"),
+                    transpiler: nameof(ProjectileImpactSomethingTranspiler));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(DamageWorker), nameof(DamageWorker.ExplosionCellsToHit).App(ref last_patch_method), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(DamageWorkerExplosionCellsToHitTranspiler)));
+                Patch(AccessTools.Method(typeof(DamageWorker), nameof(DamageWorker.ExplosionCellsToHit), new Type[] { typeof(IntVec3), typeof(Map), typeof(float), typeof(IntVec3?), typeof(IntVec3?) }),
+                    transpiler: nameof(DamageWorkerExplosionCellsToHitTranspiler));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(IdeoUtility), nameof(IdeoUtility.IsMemeAllowedFor).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(IdeoUtilityIsMemeAllowedForPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(IdeoUtility), "CanAdd".App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(IdeoUtilityCanAddPostfix)));
+                Patch(AccessTools.Method(typeof(IdeoUtility), nameof(IdeoUtility.IsMemeAllowedFor)),
+                    postfix: nameof(IdeoUtilityIsMemeAllowedForPostfix));
+                Patch(AccessTools.Method(typeof(IdeoUtility), "CanAdd"),
+                    postfix: nameof(IdeoUtilityCanAddPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(PawnWoundDrawer), nameof(PawnWoundDrawer.RenderOverBody).App(ref last_patch_method)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(PawnWoundDrawerRenderOverBodyPrefix)));
+                Patch(AccessTools.Method(typeof(PawnWoundDrawer), nameof(PawnWoundDrawer.RenderOverBody)),
+                    prefix: nameof(PawnWoundDrawerRenderOverBodyPrefix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(IdeoSymbolPartDef), nameof(IdeoSymbolPartDef.CanBeChosenForIdeo).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(IdeoSymbolPartDefCanBeChosenForIdeoPostfix)));
+                Patch(AccessTools.Method(typeof(IdeoSymbolPartDef), nameof(IdeoSymbolPartDef.CanBeChosenForIdeo)),
+                    postfix: nameof(IdeoSymbolPartDefCanBeChosenForIdeoPostfix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_WearingColor), "CurrentStateInternal".App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorkerWearingColorCurrentStateInternalTranspilerB)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Dialog_StylingStation), "DrawApparelColor".App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(DialogStylingStationDrawApparelColorTranspiler)));
+                Patch(AccessTools.Method(typeof(ThoughtWorker_WearingColor), "CurrentStateInternal"),
+                    transpiler: nameof(ThoughtWorkerWearingColorCurrentStateInternalTranspilerB));
+                Patch(AccessTools.Method(typeof(Dialog_StylingStation), "DrawApparelColor"),
+                    transpiler: nameof(DialogStylingStationDrawApparelColorTranspiler));
 
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(RitualBehaviorWorker_Conversion), nameof(RitualBehaviorWorker_Conversion.CanStartRitualNow).App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(RitualBehaviorWorkerCanStartRitualNowTranspiler_Conversion)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(RitualBehaviorWorker_Speech), nameof(RitualBehaviorWorker_Speech.CanStartRitualNow).App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(RitualBehaviorWorkerCanStartRitualNowTranspiler_Speech)));
+                Patch(AccessTools.Method(typeof(RitualBehaviorWorker_Conversion), nameof(RitualBehaviorWorker_Conversion.CanStartRitualNow)),
+                    transpiler: nameof(RitualBehaviorWorkerCanStartRitualNowTranspiler_Conversion));
+                Patch(AccessTools.Method(typeof(RitualBehaviorWorker_Speech), nameof(RitualBehaviorWorker_Speech.CanStartRitualNow)),
+                    transpiler: nameof(RitualBehaviorWorkerCanStartRitualNowTranspiler_Speech));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(IdeoFoundation), nameof(IdeoFoundation.RandomizeCulture).App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(IdeoFoundationRandomizeCultureTranspiler)));
+                Patch(AccessTools.Method(typeof(IdeoFoundation), nameof(IdeoFoundation.RandomizeCulture)),
+                    transpiler: nameof(IdeoFoundationRandomizeCultureTranspiler));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Page_ConfigureIdeo), nameof(Page_ConfigureIdeo.PostOpen).App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PageConfigureIdeoPostOpenTranspiler)));
+                Patch(AccessTools.Method(typeof(Page_ConfigureIdeo), nameof(Page_ConfigureIdeo.PostOpen)),
+                    transpiler: nameof(PageConfigureIdeoPostOpenTranspiler));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Dialog_ChooseMemes), "CanUseMeme".App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(DialogChooseMemesPlayerNHiddenOffTranspiler)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Dialog_ChooseMemes), "CanRemoveMeme".App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(DialogChooseMemesPlayerNHiddenOffTranspiler)));
+                Patch(AccessTools.Method(typeof(Dialog_ChooseMemes), "CanUseMeme"),
+                    transpiler: nameof(DialogChooseMemesPlayerNHiddenOffTranspiler));
+                Patch(AccessTools.Method(typeof(Dialog_ChooseMemes), "CanRemoveMeme"),
+                    transpiler: nameof(DialogChooseMemesPlayerNHiddenOffTranspiler));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(IdeoUIUtility), nameof(IdeoUIUtility.FactionForRandomization).App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(IdeoUIUtilityFactionForRandomizationTranspiler)));
+                Patch(AccessTools.Method(typeof(IdeoUIUtility), nameof(IdeoUIUtility.FactionForRandomization)),
+                    transpiler: nameof(IdeoUIUtilityFactionForRandomizationTranspiler));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(IdeoUIUtility), "DoName".App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(StrangeMethodFinderTranspiler)));
-                harmonyInstance.Patch(strangeMethod,
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(IdeoUIUtility_MT_LT_c__DisplayClass59_0__MT_DoName_LT_g____CultureAllowed_1_Transpiler)));
+                Patch(AccessTools.Method(typeof(IdeoUIUtility), "DoName"),
+                    transpiler: nameof(StrangeMethodFinderTranspiler));
+                Patch(strangeMethod,
+                    transpiler: nameof(IdeoUIUtility_MT_LT_c__DisplayClass59_0__MT_DoName_LT_g____CultureAllowed_1_Transpiler));
 
-                //harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.IdeoUIUtility.<>c__DisplayClass59_0"), "<DoName>g__CultureAllowed|1".App(ref last_patch_method)),
-                //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PrinterTranspiler)));
+                //Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.IdeoUIUtility.<>c__DisplayClass59_0"), "<DoName>g__CultureAllowed|1"),
+                //    transpiler: nameof(PrinterTranspiler));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(Page_ConfigureIdeo), "CanDoNext".App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(PageConfigureIdeoCanDoNextTranspiler)));
+                Patch(AccessTools.Method(typeof(Page_ConfigureIdeo), "CanDoNext"),
+                    transpiler: nameof(PageConfigureIdeoCanDoNextTranspiler));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(StatWorker), nameof(StatWorker.GetValueUnfinalized).App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(StatWorkerGetValueUnfinalizedTranspiler)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(StatWorker), nameof(StatWorker.GetExplanationUnfinalized).App(ref last_patch_method)),
-                    transpiler: new HarmonyMethod(patchType, last_patch = nameof(StatWorkerGetExplanationUnfinalizedTranspiler)));
+                Patch(AccessTools.Method(typeof(StatWorker), nameof(StatWorker.GetValueUnfinalized)),
+                    transpiler: nameof(StatWorkerGetValueUnfinalizedTranspiler));
+                Patch(AccessTools.Method(typeof(StatWorker), nameof(StatWorker.GetExplanationUnfinalized)),
+                    transpiler: nameof(StatWorkerGetExplanationUnfinalizedTranspiler));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_Precept_GroinUncovered), nameof(ThoughtWorker_Precept_GroinUncovered.HasUncoveredGroin).App(ref last_patch_method)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorkerPreceptHasUncoveredPrefix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_Precept_GroinOrChestUncovered), nameof(ThoughtWorker_Precept_GroinOrChestUncovered.HasUncoveredGroinOrChest).App(ref last_patch_method)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorkerPreceptHasUncoveredPrefix)));
+                Patch(AccessTools.Method(typeof(ThoughtWorker_Precept_GroinUncovered), nameof(ThoughtWorker_Precept_GroinUncovered.HasUncoveredGroin)),
+                    prefix: nameof(ThoughtWorkerPreceptHasUncoveredPrefix));
+                Patch(AccessTools.Method(typeof(ThoughtWorker_Precept_GroinOrChestUncovered), nameof(ThoughtWorker_Precept_GroinOrChestUncovered.HasUncoveredGroinOrChest)),
+                    prefix: nameof(ThoughtWorkerPreceptHasUncoveredPrefix));
 
-                harmonyInstance.Patch(AccessTools.Method(typeof(RoyalTitleDef), nameof(RoyalTitleDef.GetBedroomRequirements).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(RoyalTitleDefGetBedroomRequirementsPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(ApparelRequirement), nameof(ApparelRequirement.IsMet).App(ref last_patch_method)),
-                    postfix: new HarmonyMethod(patchType, last_patch = nameof(ApparelRequirementIsMetPostfix)));
-                harmonyInstance.Patch(AccessTools.Method(typeof(Ideo), "get_ApparelColor".App(ref last_patch_method)),
-                    prefix: new HarmonyMethod(patchType, last_patch = nameof(IdeoApparelColorPrefix)));
-                
+                Patch(AccessTools.Method(typeof(RoyalTitleDef), nameof(RoyalTitleDef.GetBedroomRequirements)),
+                    postfix: nameof(RoyalTitleDefGetBedroomRequirementsPostfix));
+                Patch(AccessTools.Method(typeof(ApparelRequirement), nameof(ApparelRequirement.IsMet)),
+                    postfix: nameof(ApparelRequirementIsMetPostfix));
+                Patch(AccessTools.Method(typeof(Ideo), "get_ApparelColor"),
+                    prefix: nameof(IdeoApparelColorPrefix));
+
                 if (InstelledMods.HAR)
                 {
                     // 依赖 类 AlienRace.RaceRestrictionSettings
-                    harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("AlienRace.RaceRestrictionSettings"), "CanWear".App(ref last_patch_method)),
-                        postfix: new HarmonyMethod(patchType, last_patch = nameof(RaceRestrictionSettingsCanWearPostfix)));
+                    Patch(AccessTools.Method(AccessTools.TypeByName("AlienRace.RaceRestrictionSettings"), "CanWear"),
+                        postfix: nameof(RaceRestrictionSettingsCanWearPostfix));
 
                     //// 依赖 类 AlienRace.RaceRestrictionSettings
-                    //harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("AlienRace.HarmonyPatches"), "ChooseStyleItemPrefix".App(ref last_patch_method)),
-                    //    transpiler: new HarmonyMethod(patchType, last_patch = nameof(AlienRaceHarmonyPatchesChooseStyleItemPrefix)));
+                    //Patch(AccessTools.Method(AccessTools.TypeByName("AlienRace.HarmonyPatches"), "ChooseStyleItemPrefix"),
+                    //    transpiler: nameof(AlienRaceHarmonyPatchesChooseStyleItemPrefix));
                 }
                 if (InstelledMods.SoS2)
                 {
                     // 依赖 类 SaveOurShip2.ShipInteriorMod2
-                    harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("SaveOurShip2.ShipInteriorMod2"), "HasSpaceSuitSlow".App(ref last_patch_method), new[] { typeof(Pawn) }),
-                        postfix: new HarmonyMethod(patchType, last_patch = nameof(HasSpaceSuitSlowPostfix)));
+                    Patch(AccessTools.Method(AccessTools.TypeByName("SaveOurShip2.ShipInteriorMod2"), "HasSpaceSuitSlow", new[] { typeof(Pawn) }),
+                        postfix: nameof(HasSpaceSuitSlowPostfix));
 
                     // 依赖 类 RimWorld.ThoughtWorker_SpaceThoughts
-                    harmonyInstance.Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.ThoughtWorker_SpaceThoughts"), "CurrentStateInternal".App(ref last_patch_method)),
-                        postfix: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorker_SpaceThoughts_CurrentStateInternalPostfix)));
+                    Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.ThoughtWorker_SpaceThoughts"), "CurrentStateInternal"),
+                        postfix: nameof(ThoughtWorker_SpaceThoughts_CurrentStateInternalPostfix));
                 }
             }
-            catch (Exception e)
+            catch(Exception e)
             {
+                ExplortiePatchActionRecord last = records.Last();
                 Log.Error(string.Concat(
-                    "[Explorite]Patch sequence failare at ",
-                    $"{last_patch}, {last_patch_method}, ",
+                    "[Explorite]Patch sequence crashed, last patch were ",
+                    $"{last.original.FullDescription()}, ",
+                    last.prefix != null ? "prefix: " + last.prefix + ", " : "",
+                    last.postfix != null ? "postfix: " + last.postfix + ", " : "",
+                    last.transpiler != null ? "transpiler: " + last.transpiler + ", " : "",
+                    last.finalizer != null ? "finalizer: " + last.finalizer + ", " : "",
+                    ", ",
                     $"an exception ({e.GetType().Name}) occurred.\n",
                     $"Message:\n   {e.Message}\n",
                     $"Stack Trace:\n{e.StackTrace}\n"
                     ));
             }
+            stopwatch.Stop();
+            Log.Message($"[Explorite]Patch sequence complete, solved total {records.Count()} patches, " +
+                $"{records.Count(d=>d.state == ExplortiePatchActionRecordState.Success)} success, " +
+                $"{records.Count(d=>d.state == ExplortiePatchActionRecordState.Failed)} failed, " +
+                $"{records.Count(d=>d.state == ExplortiePatchActionRecordState.Unresolved)} unresolved, " +
+                $"in {stopwatch.ElapsedMilliseconds}ms.\n"+ PrintPatches());
+            Log.Message($"[Explorite]All patch targets:\n" +
+                string.Join("\n", records.OrderBy(r => $"{r.original.Name}({ r.original.GetParameters().Join(p => $"{p.ParameterType.FullDescription()} {p.Name}")})").Select(r=> r.original.FullDescription()).Distinct())
+                );
         }
         /*
         ///<summary>阻止半人马的技能衰退。</summary>
