@@ -344,6 +344,13 @@ namespace Explorite
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorkerPreceptHasUncoveredPrefix)));
                 harmonyInstance.Patch(AccessTools.Method(typeof(ThoughtWorker_Precept_GroinOrChestUncovered), nameof(ThoughtWorker_Precept_GroinOrChestUncovered.HasUncoveredGroinOrChest).App(ref last_patch_method)),
                     prefix: new HarmonyMethod(patchType, last_patch = nameof(ThoughtWorkerPreceptHasUncoveredPrefix)));
+
+                harmonyInstance.Patch(AccessTools.Method(typeof(RoyalTitleDef), nameof(RoyalTitleDef.GetBedroomRequirements).App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(RoyalTitleDefGetBedroomRequirementsPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(ApparelRequirement), nameof(ApparelRequirement.IsMet).App(ref last_patch_method)),
+                    postfix: new HarmonyMethod(patchType, last_patch = nameof(ApparelRequirementIsMetPostfix)));
+                harmonyInstance.Patch(AccessTools.Method(typeof(Ideo), "get_ApparelColor".App(ref last_patch_method)),
+                    prefix: new HarmonyMethod(patchType, last_patch = nameof(IdeoApparelColorPrefix)));
                 
                 if (InstelledMods.HAR)
                 {
@@ -2801,7 +2808,52 @@ namespace Explorite
                 __result = false;
                 return false;
             }
-            return false;
+            return true;
+        }
+
+        ///<summary>使半人马的头衔建筑物需求使用半人马床而非其他床铺。</summary>
+        [HarmonyPostfix]public static void RoyalTitleDefGetBedroomRequirementsPostfix(Pawn p, RoyalTitleDef __instance, ref IEnumerable<RoomRequirement> __result)
+        {
+            if (p.def == AlienCentaurDef)//__instance.tags.Contains("EmpireTitle") && 
+            {
+                foreach (RoomRequirement roomRequirement in __result)
+                {
+                    if (roomRequirement is RoomRequirement_ThingAnyOf thingsRequirement && thingsRequirement.things.Any(tdef => tdef.HasComp(typeof(CompAssignableToPawn_Bed))) && !thingsRequirement.things.Contains(CentaurBedDef))
+                    {
+                        thingsRequirement.things.Add(CentaurBedDef);
+                    }
+                }
+            }
+        }
+        ///<summary>使半人马的头衔服装需求需要半人马衣物，使Sayers的头衔服装需求不需要衣物。</summary>
+        [HarmonyPostfix]public static void ApparelRequirementIsMetPostfix(Pawn p, ApparelRequirement __instance, ref bool __result)
+        {
+            if (!__result && p.def == AlienSayersDef)
+            {
+                __result = true;
+                return;
+            }
+            if (!__result && p.def == AlienCentaurDef)
+            {
+                foreach (Apparel apparel in p.apparel.WornApparel)
+                {
+                    if (apparel.def.apparel.tags.Contains("CentaurRoyale"))
+                    {
+                        __result = true;
+                        return;
+                    }
+                }
+            }
+        }
+        ///<summary>锁定文化代表颜色。</summary>
+        [HarmonyPrefix]public static bool IdeoApparelColorPrefix(Ideo __instance, ref Color __result)
+        {
+            if (__instance.memes.Any(meme => meme is MemeDef_Ex meEx && meEx.lockAccuIdeoColor))
+            {
+                __result = __instance.Color;
+                return false;
+            }
+            return true;
         }
     }
 }

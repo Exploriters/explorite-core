@@ -80,6 +80,7 @@ namespace Explorite
         public static readonly ThingDef ThermoDamperDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "ThermoDamper");
         public static readonly ThingDef OrangiceDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Orangice");
         public static readonly ThingDef HyperTrishotTurretBuildingDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Turret_HyperTrishot");
+        public static readonly ThingDef CentaurBedDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "CentaurBed");
         public static readonly HediffDef HyperManipulatorHediffDef = GetModDef<HediffDef>(InstelledMods.RimCentaurs, "HyperManipulator");
         public static readonly HediffDef PsychicDeafHediffDef = GetModDef<HediffDef>(InstelledMods.RimCentaurs, "PsychicDeafCentaur");
         public static readonly HediffDef SubsystemBlankHediffDef = GetModDef<HediffDef>(InstelledMods.RimCentaurs, "CentaurSubsystem_BlankBlank");

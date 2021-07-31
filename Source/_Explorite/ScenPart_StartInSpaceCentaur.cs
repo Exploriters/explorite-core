@@ -94,7 +94,7 @@ namespace Explorite
 
             //Thing targetTorpedo = null;
             //IntVec3 torpedoToLocation = new IntVec3(0, 0, 0);
-            //IntVec3? sunLampLocation = null;
+            IntVec3? sunLampLocation = null;
             foreach (Thing thing in spaceMap.listerThings.AllThings.ToList())
             {
                 try
@@ -107,12 +107,10 @@ namespace Explorite
                             thingInside?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
                         }
                     }
-                    /*
                     if (sunLampLocation == null && thing.def == DefDatabase<ThingDef>.GetNamed("SunLamp"))
                     {
                         sunLampLocation = thing.Position;
                     }
-                    */
                     if (thing?.TryGetComp<CompForbiddable>() is CompForbiddable compForbiddable)
                     {
                         compForbiddable.Forbidden = thing.def == ThingDefOf.ComponentIndustrial;
@@ -160,6 +158,7 @@ namespace Explorite
                         )
                     {
                         compFlickable.SwitchIsOn = false;
+                        typeof(CompFlickable).GetField("wantSwitchOn").SetValue(compFlickable, false);
                     }
                     if (thing?.TryGetComp<CompRechargeable>() is CompRechargeable compRechargeable)
                     {
@@ -170,7 +169,7 @@ namespace Explorite
                         ThingDef oofType = null;
                         if (compRoofMe.Props.archotech)
                         {
-                            oofType = DefDatabase<ThingDef>.GetNamed("ShipHullTileMech");
+                            oofType = DefDatabase<ThingDef>.GetNamed("ShipHullTileArchotech");
                         }
                         else if (compRoofMe.Props.mechanoid)
                         {
@@ -330,6 +329,10 @@ namespace Explorite
                 }
                 catch { }
             }*/
+            if (sunLampLocation != null)
+            {
+                CameraJumper.TryJump(sunLampLocation.Value, spaceMap);
+            }
             spaceMap.fogGrid.ClearAllFog();
             }
 
@@ -434,7 +437,8 @@ namespace Explorite
                 }
             }
             spaceMap.fogGrid.ClearAllFog();
-            Current.Game.DeinitAndRemoveMap(Find.CurrentMap);
+            //Current.Game.DeinitAndRemoveMap(Find.CurrentMap);
+            Find.CurrentMap.Parent.Destroy();
             CameraJumper.TryJump(spaceMap.Center, spaceMap);
             spaceMap.weatherManager.curWeather = WeatherDef.Named("OuterSpaceWeather");
             spaceMap.weatherManager.lastWeather = WeatherDef.Named("OuterSpaceWeather");

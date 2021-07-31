@@ -540,6 +540,15 @@
         <member name="M:Explorite.ExploritePatches.ThoughtWorkerPreceptHasUncoveredPrefix(Verse.Pawn,System.Boolean@)">
             <summary>使半人马和Sayers不被判断为裸体。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.RoyalTitleDefGetBedroomRequirementsPostfix(Verse.Pawn,RimWorld.RoyalTitleDef,System.Collections.Generic.IEnumerable{RimWorld.RoomRequirement}@)">
+            <summary>使半人马的头衔建筑物需求使用半人马床而非其他床铺。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ApparelRequirementIsMetPostfix(Verse.Pawn,RimWorld.ApparelRequirement,System.Boolean@)">
+            <summary>使半人马的头衔服装需求需要半人马衣物，使Sayers的头衔服装需求不需要衣物。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoApparelColorPrefix(RimWorld.Ideo,UnityEngine.Color@)">
+            <summary>锁定文化代表颜色。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>

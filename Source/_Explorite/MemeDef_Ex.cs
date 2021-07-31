@@ -14,5 +14,6 @@ namespace Explorite
         [NoTranslate]
         public string islocateGroup;
         public List<FactionDef> exclusiveTo;
+        public bool lockAccuIdeoColor = false;
     }
 }
