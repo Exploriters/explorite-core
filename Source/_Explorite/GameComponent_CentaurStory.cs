@@ -57,6 +57,10 @@ namespace Explorite
             return tracedTrishots = tracedTrishots.Distinct().ToList();
         }
         public IEnumerable<Thing> ValidTrishots => CleanUp();
+        public bool Any()
+        {
+            return tracedTrishots.Any();
+        }
         public bool TryAdd(Thing thing)
         {
             if (ValidTrishotPredicate(thing))

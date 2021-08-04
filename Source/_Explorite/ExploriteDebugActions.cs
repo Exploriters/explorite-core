@@ -19,6 +19,37 @@ namespace Explorite
 #pragma warning disable IDE0051 // 删除未使用的私有成员
     static partial class ExploriteDebugActions
     {
+        private static IEnumerable<DebugMenuOption> KeepOutOption(Action action, int fallbackCount = 9)
+        {
+            DebugMenuOption fallback = new DebugMenuOption("Cancel", DebugMenuOptionMode.Action, delegate () { });
+            DebugMenuOption todo = new DebugMenuOption("--- Confirm ---", DebugMenuOptionMode.Action, action);
+            List<DebugMenuOption> result = new List<DebugMenuOption>();
+            result.Add(todo);
+            for (int i = 0; i < fallbackCount; i++)
+            {
+                result.Add(fallback);
+            }
+            return result.InRandomOrder();
+        }
+        private static void FalseOption(Action action, int depth)
+        {
+            if (depth <= 0)
+            {
+                action();
+                return;
+            }
+            List<DebugMenuOption> result = new List<DebugMenuOption>();
+            for (int i = 0; i < 26; i++)
+            {
+                result.Add(new DebugMenuOption(((char)('a' + i)).ToString(), DebugMenuOptionMode.Action, delegate () { FalseOption(delegate () { }, depth - 1); }));
+            }
+            DebugMenuOption[] result2 = result.InRandomOrder().ToArray();
+            result2[result2.First().label[0] - 'a'].method = delegate () { FalseOption(action, depth - 1); };
+
+            Find.WindowStack.Add(new Dialog_DebugOptionListLister(result2));
+        }
+
+
         ///<summary>清除所有迷雾。</summary>
         [DebugAction(category: "Explorite", name: "Clear fog at...", allowedGameStates = AllowedGameStates.PlayingOnMap,
             actionType = DebugActionType.ToolMap)]
@@ -53,15 +84,7 @@ namespace Explorite
         private static void FrozenWholeMapWater()
         {
             List<DebugMenuOption> list = new List<DebugMenuOption>();
-
-            int confirmNum = (int)Math.Floor(Rand.Value * 10);
-            DebugMenuOption blank = new DebugMenuOption("Cancel", DebugMenuOptionMode.Action, delegate () { });
-
-            for (int i = 0; i < confirmNum; i++)
-            {
-                list.Add(blank);
-            }
-            list.Add(new DebugMenuOption("--- Confirm ---", DebugMenuOptionMode.Action, delegate ()
+            Find.WindowStack.Add(new Dialog_DebugOptionListLister(KeepOutOption(delegate ()
             {
                 int count = Find.CurrentMap.terrainGrid.topGrid.Count();
                 TerrainDef Marsh = DefDatabase<TerrainDef>.GetNamed("Marsh");
@@ -82,12 +105,7 @@ namespace Explorite
                 Find.CurrentMap.mapDrawer.WholeMapChanged(MapMeshFlag.Terrain);
                 //Find.CurrentMap.pathGrid.RecalculateAllPerceivedPathCosts();
                 Find.CurrentMap.pathing.RecalculateAllPerceivedPathCosts();
-            }));
-            for (int i = 0; i < 9 - confirmNum; i++)
-            {
-                list.Add(blank);
-            }
-            Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
+            })));
         }
         ///<summary>完成半人马身体部件极其漫长的整备时间。</summary>
         [DebugAction(category: "Explorite", name: "Complete HyperManipulator", allowedGameStates = AllowedGameStates.PlayingOnMap,
@@ -100,6 +118,99 @@ namespace Explorite
             {
                 hediff.Severity = hediff.def.maxSeverity;
             }
+        }
+        private static void MoveSomewhere(IntVec3 offset)
+        {
+            foreach (object obj in Find.Selector.SelectedObjects)
+            {
+                if (obj is Thing thing)
+                {
+                    thing.Position += offset;
+                    if (thing is Pawn pawn)
+                    {
+                        pawn.Notify_Teleported();
+                    }
+                }
+            }
+        }
+        ///<summary>向上移动选中的物体。</summary>
+        [DebugAction(category: "Explorite", name: "Move z+ (^)", allowedGameStates = AllowedGameStates.PlayingOnMap,
+            actionType = DebugActionType.Action)]
+        private static void MoveUp()
+        {
+            MoveSomewhere(new IntVec3(0, 0, 1));
+        }
+        ///<summary>向右移动选中的物体。</summary>
+        [DebugAction(category: "Explorite", name: "Move x+ (>)", allowedGameStates = AllowedGameStates.PlayingOnMap,
+            actionType = DebugActionType.Action)]
+        private static void MoveRight()
+        {
+            MoveSomewhere(new IntVec3(1, 0, 0));
+        }
+        ///<summary>向下移动选中的物体。</summary>
+        [DebugAction(category: "Explorite", name: "Move z- (v)", allowedGameStates = AllowedGameStates.PlayingOnMap,
+            actionType = DebugActionType.Action)]
+        private static void MoveDown()
+        {
+            MoveSomewhere(new IntVec3(0, 0, -1));
+        }
+        ///<summary>向左移动选中的物体。</summary>
+        [DebugAction(category: "Explorite", name: "Move x- (<)", allowedGameStates = AllowedGameStates.PlayingOnMap,
+            actionType = DebugActionType.Action)]
+        private static void MoveLeft()
+        {
+            MoveSomewhere(new IntVec3(-1, 0, 0));
+        }
+
+        ///<summary>。</summary>
+        [DebugAction(category: "Explorite", name: "Cataclysm", allowedGameStates = AllowedGameStates.PlayingOnMap,
+            actionType = DebugActionType.Action)]
+        private static void RuinThis()
+        {
+            List<DebugMenuOption> list = new List<DebugMenuOption>();
+            FalseOption(delegate ()
+            {
+                Map map = Find.CurrentMap;
+
+                map.fogGrid.ClearAllFog();
+
+                int count = map.terrainGrid.topGrid.Count();
+                TerrainDef Marsh = DefDatabase<TerrainDef>.GetNamed("Marsh");
+                for (int i = 0; i < count; i++)
+                {
+                    Find.CurrentMap.terrainGrid.topGrid[i] = DefDatabase<TerrainDef>.GetRandom();
+                }
+                Find.CurrentMap.mapDrawer.WholeMapChanged(MapMeshFlag.Terrain);
+                Find.CurrentMap.pathing.RecalculateAllPerceivedPathCosts();
+
+                foreach (Thing thing in map.listerThings.AllThings.ToList())
+                {
+                    try
+                    {
+                        thing.DeSpawn();
+                        thing.Destroy();
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+
+                foreach (IntVec3 cell in map.AllCells.InRandomOrder())
+                {
+                    try
+                    {
+                        Thing thing = ThingMaker.MakeThing(DefDatabase<ThingDef>.GetRandom());
+                        Rot4 rot = new Rot4(Rand.RangeInclusive(0, 4));
+                        GenSpawn.Spawn(thing, cell, map, rot, WipeMode.VanishOrMoveAside);
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+
+            }, 3);
         }
     }
 #pragma warning restore IDE0051 // 删除未使用的私有成员

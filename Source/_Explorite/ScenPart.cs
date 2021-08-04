@@ -86,14 +86,11 @@ namespace Explorite
             try
             {
                 battery?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
-                if (!once)
+                if (battery is Building_TriBattery secretBattery && !GameComponentCentaurStory.Any())
                 {
-                    if (battery is Building_TriBattery secretBattery)
-                    {
-                        secretBattery.SetSecret(true);
-                        GameComponentCentaurStory.TryAdd(secretBattery);
-                        once = true;
-                    }
+                    secretBattery.SetSecret(true);
+                    GameComponentCentaurStory.TryAdd(secretBattery);
+                    once = true;
                 }
             }
             catch

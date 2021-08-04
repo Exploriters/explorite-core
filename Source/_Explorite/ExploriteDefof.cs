@@ -47,6 +47,7 @@ namespace Explorite
             T def = new T
             {
                 defName = "EXPLO_MALREF",
+                label = "EXPLO_MALREF",
                 description = $"Encountered bad reference of {nameof(T)}."
             };
             malrefs.Add(t, def);
@@ -79,6 +80,7 @@ namespace Explorite
         public static readonly ThingDef ThermoDamperDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "ThermoDamper");
         public static readonly ThingDef OrangiceDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Orangice");
         public static readonly ThingDef HyperTrishotTurretBuildingDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Turret_HyperTrishot");
+        public static readonly ThingDef CentaurBedDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "CentaurBed");
         public static readonly HediffDef HyperManipulatorHediffDef = GetModDef<HediffDef>(InstelledMods.RimCentaurs, "HyperManipulator");
         public static readonly HediffDef PsychicDeafHediffDef = GetModDef<HediffDef>(InstelledMods.RimCentaurs, "PsychicDeafCentaur");
         public static readonly HediffDef SubsystemBlankHediffDef = GetModDef<HediffDef>(InstelledMods.RimCentaurs, "CentaurSubsystem_BlankBlank");
@@ -124,6 +126,7 @@ namespace Explorite
         public static readonly MemeDef SayersMeme2Def = GetModDef<MemeDef>(InstelledMods.Sayers, "CarnivorousAnimal_SayersMeme");
         public static readonly ThoughtDef SayersThoughtDef = GetModDef<ThoughtDef>(InstelledMods.Sayers, "SayersAbandonedSadness");
         public static readonly ThoughtDef SayersThoughtDef2 = GetModDef<ThoughtDef>(InstelledMods.Sayers, "SayersWillFeelLonely");
+        public static readonly MemeDef SayersStructureMemeDef = GetModDef<MemeDef>(InstelledMods.Sayers, "Structure_Sayers");
 
         public static readonly ThingDef AlienGuoguoDef = GetModDef<ThingDef>(InstelledMods.GuoGuo, "Alien_Guoguo");
         public static readonly FactionDef GuoguoPlayerColonyDef = GetModDef<FactionDef>(InstelledMods.GuoGuo, "GuoguoPlayerColony");

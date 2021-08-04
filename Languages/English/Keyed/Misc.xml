@@ -55,4 +55,7 @@
   
   <MessageIdeoForcedIdeoNotSelected>{0} cannot use ideo which not preset.</MessageIdeoForcedIdeoNotSelected>
   
+  <Magnuassembly_CompRequireBuildingInPowerNet_StatLabel>structure requirement</Magnuassembly_CompRequireBuildingInPowerNet_StatLabel>
+  <Magnuassembly_CompRequireBuildingInPowerNet_StatTitle>This facility requires these following powered facilities in the same power net to be used.</Magnuassembly_CompRequireBuildingInPowerNet_StatTitle>
+  
 </LanguageData>

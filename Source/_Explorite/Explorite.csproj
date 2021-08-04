@@ -27,12 +27,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\1.3\Assemblies\</OutputPath>
+    <OutputPath>..\..\1.3\CORE-LIB\Assemblies\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>8.0</LangVersion>
-    <DocumentationFile>..\..\1.3\Assemblies\Explorite.xml</DocumentationFile>
+    <DocumentationFile>..\..\1.3\CORE-LIB\Assemblies\Explorite.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -101,6 +101,7 @@
     <Compile Include="Building_TriBattery.cs" />
     <Compile Include="Building_TurretGun_HyperTrishot.cs" />
     <Compile Include="ThoughtWorker_SayersWillFeelLonely.cs" />
+    <Compile Include="CheckOutList.cs" />
     <Compile Include="ColorGenerator.cs" />
     <Compile Include="CompAbilityEffect_GiveHediff_ParasiticStab.cs" />
     <Compile Include="CompAbilityEffect_GiveHediff_WholeMap.cs" />
@@ -114,6 +115,8 @@
     <Compile Include="CompHealWearedOvertime.cs" />
     <Compile Include="CompHMTrishotUser.cs" />
     <Compile Include="CompRemoteActivationEffect.cs" />
+    <Compile Include="CompRequireBuildingInPowerNet.cs" />
+    <Compile Include="ExploritePatch.cs" />
     <Compile Include="ExploritePatches_OversizedWeapon.cs" />
     <Compile Include="CompPassiveMeditationFocusGain.cs" />
     <Compile Include="CompPawnRepairApparelsOvertime.cs" />
@@ -190,6 +193,7 @@
     <Compile Include="Verb.cs" />
     <Compile Include="Verb_RemoteActivator.cs" />
     <Compile Include="Verb_SensitivityToggle.cs" />
+    <Compile Include="_AssemblyInfo_Core_Lib.cs" />
     <Compile Include="_AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

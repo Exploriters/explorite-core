@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThingDef ParentName="BuildingBase" Name="ExploriteTestingBuilding" Abstract="True">
+    <graphicData>
+      <texPath>Things/Building/ExTestSpot</texPath>
+      <!--<graphicClass>Graphic_Single</graphicClass>-->
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(2,2)</drawSize>
+      <drawRotated>true</drawRotated>
+      <allowFlip>true</allowFlip>
+    </graphicData>
+    <altitudeLayer>FloorEmplacement</altitudeLayer>
+    <statBases>
+      <WorkToBuild>0</WorkToBuild>
+    </statBases>
+    <useHitPoints>false</useHitPoints>
+    <rotatable>false</rotatable>
+    <size>(1,1)</size>
+    <scatterableOnMapGen>false</scatterableOnMapGen>
+    <designationCategory>Misc</designationCategory>
+    <passability>Standable</passability>
+    <drawPlaceWorkersWhileSelected>True</drawPlaceWorkersWhileSelected>
+    <ritualFocus />
+    <designationHotKey />
+    <building>
+      <sowTag>SupportPlantsOnly</sowTag>
+      <canPlaceOverImpassablePlant>false</canPlaceOverImpassablePlant>
+      <ai_chillDestination>false</ai_chillDestination>
+      <artificialForMeditationPurposes>false</artificialForMeditationPurposes>
+      <buildingTags />
+    </building>
+
+  </ThingDef>
+
+  <ThingDef ParentName="ExploriteTestingBuilding" Abstract="True">
+    <defName>TestShieldSpot</defName>
+    <label>shield spot</label>
+    <description>Test spot to spawn shield.</description>
+
+    <rotatable>true</rotatable>
+    <placeWorkers>
+      <li>Explorite.PlaceWorker_Rect_5_1</li>
+    </placeWorkers>
+  </ThingDef>
+
+
+  <ThingDef ParentName="ExploriteTestingBuilding" Abstract="True">
+    <defName>Test2_2_Tower</defName>
+    <label>tower spot</label>
+    <description>Test spot as tower.</description>
+
+    <graphicData>
+      <drawSize>(4,4)</drawSize>
+    </graphicData>
+    <size>(2,2)</size>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>10</basePowerConsumption>
+        <transmitsPower>true</transmitsPower>
+      </li>
+    </comps>
+    <passability>Impassable</passability>
+  </ThingDef>
+
+  <ThingDef ParentName="ExploriteTestingBuilding" Abstract="True">
+    <defName>TestConsole</defName>
+    <label>console spot</label>
+    <description>Test spot as tower.</description>
+
+    <rotatable>true</rotatable>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>10</basePowerConsumption>
+        <transmitsPower>false</transmitsPower>
+      </li>
+      <li Class="Explorite.CompProperties_RequireBuildingInPowerNet">
+        <!--<requiredBuildings Mode="All">
+          <li>Test2_2_Tower</li>
+          <li>CommsConsole</li>
+	      <list Mode="Any">
+            <li>Cooler</li>
+            <li>Heater</li>
+            <li>Ship_Beam</li>
+			<list Mode="None">
+			  <li>Ship_Beam</li>
+			  <li>Grave</li>
+			  <li>SteamGeyser</li>
+			</list>
+		  </list>
+	      <list Mode="Neither">
+		    <li>Turret_Mortar</li>
+		    <li>Barricade</li>
+            <li>Campfire</li>
+		  </list>
+        </requiredBuildings>-->
+        <errorReportString>Missing powered command tower</errorReportString>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>

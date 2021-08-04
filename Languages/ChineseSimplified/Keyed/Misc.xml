@@ -55,4 +55,7 @@
   
   <MessageIdeoForcedIdeoNotSelected>{0}不能选择非预设的文化。</MessageIdeoForcedIdeoNotSelected>
   
+  <Magnuassembly_CompRequireBuildingInPowerNet_StatLabel>设施需求</Magnuassembly_CompRequireBuildingInPowerNet_StatLabel>
+  <Magnuassembly_CompRequireBuildingInPowerNet_StatTitle>这个设施需要电网中包含以下开启的设施才能使用。</Magnuassembly_CompRequireBuildingInPowerNet_StatTitle>
+  
 </LanguageData>

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <HediffDef Abstract="True">
+    <defName>ExPainShock</defName>
+    <hediffClass>HediffWithComps</hediffClass>
+    <label>electroshock</label>
+    <description>Inflicts pain on the user from electroshock.</description>
+    <isBad>true</isBad>
+    <stages>
+      <li>
+        <painOffset>20</painOffset>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>6000~6000</disappearsAfterTicks>
+        <showRemainingTime>True</showRemainingTime>
+      </li>
+      <li Class="HediffCompProperties_DisappearsOnDeath"/>
+	  
+	  <!-- 来源服装物品被取下后移除hediff -->
+      <li Class="Explorite.HediffCompProperties_DisappearsOnSourceApparelLost"/>
+    </comps>
+  </HediffDef>
+
+  <ThingDef ParentName="ApparelNoQualityBase" Abstract="True">
+    <defName>RemoteShockActivator</defName>
+    <label>remote shock activator</label>
+    <description>A remote pain shock activator.</description>
+    <techLevel>Industrial</techLevel>
+    <graphicData>
+      <texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <tickerType>Normal</tickerType>
+    <statBases>
+      <Mass>3</Mass>
+      <Flammability>0.4</Flammability>
+      <EquipDelay>2</EquipDelay>
+    </statBases>
+    <thingCategories>
+      <li>ApparelUtility</li>
+    </thingCategories>
+    <generateAllowChance>0</generateAllowChance>
+    <apparel>
+      <countsAsClothingForNudity>false</countsAsClothingForNudity>
+      <careIfWornByCorpse>false</careIfWornByCorpse>
+      <careIfDamaged>false</careIfDamaged>
+      <wearPerDay>0</wearPerDay>
+      <bodyPartGroups>
+        <li>Waist</li>
+      </bodyPartGroups>
+      <layers>
+        <li>Belt</li>
+      </layers>
+      <tags>
+        <li>ExRemoteShockBelt</li>
+      </tags>
+    </apparel>
+    <colorGenerator Class="ColorGenerator_Options">
+      <options>
+        <li>
+          <weight>10</weight>
+          <only>(0.33,0.33,0.33,1)</only>
+        </li>
+        <li>
+          <weight>10</weight>
+          <only>(0.6,0.4,0.4,1)</only>
+        </li>
+        <li>
+          <weight>10</weight>
+          <only>(0.6,0.6,0.4,1)</only>
+        </li>
+        <li>
+          <weight>6</weight>
+          <min>(0.3,0.3,0.3,1)</min>
+          <max>(0.5,0.5,0.5,1)</max>
+        </li>
+      </options>
+    </colorGenerator>
+	
+    <comps>
+	  <!-- 接收器 -->
+      <li Class="Explorite.CompProperties_RemoteActivationEffect_Apparel_ApplyHediff">
+        <tags>
+          <li>ExRemoteShock</li>
+        </tags>
+        <hediff>ExPainShock</hediff>
+        <part>Neck</part>
+        <count>1</count>
+      </li>
+	  
+	  <!-- 接收器 -->
+      <li Class="Explorite.CompProperties_RemoteActivationEffect_Explode">
+        <tags>
+          <li>ExRemoteExplode</li>
+        </tags>
+        <explosiveDamageType>Bomb</explosiveDamageType>
+        <explosiveRadius>4.95</explosiveRadius>
+        <explosiveExpandPerStackcount>0</explosiveExpandPerStackcount>
+        <chanceToStartFire>0</chanceToStartFire>
+        <damageFalloff>true</damageFalloff>
+        <applyDamageToExplosionCellsNeighbors>true</applyDamageToExplosionCellsNeighbors>
+        <explosionEffect>GiantExplosion</explosionEffect>
+        <explosionSound>Explosion_GiantBomb</explosionSound>
+        <destroyThingOnExplosionSize>Infinity</destroyThingOnExplosionSize>
+        <immuneToExplodeFromSelf>true</immuneToExplodeFromSelf>
+      </li>
+      <!--<li Class="Explorite.CompProperties_RemoteActivationEffect_Apparel_ApplyDamage">
+        <tags>
+          <li>ExRemoteExplode</li>
+        </tags>
+        <damageType>Bomb</damageType>
+        <damageAmount>120</damageAmount>
+        <part>Neck</part>
+        <count>1</count>
+      </li>-->
+      <li Class="Explorite.CompProperties_RemoteActivationEffect_Kill">
+        <tags>
+          <li>ExRemoteExplode</li>
+        </tags>
+      </li>
+	  
+	  <!-- 遥控器，提供Gizmo -->
+      <li Class="Explorite.CompProperties_ReloadableNotReloadable">
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+      </li>
+	  
+    </comps>
+	
+	<!-- 遥控器，提供Verb -->
+    <verbs>
+      <li Class="Explorite.VerbProperties_RemoteActivator">
+        <label>remote shock</label>
+        <commandIcon>UI/Structures/Archist</commandIcon>
+        <violent>true</violent>
+        <hasStandardCommand>true</hasStandardCommand>
+        <targetable>true</targetable>
+        <onlyManualCast>True</onlyManualCast>
+        <tags>
+          <li>ExRemoteShock</li>
+        </tags>
+        <range>34.9</range>
+        <warmupTime>1</warmupTime>
+        <targetParams>
+          <canTargetSelf>true</canTargetSelf>
+          <canTargetPawns>true</canTargetPawns>
+          <canTargetItems>false</canTargetItems>
+          <canTargetBuildings>false</canTargetBuildings>
+        </targetParams>
+      </li>
+      <li Class="Explorite.VerbProperties_RemoteActivator_Area">
+        <label>remote shock area</label>
+        <commandIcon>UI/Structures/Archist</commandIcon>
+        <violent>true</violent>
+        <hasStandardCommand>true</hasStandardCommand>
+        <targetable>true</targetable>
+        <onlyManualCast>True</onlyManualCast>
+		
+        <tags>
+          <li>ExRemoteShock</li>
+        </tags>
+        <radius>4.5</radius>
+        <needLOSToCenter>true</needLOSToCenter>
+		
+        <range>34.9</range>
+        <warmupTime>1</warmupTime>
+        <targetParams>
+          <canTargetSelf>true</canTargetSelf>
+          <canTargetPawns>true</canTargetPawns>
+          <canTargetItems>true</canTargetItems>
+          <canTargetBuildings>true</canTargetBuildings>
+          <canTargetLocations>true</canTargetLocations>
+        </targetParams>
+      </li>
+      <li Class="Explorite.VerbProperties_RemoteActivator">
+        <label>remote explode</label>
+        <commandIcon>UI/Structures/Archist</commandIcon>
+        <violent>true</violent>
+        <hasStandardCommand>true</hasStandardCommand>
+        <targetable>true</targetable>
+        <onlyManualCast>True</onlyManualCast>
+        <tags>
+          <li>ExRemoteExplode</li>
+        </tags>
+        <range>34.9</range>
+        <warmupTime>1</warmupTime>
+        <targetParams>
+          <canTargetSelf>true</canTargetSelf>
+          <canTargetPawns>true</canTargetPawns>
+          <canTargetItems>true</canTargetItems>
+          <canTargetBuildings>true</canTargetBuildings>
+          <canTargetPlants>true</canTargetPlants>
+        </targetParams>
+      </li>
+      <li Class="Explorite.VerbProperties_RemoteActivator_Area">
+        <label>remote explode area</label>
+        <commandIcon>UI/Structures/Archist</commandIcon>
+        <violent>true</violent>
+        <hasStandardCommand>true</hasStandardCommand>
+        <targetable>true</targetable>
+        <onlyManualCast>True</onlyManualCast>
+		
+        <tags>
+          <li>ExRemoteExplode</li>
+        </tags>
+        <radius>4.5</radius>
+        <needLOSToCenter>true</needLOSToCenter>
+		
+        <range>34.9</range>
+        <warmupTime>1</warmupTime>
+        <targetParams>
+          <canTargetSelf>true</canTargetSelf>
+          <canTargetPawns>true</canTargetPawns>
+          <canTargetItems>true</canTargetItems>
+          <canTargetBuildings>true</canTargetBuildings>
+          <canTargetLocations>true</canTargetLocations>
+        </targetParams>
+      </li>
+    </verbs>
+	
+  </ThingDef>
+
+</Defs>

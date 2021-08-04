@@ -36,6 +36,77 @@
         <member name="T:Explorite.Building_TriBattery">
             <summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />不继承自<seealso cref = "T:RimWorld.Building_Battery" />，因该类并未有独有方法，且部分行为不可被覆盖。<br />实现了<seealso cref = "T:Explorite.ISecretTrishot" />，可在开局被指定具有三射弓。</summary>
         </member>
+        <member name="T:Explorite.CheckOutListMode">
+            <summary>为<see cref = "T:Explorite.CheckOutList`1" />设置匹配模式。</summary>
+        </member>
+        <member name="F:Explorite.CheckOutListMode.All">
+            <summary>全部符合。</summary>
+        </member>
+        <member name="F:Explorite.CheckOutListMode.Any">
+            <summary>任意符合。</summary>
+        </member>
+        <member name="F:Explorite.CheckOutListMode.Neither">
+            <summary>任意不符合。</summary>
+        </member>
+        <member name="F:Explorite.CheckOutListMode.None">
+            <summary>全部不符合。</summary>
+        </member>
+        <member name="T:Explorite.CheckOutList`1">
+            <summary>检测清单。</summary>
+        </member>
+        <member name="F:Explorite.CheckOutList`1.objects">
+            <summary>检测项目列表。</summary>
+        </member>
+        <member name="F:Explorite.CheckOutList`1.sublists">
+            <summary>检测项目子列表。</summary>
+        </member>
+        <member name="F:Explorite.CheckOutList`1.mode">
+            <summary>检测模式。</summary>
+        </member>
+        <member name="M:Explorite.CheckOutList`1.CheckOut(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            检测列表并获取匹配性结果。
+            </summary>
+            <param name="checkList">需要被检查的列表。</param>
+            <returns>匹配结果。</returns>
+        </member>
+        <member name="T:Explorite.CheckOutList`1.CheckOutListStringRule">
+            <summary>为<see cref = "T:Explorite.CheckOutList`1" />提供清单参数。</summary>
+        </member>
+        <member name="F:Explorite.CheckOutList`1.CheckOutListStringRule.modeAll">
+            <summary>全部符合模式时的前缀。</summary>
+        </member>
+        <member name="F:Explorite.CheckOutList`1.CheckOutListStringRule.modeAny">
+            <summary>任意符合模式时的前缀。</summary>
+        </member>
+        <member name="F:Explorite.CheckOutList`1.CheckOutListStringRule.modeNeither">
+            <summary>任意不符合模式时的前缀。</summary>
+        </member>
+        <member name="F:Explorite.CheckOutList`1.CheckOutListStringRule.modeNone">
+            <summary>全部不符合模式时的前缀。</summary>
+        </member>
+        <member name="F:Explorite.CheckOutList`1.CheckOutListStringRule.clusterStart">
+            <summary>一组的前缀。</summary>
+        </member>
+        <member name="F:Explorite.CheckOutList`1.CheckOutListStringRule.clusterEnd">
+            <summary>一组的后缀。</summary>
+        </member>
+        <member name="F:Explorite.CheckOutList`1.CheckOutListStringRule.join">
+            <summary>连接符起始字符。</summary>
+        </member>
+        <member name="F:Explorite.CheckOutList`1.CheckOutListStringRule.indentation">
+            <summary>缩进字符。</summary>
+        </member>
+        <member name="F:Explorite.CheckOutList`1.CheckOutListStringRule.selector">
+            <summary>将数据转换为字符串的选择器。</summary>
+        </member>
+        <member name="M:Explorite.CheckOutList`1.ReportContact(System.Nullable{Explorite.CheckOutList{`0}.CheckOutListStringRule})">
+            <summary>
+            以文本形式打印清单数据。
+            </summary>
+            <param name="rule">打印参数。</param>
+            <returns>以文本形式打印的清单数据。</returns>
+        </member>
         <member name="T:Explorite.ColorGenerator_CentaurHair">
             <summary>生成半人马的头发颜色。</summary>
         </member>
@@ -138,6 +209,12 @@
         <member name="T:Explorite.CompRemoteActivationEffect_Apparel_ApplyDamage">
             <summary>响应效果时为穿戴者施加伤害。</summary>
         </member>
+        <member name="T:Explorite.CompProperties_RemoteActivationEffect_PlayEffects">
+            <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_PlayEffects" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompRemoteActivationEffect_PlayEffects">
+            <summary>响应效果时发出声音以及效果。</summary>
+        </member>
         <member name="T:Explorite.CompProperties_RemoteActivationEffect_Destroy">
             <summary>为<see cref = "T:Explorite.CompRemoteActivationEffect_Destroy" />接收参数。</summary>
         </member>
@@ -162,6 +239,12 @@
         <member name="T:Explorite.CompRemoteActivationEffect_Explode">
             <summary>响应效果时爆炸。</summary>
         </member>
+        <member name="T:Explorite.CompProperties_RequireBuildingInPowerNet">
+            <summary>为<see cref = "T:Explorite.CompRequireBuildingInPowerNet" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompRequireBuildingInPowerNet">
+            <summary>检测电网中是否存在指定的建筑物。</summary>
+        </member>
         <member name="T:Explorite.ExploritePatches">
             <summary>包含多个补丁的合集类。</summary>
         </member>
@@ -178,14 +261,20 @@
         <member name="M:Explorite.ExploritePatches.PrinterTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>打印函数的构造。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.SkillLearnPrefix(RimWorld.SkillRecord,System.Single@)">
+        <member name="M:Explorite.ExploritePatches.SkillRecordIntervalTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>阻止半人马的技能衰退。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.SkillIntervalPostfix(RimWorld.SkillRecord)">
+        <member name="M:Explorite.ExploritePatches.SkillRecordLearningSaturatedTodayPostfix(RimWorld.SkillRecord,System.Boolean@)">
             <summary>移除半人马每日技能训练上限。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.NoPainBounsForCentaursPostfix(RimWorld.Pawn_PsychicEntropyTracker,System.Single@)">
+        <member name="M:Explorite.ExploritePatches.StatPartPainPainFactorPostfix(Verse.Pawn,System.Single@)">
             <summary>移除半人马的疼痛带来心灵熵消散增益。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.StatPartPainExplanationPartPostfix(RimWorld.StatRequest,System.String@)">
+            <summary>移除半人马的疼痛带来心灵熵消散增益的描述文本。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PsychicEntropyGizmoTryGetPainMultiplierPostfix(RimWorld.PsychicEntropyGizmo,System.Single@,System.Boolean@)">
+            <summary>移除半人马的心灵熵Gizno的疼痛激励显示。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.WandererJoinCannotFirePostfix(RimWorld.IncidentParms,System.Boolean@)">
             <summary>禁用阵营生成流浪者加入事件。</summary>
@@ -238,17 +327,20 @@
         <member name="M:Explorite.ExploritePatches.MeditationFocusExplanationPostfix(RimWorld.MeditationFocusDef,System.String@,Verse.Pawn)">
             <summary>为半人马和Sayers补充启用冥想类型的原因。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.AssignToPawnCandidatesPostfix(RimWorld.CompAssignableToPawn,System.Collections.Generic.IEnumerable{Verse.Pawn}@)">
-            <summary>对绑定选单进行补丁。</summary>
+        <member name="M:Explorite.ExploritePatches.AssignBedToPawnHasFreeSlotTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>使半人马占用更多床位。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.AssignBedToPawnHasFreeSlotPostfix(RimWorld.CompAssignableToPawn,System.Boolean@)">
-            <summary>使半人马占满床位。</summary>
+        <member name="M:Explorite.ExploritePatches.AssignBedToPawnTryAssignPawnPostfix(RimWorld.CompAssignableToPawn,Verse.Pawn)">
+            <summary>使半人马与他人同时被添加至同一个床时被移除绑定。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.AssignBedToPawnTryAssignPawnPostfix(RimWorld.CompAssignableToPawn_Bed,Verse.Pawn)">
-            <summary>使半人马不能与他人同时被添加至同一个床。</summary>
+        <member name="M:Explorite.ExploritePatches.AssignBedToPawnCanAssignToPostfix(RimWorld.CompAssignableToPawn,Verse.AcceptanceReport@,Verse.Pawn)">
+            <summary>使半人马不能使用小尺寸床铺。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.RestUtilityCanUseBedEverPostfix(System.Boolean@,Verse.Pawn,Verse.ThingDef)">
-            <summary>使半人马不能使用小尺寸床铺，使果果床铺不能被其他种族使用。</summary>
+            <summary>使半人马不能使用小尺寸床铺。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.BedUtilityWillingToShareBedPostfix(System.Boolean@,Verse.Pawn,Verse.Pawn)">
+            <summary>使半人马拒绝与他人共用床铺，使Sayers拒绝与非同族共用床铺。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PlantGrowthRateFactorNoTemperaturePostfix(RimWorld.Plant,System.Single@)">
             <summary>使指定植物的生长无视环境温度。</summary>
@@ -397,6 +489,9 @@
         <member name="M:Explorite.ExploritePatches.IdeoUtilityCanAddPostfix(RimWorld.MemeDef,System.Collections.Generic.List{RimWorld.MemeDef},RimWorld.FactionDef,System.Boolean@)">
             <summary>更改模因能够兼容的模因。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.PawnWoundDrawerRenderOverBodyPrefix(RimWorld.PawnWoundDrawer@)">
+            <summary>禁止伤害渲染。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.IdeoSymbolPartDefCanBeChosenForIdeoPostfix(RimWorld.Ideo,RimWorld.IdeoSymbolPartDef@,System.Boolean@)">
             <summary>更改阵营能够使用的图标。</summary>
         </member>
@@ -435,6 +530,24 @@
         </member>
         <member name="M:Explorite.ExploritePatches.PageConfigureIdeoCanDoNextTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>阻止半人马和Sayers阵营选择其他文化。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.StatWorkerGetValueUnfinalizedTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>改变心灵敏感度对半人马心灵熵阈值的影响。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.StatWorkerGetExplanationUnfinalizedTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>改变心灵敏感度对半人马心灵熵阈值的影响的数值显示。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ThoughtWorkerPreceptHasUncoveredPrefix(Verse.Pawn,System.Boolean@)">
+            <summary>使半人马和Sayers不被判断为裸体。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RoyalTitleDefGetBedroomRequirementsPostfix(Verse.Pawn,RimWorld.RoyalTitleDef,System.Collections.Generic.IEnumerable{RimWorld.RoomRequirement}@)">
+            <summary>使半人马的头衔建筑物需求使用半人马床而非其他床铺。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ApparelRequirementIsMetPostfix(Verse.Pawn,RimWorld.ApparelRequirement,System.Boolean@)">
+            <summary>使半人马的头衔服装需求需要半人马衣物，使Sayers的头衔服装需求不需要衣物。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoApparelColorPrefix(RimWorld.Ideo,UnityEngine.Color@)">
+            <summary>锁定文化代表颜色。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
@@ -563,31 +676,28 @@
             <param name="toStringFormat">返回值字符串的格式。</param>
             <returns>被格式化为可读文本的时间。</returns>
         </member>
-        <member name="M:Explorite.ExploriteCore.PawnCanOccupy(Verse.Pawn,Verse.Map,Verse.IntVec3)">
+        <member name="M:Explorite.ExploriteCore.PawnCanOccupy(Verse.Pawn,Verse.TargetInfo)">
             <summary>
             检测人物是否可以占用目标位置。
             </summary>
             <param name="pawn">需要被检测的人物。</param>
-            <param name="map">指定的地图。</param>
-            <param name="loc">一个位置。</param>
+            <param name="target">位置参数。</param>
             <returns>是否可以占用目标位置。</returns>
         </member>
-        <member name="M:Explorite.ExploriteCore.ScanOccupiablePosition(Verse.Pawn,Verse.Map,Verse.IntVec3)">
+        <member name="M:Explorite.ExploriteCore.ScanOccupiablePosition(Verse.Pawn,Verse.TargetInfo)">
             <summary>
             扫描目标周围可被占用的位置。
             </summary>
             <param name="pawn">需要被检测的人物。</param>
-            <param name="map">指定的地图。</param>
-            <param name="loc">一个位置。</param>
+            <param name="target">位置参数。</param>
             <returns>最近的可被占用的位置。若无，则返回<c>null</c>。</returns>
         </member>
-        <member name="M:Explorite.ExploriteCore.TeleportPawn(Verse.Pawn,Verse.Map,Verse.IntVec3)">
+        <member name="M:Explorite.ExploriteCore.TeleportPawn(Verse.Pawn,Verse.TargetInfo)">
             <summary>
             将人物传送到目标位置附近。
             </summary>
             <param name="pawn">需要被传送的人物。</param>
-            <param name="map">指定的地图。</param>
-            <param name="loc">一个位置。</param>
+            <param name="target">位置参数。</param>
             <returns>是否成功地完成了传送。</returns>
         </member>
         <member name="M:Explorite.ExploriteCore.FinalSpawnedParent(Verse.Thing)">
@@ -634,6 +744,21 @@
         </member>
         <member name="M:Explorite.ExploriteDebugActions.FinishHyperManipulatorInstell(Verse.Pawn)">
             <summary>完成半人马身体部件极其漫长的整备时间。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.MoveUp">
+            <summary>向上移动选中的物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.MoveRight">
+            <summary>向右移动选中的物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.MoveDown">
+            <summary>向下移动选中的物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.MoveLeft">
+            <summary>向左移动选中的物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.RuinThis">
+            <summary>。</summary>
         </member>
         <member name="T:Explorite.ExploriteMod">
             <summary>Explorite模组信息类。</summary>

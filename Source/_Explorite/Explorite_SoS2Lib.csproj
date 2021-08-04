@@ -25,11 +25,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\1.3\Assemblies\</OutputPath>
+    <OutputPath>..\..\1.3\SOS2-LIB\Assemblies\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\1.3\Assemblies\Explorite_SoS2Lib.xml</DocumentationFile>
+    <DocumentationFile>..\..\1.3\SOS2-LIB\Assemblies\Explorite_SoS2Lib.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -76,6 +76,7 @@
     <Compile Include="Building_ShipTurretTorpedo.cs" />
     <Compile Include="ScenPart_StartInSpaceCentaur.cs" />
     <Compile Include="SoS2Reflection.cs" />
+    <Compile Include="_AssemblyInfo_SoS2_Lib.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -84,6 +85,7 @@
     <ProjectReference Include="Explorite.csproj">
       <Project>{69b9a798-f053-4094-8a1a-a0f7f4a018b7}</Project>
       <Name>Explorite</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

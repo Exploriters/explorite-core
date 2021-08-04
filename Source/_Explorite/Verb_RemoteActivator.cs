@@ -80,7 +80,7 @@ namespace Explorite
         private IEnumerable<IRemoteActivationEffect> ListEffects()
         {
             IntVec3 targetPos = currentTarget.Cell;
-            IEnumerable<Thing> things = caster.Map.listerThings.AllThings.Where(thing => thing is ThingWithComps tc && thing.Position.DistanceTo(targetPos) <= VerbProps.radius && (@VerbProps.needLOSToCenter || GenSight.LineOfSight(thing.Position, targetPos, caster.Map)));
+            IEnumerable<Thing> things = caster.Map.listerThings.AllThings.Where(thing => thing is ThingWithComps tc && thing.Position.DistanceTo(targetPos) <= VerbProps.radius && (!VerbProps.needLOSToCenter || GenSight.LineOfSight(thing.Position, targetPos, caster.Map)));
             List<IRemoteActivationEffect> effects = new List<IRemoteActivationEffect>();
             foreach (Thing thing in things)
             {
