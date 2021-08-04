@@ -38,7 +38,6 @@ namespace Explorite
             Widgets.TextFieldNumeric(scenPartRect, ref pawnChoiceCount, ref pawnCountChoiceBuffer, pawnCount, 10f);
         }
     }
-    */
 
     ///<summary>向开局的空降仓内塞入Sayers粘液。</summary>
     public class ScenPart_ScatteredGarbage : ScenPart
@@ -61,6 +60,22 @@ namespace Explorite
             }
         }
     }
+
+    ///<summary>Sayers开局情绪低落(来自Abrel，她正在尝试这个)</summary>
+    public class ScenPart_StartThoughtSadness : ScenPart
+    {
+        public override void PostGameStart()
+        {
+            base.PostGameStart();
+            foreach (Pawn pawn in Find.GameInitData.startingAndOptionalPawns.Where(pawn => pawn.def == AlienSayersDef))
+            {
+                List<Thought_Memory> memories = pawn.needs.mood.thoughts.memories.Memories;
+                memories.RemoveAll(memory => memory.def == ThoughtDefOf.NewColonyOptimism);
+                memories.Add((Thought_Memory)ThoughtMaker.MakeThought(SayersThoughtDef));
+            }
+        }
+    }
+
     ///<summary>填满开局的所有电池。</summary>
     public class ScenPart_FillBattery : ScenPart
     {

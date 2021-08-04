@@ -120,8 +120,10 @@ namespace Explorite
         public static readonly FactionDef SayersPlayerColonyDef = GetModDef<FactionDef>(InstelledMods.Sayers, "SayersClan");
         public static readonly FactionDef SayersPlayerColonySingleDef = GetModDef<FactionDef>(InstelledMods.Sayers);
         public static readonly BodyDef SayersBodyDef = GetModDef<BodyDef>(InstelledMods.Sayers, "Body_Sayers");
-        public static readonly MemeDef SayersMeme1Def = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "Experimental_SayersMeme");
-        public static readonly MemeDef SayersMeme2Def = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "CarnivorousAnimal_SayersMeme");
+        public static readonly MemeDef SayersMeme1Def = GetModDef<MemeDef>(InstelledMods.Sayers, "Experimental_SayersMeme");
+        public static readonly MemeDef SayersMeme2Def = GetModDef<MemeDef>(InstelledMods.Sayers, "CarnivorousAnimal_SayersMeme");
+        public static readonly ThoughtDef SayersThoughtDef = GetModDef<ThoughtDef>(InstelledMods.Sayers, "SayersAbandonedSadness");
+        public static readonly ThoughtDef SayersThoughtDef2 = GetModDef<ThoughtDef>(InstelledMods.Sayers, "SayersWillFeelLonely");
 
         public static readonly ThingDef AlienGuoguoDef = GetModDef<ThingDef>(InstelledMods.GuoGuo, "Alien_Guoguo");
         public static readonly FactionDef GuoguoPlayerColonyDef = GetModDef<FactionDef>(InstelledMods.GuoGuo, "GuoguoPlayerColony");
