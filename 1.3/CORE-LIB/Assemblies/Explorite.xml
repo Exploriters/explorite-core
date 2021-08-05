@@ -36,6 +36,9 @@
         <member name="T:Explorite.Building_TriBattery">
             <summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />不继承自<seealso cref = "T:RimWorld.Building_Battery" />，因该类并未有独有方法，且部分行为不可被覆盖。<br />实现了<seealso cref = "T:Explorite.ISecretTrishot" />，可在开局被指定具有三射弓。</summary>
         </member>
+        <member name="T:Explorite.ThoughtWorker_SayersWillFeelLonely">
+            <summary>Sayers在独自一人时会感觉孤独(来自Abrel，她摸索的时候不小心一头撞在了墙壁上)</summary>
+        </member>
         <member name="T:Explorite.CheckOutListMode">
             <summary>为<see cref = "T:Explorite.CheckOutList`1" />设置匹配模式。</summary>
         </member>
@@ -925,6 +928,9 @@
         </member>
         <member name="T:Explorite.ScenPart_ScatteredGarbage">
             <summary>向开局的空降仓内塞入Sayers粘液。</summary>
+        </member>
+        <member name="T:Explorite.ScenPart_StartThoughtSadness">
+            <summary>Sayers开局情绪低落(来自Abrel，她正在尝试这个)</summary>
         </member>
         <member name="T:Explorite.ScenPart_FillBattery">
             <summary>填满开局的所有电池。</summary>

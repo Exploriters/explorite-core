@@ -19,13 +19,6 @@ namespace Explorite
         {
         }
     }
-    /*
-    ///<summary>人物编辑界面剧本部件副本。</summary>
-    public class ScenPart_ConfigPage_ConfigureStartingPawns_Alt1 : ScenPart_ConfigPage_ConfigureStartingPawns { }
-    ///<summary>人物编辑界面剧本部件副本。</summary>
-    public class ScenPart_ConfigPage_ConfigureStartingPawns_Alt2 : ScenPart_ConfigPage_ConfigureStartingPawns { }
-
-
     public class ScenPart_ConfigPage_ConfigureStartingPawns_Solo : ScenPart_ConfigPage_ConfigureStartingPawns
     {
         private string pawnCountBuffer;
@@ -46,11 +39,6 @@ namespace Explorite
             Widgets.TextFieldNumeric(scenPartRect, ref pawnChoiceCount, ref pawnCountChoiceBuffer, pawnCount, 10f);
         }
     }
-    */
-
-
-
-
 
     ///<summary>向开局的空降仓内塞入Sayers粘液。</summary>
     public class ScenPart_ScatteredGarbage : ScenPart
@@ -73,6 +61,21 @@ namespace Explorite
             }
         }
     }
+
+    ///<summary>Sayers开局情绪低落(来自Abrel，她正在尝试这个)</summary>
+    public class ScenPart_StartThoughtSadness : ScenPart
+    {
+        public override void PostGameStart()
+        {
+            base.PostGameStart();
+            foreach (List<Thought_Memory> memories in Find.GameInitData.startingAndOptionalPawns.Where(pawn => pawn.def == AlienSayersDef).Select(pawn => pawn.needs.mood.thoughts.memories.Memories))
+            {
+                memories.RemoveAll(memory => memory.def == ThoughtDefOf.NewColonyOptimism);
+                memories.Add((Thought_Memory)ThoughtMaker.MakeThought(SayersAbandonedSadnessThoughtDef));
+            }
+        }
+    }
+
     ///<summary>填满开局的所有电池。</summary>
     [Obsolete]
     public class ScenPart_FillBattery : ScenPart
@@ -257,23 +260,6 @@ namespace Explorite
         }
     }
 
-    /*
-    ///<summary>初始化Sayers开局想法。</summary>
-    public class ScenPart_InitSayersThought : ScenPart
-    {
-        public override void PostGameStart()
-        {
-            base.PostGameStart();
-
-            foreach (List<Thought_Memory> memories in Find.GameInitData.startingAndOptionalPawns.Where(pawn => pawn.def == AlienSayersDef).Select(pawn => pawn.needs.mood.thoughts.memories.Memories))
-            {
-                memories.RemoveAll(memory => memory.def == ThoughtDefOf.NewColonyOptimism);
-                memories.Add(ThoughtMaker.MakeThought(SayersThought));
-                
-            }
-        }
-    }
-    */
     ///<summary>玩家初始角色开局资源。</summary>
     public class ScenPart_StartingPawnThings : ScenPart_ThingCount
     {

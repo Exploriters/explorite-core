@@ -124,6 +124,8 @@ namespace Explorite
         public static readonly BodyDef SayersBodyDef = GetModDef<BodyDef>(InstelledMods.Sayers, "Body_Sayers");
         public static readonly MemeDef SayersMeme1Def = GetModDef<MemeDef>(InstelledMods.Sayers, "Experimental_SayersMeme");
         public static readonly MemeDef SayersMeme2Def = GetModDef<MemeDef>(InstelledMods.Sayers, "CarnivorousAnimal_SayersMeme");
+        public static readonly ThoughtDef SayersAbandonedSadnessThoughtDef = GetModDef<ThoughtDef>(InstelledMods.Sayers, "SayersAbandonedSadness");
+        public static readonly ThoughtDef SayersFeelLonelyThoughtDef = GetModDef<ThoughtDef>(InstelledMods.Sayers, "SayersWillFeelLonely");
         public static readonly MemeDef SayersStructureMemeDef = GetModDef<MemeDef>(InstelledMods.Sayers, "Structure_Sayers");
 
         public static readonly ThingDef AlienGuoguoDef = GetModDef<ThingDef>(InstelledMods.GuoGuo, "Alien_Guoguo");
