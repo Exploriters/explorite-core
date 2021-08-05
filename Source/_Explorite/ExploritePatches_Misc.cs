@@ -311,6 +311,9 @@ namespace Explorite
                 Patch(AccessTools.Method(typeof(Ideo), "get_ApparelColor"),
                     prefix: nameof(IdeoApparelColorPrefix));
 
+                Patch(AccessTools.Method(typeof(Page_ChooseIdeoPreset), "PostOpen"),
+                    transpiler: nameof(PageChooseIdeoPresetPostOpenTranspiler));
+
                 if (InstelledMods.HAR)
                 {
                     // 依赖 类 AlienRace.RaceRestrictionSettings
@@ -2829,6 +2832,56 @@ namespace Explorite
                 return false;
             }
             return true;
+        }
+
+        ///<summary>跳过文化预设。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> PageChooseIdeoPresetPostOpenTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            byte patchActionStage = 0;
+            MethodInfo WindowPostOpenInfo = AccessTools.Method(typeof(Window), "PostOpen");
+            MethodInfo PageChooseIdeoPresetDoCustomizeInfo = AccessTools.Method(typeof(Page_ChooseIdeoPreset), "DoCustomize");
+            FieldInfo next = typeof(Page).GetField(nameof(Page.next));
+            FieldInfo prev = typeof(Page).GetField(nameof(Page.prev));
+            Label label = ilg.DefineLabel();
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0 && ins.opcode == OpCodes.Call && ins.operand == WindowPostOpenInfo as object)
+                {
+                    patchActionStage++;
+                    yield return ins;
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<bool>)SpecPFacInGame).GetMethodInfo());
+                    yield return new CodeInstruction(OpCodes.Brfalse_S, label);
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Call, PageChooseIdeoPresetDoCustomizeInfo);
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldfld, prev);
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldfld, next);
+                    yield return new CodeInstruction(OpCodes.Ldfld, prev);
+                    yield return new CodeInstruction(OpCodes.Stfld, next);
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldfld, next);
+                    yield return new CodeInstruction(OpCodes.Ldfld, prev);
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldfld, prev);
+                    yield return new CodeInstruction(OpCodes.Stfld, prev);
+                    yield return new CodeInstruction(OpCodes.Ret);
+                    continue;
+                }
+                if (patchActionStage == 1)
+                {
+                    patchActionStage++;
+                    ins.labels.Add(label);
+                    yield return ins;
+                    continue;
+                }
+                else
+                {
+                    yield return ins;
+                    continue;
+                }
+            }
+            yield break;
         }
     }
 }

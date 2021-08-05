@@ -301,11 +301,9 @@ namespace Explorite
             }
             if (thing is Building_TriBattery_SecretTrishot secretBattery)
             {
-                if (!GameComponentCentaurStory.Any())
-                {
-                    secretBattery.SetSecret(true);
-                    GameComponentCentaurStory.TryAdd(secretBattery);
-                }
+                GameComponentCentaurStory.ClearSecret();
+                secretBattery.SetSecret(true);
+                GameComponentCentaurStory.TryAdd(secretBattery);
             }
             thing.stackCount = count;
             if (thingDef.Minifiable)

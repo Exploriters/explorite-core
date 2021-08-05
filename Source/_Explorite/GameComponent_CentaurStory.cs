@@ -51,6 +51,17 @@ namespace Explorite
                 return false;
             }
         };
+        public void ClearSecret()
+        {
+            foreach (Thing thing in tracedTrishots)
+            {
+                if (thing is ISecretTrishot secretTrishot)
+                {
+                    secretTrishot.SetSecret(false);
+                }
+            }
+            CleanUp();
+        }
         public IEnumerable<Thing> CleanUp()
         {
             tracedTrishots.RemoveAll(thing => !ValidTrishotPredicate(thing));
