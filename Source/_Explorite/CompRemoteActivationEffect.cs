@@ -74,7 +74,7 @@ namespace Explorite
             {
                 return false;
             }
-            IEnumerable<BodyPartRecord> partrecs = Props.part == null ? new List<BodyPartRecord>(){ null } : Wearer.def.race.body.AllParts.Where(p => p.def == Props.part).InRandomOrder();
+            IEnumerable<BodyPartRecord> partrecs = Props.part == null ? new List<BodyPartRecord>() { null } : Wearer.def.race.body.AllParts.Where(p => p.def == Props.part).InRandomOrder();
             int count = Props.count?.RandomInRange ?? int.MaxValue;
             foreach (BodyPartRecord partrec in partrecs)
             {
@@ -107,7 +107,7 @@ namespace Explorite
         CompProperties_RemoteActivationEffect_Apparel_ApplyDamage Props => props as CompProperties_RemoteActivationEffect_Apparel_ApplyDamage;
         public override bool ActiveEffect()
         {
-            IEnumerable<BodyPartRecord> partrecs = Props.part == null ? new List<BodyPartRecord>(){ null } : Wearer.def.race.body.AllParts.Where(p => p.def == Props.part).InRandomOrder();
+            IEnumerable<BodyPartRecord> partrecs = Props.part == null ? new List<BodyPartRecord>() { null } : Wearer.def.race.body.AllParts.Where(p => p.def == Props.part).InRandomOrder();
             int count = Props.count?.RandomInRange ?? int.MaxValue;
             foreach (BodyPartRecord partrec in partrecs)
             {
@@ -250,7 +250,7 @@ namespace Explorite
             {
                 if (comp is CompExplosive explosive)
                 {
-                    typeof(CompExplosive).GetMethod("Detonate", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(explosive, new object[]{ parent.MapHeld , true});
+                    typeof(CompExplosive).GetMethod("Detonate", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(explosive, new object[] { parent.MapHeld, true });
                 }
             }
             return true;

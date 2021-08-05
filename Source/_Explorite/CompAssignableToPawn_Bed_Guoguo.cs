@@ -14,14 +14,14 @@ namespace Explorite
     public class CompAssignableToPawn_Bed_Guoguo : CompAssignableToPawn_Bed
     {
         //public override IEnumerable<Pawn> AssigningCandidates => base.AssigningCandidates.Where(p => p.def == AlienGuoguoDef);
-		public override AcceptanceReport CanAssignTo(Pawn pawn)
-		{
-			if (pawn.def != AlienGuoguoDef)
-			{
-				return "TooLargeForBed".Translate();
-			}
-			return base.CanAssignTo(pawn);
-		}
-	}
+        public override AcceptanceReport CanAssignTo(Pawn pawn)
+        {
+            if (pawn.def != AlienGuoguoDef)
+            {
+                return "TooLargeForBed".Translate();
+            }
+            return base.CanAssignTo(pawn);
+        }
+    }
 
 }

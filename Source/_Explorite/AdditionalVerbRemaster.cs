@@ -385,7 +385,7 @@ namespace Explorite
             }
             if (disableReasonOverwrite)
             {
-                if (verbProps != null && verbProps.disable)
+                if (verbProps != null && (verbProps.disable || !verbProps.CheckOut(ownerThing)))
                 {
                     command_VerbTarget.disabledReason = verbProps.disableReason + "\n" + command_VerbTarget.disabledReason;
                 }
@@ -397,7 +397,7 @@ namespace Explorite
                         ) + "\n" + command_VerbTarget.disabledReason;
                 }
             }
-            else if (verbProps != null && verbProps.disable)
+            else if (verbProps != null && (verbProps.disable || !verbProps.CheckOut(ownerThing)))
             {
                 command_VerbTarget.Disable(verbProps.disableReason);
             }
@@ -609,7 +609,12 @@ namespace Explorite
         public int cooldownTick = -1;
         public bool ownByPawnEquipment = false;
         public ThingDef secondaryProjectile;
+        public CheckOutList<string> enableTagsValidator = new CheckOutList<string>();
 
+        public bool CheckOut(Thing thing)
+        {
+            return enableTagsValidator.CheckOut(thing.AllStateTags());
+        }
         public VerbProperties_Custom()
         {
             LongEventHandler.ExecuteWhenFinished(delegate

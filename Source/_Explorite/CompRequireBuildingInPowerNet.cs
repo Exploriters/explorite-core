@@ -30,7 +30,8 @@ namespace Explorite
         public CheckOutList<ThingDef> RequiredBuildings => Props.requiredBuildings;
         public virtual bool BuildingsRequirementMeet
         {
-            get {
+            get
+            {
                 return RequiredBuildings.CheckOut(parent?.TryGetComp<CompPower>()?.PowerNet?.powerComps?.Where(comp => comp.PowerOn)?.Select(comp => comp.parent.def) ?? Enumerable.Empty<ThingDef>());
             }
         }
@@ -59,7 +60,7 @@ namespace Explorite
                     overrideReportTitle: "Magnuassembly_CompRequireBuildingInPowerNet_StatTitle".Translate(),
                     hyperlinks: null
                     );
-            
+
         }
     }
 }

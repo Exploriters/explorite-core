@@ -37,7 +37,7 @@ namespace Explorite
 
             QuestPart_HyperLinks questPart_HyperLinks = new QuestPart_HyperLinks() {
                 DefDatabase<ThingDef>.GetNamed("FabricationBench"),
-                DefDatabase<RecipeDef>.GetNamed("Repair_Trishot_1Stage"),
+                //DefDatabase<RecipeDef>.GetNamed("Repair_Trishot_1Stage"),
             };
 
             QuestGen.quest.AddPart(questPart_Choice);

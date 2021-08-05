@@ -100,6 +100,7 @@
     <Compile Include="BackstoryCracker.cs" />
     <Compile Include="Building_TriBattery.cs" />
     <Compile Include="Building_TurretGun_HyperTrishot.cs" />
+    <Compile Include="CompItemStage.cs" />
     <Compile Include="ThoughtWorker_SayersWillFeelLonely.cs" />
     <Compile Include="CheckOutList.cs" />
     <Compile Include="ColorGenerator.cs" />

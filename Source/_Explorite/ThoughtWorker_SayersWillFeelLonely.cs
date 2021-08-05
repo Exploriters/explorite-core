@@ -1,4 +1,4 @@
-﻿using Verse;
+using Verse;
 using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace Explorite
     {
         protected override ThoughtState CurrentStateInternal(Pawn p)
         {
-            if (p.def == AlienSayersDef && !(p?.Map?.mapPawns?.AllPawns?.Any(pawn => pawn != p && (pawn.Faction == null || pawn.Faction == p.Faction) && pawn.def == AlienSayersDef)??false))
+            if (p.def == AlienSayersDef && !(p?.Map?.mapPawns?.AllPawns?.Any(pawn => pawn != p && (pawn.Faction == null || pawn.Faction == p.Faction) && pawn.def == AlienSayersDef) ?? false))
             {
                 return true;
             }

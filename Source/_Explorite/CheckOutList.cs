@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using Verse;
 
 namespace Explorite
 {
@@ -165,7 +166,7 @@ namespace Explorite
                 CheckOutListMode.Neither => rulev.modeNeither,
                 CheckOutListMode.None => rulev.modeNone,
                 _ => throw new InvalidOperationException("CheckOutListMode mode is invalid.")
-            } + string.Join("\n", stringBuilder.ToString().Split('\n').Select((str, i) => ( i == 0 ? "" : rulev.indentation) + str));
+            } + string.Join("\n", stringBuilder.ToString().Split('\n').Select((str, i) => (i == 0 ? "" : rulev.indentation) + str));
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051", Justification = "<挂起>")]
@@ -222,8 +223,15 @@ namespace Explorite
                     switch (node.Name)
                     {
                         case "li":
-                            XmlAttribute xmlAttribute = node.Attributes["MayRequire"];
-                            Verse.DirectXmlCrossRefLoader.RegisterListWantsCrossRef<T>(objects, node.InnerText, xmlRoot.Name, xmlAttribute?.Value);
+                            if (typeof(Def).IsAssignableFrom(typeof(T)))
+                            {
+                                XmlAttribute xmlAttribute = node.Attributes["MayRequire"];
+                                Verse.DirectXmlCrossRefLoader.RegisterListWantsCrossRef<T>(objects, node.InnerText, xmlRoot.Name, xmlAttribute?.Value);
+                            }
+                            else
+                            {
+                                objects.Add(Verse.DirectXmlToObject.ObjectFromXml<T>(node, true));
+                            }
                             break;
 
                         case "list":

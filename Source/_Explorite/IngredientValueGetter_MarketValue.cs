@@ -1,9 +1,10 @@
 /********************
- * 该文件包含多个剧本部件。
+ * 该文件包含配方成分获取器。
  * --siiftun1857
  */
 using RimWorld;
 using Verse;
+using Explorite;
 
 namespace Explorite
 {
@@ -19,4 +20,13 @@ namespace Explorite
             return "BillRequiresMarketValue".Translate(ing.GetBaseCount(), ing.filter.Summary);
         }
     }
+    /*
+    public class IngredientValueGetter_Stage1trishotOnly : IngredientValueGetter_Volume
+    {
+        public override float ValuePerUnitOf(ThingDef t)
+        {
+            return !t.TryGetState("Trishot", out string stage) || stage == "stage1";
+        }
+    }
+    */
 }

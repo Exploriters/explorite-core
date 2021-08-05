@@ -147,7 +147,8 @@ namespace Explorite
             Thing final = this.FinalSpawnedParent();
             if (final != null && SpawnedOrAnyParentSpawned && includingBrokenTrishot)
             {
-                Thing trishot = ThingMaker.MakeThing(TrishotThing1Def);
+                Thing trishot = ThingMaker.MakeThing(TrishotThingDef);
+                trishot.TrySetState("Trishot", "stage1");
                 GameComponentCentaurStory.TryAdd(trishot);
                 GenSpawn.Spawn(trishot, final.Position, final.Map);
                 if (this.TryGetComp<CompForbiddable>()?.Forbidden is bool forbid)

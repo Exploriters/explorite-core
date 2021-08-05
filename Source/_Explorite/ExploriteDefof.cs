@@ -73,8 +73,8 @@ namespace Explorite
         public static readonly ThingDef AlienCentaurDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Alien_Centaur");
         public static readonly ThingDef AlienCentaurCorpseDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Corpse_Alien_Centaur");
         public static readonly ThingDef CentaurHeaddressDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Apparel_CentaurHeaddress");
-        public static readonly ThingDef TrishotThing1Def = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Bow_Trishot_1Stage");
-        public static readonly ThingDef TrishotThing2Def = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Bow_Trishot_2Stage");
+        //public static readonly ThingDef TrishotThing1Def = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Bow_Trishot_1Stage");
+        //public static readonly ThingDef TrishotThing2Def = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Bow_Trishot_2Stage");
         public static readonly ThingDef TrishotThingDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Bow_Trishot");
         public static readonly ThingDef ComponentArchotechDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "ComponentArchotech");
         public static readonly ThingDef ThermoDamperDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "ThermoDamper");

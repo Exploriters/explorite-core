@@ -290,10 +290,10 @@ namespace Explorite
         internal static MethodInfo methodFloodUnfogAdjacent = typeof(FogGrid).GetMethod("FloodUnfogAdjacent", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
         public static void RevealFogCluster(this FogGrid fogGrid, IntVec3 target)
         {
-            methodFloodUnfogAdjacent.Invoke(fogGrid, new object[] { target });
+            methodFloodUnfogAdjacent.Invoke(fogGrid, new object[] { target, false });
         }
 
-        
+
         /**
          * <summary>
          * 获取目标的最后一个已生成的上级容器。
@@ -329,7 +329,7 @@ namespace Explorite
             }
             return null;
         }
-        
+
 
         // 与Color.HSVToRGB重复
         /*

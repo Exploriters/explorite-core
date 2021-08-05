@@ -28,7 +28,9 @@ namespace Explorite
         {
             if (includingBrokenTrishot)
             {
-                GenSpawn.Spawn(ThingMaker.MakeThing(TrishotThing1Def), parent.Position, previousMap);
+                Thing thing = ThingMaker.MakeThing(TrishotThingDef);
+                thing.TrySetState("Trishot", "stage1");
+                GenSpawn.Spawn(thing, parent.Position, previousMap);
             }
         }
         public bool Secret(bool boolen)

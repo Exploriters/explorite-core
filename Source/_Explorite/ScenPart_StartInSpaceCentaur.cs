@@ -52,7 +52,7 @@ namespace Explorite
                 if (shape.shapeOrDef == "Ship_Engine_Interplanetary")
                 {
                     Thing InterplanetaryEngine = ThingMaker.MakeThing(engineDef);
-                    GenSpawn.Spawn(InterplanetaryEngine, center + new IntVec3(shape.x,0,shape.z), spaceMap, shape.rot, WipeMode.Vanish);
+                    GenSpawn.Spawn(InterplanetaryEngine, center + new IntVec3(shape.x, 0, shape.z), spaceMap, shape.rot, WipeMode.Vanish);
                     InterplanetaryEngine.SetFaction(Faction.OfPlayer);
                     InterplanetaryEngine.TryGetComp<CompPowerTrader>().PowerOn = true;
                 }
@@ -336,7 +336,7 @@ namespace Explorite
                 CameraJumper.TryJump(sunLampLocation.Value, spaceMap);
             }
             spaceMap.fogGrid.ClearAllFog();
-            }
+        }
 
         public override void PostGameStart()
         {

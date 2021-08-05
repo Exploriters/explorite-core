@@ -108,7 +108,8 @@ namespace Explorite
                 return;
             }
             IntVec3 dropCenter = DropCellFinder.RandomDropSpot(map);
-            Thing copy = ThingMaker.MakeThing(TrishotThing1Def);
+            Thing copy = ThingMaker.MakeThing(TrishotThingDef);
+            copy.TrySetState("Trishot", "stage1");
             tracedTrishots.Add(copy);
             DropPodUtility.DropThingsNear(
                 dropCenter,

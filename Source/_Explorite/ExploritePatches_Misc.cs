@@ -314,6 +314,11 @@ namespace Explorite
                 Patch(AccessTools.Method(typeof(Page_ChooseIdeoPreset), "PostOpen"),
                     transpiler: nameof(PageChooseIdeoPresetPostOpenTranspiler));
 
+                Patch(AccessTools.Method(typeof(GenLabel), "NewThingLabel", new Type[] { typeof(Thing), typeof(int), typeof(bool) }),
+                    transpiler: nameof(GenLabelNewThingLabelTranspiler));
+                Patch(AccessTools.Method(typeof(GenLabel), "ThingLabel", new Type[] { typeof(Thing), typeof(int), typeof(bool) }),
+                    transpiler: nameof(GenLabelThingLabelTranspiler));
+
                 if (InstelledMods.HAR)
                 {
                     // 依赖 类 AlienRace.RaceRestrictionSettings
@@ -1418,10 +1423,12 @@ namespace Explorite
         ///<summary>显示MakeThing的调用堆栈。</summary>
         [HarmonyPrefix]public static void ThingMakerMakeThingPrefix(ThingDef def)
         {
+            /*
             if (def == TrishotThing2Def)
             {
                 Log.Message("[Explorite]Making TriShot Prototype, with stack trace...");
             }
+            */
         }
         ///<summary>显示MakeThing的调用堆栈。</summary>
         [HarmonyPostfix]public static void ThingMakerMakeThingPostfix(Thing __result)
@@ -1471,9 +1478,12 @@ namespace Explorite
         {
             if (anyThing?.def?.weaponTags?.Contains("CentaurTracedTrishot") == true)
             {
+                /*
                 float factor = singlePrice / anyThing.MarketValue;
                 //__result = 0f;//-= TrishotThing1Def.BaseMarketValue * count / 40f;
                 __result -= TrishotThing1Def.BaseMarketValue * factor * count / 40f;
+                */
+                __result = 0f;
             }
         }
         ///<summary>移除半人马随机好心情灵感。</summary>
@@ -2883,5 +2893,129 @@ namespace Explorite
             }
             yield break;
         }
+
+        ///<summary>增加特殊标签的显示。</summary>
+        [HarmonyTranspiler]public static IEnumerable<CodeInstruction> GenLabelNewThingLabelTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            byte patchActionStage = 0;
+            MethodInfo StringConcatInfo = AccessTools.Method(typeof(string), nameof(string.Concat), new Type[] { typeof(string), typeof(string) });
+
+            Label label1 = ilg.DefineLabel();
+            Label label2 = ilg.DefineLabel();
+            LocalBuilder localBool = ilg.DeclareLocal(typeof(bool));
+            bool lastOr = false;
+            Queue<LocalBuilder> localBools = new Queue<LocalBuilder>();
+
+            StringBuilder sb = new StringBuilder();
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0 && ins.opcode == OpCodes.Stloc_S && ((LocalBuilder)ins.operand).LocalIndex == 8)
+                {
+                    patchActionStage++;
+                    yield return ins.Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Ldarg_0).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<Thing, bool>)ItemStageUtility.AnyItemStageLabels).GetMethodInfo()).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Stloc_S, localBool).Appsb(sb);
+                }
+                else if (patchActionStage == 1 && lastOr && (ins.opcode == OpCodes.Brfalse || ins.opcode == OpCodes.Brfalse_S))
+                {
+                    patchActionStage++;
+                    yield return new CodeInstruction(OpCodes.Ldloc_S, localBool).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Or).Appsb(sb);
+                    yield return ins.Appsb(sb);
+                }
+                else if (patchActionStage == 2 && ins.opcode == OpCodes.Ldstr && ins.operand == " (" as object)
+                {
+                    patchActionStage++;
+                    yield return ins.Appsb(sb);
+                }
+                else if (patchActionStage == 3 && ins.opcode == OpCodes.Call && ins.operand == StringConcatInfo as object)
+                {
+                    patchActionStage++;
+                    yield return ins.Appsb(sb);
+                }
+                else if (patchActionStage == 4 && ins.opcode == OpCodes.Stloc_0)
+                {
+                    patchActionStage++;
+                    yield return ins.Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Ldloc_S, localBool).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Brfalse_S, label1).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Ldloc_0).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Ldarg_0).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Call, ((Func<Thing, string>)ItemStageUtility.AllStateLabels).GetMethodInfo()).Appsb(sb); 
+                    yield return new CodeInstruction(OpCodes.Call, StringConcatInfo).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Stloc_0).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Ldloc_3).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Ldloc_S, localBools.Dequeue()).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Or).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Ldloc_S, localBools.Dequeue()).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Or).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Brfalse_S, label2).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Ldloc_0).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Ldstr, " ").Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Call, StringConcatInfo).Appsb(sb);
+                    yield return new CodeInstruction(OpCodes.Stloc_0).Appsb(sb);
+                }
+                else if (patchActionStage == 5)
+                {
+                    patchActionStage++;
+                    ins.labels.Add(label1);
+                    ins.labels.Add(label2);
+                    yield return ins.Appsb(sb);
+                }
+                else
+                {
+                    yield return ins.Appsb(sb);
+                }
+
+                if (patchActionStage <= 1)
+                {
+                    if (ins.opcode == OpCodes.Ldloc_S)
+                    {
+                        localBools.Enqueue(ins.operand as LocalBuilder);
+                    }
+                    if (localBools.Count() > 2)
+                    {
+                        localBools.Dequeue();
+                    }
+                    lastOr = ins.opcode == OpCodes.Or;
+                }
+            }
+            Log.Message($"[Explorite]instr result:\n" + sb.ToString());
+            yield break;
+        }
+
+        ///<summary>特殊标签禁止使用缓存机制。</summary>
+        [HarmonyTranspiler]
+        public static IEnumerable<CodeInstruction> GenLabelThingLabelTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+        {
+            byte patchActionStage = 0;
+            MethodInfo NewThingLabelInfo = AccessTools.Method(typeof(GenLabel), "NewThingLabel", new Type[] { typeof(Thing), typeof(int), typeof(bool) });
+            Label label = ilg.DefineLabel();
+
+            yield return new CodeInstruction(OpCodes.Ldarg_0);
+            yield return new CodeInstruction(OpCodes.Call, ((Func<Thing, bool>)ItemStageUtility.AnyItemStageLabels).GetMethodInfo());
+            yield return new CodeInstruction(OpCodes.Brfalse_S, label);
+            yield return new CodeInstruction(OpCodes.Ldarg_0);
+            yield return new CodeInstruction(OpCodes.Ldarg_1);
+            yield return new CodeInstruction(OpCodes.Ldarg_2);
+            yield return new CodeInstruction(OpCodes.Call, NewThingLabelInfo);
+            yield return new CodeInstruction(OpCodes.Ret);
+            foreach (CodeInstruction ins in instr)
+            {
+                if (patchActionStage == 0)
+                {
+                    patchActionStage++;
+                    ins.labels.Add(label);
+                    yield return ins;
+                }
+                else
+                {
+                    yield return ins;
+                }
+            }
+            yield break;
+        }
+
     }
 }
