@@ -7,20 +7,29 @@
     <scenPartClass>Explorite.ScenPart_StartInSpaceCentaur</scenPartClass>
     <maxUses>1</maxUses>
   </ScenPartDef>
-
-  <ScenPartDef>
-    <defName>FillTriBattery</defName>
-    <label>fill batteries</label>
-    <category>Misc</category>
-    <scenPartClass>Explorite.ScenPart_FillBattery</scenPartClass>
-    <maxUses>1</maxUses>
-  </ScenPartDef>
   
   <ScenPartDef>
     <defName>RemoveChunkSlag</defName>
     <label>remove steel slag chunk in drop pod</label>
     <category>Misc</category>
     <scenPartClass>Explorite.ScenPart_WipeoutChunkSlag</scenPartClass>
+    <maxUses>1</maxUses>
+  </ScenPartDef>
+  
+  <ScenPartDef>
+    <defName>StartingPawnsThings</defName>
+    <label>player starting characters start with</label>
+    <scenPartClass>Explorite.ScenPart_StartingPawnThings</scenPartClass>
+    <category>StartingItem</category>
+    <summaryPriority>299</summaryPriority>
+  </ScenPartDef>
+
+<!--
+  <ScenPartDef>
+    <defName>FillTriBattery</defName>
+    <label>fill batteries</label>
+    <category>Misc</category>
+    <scenPartClass>Explorite.ScenPart_FillBattery</scenPartClass>
     <maxUses>1</maxUses>
   </ScenPartDef>
   
@@ -39,6 +48,7 @@
     <scenPartClass>Explorite.ScenPart_UnpackMinified</scenPartClass>
     <maxUses>1</maxUses>
   </ScenPartDef>
+  -->
   
   <!--<ScenPartDef>
     <defName>StartInSpace_Defined</defName>

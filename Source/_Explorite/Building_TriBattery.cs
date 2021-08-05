@@ -15,11 +15,11 @@ namespace Explorite
     {
         public bool GetSecret();
         public bool SetSecret(bool boolen);
-        public bool LeaveTrishot(IntVec3 position, Map map);
+        public bool LeaveTrishot();
     }
     ///<summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />不继承自<seealso cref = "Building_Battery" />，因该类并未有独有方法，且部分行为不可被覆盖。<br />实现了<seealso cref = "ISecretTrishot" />，可在开局被指定具有三射弓。</summary>
     [StaticConstructorOnStartup]
-    public class Building_TriBattery : Building/*_Battery*/, ISecretTrishot
+    public class Building_TriBattery : Building/*_Battery*/
     {
         private int ticksToExplode;
 
@@ -37,39 +37,6 @@ namespace Explorite
 
         private static readonly Material BatteryBarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.3f, 0.3f, 0.3f), false);
 
-        private bool includingBrokenTrishot = false;
-        public bool GetSecret()
-        {
-            return includingBrokenTrishot;
-        }
-        public bool SetSecret(bool boolen)
-        {
-            return includingBrokenTrishot = boolen;
-        }
-        public bool LeaveTrishot(IntVec3 position, Map map)
-        {
-            if (includingBrokenTrishot)
-            {
-                Thing trishot = ThingMaker.MakeThing(TrishotThing1Def);
-                GameComponentCentaurStory.TryAdd(trishot);
-                GenSpawn.Spawn(trishot, position, map);
-
-                bool? forbid = this?.TryGetComp<CompForbiddable>()?.Forbidden;
-                if (forbid.HasValue)
-                {
-                    trishot.TryGetComp<CompForbiddable>().Forbidden = forbid.Value;
-                }
-                includingBrokenTrishot = false;
-                return true;
-            }
-            return false;
-        }
-        public override void Destroy(DestroyMode mode)
-        {
-            LeaveTrishot(Position, Map);
-            base.Destroy(mode);
-        }
-
         public Building_TriBattery()
         {
         }
@@ -78,7 +45,6 @@ namespace Explorite
         {
             base.ExposeData();
             Scribe_Values.Look(ref ticksToExplode, "ticksToExplode", 0, false);
-            Scribe_Values.Look(ref includingBrokenTrishot, "isSecretBattery", false);
         }
 
         public override void Draw()
@@ -162,5 +128,47 @@ namespace Explorite
 
         // Note: this type is marked as 'beforefieldinit'.
         //static Building_TriBattery() { }
+    }
+
+    [StaticConstructorOnStartup]
+    public class Building_TriBattery_SecretTrishot : Building_TriBattery, ISecretTrishot
+    {
+        private bool includingBrokenTrishot = false;
+        public bool GetSecret()
+        {
+            return includingBrokenTrishot;
+        }
+        public bool SetSecret(bool boolen)
+        {
+            return includingBrokenTrishot = boolen;
+        }
+        public bool LeaveTrishot()
+        {
+            Thing final = this.FinalSpawnedParent();
+            if (final != null && SpawnedOrAnyParentSpawned && includingBrokenTrishot)
+            {
+                Thing trishot = ThingMaker.MakeThing(TrishotThing1Def);
+                GameComponentCentaurStory.TryAdd(trishot);
+                GenSpawn.Spawn(trishot, final.Position, final.Map);
+                if (this.TryGetComp<CompForbiddable>()?.Forbidden is bool forbid)
+                {
+                    trishot.TryGetComp<CompForbiddable>().Forbidden = forbid;
+                }
+                includingBrokenTrishot = false;
+                return true;
+            }
+            return false;
+        }
+        public override void Destroy(DestroyMode mode)
+        {
+            LeaveTrishot();
+            base.Destroy(mode);
+        }
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look(ref includingBrokenTrishot, "isSecretBattery", false);
+        }
+
     }
 }

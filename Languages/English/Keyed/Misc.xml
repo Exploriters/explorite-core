@@ -15,6 +15,7 @@
   <Magnuassembly_ScenPart_WipeoutChunkSlag_StaticSummary>Beginner drop pods will not drops chunk slag.</Magnuassembly_ScenPart_WipeoutChunkSlag_StaticSummary>
   <Magnuassembly_ScenPart_DumpThingsToPawnInv_StaticSummary>All items will be dumped to pawn's inventory.</Magnuassembly_ScenPart_DumpThingsToPawnInv_StaticSummary>
   <Magnuassembly_ScenPart_UnpackMinified_StaticSummary>Unpack all minified buildings in drop pods.</Magnuassembly_ScenPart_UnpackMinified_StaticSummary>
+  <Magnuassembly_ScenPart_StartingPawnThings_Summary>player starting characters are start with</Magnuassembly_ScenPart_StartingPawnThings_Summary>
   
   <Magnuassembly_CompRefuelable_PassiveRecharge_ChargeCompleted>{0} has completely charged.</Magnuassembly_CompRefuelable_PassiveRecharge_ChargeCompleted>
 

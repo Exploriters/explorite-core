@@ -15,6 +15,7 @@
   <Magnuassembly_ScenPart_WipeoutChunkSlag_StaticSummary>起始空投舱不再产生钢渣块。</Magnuassembly_ScenPart_WipeoutChunkSlag_StaticSummary>
   <Magnuassembly_ScenPart_DumpThingsToPawnInv_StaticSummary>物品将被装入人物背包。</Magnuassembly_ScenPart_DumpThingsToPawnInv_StaticSummary>
   <Magnuassembly_ScenPart_UnpackMinified_StaticSummary>解开空投舱内被打包的建筑物。</Magnuassembly_ScenPart_UnpackMinified_StaticSummary>
+  <Magnuassembly_ScenPart_StartingPawnThings_Summary>玩家初始角色开局资源</Magnuassembly_ScenPart_StartingPawnThings_Summary>
   
   <Magnuassembly_CompRefuelable_PassiveRecharge_ChargeCompleted>{0}已经完成了充能。</Magnuassembly_CompRefuelable_PassiveRecharge_ChargeCompleted>
 

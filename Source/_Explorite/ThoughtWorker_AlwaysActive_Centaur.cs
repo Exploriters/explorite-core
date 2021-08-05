@@ -27,4 +27,22 @@ namespace Explorite
         }
     }
 
+    /*
+    /// <summary>。</summary>
+    public class ThoughtWorker_NoSayersInMap : ThoughtWorker
+    {
+        protected override ThoughtState CurrentStateInternal(Pawn p)
+        {
+            if (p.def == AlienSayersDef && !(p?.Map?.mapPawns?.AllPawns?.Any(pawn => pawn != p && (pawn.Faction == null || pawn.Faction == p.Faction) && pawn.def == AlienSayersDef && !pawn.Dead) ?? false))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+    */
+
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  
+  <RecipeDef ParentName="SurgeryFlesh" Abstract="True">
+    <defName>ForceScarSurgery</defName>
+    <label>scarring</label>
+    <description>Causes injueries get permanent.</description>
+    <workerClass>Explorite.Recipe_ForceScarSurgery</workerClass>
+    <jobString>Scarring.</jobString>
+    <workAmount>1000</workAmount>
+    <hideBodyPartNames>true</hideBodyPartNames>
+    <isViolation>true</isViolation>
+    <targetsBodyPart>false</targetsBodyPart>
+    <surgerySuccessChanceFactor>1</surgerySuccessChanceFactor>
+    <ingredients>
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <categories>
+        <li>Medicine</li>
+      </categories>
+    </fixedIngredientFilter>
+  </RecipeDef>
+  
+</Defs>

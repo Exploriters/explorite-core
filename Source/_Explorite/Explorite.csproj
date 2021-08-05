@@ -115,7 +115,7 @@
     <Compile Include="CompHMTrishotUser.cs" />
     <Compile Include="CompRemoteActivationEffect.cs" />
     <Compile Include="CompRequireBuildingInPowerNet.cs" />
-    <Compile Include="ExploritePatch.cs" />
+    <Compile Include="ExploritePatches_Utility.cs" />
     <Compile Include="ExploritePatches_OversizedWeapon.cs" />
     <Compile Include="CompPassiveMeditationFocusGain.cs" />
     <Compile Include="CompPawnRepairApparelsOvertime.cs" />

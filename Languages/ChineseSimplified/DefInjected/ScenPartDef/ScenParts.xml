@@ -8,6 +8,7 @@
   <AddFilledTribatteryInPod.label>追加三联电池</AddFilledTribatteryInPod.label>
   <DumpThingsToPawnInv.label>将物品放入角色背包</DumpThingsToPawnInv.label>
   <StartingThing_Defined_FillBattery.label>开局资源（填满电池）</StartingThing_Defined_FillBattery.label>
+  <StartingPawnsThings.label>玩家初始角色开局资源</StartingPawnsThings.label>
 
 
 </LanguageData>

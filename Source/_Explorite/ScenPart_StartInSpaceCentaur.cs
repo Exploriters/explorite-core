@@ -58,6 +58,7 @@ namespace Explorite
                 }
             }
 
+            /*
             foreach (Pawn pawn in Find.GameInitData.startingAndOptionalPawns)
             {
                 foreach (Thing thingInPawn in (pawn?.inventory?.GetDirectlyHeldThings() ?? Enumerable.Empty<Thing>()).Concat(pawn?.apparel?.GetDirectlyHeldThings() ?? Enumerable.Empty<Thing>()).Concat(pawn?.equipment?.GetDirectlyHeldThings() ?? Enumerable.Empty<Thing>()).ToList())
@@ -76,11 +77,11 @@ namespace Explorite
                         {
                             compStyleableInPawn.styleDef = Find.FactionManager?.OfPlayer?.ideos?.PrimaryIdeo?.style?.StyleForThingDef(thingInPawn.def)?.styleDef;
                         }
-                        catch (NullReferenceException e)
+                        catch (NullReferenceException)
                         {
                         }
                     }
-                    if (thingInPawn is Building_TriBattery secretBattery)
+                    if (thingInPawn is Building_TriBattery_SecretTrishot secretBattery)
                     {
                         secretBattery?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
                         if (!GameComponentCentaurStory.Any())
@@ -91,6 +92,7 @@ namespace Explorite
                     }
                 }
             }
+            */
 
             //Thing targetTorpedo = null;
             //IntVec3 torpedoToLocation = new IntVec3(0, 0, 0);
@@ -129,7 +131,7 @@ namespace Explorite
                         {
                             compStyleable.styleDef = Find.FactionManager.OfPlayer.ideos.PrimaryIdeo.style.StyleForThingDef(thing.def)?.styleDef;
                         }
-                        catch (NullReferenceException e)
+                        catch (NullReferenceException)
                         {
                         }
                     }

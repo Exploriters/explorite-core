@@ -248,6 +248,9 @@
         <member name="T:Explorite.ExploritePatches">
             <summary>包含多个补丁的合集类。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.PrinterTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>打印函数的构造。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.DrawEquipmentAimingPrefix(Verse.PawnRenderer,Verse.Thing,UnityEngine.Vector3,System.Single)">
             <summary>
                 Adds another "layer" to the equipment aiming if they have a
@@ -257,9 +260,6 @@
             <param name="eq"></param>
             <param name="drawLoc"></param>
             <param name="aimAngle"></param>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PrinterTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>打印函数的构造。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.SkillRecordIntervalTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>阻止半人马的技能衰退。</summary>
@@ -937,6 +937,9 @@
         </member>
         <member name="T:Explorite.ScenPart_DumpThingsToPawnInv">
             <summary>将物品塞入殖民者的背包中。</summary>
+        </member>
+        <member name="T:Explorite.ScenPart_StartingPawnThings">
+            <summary>玩家初始角色开局资源。</summary>
         </member>
         <member name="T:Explorite.SubsystemSlot">
             <summary>指定一个子系统的槽位。</summary>
