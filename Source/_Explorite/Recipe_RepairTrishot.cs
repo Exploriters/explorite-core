@@ -6,8 +6,8 @@ using Verse;
 
 namespace Explorite
 {
-    public class Recipe_RepairTrishot1Stage : RecipeWorker
-    {
+	public class Recipe_RepairTrishot1Stage : RecipeWorker
+	{
 
-    }
+	}
 }

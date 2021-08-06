@@ -4,7 +4,7 @@
  */
 namespace Explorite
 {
-    public static partial class ExploriteCore
-    {
-    }
+	public static partial class ExploriteCore
+	{
+	}
 }

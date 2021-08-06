@@ -8,9 +8,9 @@ using Verse;
 
 namespace Explorite
 {
-    ///<summary>指定不允许一个伤害被治疗。</summary>
-    public class HediffComp_TendDuration_CantTend : HediffComp_TendDuration
-    {
-    }
+	///<summary>指定不允许一个伤害被治疗。</summary>
+	public class HediffComp_TendDuration_CantTend : HediffComp_TendDuration
+	{
+	}
 
 }

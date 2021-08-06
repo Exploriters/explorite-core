@@ -8,12 +8,12 @@ using Verse;
 
 namespace Explorite
 {
-    ///<summary><see cref = "MemeDef" />增强。</summary>
-    public class MemeDef_Ex : MemeDef
-    {
-        [NoTranslate]
-        public string islocateGroup;
-        public List<FactionDef> exclusiveTo;
-        public bool lockAccuIdeoColor = false;
-    }
+	///<summary><see cref = "MemeDef" />增强。</summary>
+	public class MemeDef_Ex : MemeDef
+	{
+		[NoTranslate]
+		public string islocateGroup;
+		public List<FactionDef> exclusiveTo;
+		public bool lockAccuIdeoColor = false;
+	}
 }

@@ -9,12 +9,12 @@ using Verse;
 
 namespace Explorite
 {
-    ///<summary>被种族技能使用自定义Ability类。</summary>
-    public class AdditionalAbility : Ability
-    {
-        public AdditionalAbility(Pawn pawn) : base(pawn) { }
-        public AdditionalAbility(Pawn pawn, AbilityDef def) : base(pawn, def) { }
+	///<summary>被种族技能使用自定义Ability类。</summary>
+	public class AdditionalAbility : Ability
+	{
+		public AdditionalAbility(Pawn pawn) : base(pawn) { }
+		public AdditionalAbility(Pawn pawn, AbilityDef def) : base(pawn, def) { }
 
-        public override bool CanCast => base.CanCast;
-    }
+		public override bool CanCast => base.CanCast;
+	}
 }

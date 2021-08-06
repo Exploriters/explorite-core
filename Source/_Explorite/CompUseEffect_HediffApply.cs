@@ -5,12 +5,12 @@
 
 namespace Explorite
 {
-    /*public class CompProperties_UseEffect_HediffApply : CompProperties_UseEffect
-    {
-        public HediffDef hediffDef = null;
-    }
-    public class CompUseEffect_HediffApply : CompUseEffect
-    {
-    }*/
+	/*public class CompProperties_UseEffect_HediffApply : CompProperties_UseEffect
+	{
+		public HediffDef hediffDef = null;
+	}
+	public class CompUseEffect_HediffApply : CompUseEffect
+	{
+	}*/
 
 }
