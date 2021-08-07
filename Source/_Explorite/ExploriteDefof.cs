@@ -140,19 +140,6 @@ namespace Explorite
 		public static readonly Backstory CentaurCivilRetro = BackstoryDatabase.allBackstories.TryGetValue("CentaurCivil_Retro");
 		public static readonly Backstory CentaurCivilMayinas = BackstoryDatabase.allBackstories.TryGetValue("Backstory_Mayinas_Exploriter");
 
-		public static readonly IEnumerable<BodyPartGroupDef> CentaurBodyPartGroups = ((Func<IEnumerable<BodyPartGroupDef>>)(() =>
-		{
-			List<BodyPartGroupDef> pgs = new List<BodyPartGroupDef>();
-			foreach (BodyPartRecord bodyPart in CentaurBodyDef.AllParts)
-			{
-				foreach (BodyPartGroupDef group in bodyPart.groups)
-				{
-					if (!pgs.Contains(group))
-						pgs.Add(group);
-				}
-			}
-			return pgs;
-		}))();
 
 	}
 

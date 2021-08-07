@@ -95,12 +95,14 @@
   <ItemGroup>
     <Compile Include="Ability_MassPsychicDeafCentaur.cs" />
     <Compile Include="AdditionalAbility.cs" />
-    <Compile Include="AdditionalVerbRemaster.cs" />
+    <Compile Include="ExploritePatches_AdditionalVerbRemaster.cs" />
     <Compile Include="Alert_HypothermiaAbsorptionDepletedColonists.cs" />
     <Compile Include="BackstoryCracker.cs" />
     <Compile Include="Building_TriBattery.cs" />
     <Compile Include="Building_TurretGun_HyperTrishot.cs" />
     <Compile Include="CompItemStage.cs" />
+    <Compile Include="ExploritePatches_PawnApparelPredicate.cs" />
+    <Compile Include="ExploritePatches_PawnTraitOverrider.cs" />
     <Compile Include="ThoughtWorker_SayersWillFeelLonely.cs" />
     <Compile Include="CheckOutList.cs" />
     <Compile Include="ColorGenerator.cs" />

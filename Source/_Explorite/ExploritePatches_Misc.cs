@@ -206,6 +206,13 @@ namespace Explorite
 
 				Patch(AccessTools.Method(typeof(OutfitDatabase), "GenerateStartingOutfits"),
 					postfix: new HarmonyMethod(patchType, nameof(OutfitDatabaseGenerateStartingOutfitsPostfix)));
+				// 依赖 类 AlienRace.RaceRestrictionSettings
+				Patch(AccessTools.Method(AccessTools.TypeByName("AlienRace.RaceRestrictionSettings"), "CanWear"),
+					willResolve: InstelledMods.HAR,
+					postfix: new HarmonyMethod(patchType, nameof(RaceRestrictionSettingsCanWearPostfix))); ;
+				Patch(AccessTools.Method(typeof(ApparelProperties), nameof(ApparelProperties.GetCoveredOuterPartsString)),
+					prefix: new HarmonyMethod(patchType, nameof(ApparelPropertiesGetCoveredOuterPartsStringPostfix)));
+
 				//Patch(AccessTools.Method(typeof(Pawn_OutfitTracker), "get_CurrentOutfit"),
 				//	postfix: nameof(PawnOutfitTrackerGetCurrentOutfitPostfix));
 
@@ -214,9 +221,6 @@ namespace Explorite
 
 				Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.ThreatDisabled)),
 					postfix: new HarmonyMethod(patchType, nameof(PawnThreatDisabledPostfix)));
-
-				Patch(AccessTools.Method(typeof(ApparelProperties), nameof(ApparelProperties.GetCoveredOuterPartsString)),
-					prefix: new HarmonyMethod(patchType, nameof(ApparelPropertiesGetCoveredOuterPartsStringPostfix)));
 
 				Patch(AccessTools.Method(typeof(ThingMaker), nameof(ThingMaker.MakeThing)),
 					prefix: new HarmonyMethod(patchType, nameof(ThingMakerMakeThingPrefix)),
@@ -353,28 +357,27 @@ namespace Explorite
 				Patch(AccessTools.Method(typeof(WorkGiver_ExtractSkull), nameof(WorkGiver_ExtractSkull.CanExtractSkull)),
 					postfix: new HarmonyMethod(patchType, nameof(WorkGiverExtractSkullCanExtractSkullPostfix)));
 
-				if (InstelledMods.HAR)
-				{
-					// 依赖 类 AlienRace.RaceRestrictionSettings
-					Patch(AccessTools.Method(AccessTools.TypeByName("AlienRace.RaceRestrictionSettings"), "CanWear"),
-						postfix: new HarmonyMethod(patchType, nameof(RaceRestrictionSettingsCanWearPostfix)));
+				Patch(AccessTools.Method(typeof(WorkGiver_ExtractSkull), nameof(WorkGiver_ExtractSkull.CanExtractSkull)),
+					postfix: new HarmonyMethod(patchType, nameof(WorkGiverExtractSkullCanExtractSkullPostfix)));
 
-					//// 依赖 类 AlienRace.RaceRestrictionSettings
-					//Patch(AccessTools.Method(AccessTools.TypeByName("AlienRace.HarmonyPatches"), "ChooseStyleItemPrefix"),
-					//	transpiler: nameof(AlienRaceHarmonyPatchesChooseStyleItemPrefix));
-				}
-				if (InstelledMods.SoS2)
-				{
-					// 依赖 类 SaveOurShip2.ShipInteriorMod2
-					Patch(AccessTools.Method(AccessTools.TypeByName("SaveOurShip2.ShipInteriorMod2"), "HasSpaceSuitSlow", new[] { typeof(Pawn) }),
-						postfix: new HarmonyMethod(patchType, nameof(HasSpaceSuitSlowPostfix)));
 
-					// 依赖 类 RimWorld.ThoughtWorker_SpaceThoughts
-					Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.ThoughtWorker_SpaceThoughts"), "CurrentStateInternal"),
-						postfix: new HarmonyMethod(patchType, nameof(ThoughtWorker_SpaceThoughts_CurrentStateInternalPostfix)));
-				}
+				// 依赖 类 AlienRace.RaceRestrictionSettings
+				//Patch(AccessTools.Method(AccessTools.TypeByName("AlienRace.HarmonyPatches"), "ChooseStyleItemPrefix"),
+				//	willResolve: InstelledMods.HAR,
+				//	transpiler: nameof(AlienRaceHarmonyPatchesChooseStyleItemPrefix));
+
+				// 依赖 类 SaveOurShip2.ShipInteriorMod2
+				Patch(AccessTools.Method(AccessTools.TypeByName("SaveOurShip2.ShipInteriorMod2"), "HasSpaceSuitSlow", new[] { typeof(Pawn) }),
+					willResolve: InstelledMods.SoS2,
+					postfix: new HarmonyMethod(patchType, nameof(HasSpaceSuitSlowPostfix)));
+
+				// 依赖 类 RimWorld.ThoughtWorker_SpaceThoughts
+				Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.ThoughtWorker_SpaceThoughts"), "CurrentStateInternal"),
+					willResolve: InstelledMods.SoS2,
+					postfix: new HarmonyMethod(patchType, nameof(ThoughtWorker_SpaceThoughts_CurrentStateInternalPostfix)));
+
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				ExplortiePatchActionRecord last = records.Last();
 				Log.Error(string.Concat(
@@ -1156,68 +1159,6 @@ namespace Explorite
 			}
 		}
 
-		///<summary>使半人马始终被视为具有特征等级。</summary>
-		[HarmonyPostfix]public static void TraitSetDegreeOfTraitPostfix(TraitSet __instance, ref int __result, TraitDef tDef)
-		{
-			if (__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-				&& pawn.def == AlienCentaurDef)
-			{
-				if (CentaurTraitPredicate(tDef, out int degree))
-					__result = degree;
-			}
-		}
-		///<summary>使半人马始终被视为具有特征。</summary>
-		[HarmonyPostfix]public static void TraitSetHasTraitPostfix(TraitSet __instance, ref bool __result, TraitDef tDef)
-		{
-			if (__result == false
-				&& __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-				&& pawn.def == AlienCentaurDef)
-			{
-				if (CentaurTraitPredicate(tDef))
-				{
-					__result = true;
-				}
-			}
-		}
-		///<summary>使半人马始终被视为具有特征等级。</summary>
-		[HarmonyPostfix]public static void TraitSetHasTraitDegreePostfix(TraitSet __instance, ref bool __result, TraitDef tDef, int degree)
-		{
-			if (__result == false
-				&& __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-				&& pawn.def == AlienCentaurDef)
-			{
-				if (CentaurTraitPredicate(tDef, degree))
-				{
-					__result = true;
-				}
-			}
-		}
-		///<summary>为半人马特征制作样本。</summary>
-		[HarmonyPostfix]public static void TraitSetGetTraitPostfix(TraitSet __instance, ref Trait __result, TraitDef tDef)
-		{
-			if (__result == null
-				&& __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-				&& pawn.def == AlienCentaurDef)
-			{
-				if (CentaurTraitPredicate(tDef, out int degree))
-				{
-					__result = new Trait(tDef, degree) { pawn = pawn };
-				}
-			}
-		}
-		///<summary>为半人马特征等级制作样本。</summary>
-		[HarmonyPostfix]public static void TraitSetGetTraitDegreePostfix(TraitSet __instance, ref Trait __result, TraitDef tDef, int degree)
-		{
-			if (__result == null
-				&& __instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-				&& pawn.def == AlienCentaurDef)
-			{
-				if (CentaurTraitPredicate(tDef, degree))
-				{
-					__result = new Trait(tDef, degree) { pawn = pawn };
-				}
-			}
-		}
 		///<summary>在信息页移除半人马的寿命显示。</summary>
 		[HarmonyPostfix]public static void RacePropertiesSpecialDisplayStatsPostfix(RaceProperties __instance, ref IEnumerable<StatDrawEntry> __result, ThingDef parentDef, StatRequest req)
 		{
@@ -1260,26 +1201,6 @@ namespace Explorite
 				 || bpr.def == CentaurSubsystemBodyPartDef
 					);
 				__result = result;
-			}
-		}
-		///<summary>添加默认服装方案。</summary>
-		[HarmonyPostfix]public static void OutfitDatabaseGenerateStartingOutfitsPostfix(OutfitDatabase __instance)
-		{
-			if (InstelledMods.RimCentaurs)
-			{
-				BodyPartRecord partRecHead = CentaurBodyDef.AllParts.First(d => d.def == BodyPartDefOf.Head);
-				BodyPartRecord partRecWaist = CentaurBodyDef.AllParts.First(d => d?.groups?.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist")) ?? false);
-				Outfit outfitCentaur = __instance.MakeNewOutfit();
-				outfitCentaur.label = "OutfitCentaur".Translate();
-				outfitCentaur.filter.SetDisallowAll();
-				outfitCentaur.filter.SetAllow(SpecialThingFilterDefOf.AllowDeadmansApparel, allow: false);
-				foreach (ThingDef allDef2 in DefDatabase<ThingDef>.AllDefs)
-				{
-					if (VaildCentaurApparelPredicate(allDef2))
-					{
-						outfitCentaur.filter.SetAllow(allDef2, allow: true);
-					}
-				}
 			}
 		}
 		/*
@@ -1448,18 +1369,6 @@ namespace Explorite
 				}
 			}
 		}
-		///<summary>使半人马服装正确显示覆盖的部位。</summary>
-		[HarmonyPrefix]public static void ApparelPropertiesGetCoveredOuterPartsStringPostfix(ApparelProperties __instance, ref BodyDef body)
-		{
-			if (__instance.tags.Contains("CentaurBodyFit"))
-			{
-				body = CentaurBodyDef;
-			}
-			else if (__instance.tags.Contains("SayersBodyFit"))
-			{
-				body = SayersBodyDef;
-			}
-		}
 		///<summary>显示MakeThing的调用堆栈。</summary>
 		[HarmonyPrefix]public static void ThingMakerMakeThingPrefix(ThingDef def)
 		{
@@ -1610,14 +1519,6 @@ namespace Explorite
 				__result = false;
 			}
 		}
-		///<summary>自动判断服装是否适合半人马。</summary>
-		[HarmonyPostfix]public static void RaceRestrictionSettingsCanWearPostfix(ThingDef apparel, ThingDef race, ref bool __result)
-		{
-			if (race == AlienCentaurDef)
-			{
-				__result = VaildCentaurApparelPredicate(apparel);
-			}
-		}
 		///<summary>使自动弩机炮台无视屋顶限制。</summary>
 		[HarmonyPostfix]public static void BuildingTurretGunIsMortarOrProjectileFliesOverheadPostfix(Building_TurretGun __instance, ref bool __result)
 		{
@@ -1635,7 +1536,7 @@ namespace Explorite
 			}
 		}
 
-		private static bool TrishotProjFliesOverheadOverrider(Verb verb, object instance)
+		private static bool TrishotProjFliesOverheadOverrider(bool boolen, object instance)
 		{
 			//if (HyperTrishotTurretBuildingDef.Verbs.Contains(verb.verbProps))
 			//Log.Message($"[Explorite]Transpiler overrider get {instance.def.defName} and {verb.verbProps}");
@@ -1646,24 +1547,28 @@ namespace Explorite
 			else
 			{
 				//return projectileFliesOverheadMethod.Invoke(null, new object[] { verb }) as bool? ?? false;
-				return verb.ProjectileFliesOverhead();
+				//return verb.ProjectileFliesOverhead();
+				return boolen;
 			}
 		}
 		///<summary>使自动弩机炮台无视屋顶限制而开火。</summary>
 		[HarmonyTranspiler]public static IEnumerable<CodeInstruction> BuildingTurretGunTryStartShootSomethingTranspiler(IEnumerable<CodeInstruction> instr)
 		{
+			byte patchActionStage = 0;
 			MethodBase projectileFliesOverheadMethod = AccessTools.Method(typeof(VerbUtility), nameof(VerbUtility.ProjectileFliesOverhead));
 			//Log.Message($"[Explorite]Transpiler patch target: {projectileFliesOverheadMethod?.Name}.");
 			foreach (CodeInstruction ins in instr)
 			{
-				if (ins.opcode == OpCodes.Call
+				if (patchActionStage == 0 && ins.opcode == OpCodes.Call
 					&& ins.operand == (projectileFliesOverheadMethod as object)
 					)
 				{
+					patchActionStage++;
 					//Log.Message("[Explorite]Find transpiler patch target.");
 					//yield return new CodeInstruction(OpCodes.Ldloc_0);
+					yield return ins;
 					yield return new CodeInstruction(OpCodes.Ldarg_0);
-					yield return new CodeInstruction(OpCodes.Call, ((Func<Verb, object, bool>)TrishotProjFliesOverheadOverrider).GetMethodInfo());
+					yield return new CodeInstruction(OpCodes.Call, ((Func<bool, object, bool>)TrishotProjFliesOverheadOverrider).GetMethodInfo());
 				}
 				else
 				{
@@ -3070,7 +2975,16 @@ namespace Explorite
 				__result = true;
 			}
 		}
-		
 
+		///<summary>禁止种族食物中毒。</summary>
+		[HarmonyPrefix]public static bool FoodUtilityGetFoodPoisonChanceFactorPrefix(Pawn ingester, ref float __result)
+		{
+			if (ingester.def?.tradeTags?.Contains("ExImmuneToFoodPoisoning") ?? false)
+			{
+				__result = 0f;
+				return false;
+			}
+			return true;
+		}
 	}
 }

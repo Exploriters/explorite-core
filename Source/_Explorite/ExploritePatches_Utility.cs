@@ -63,7 +63,7 @@ namespace Explorite
 				{
 					Log.Error(string.Concat(
 						"[Explorite]Patch sequence failare at ",
-						$"{original.FullDescription()}, ",
+						original != null ? original.FullDescription() : "NULL-TARGET-METHOD",
 						prefix != null ? "prefix: " + prefix.method.FullDescription() + ", " : "",
 						postfix != null ? "postfix: " + postfix.method.FullDescription() + ", " : "",
 						transpiler != null ? "transpiler: " + transpiler.method.FullDescription() + ", " : "",
@@ -87,7 +87,7 @@ namespace Explorite
 			foreach (ExplortiePatchActionRecord record in records)
 			{
 				stringBuilder.AppendLine(string.Concat(
-					$"{record.original.FullDescription()}",
+					record.original != null ? record.original.FullDescription() : "NULL-TARGET-METHOD",
 					record.prefix != null ? $"\n - prefix: {record.prefix.method.FullDescription()}" : "",
 					record.postfix != null ? $"\n - postfix: {record.postfix.method.FullDescription()}" : "",
 					record.transpiler != null ? $"\n - transpiler: {record.transpiler.method.FullDescription()}" : "",
@@ -136,11 +136,11 @@ namespace Explorite
 			Log.Message("[Explorite]instr result:\n" + stringBuilder.ToString());
 			yield break;
 		}
-		static MethodInfo Patch(MethodBase original, HarmonyMethod prefix = null, HarmonyMethod postfix = null, HarmonyMethod transpiler = null, HarmonyMethod finalizer = null)
+		static MethodInfo Patch(MethodBase original, HarmonyMethod prefix = null, HarmonyMethod postfix = null, HarmonyMethod transpiler = null, HarmonyMethod finalizer = null, bool willResolve = true)
 		{
 			ExplortiePatchActionRecord record = new ExplortiePatchActionRecord(original, prefix, postfix, transpiler, finalizer);
 			records.Add(record);
-			return record.Patch();
+			return willResolve ? record.Patch() : null;
 		}
 	}
 }

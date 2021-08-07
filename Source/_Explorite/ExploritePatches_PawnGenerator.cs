@@ -50,10 +50,13 @@ namespace Explorite
 
 			//__result.abilities.abilities.Add(new Ability(__result, DefDatabase<AbilityDef>.GetNamed("MassPsychicDeafCentaur")));
 
+			/*
 			pawn.ageTracker.AgeChronologicalTicks = (long)Math.Floor(
 				pawn.ageTracker.AgeChronologicalTicks * ((pawn.ageTracker.AgeBiologicalTicks + 360000000f) / pawn.ageTracker.AgeBiologicalTicks)
 				) + 360000000;
 			pawn.ageTracker.AgeBiologicalTicks += 360000000;
+			*/
+			pawn.ageTracker.AgeChronologicalTicks = Math.Max(pawn.ageTracker.AgeChronologicalTicks, (long)Math.Floor(pawn.ageTracker.AgeBiologicalTicks / 0.95f));
 
 			pawn.story.traits.allTraits.Clear();
 			/* if (pawn.story.hairDef == DefDatabase<HairDef>.GetNamed("Mohawk"))
@@ -61,6 +64,8 @@ namespace Explorite
 				pawn.story.hairDef = DefDatabase<HairDef>.GetNamed("Flowy");
 			} */
 			//__result.story.traits.GainTrait(new Trait(TraitDefOf.Asexual, 0, forced: true));
+
+			pawn.story.favoriteColor = null;
 
 			foreach (SkillRecord sr in pawn.skills.skills)
 			{
@@ -103,6 +108,12 @@ namespace Explorite
 
 			// 在这里写后期处理
 
+			if (pawn.Name is NameTriple name)
+			{
+				//__result.Name = new NameTriple(name.Last, name.Last, null);
+				string nameFirst = PawnNameDatabaseShuffled.BankOf(PawnNameCategory.HumanStandard).GetName(PawnNameSlot.First, Rand.Bool ? Gender.Female : Gender.Male);
+				pawn.Name = new NameTriple(nameFirst, nameFirst, "Sayers");
+			}
 			return true;
 		}
 		internal static bool GenerateGuoguoPostprocess(ref Pawn pawn, PawnGenerationRequest request, ref bool matchError)

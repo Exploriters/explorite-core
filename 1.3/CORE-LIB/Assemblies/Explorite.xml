@@ -25,6 +25,30 @@
         <member name="M:Explorite.ExploritePatches.ShotCalculationTipStringTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>修正瞄准命中率预览。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.OutfitDatabaseGenerateStartingOutfitsPostfix(RimWorld.OutfitDatabase)">
+            <summary>添加默认服装方案。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RaceRestrictionSettingsCanWearPostfix(Verse.ThingDef,Verse.ThingDef,System.Boolean@)">
+            <summary>自动判断服装是否适合种族。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ApparelPropertiesGetCoveredOuterPartsStringPostfix(RimWorld.ApparelProperties,Verse.BodyDef@)">
+            <summary>使半人马服装正确显示覆盖的部位。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.TraitSetDegreeOfTraitPostfix(RimWorld.TraitSet,System.Int32@,RimWorld.TraitDef)">
+            <summary>使强制特征物种始终被视为具有特征等级。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.TraitSetHasTraitPostfix(RimWorld.TraitSet,System.Boolean@,RimWorld.TraitDef)">
+            <summary>使强制特征物种始终被视为具有特征。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.TraitSetHasTraitDegreePostfix(RimWorld.TraitSet,System.Boolean@,RimWorld.TraitDef,System.Int32)">
+            <summary>使强制特征物种始终被视为具有特征等级。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.TraitSetGetTraitPostfix(RimWorld.TraitSet,RimWorld.Trait@,RimWorld.TraitDef)">
+            <summary>为强制特征物种特征制作样本。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.TraitSetGetTraitDegreePostfix(RimWorld.TraitSet,RimWorld.Trait@,RimWorld.TraitDef,System.Int32)">
+            <summary>为强制特征物种特征等级制作样本。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PrinterTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>打印函数的构造。</summary>
         </member>
@@ -155,21 +179,6 @@
         <member name="M:Explorite.ExploritePatches.PawnGraphicSetResolveApparelGraphicsPostfix(Verse.PawnGraphicSet)">
             <summary>对人物渲染器的服装选单的补丁。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.TraitSetDegreeOfTraitPostfix(RimWorld.TraitSet,System.Int32@,RimWorld.TraitDef)">
-            <summary>使半人马始终被视为具有特征等级。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.TraitSetHasTraitPostfix(RimWorld.TraitSet,System.Boolean@,RimWorld.TraitDef)">
-            <summary>使半人马始终被视为具有特征。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.TraitSetHasTraitDegreePostfix(RimWorld.TraitSet,System.Boolean@,RimWorld.TraitDef,System.Int32)">
-            <summary>使半人马始终被视为具有特征等级。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.TraitSetGetTraitPostfix(RimWorld.TraitSet,RimWorld.Trait@,RimWorld.TraitDef)">
-            <summary>为半人马特征制作样本。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.TraitSetGetTraitDegreePostfix(RimWorld.TraitSet,RimWorld.Trait@,RimWorld.TraitDef,System.Int32)">
-            <summary>为半人马特征等级制作样本。</summary>
-        </member>
         <member name="M:Explorite.ExploritePatches.RacePropertiesSpecialDisplayStatsPostfix(Verse.RaceProperties,System.Collections.Generic.IEnumerable{RimWorld.StatDrawEntry}@,Verse.ThingDef,RimWorld.StatRequest)">
             <summary>在信息页移除半人马的寿命显示。</summary>
         </member>
@@ -179,14 +188,8 @@
         <member name="M:Explorite.ExploritePatches.RecipeRemoveBodyPartGetPartsToApplyOnPostfix(RimWorld.Recipe_Surgery,System.Collections.Generic.IEnumerable{Verse.BodyPartRecord}@,Verse.Pawn,Verse.RecipeDef)">
             <summary>从截肢手术清单中移除半人马的锁骨和子系统。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.OutfitDatabaseGenerateStartingOutfitsPostfix(RimWorld.OutfitDatabase)">
-            <summary>添加默认服装方案。</summary>
-        </member>
         <member name="M:Explorite.ExploritePatches.PawnThreatDisabledPostfix(Verse.Pawn,System.Boolean@,Verse.AI.IAttackTargetSearcher)">
             <summary>使半人马即使携带了物品也会被视为威胁。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.ApparelPropertiesGetCoveredOuterPartsStringPostfix(RimWorld.ApparelProperties,Verse.BodyDef@)">
-            <summary>使半人马服装正确显示覆盖的部位。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.ThingMakerMakeThingPrefix(Verse.ThingDef)">
             <summary>显示MakeThing的调用堆栈。</summary>
@@ -220,9 +223,6 @@
         </member>
         <member name="M:Explorite.ExploritePatches.ResearchProjectDefCanStartNowPostfix(Verse.ResearchProjectDef,System.Boolean@)">
             <summary>阻止特定项目被研究。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.RaceRestrictionSettingsCanWearPostfix(Verse.ThingDef,Verse.ThingDef,System.Boolean@)">
-            <summary>自动判断服装是否适合半人马。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.BuildingTurretGunIsMortarOrProjectileFliesOverheadPostfix(RimWorld.Building_TurretGun,System.Boolean@)">
             <summary>使自动弩机炮台无视屋顶限制。</summary>
@@ -341,6 +341,9 @@
         <member name="M:Explorite.ExploritePatches.WorkGiverExtractSkullCanExtractSkullPostfix(RimWorld.Ideo,System.Boolean@)">
             <summary>允许特定文化摘取头颅。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.FoodUtilityGetFoodPoisonChanceFactorPrefix(Verse.Pawn,System.Single@)">
+            <summary>禁止种族食物中毒。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>
@@ -371,6 +374,54 @@
         </member>
         <member name="T:Explorite.Building_TriBattery">
             <summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />不继承自<seealso cref = "T:RimWorld.Building_Battery" />，因该类并未有独有方法，且部分行为不可被覆盖。<br />实现了<seealso cref = "T:Explorite.ISecretTrishot" />，可在开局被指定具有三射弓。</summary>
+        </member>
+        <member name="T:Explorite.ExploritePawnApparelPredicate">
+            <summary>自动衣物规划。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePawnApparelPredicate.AutoApparelWhiteListRecord.VaildApparelPredicate(Verse.ThingDef)">
+            <summary>
+            检测物品是否为合法的种族服装。
+            </summary>
+            <param name="thing">需要被检测的物品。</param>
+            <returns>该物品是否为合法的服装。</returns>
+        </member>
+        <member name="M:Explorite.ExploritePawnApparelPredicate.VaildApparelPredicate(Verse.ThingDef,Verse.ThingDef,System.Boolean@)">
+            <summary>
+            检测物品是否为合法的种族服装。
+            </summary>
+            <param name="race">需要被检测的种族。</param>
+            <param name="thing">需要被检测的物品。</param>
+            <param name="result">该物品是否为合法的服装。</param>
+            <returns>是否执行了检测。</returns>
+        </member>
+        <member name="T:Explorite.ExploriteTraitOverriderDatabase">
+            <summary>强制特征系统。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteTraitOverriderDatabase.AddRecord(Verse.ThingDef,RimWorld.TraitDef,System.Int32)">
+            <summary>
+            添加特征为强制特征。
+            </summary>
+            <param name="races">需要被添加强制特征的种族。</param>
+            <param name="tDef">需要被添加的特征。</param>
+            <param name="degree">需要被添加的特征程度。</param>
+        </member>
+        <member name="M:Explorite.ExploriteTraitOverriderDatabase.OverrideTraitPredicate(Verse.ThingDef,RimWorld.TraitDef,System.Nullable{System.Int32})">
+            <summary>
+            检测特征是否为强制特征。
+            </summary>
+            <param name="races">需要被检测特征的种族。</param>
+            <param name="tDef">需要被检测的特征。</param>
+            <param name="degree">需要被检测的特征程度。</param>
+            <returns>该特征是否为强制特征。</returns>
+        </member>
+        <member name="M:Explorite.ExploriteTraitOverriderDatabase.OverrideTraitPredicate(Verse.ThingDef,RimWorld.TraitDef,System.Int32@)">
+            <summary>
+            检测特征是否为强制特征。
+            </summary>
+            <param name="races">需要被检测特征的种族。</param>
+            <param name="tDef">需要被检测的特征。</param>
+            <param name="degree">需要被检测的特征程度。</param>
+            <returns>该特征是否为强制特征。</returns>
         </member>
         <member name="T:Explorite.ThoughtWorker_SayersWillFeelLonely">
             <summary>Sayers在独自一人时会感觉孤独(来自Abrel，她摸索的时候不小心一头撞在了墙壁上)</summary>
@@ -733,29 +784,6 @@
             </summary>
             <param name="thing">需要被查找的物体。</param>
             <returns>找到的物体。</returns>
-        </member>
-        <member name="M:Explorite.ExploriteCore.VaildCentaurApparelPredicate(Verse.ThingDef)">
-            <summary>
-            检测物品是否为合法的半人马服装。
-            </summary>
-            <param name="thing">需要被检测的物品。</param>
-            <returns>该物品是否为合法的半人马服装。</returns>
-        </member>
-        <member name="M:Explorite.ExploriteCore.CentaurTraitPredicate(RimWorld.TraitDef,System.Nullable{System.Int32})">
-            <summary>
-            检测特征是否为半人马特征。
-            </summary>
-            <param name="tDef">需要被检测的特征。</param>
-            <param name="degree">需要被检测的特征程度。</param>
-            <returns>该特征是否为半人马服装。</returns>
-        </member>
-        <member name="M:Explorite.ExploriteCore.CentaurTraitPredicate(RimWorld.TraitDef,System.Int32@)">
-            <summary>
-            检测特征是否为半人马特征。
-            </summary>
-            <param name="tDef">需要被检测的特征。</param>
-            <param name="degree">需要被检测的特征程度。</param>
-            <returns>该特征是否为半人马特征。</returns>
         </member>
         <member name="M:Explorite.ExploriteCore.IsSayersIdeo(RimWorld.Ideo)">
             <summary>
