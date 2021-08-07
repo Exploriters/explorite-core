@@ -31,13 +31,13 @@ namespace Explorite
 		public class ExplortiePatchActionRecord
 		{
 			public MethodBase original;
-			public string prefix;
-			public string postfix;
-			public string transpiler;
-			public string finalizer;
+			public HarmonyMethod prefix;
+			public HarmonyMethod postfix;
+			public HarmonyMethod transpiler;
+			public HarmonyMethod finalizer;
 			public ExplortiePatchActionRecordState state;
 
-			public ExplortiePatchActionRecord(MethodBase original, string prefix = null, string postfix = null, string transpiler = null, string finalizer = null)
+			public ExplortiePatchActionRecord(MethodBase original, HarmonyMethod prefix = null, HarmonyMethod postfix = null, HarmonyMethod transpiler = null, HarmonyMethod finalizer = null)
 			{
 				this.original = original;
 				this.prefix = prefix;
@@ -53,10 +53,10 @@ namespace Explorite
 				{
 					return harmonyInstance.Patch(
 						original: original,
-						prefix: prefix == null ? null : new HarmonyMethod(patchType, prefix),
-						postfix: postfix == null ? null : new HarmonyMethod(patchType, postfix),
-						transpiler: transpiler == null ? null : new HarmonyMethod(patchType, transpiler),
-						finalizer: finalizer == null ? null : new HarmonyMethod(patchType, finalizer)
+						prefix: prefix,
+						postfix: postfix,
+						transpiler: transpiler,
+						finalizer: finalizer
 						);
 				}
 				catch (Exception e)
@@ -64,10 +64,10 @@ namespace Explorite
 					Log.Error(string.Concat(
 						"[Explorite]Patch sequence failare at ",
 						$"{original.FullDescription()}, ",
-						prefix != null ? "prefix: " + prefix + ", " : "",
-						postfix != null ? "postfix: " + postfix + ", " : "",
-						transpiler != null ? "transpiler: " + transpiler + ", " : "",
-						finalizer != null ? "finalizer: " + finalizer + ", " : "",
+						prefix != null ? "prefix: " + prefix.method.FullDescription() + ", " : "",
+						postfix != null ? "postfix: " + postfix.method.FullDescription() + ", " : "",
+						transpiler != null ? "transpiler: " + transpiler.method.FullDescription() + ", " : "",
+						finalizer != null ? "finalizer: " + finalizer.method.FullDescription() + ", " : "",
 						", ",
 						$"an exception ({e.GetType().Name}) occurred.\n",
 						$"Message:\n   {e.Message}\n",
@@ -79,7 +79,7 @@ namespace Explorite
 			}
 		}
 		internal static readonly List<ExplortiePatchActionRecord> records = new List<ExplortiePatchActionRecord>();
-		internal static readonly Type patchType = typeof(ExploritePatches);
+		//internal static readonly Type patchType = typeof(ExploritePatches);
 
 		static string PrintPatches()
 		{
@@ -88,10 +88,10 @@ namespace Explorite
 			{
 				stringBuilder.AppendLine(string.Concat(
 					$"{record.original.FullDescription()}",
-					record.prefix != null ? $"\n - prefix: {record.prefix}" : "",
-					record.postfix != null ? $"\n - postfix: {record.postfix}" : "",
-					record.transpiler != null ? $"\n - transpiler: {record.transpiler}" : "",
-					record.finalizer != null ? $"\n - finalizer: {record.finalizer}" : ""
+					record.prefix != null ? $"\n - prefix: {record.prefix.method.FullDescription()}" : "",
+					record.postfix != null ? $"\n - postfix: {record.postfix.method.FullDescription()}" : "",
+					record.transpiler != null ? $"\n - transpiler: {record.transpiler.method.FullDescription()}" : "",
+					record.finalizer != null ? $"\n - finalizer: {record.finalizer.method.FullDescription()}" : ""
 					));
 			}
 			return stringBuilder.ToString();
@@ -136,7 +136,7 @@ namespace Explorite
 			Log.Message("[Explorite]instr result:\n" + stringBuilder.ToString());
 			yield break;
 		}
-		static MethodInfo Patch(MethodBase original, string prefix = null, string postfix = null, string transpiler = null, string finalizer = null)
+		static MethodInfo Patch(MethodBase original, HarmonyMethod prefix = null, HarmonyMethod postfix = null, HarmonyMethod transpiler = null, HarmonyMethod finalizer = null)
 		{
 			ExplortiePatchActionRecord record = new ExplortiePatchActionRecord(original, prefix, postfix, transpiler, finalizer);
 			records.Add(record);

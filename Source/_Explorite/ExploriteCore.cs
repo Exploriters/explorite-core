@@ -504,5 +504,28 @@ namespace Explorite
 				return false;
 			}
 		}
+
+		/**
+		 * <summary>
+		 * 检测文化是否为Sayers文化。
+		 * </summary>
+		 * <param name="ideo">需要被检测的文化。</param>
+		 * <returns>文化是否为Sayers文化。</returns>
+		 */
+		public static bool IsSayersIdeo(this Ideo ideo)
+		{
+			return ideo.memes.Contains(SayersMeme1Def);
+		}
+		/**
+		 * <summary>
+		 * 检测文化是否为半人马文化。
+		 * </summary>
+		 * <param name="ideo">需要被检测的文化。</param>
+		 * <returns>文化是否为半人马文化。</returns>
+		 */
+		public static bool IsCentaursIdeo(this Ideo ideo)
+		{
+			return ideo.memes.Contains(CentaurMemeDef);
+		}
 	}
 }

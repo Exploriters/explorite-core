@@ -30,12 +30,13 @@ namespace Explorite
 		public IEnumerable<ItemStage> Stages => Props.stages;
 		public Dictionary<string, ItemStage> StagesDic => Stages.ToDictionary(st => st.name);
 
+		private string stageNameInt = null;
+
 		public string StageName => stageNameInt;
 		public ItemStage Stage => StagesDic.TryGetValue(StageName);
 		public string StageLabelAccu => Stage.label;
 		public string StageLabel => Stage.showLabel ? StageLabelAccu : null;
 		public IEnumerable<string> StageTags => Stage.tags ?? Enumerable.Empty<string>();
-
 
 		public bool SetStage(string stage)
 		{
@@ -53,25 +54,21 @@ namespace Explorite
 			Scribe_Values.Look<string>(ref stageNameInt, $"state_{Group}", null, false);
 		}
 
-
 		public override void PostPostMake()
 		{
 			SetStage(Stages.Any(st => st.weight > 0f) ? Stages.RandomElementByWeight(st => st.weight).name : null);
 		}
-
 
 		public override bool AllowStackWith(Thing other)
 		{
 			return other.TryGetState(Group, out string stage) && stage == StageName;
 		}
 
-
 		public override void PostSplitOff(Thing piece)
 		{
 			base.PostSplitOff(piece);
 			piece.GetItemStageComps(Group).stageNameInt = stageNameInt;
 		}
-
 
 		public override string CompInspectStringExtra()
 		{
@@ -94,7 +91,6 @@ namespace Explorite
 					);
 		}
 
-		private string stageNameInt = null;
 	}
 	public class ItemStage
 	{

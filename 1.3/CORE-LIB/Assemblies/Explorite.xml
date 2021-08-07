@@ -13,6 +13,342 @@
         <member name="T:Explorite.AdditionalAbility">
             <summary>被种族技能使用自定义Ability类。</summary>
         </member>
+        <member name="T:Explorite.ExploritePatches">
+            <summary>包含多个补丁的合集类。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.CreateVerbTargetCommandPostfix(Verse.Command_VerbTarget@,Verse.Thing,Verse.Verb)">
+            <summary>更改创建的Verb的Command。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PrimaryVerbPrefix(Verse.CompEquippable,Verse.Verb@)">
+            <summary>更改武器的主Verb。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ShotCalculationTipStringTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>修正瞄准命中率预览。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PrinterTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>打印函数的构造。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.DrawEquipmentAimingPrefix(Verse.PawnRenderer,Verse.Thing,UnityEngine.Vector3,System.Single)">
+            <summary>
+                Adds another "layer" to the equipment aiming if they have a
+                weapon with a CompActivatableEffect.
+            </summary>
+            <param name="__instance"></param>
+            <param name="eq"></param>
+            <param name="drawLoc"></param>
+            <param name="aimAngle"></param>
+        </member>
+        <member name="M:Explorite.ExploritePatches.SkillRecordIntervalTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>阻止半人马的技能衰退。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.SkillRecordLearningSaturatedTodayPostfix(RimWorld.SkillRecord,System.Boolean@)">
+            <summary>移除半人马每日技能训练上限。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.StatPartPainPainFactorPostfix(Verse.Pawn,System.Single@)">
+            <summary>移除半人马的疼痛带来心灵熵消散增益。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.StatPartPainExplanationPartPostfix(RimWorld.StatRequest,System.String@)">
+            <summary>移除半人马的疼痛带来心灵熵消散增益的描述文本。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PsychicEntropyGizmoTryGetPainMultiplierPostfix(RimWorld.PsychicEntropyGizmo,System.Single@,System.Boolean@)">
+            <summary>移除半人马的心灵熵Gizno的疼痛激励显示。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.WandererJoinCannotFirePostfix(RimWorld.IncidentParms,System.Boolean@)">
+            <summary>禁用阵营生成流浪者加入事件。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.HasSpaceSuitSlowPostfix(Verse.Pawn,System.Boolean@)">
+            <summary>使半人马可以在太空中靠动力装甲存活。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.NeedOutdoors_DisabledPostfix(RimWorld.Need_Outdoors,System.Boolean@)">
+            <summary>移除半人马和Sayers的户外需求。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.NeedMood_GetTipStringPostfix(RimWorld.Need_Mood,System.String@)">
+            <summary>移除半人马的心情需求显示精神崩溃阈值描述。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.NeedsCardUtilityDrawThoughtListingPrefix(UnityEngine.Rect@,Verse.Pawn,UnityEngine.Vector2@)">
+            <summary>更改渲染想法预补丁。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.Need_DrawOnGUIPrefix(RimWorld.Need,UnityEngine.Rect@,System.Int32@,System.Single@,System.Boolean@,System.Boolean@)">
+            <summary>更改渲染模式预补丁。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.Need_DrawOnGUIPostfix(RimWorld.Need,UnityEngine.Rect,System.Int32,System.Single,System.Boolean,System.Boolean)">
+            <summary>更改渲染模式后期处理补丁。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.Need_NeedIntervalPrefix(RimWorld.Need_Seeker,System.Single@)">
+            <summary>记录在刻函数开始前的需求值。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.Need_NeedIntervalPostfix(RimWorld.Need_Seeker,System.Single)">
+            <summary>对需求刻函数进行后期处理。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.NeedMaxLevelPostfix(RimWorld.Need_Food,System.Single@)">
+            <summary>增强半人马食物需求储备量。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ThoughtWorker_NeedComfort_CurrentStateInternalPostfix(RimWorld.ThoughtWorker_NeedComfort,RimWorld.ThoughtState@,Verse.Pawn)">
+            <summary>移除半人马舒适度需求的负面情绪。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ThoughtWorker_SpaceThoughts_CurrentStateInternalPostfix(RimWorld.ThoughtWorker,RimWorld.ThoughtState@,Verse.Pawn)">
+            <summary>移除半人马在SoS2太空中的负面情绪。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.MentalBreaker_BreakThresholdPostfix(Verse.AI.MentalBreaker,System.Single@)">
+            <summary>移除半人马精神崩溃阈值。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PsychicSensitivityPostfix(RimWorld.StatPart,RimWorld.StatRequest,System.Single@)">
+            <summary>使心灵敏感度属性受到心灵失聪hediff影响。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.MeditationFocusCanPawnUsePostfix(RimWorld.MeditationFocusDef,System.Boolean@,Verse.Pawn)">
+            <summary>使半人马和Sayers可以使用额外类型的冥想媒介。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RecipeDefAvailableNowPostfix(Verse.RecipeDef,System.Boolean@)">
+            <summary>更改特定配方的显示可用性。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.MeditationFocusExplanationPostfix(RimWorld.MeditationFocusDef,System.String@,Verse.Pawn)">
+            <summary>为半人马和Sayers补充启用冥想类型的原因。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.AssignBedToPawnHasFreeSlotTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>使半人马占用更多床位。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.AssignBedToPawnTryAssignPawnPostfix(RimWorld.CompAssignableToPawn,Verse.Pawn)">
+            <summary>使半人马与他人同时被添加至同一个床时被移除绑定。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.AssignBedToPawnCanAssignToPostfix(RimWorld.CompAssignableToPawn,Verse.AcceptanceReport@,Verse.Pawn)">
+            <summary>使半人马不能使用小尺寸床铺。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RestUtilityCanUseBedEverPostfix(System.Boolean@,Verse.Pawn,Verse.ThingDef)">
+            <summary>使半人马不能使用小尺寸床铺。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.BedUtilityWillingToShareBedPostfix(System.Boolean@,Verse.Pawn,Verse.Pawn)">
+            <summary>使半人马拒绝与他人共用床铺，使Sayers拒绝与非同族共用床铺。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PlantGrowthRateFactorNoTemperaturePostfix(RimWorld.Plant,System.Single@)">
+            <summary>使指定植物的生长无视环境温度。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.MinifiedThingDestroyPrefix(RimWorld.MinifiedThing)">
+            <summary>使被收纳的秘密三射弓物体掉落故障三射弓。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.AlertNeedBatteriesPostfix(RimWorld.Alert_NeedBatteries,System.Boolean@,Verse.Map)">
+            <summary>使三联电池同样被视为<see cref = "T:RimWorld.Alert_NeedBatteries" />可接受的电池类型。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.GetFoodTryGiveJobPostfix(RimWorld.JobGiver_GetFood,Verse.AI.Job@,Verse.Pawn)">
+            <summary>使Sayers优先选择尸体作为食物。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PawnHealthTrackerInPainShockPostfix(Verse.Pawn_HealthTracker,System.Boolean@)">
+            <summary>阻止半人马疼痛休克。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.HediffComp_GetsPermanentIsPermanentPrefix(Verse.HediffComp_GetsPermanent,System.Boolean@)">
+            <summary>阻止半人马和Michelles得到任何永久性疤痕。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.HediffComp_TendDurationAllowTendPostfix(Verse.HediffComp_TendDuration,System.Boolean@)">
+            <summary>设置不允许<see cref = "T:Explorite.HediffComp_TendDuration_CantTend" />症状被治疗。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.HediffComp_ReactOnDamageNotify_PawnPostApplyDamagePrefix(Verse.HediffComp_ReactOnDamage,Verse.DamageInfo@,System.Single)">
+            <summary>阻止半人马大脑休克。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.MassUtilityCapacityPostfix(System.Single@,Verse.Pawn,System.Text.StringBuilder@)">
+            <summary>增强半人马负重能力。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PawnGraphicSetResolveAllGraphicsPostfix(Verse.PawnGraphicSet)">
+            <summary>使半人马的身体被渲染为其头发颜色。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.CompAffectedByFacilitiesCanPotentiallyLinkToStaticPostfix(System.Boolean@,Verse.ThingDef,Verse.IntVec3,Verse.Rot4,Verse.ThingDef,Verse.IntVec3,Verse.Rot4)">
+            <summary>对设施连接性的后期处理。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PawnGraphicSetResolveApparelGraphicsPostfix(Verse.PawnGraphicSet)">
+            <summary>对人物渲染器的服装选单的补丁。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.TraitSetDegreeOfTraitPostfix(RimWorld.TraitSet,System.Int32@,RimWorld.TraitDef)">
+            <summary>使半人马始终被视为具有特征等级。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.TraitSetHasTraitPostfix(RimWorld.TraitSet,System.Boolean@,RimWorld.TraitDef)">
+            <summary>使半人马始终被视为具有特征。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.TraitSetHasTraitDegreePostfix(RimWorld.TraitSet,System.Boolean@,RimWorld.TraitDef,System.Int32)">
+            <summary>使半人马始终被视为具有特征等级。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.TraitSetGetTraitPostfix(RimWorld.TraitSet,RimWorld.Trait@,RimWorld.TraitDef)">
+            <summary>为半人马特征制作样本。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.TraitSetGetTraitDegreePostfix(RimWorld.TraitSet,RimWorld.Trait@,RimWorld.TraitDef,System.Int32)">
+            <summary>为半人马特征等级制作样本。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RacePropertiesSpecialDisplayStatsPostfix(Verse.RaceProperties,System.Collections.Generic.IEnumerable{RimWorld.StatDrawEntry}@,Verse.ThingDef,RimWorld.StatRequest)">
+            <summary>在信息页移除半人马的寿命显示。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.StatWorkerShouldShowForPostfix(RimWorld.StatWorker,System.Boolean@,RimWorld.StatRequest)">
+            <summary>在信息页移除半人马的疼痛休克阈值和精神崩溃阈值显示。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RecipeRemoveBodyPartGetPartsToApplyOnPostfix(RimWorld.Recipe_Surgery,System.Collections.Generic.IEnumerable{Verse.BodyPartRecord}@,Verse.Pawn,Verse.RecipeDef)">
+            <summary>从截肢手术清单中移除半人马的锁骨和子系统。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.OutfitDatabaseGenerateStartingOutfitsPostfix(RimWorld.OutfitDatabase)">
+            <summary>添加默认服装方案。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PawnThreatDisabledPostfix(Verse.Pawn,System.Boolean@,Verse.AI.IAttackTargetSearcher)">
+            <summary>使半人马即使携带了物品也会被视为威胁。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ApparelPropertiesGetCoveredOuterPartsStringPostfix(RimWorld.ApparelProperties,Verse.BodyDef@)">
+            <summary>使半人马服装正确显示覆盖的部位。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ThingMakerMakeThingPrefix(Verse.ThingDef)">
+            <summary>显示MakeThing的调用堆栈。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ThingMakerMakeThingPostfix(Verse.Thing)">
+            <summary>显示MakeThing的调用堆栈。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.GenRecipePostProcessProductPostfix(Verse.Thing,Verse.Thing,Verse.RecipeDef,Verse.Pawn)">
+            <summary>将被制作出来的三射弓添加到追踪中。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.FactionGiftUtilityGetBaseGoodwillChangePostfix(System.Single@,Verse.Thing,System.Int32,System.Single,RimWorld.Faction)">
+            <summary>降低故障三射弓的好感度加成。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.InspirationHandlerGetRandomAvailableInspirationDefPostfix(RimWorld.InspirationHandler,RimWorld.InspirationDef@)">
+            <summary>移除半人马随机好心情灵感。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.DamageInfoCtorPrefix(Verse.ThingDef@)">
+            <summary>设置三射弓伤害源为满级三射弓。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.BattleLogEntry_ExplosionImpactCtorPrefix(Verse.ThingDef@)">
+            <summary>设置日志中三射弓伤害源为满级三射弓。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.HealthCardUtilityGetListPriorityPostfix(System.Single@,Verse.BodyPartRecord)">
+            <summary>修正健康面板中的身体部位排序。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.TendUtilityCalculateBaseTendQualityPrefix(Verse.Pawn,Verse.Pawn,System.Single@,System.Single@)">
+            <summary>移除半人马自我治疗的70%效果惩罚。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.QuestPartDropPodsSetThingsPostfix(System.Collections.Generic.IEnumerable{Verse.Thing})">
+            <summary>检测任务奖励中的橙冰。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ResearchProjectDefCanStartNowPostfix(Verse.ResearchProjectDef,System.Boolean@)">
+            <summary>阻止特定项目被研究。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RaceRestrictionSettingsCanWearPostfix(Verse.ThingDef,Verse.ThingDef,System.Boolean@)">
+            <summary>自动判断服装是否适合半人马。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.BuildingTurretGunIsMortarOrProjectileFliesOverheadPostfix(RimWorld.Building_TurretGun,System.Boolean@)">
+            <summary>使自动弩机炮台无视屋顶限制。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.BuildingTurretGunCanSetForcedTargetPostfix(RimWorld.Building_TurretGun,System.Boolean@)">
+            <summary>使自动弩机炮台可以手动选择目标。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.BuildingTurretGunTryStartShootSomethingTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction})">
+            <summary>使自动弩机炮台无视屋顶限制而开火。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PawnCapacityUtilityCalculateCapacityLevelPrefix(System.Nullable{System.Single}@,Verse.HediffSet,Verse.PawnCapacityDef@,System.Collections.Generic.List{Verse.PawnCapacityUtility.CapacityImpactor}@,System.Boolean)">
+            <summary>干预半人马健康能力计算预处理。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PawnCapacityUtilityCalculateCapacityLevelPostfix(System.Single@,System.Nullable{System.Single}@,Verse.HediffSet,Verse.PawnCapacityDef@,System.Collections.Generic.List{Verse.PawnCapacityUtility.CapacityImpactor}@,System.Boolean)">
+            <summary>干预半人马健康能力计算后期处理。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ProjectileImpactSomethingTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>干涉弹射物命中屋顶的效果。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.TestShieldSpotValidator(Verse.IntVec3,Verse.Map)">
+            <summary>检查护盾物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ExplosionBypassEverything(Verse.DamageDef)">
+            <summary>设置爆炸物不能穿透何种物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ExplosionCellsToHitBlockOverrider(Verse.IntVec3,Verse.IntVec3,Verse.Map)">
+            <summary>设置爆炸物不能穿透何种物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ExplosionCellsToHitInsideOverrider(Verse.IntVec3,Verse.Map)">
+            <summary>设置爆炸物不能覆盖何种物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ExplosionCellsToHitEverythingOverrider(Verse.DamageWorker)">
+            <summary>设置爆炸物无视一切物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.DamageWorkerExplosionCellsToHitTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>改变爆炸效果选择的覆盖范围。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.AlienRaceHarmonyPatchesChooseStyleItemPrefix(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>临时函数。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoUtilityIsMemeAllowedForPostfix(RimWorld.MemeDef,RimWorld.FactionDef,System.Boolean@)">
+            <summary>更改阵营能够使用的模因。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoUtilityCanAddPostfix(RimWorld.MemeDef,System.Collections.Generic.List{RimWorld.MemeDef},RimWorld.FactionDef,System.Boolean@)">
+            <summary>更改模因能够兼容的模因。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PawnWoundDrawerRenderOverBodyPrefix(RimWorld.PawnWoundDrawer@)">
+            <summary>禁止伤害渲染。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoSymbolPartDefCanBeChosenForIdeoPostfix(RimWorld.Ideo,RimWorld.IdeoSymbolPartDef@,System.Boolean@)">
+            <summary>更改阵营能够使用的图标。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ThoughtWorkerWearingColorCurrentStateInternalTranspilerB(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>使服装颜色想法进行对<see cref = "T:Verse.CompColorable" />的非空检查，方案2。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.DialogStylingStationDrawApparelColorTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>使梳妆台服装颜色选单进行对<see cref = "T:RimWorld.Dialog_StylingStation" />的非空检查。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RitualBehaviorWorkerCanStartRitualNowTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator,System.String)">
+            <summary>使仪式可用性进行对<see cref = "T:System.Collections.Generic.List`1" />的合法性检查。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RitualBehaviorWorkerCanStartRitualNowTranspiler_Speech(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>使仪式可用性进行对<see cref = "T:System.Collections.Generic.List`1" />的合法性检查。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RitualBehaviorWorkerCanStartRitualNowTranspiler_Conversion(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>使仪式可用性进行对<see cref = "T:System.Collections.Generic.List`1" />的合法性检查。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoFoundationRandomizeCultureTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>禁止无预设文化阵营随机选择阵营限定文化。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PageConfigureIdeoPostOpenTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>为文化选择界面先生成文化。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.DialogChooseMemesPlayerNHiddenOffTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>特定阵营存在时，锁定文化选项。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoUIUtilityFactionForRandomizationTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>防止隐藏阵营随机为特殊玩家阵营。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.StrangeMethodFinderTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>寻找一个奇怪的方法。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoUIUtility_MT_LT_c__DisplayClass59_0__MT_DoName_LT_g____CultureAllowed_1_Transpiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>特定阵营存在时，锁定文化选项。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PageConfigureIdeoCanDoNextTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>阻止半人马和Sayers阵营选择其他文化。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.StatWorkerGetValueUnfinalizedTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>改变心灵敏感度对半人马心灵熵阈值的影响。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.StatWorkerGetExplanationUnfinalizedTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>改变心灵敏感度对半人马心灵熵阈值的影响的数值显示。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ThoughtWorkerPreceptHasUncoveredPrefix(Verse.Pawn,System.Boolean@)">
+            <summary>使半人马和Sayers不被判断为裸体。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.RoyalTitleDefGetBedroomRequirementsPostfix(Verse.Pawn,RimWorld.RoyalTitleDef,System.Collections.Generic.IEnumerable{RimWorld.RoomRequirement}@)">
+            <summary>使半人马的头衔建筑物需求使用半人马床而非其他床铺。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.ApparelRequirementIsMetPostfix(Verse.Pawn,RimWorld.ApparelRequirement,System.Boolean@)">
+            <summary>使半人马的头衔服装需求需要半人马衣物，使Sayers的头衔服装需求不需要衣物。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.IdeoApparelColorPrefix(RimWorld.Ideo,UnityEngine.Color@)">
+            <summary>锁定文化代表颜色。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PageChooseIdeoPresetPostOpenTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>跳过文化预设。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.GenLabelNewThingLabelTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>增加特殊标签的显示。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.GenLabelThingLabelTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>特殊标签禁止使用缓存机制。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.WorkGiverExtractSkullCanExtractSkullPostfix(RimWorld.Ideo,System.Boolean@)">
+            <summary>允许特定文化摘取头颅。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>对人物渲染器的补丁。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.GeneratePawnPostfix(Verse.Pawn@,Verse.PawnGenerationRequest)">
+            <summary>
+            对人物生成器的补丁。
+            </summary>
+        </member>
         <member name="M:Explorite.BackstoryCracker.THE_ULTRA_FLOOD">
             <summary>
             按照预设内容，完成对背景故事的标签处理。
@@ -248,327 +584,6 @@
         <member name="T:Explorite.CompRequireBuildingInPowerNet">
             <summary>检测电网中是否存在指定的建筑物。</summary>
         </member>
-        <member name="T:Explorite.ExploritePatches">
-            <summary>包含多个补丁的合集类。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PrinterTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>打印函数的构造。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.DrawEquipmentAimingPrefix(Verse.PawnRenderer,Verse.Thing,UnityEngine.Vector3,System.Single)">
-            <summary>
-                Adds another "layer" to the equipment aiming if they have a
-                weapon with a CompActivatableEffect.
-            </summary>
-            <param name="__instance"></param>
-            <param name="eq"></param>
-            <param name="drawLoc"></param>
-            <param name="aimAngle"></param>
-        </member>
-        <member name="M:Explorite.ExploritePatches.SkillRecordIntervalTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>阻止半人马的技能衰退。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.SkillRecordLearningSaturatedTodayPostfix(RimWorld.SkillRecord,System.Boolean@)">
-            <summary>移除半人马每日技能训练上限。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.StatPartPainPainFactorPostfix(Verse.Pawn,System.Single@)">
-            <summary>移除半人马的疼痛带来心灵熵消散增益。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.StatPartPainExplanationPartPostfix(RimWorld.StatRequest,System.String@)">
-            <summary>移除半人马的疼痛带来心灵熵消散增益的描述文本。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PsychicEntropyGizmoTryGetPainMultiplierPostfix(RimWorld.PsychicEntropyGizmo,System.Single@,System.Boolean@)">
-            <summary>移除半人马的心灵熵Gizno的疼痛激励显示。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.WandererJoinCannotFirePostfix(RimWorld.IncidentParms,System.Boolean@)">
-            <summary>禁用阵营生成流浪者加入事件。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.HasSpaceSuitSlowPostfix(Verse.Pawn,System.Boolean@)">
-            <summary>使半人马可以在太空中靠动力装甲存活。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.NeedOutdoors_DisabledPostfix(RimWorld.Need_Outdoors,System.Boolean@)">
-            <summary>移除半人马和Sayers的户外需求。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.NeedMood_GetTipStringPostfix(RimWorld.Need_Mood,System.String@)">
-            <summary>移除半人马的心情需求显示精神崩溃阈值描述。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.NeedsCardUtilityDrawThoughtListingPrefix(UnityEngine.Rect@,Verse.Pawn,UnityEngine.Vector2@)">
-            <summary>更改渲染想法预补丁。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.Need_DrawOnGUIPrefix(RimWorld.Need,UnityEngine.Rect@,System.Int32@,System.Single@,System.Boolean@,System.Boolean@)">
-            <summary>更改渲染模式预补丁。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.Need_DrawOnGUIPostfix(RimWorld.Need,UnityEngine.Rect,System.Int32,System.Single,System.Boolean,System.Boolean)">
-            <summary>更改渲染模式后期处理补丁。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.Need_NeedIntervalPrefix(RimWorld.Need_Seeker,System.Single@)">
-            <summary>记录在刻函数开始前的需求值。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.Need_NeedIntervalPostfix(RimWorld.Need_Seeker,System.Single)">
-            <summary>对需求刻函数进行后期处理。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.NeedMaxLevelPostfix(RimWorld.Need_Food,System.Single@)">
-            <summary>增强半人马食物需求储备量。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.ThoughtWorker_NeedComfort_CurrentStateInternalPostfix(RimWorld.ThoughtWorker_NeedComfort,RimWorld.ThoughtState@,Verse.Pawn)">
-            <summary>移除半人马舒适度需求的负面情绪。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.ThoughtWorker_SpaceThoughts_CurrentStateInternalPostfix(RimWorld.ThoughtWorker,RimWorld.ThoughtState@,Verse.Pawn)">
-            <summary>移除半人马在SoS2太空中的负面情绪。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.MentalBreaker_BreakThresholdPostfix(Verse.AI.MentalBreaker,System.Single@)">
-            <summary>移除半人马精神崩溃阈值。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PsychicSensitivityPostfix(RimWorld.StatPart,RimWorld.StatRequest,System.Single@)">
-            <summary>使心灵敏感度属性受到心灵失聪hediff影响。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.MeditationFocusCanPawnUsePostfix(RimWorld.MeditationFocusDef,System.Boolean@,Verse.Pawn)">
-            <summary>使半人马和Sayers可以使用额外类型的冥想媒介。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.RecipeDefAvailableNowPostfix(Verse.RecipeDef,System.Boolean@)">
-            <summary>更改特定配方的显示可用性。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.MeditationFocusExplanationPostfix(RimWorld.MeditationFocusDef,System.String@,Verse.Pawn)">
-            <summary>为半人马和Sayers补充启用冥想类型的原因。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.AssignBedToPawnHasFreeSlotTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>使半人马占用更多床位。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.AssignBedToPawnTryAssignPawnPostfix(RimWorld.CompAssignableToPawn,Verse.Pawn)">
-            <summary>使半人马与他人同时被添加至同一个床时被移除绑定。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.AssignBedToPawnCanAssignToPostfix(RimWorld.CompAssignableToPawn,Verse.AcceptanceReport@,Verse.Pawn)">
-            <summary>使半人马不能使用小尺寸床铺。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.RestUtilityCanUseBedEverPostfix(System.Boolean@,Verse.Pawn,Verse.ThingDef)">
-            <summary>使半人马不能使用小尺寸床铺。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.BedUtilityWillingToShareBedPostfix(System.Boolean@,Verse.Pawn,Verse.Pawn)">
-            <summary>使半人马拒绝与他人共用床铺，使Sayers拒绝与非同族共用床铺。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PlantGrowthRateFactorNoTemperaturePostfix(RimWorld.Plant,System.Single@)">
-            <summary>使指定植物的生长无视环境温度。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.MinifiedThingDestroyPrefix(RimWorld.MinifiedThing)">
-            <summary>使被收纳的秘密三射弓物体掉落故障三射弓。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.AlertNeedBatteriesPostfix(RimWorld.Alert_NeedBatteries,System.Boolean@,Verse.Map)">
-            <summary>使三联电池同样被视为<see cref = "T:RimWorld.Alert_NeedBatteries" />可接受的电池类型。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.GetFoodTryGiveJobPostfix(RimWorld.JobGiver_GetFood,Verse.AI.Job@,Verse.Pawn)">
-            <summary>使Sayers优先选择尸体作为食物。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PawnHealthTrackerInPainShockPostfix(Verse.Pawn_HealthTracker,System.Boolean@)">
-            <summary>阻止半人马疼痛休克。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.HediffComp_GetsPermanentIsPermanentPrefix(Verse.HediffComp_GetsPermanent,System.Boolean@)">
-            <summary>阻止半人马和Michelles得到任何永久性疤痕。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.HediffComp_TendDurationAllowTendPostfix(Verse.HediffComp_TendDuration,System.Boolean@)">
-            <summary>设置不允许<see cref = "T:Explorite.HediffComp_TendDuration_CantTend" />症状被治疗。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.HediffComp_ReactOnDamageNotify_PawnPostApplyDamagePrefix(Verse.HediffComp_ReactOnDamage,Verse.DamageInfo@,System.Single)">
-            <summary>阻止半人马大脑休克。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.MassUtilityCapacityPostfix(System.Single@,Verse.Pawn,System.Text.StringBuilder@)">
-            <summary>增强半人马负重能力。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PawnGraphicSetResolveAllGraphicsPostfix(Verse.PawnGraphicSet)">
-            <summary>使半人马的身体被渲染为其头发颜色。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.CompAffectedByFacilitiesCanPotentiallyLinkToStaticPostfix(System.Boolean@,Verse.ThingDef,Verse.IntVec3,Verse.Rot4,Verse.ThingDef,Verse.IntVec3,Verse.Rot4)">
-            <summary>对设施连接性的后期处理。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PawnGraphicSetResolveApparelGraphicsPostfix(Verse.PawnGraphicSet)">
-            <summary>对人物渲染器的服装选单的补丁。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.TraitSetDegreeOfTraitPostfix(RimWorld.TraitSet,System.Int32@,RimWorld.TraitDef)">
-            <summary>使半人马始终被视为具有特征等级。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.TraitSetHasTraitPostfix(RimWorld.TraitSet,System.Boolean@,RimWorld.TraitDef)">
-            <summary>使半人马始终被视为具有特征。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.TraitSetHasTraitDegreePostfix(RimWorld.TraitSet,System.Boolean@,RimWorld.TraitDef,System.Int32)">
-            <summary>使半人马始终被视为具有特征等级。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.TraitSetGetTraitPostfix(RimWorld.TraitSet,RimWorld.Trait@,RimWorld.TraitDef)">
-            <summary>为半人马特征制作样本。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.TraitSetGetTraitDegreePostfix(RimWorld.TraitSet,RimWorld.Trait@,RimWorld.TraitDef,System.Int32)">
-            <summary>为半人马特征等级制作样本。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.RacePropertiesSpecialDisplayStatsPostfix(Verse.RaceProperties,System.Collections.Generic.IEnumerable{RimWorld.StatDrawEntry}@,Verse.ThingDef,RimWorld.StatRequest)">
-            <summary>在信息页移除半人马的寿命显示。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.StatWorkerShouldShowForPostfix(RimWorld.StatWorker,System.Boolean@,RimWorld.StatRequest)">
-            <summary>在信息页移除半人马的疼痛休克阈值和精神崩溃阈值显示。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.RecipeRemoveBodyPartGetPartsToApplyOnPostfix(RimWorld.Recipe_Surgery,System.Collections.Generic.IEnumerable{Verse.BodyPartRecord}@,Verse.Pawn,Verse.RecipeDef)">
-            <summary>从截肢手术清单中移除半人马的锁骨和子系统。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.OutfitDatabaseGenerateStartingOutfitsPostfix(RimWorld.OutfitDatabase)">
-            <summary>添加默认服装方案。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PawnThreatDisabledPostfix(Verse.Pawn,System.Boolean@,Verse.AI.IAttackTargetSearcher)">
-            <summary>使半人马即使携带了物品也会被视为威胁。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.ApparelPropertiesGetCoveredOuterPartsStringPostfix(RimWorld.ApparelProperties,Verse.BodyDef@)">
-            <summary>使半人马服装正确显示覆盖的部位。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.ThingMakerMakeThingPrefix(Verse.ThingDef)">
-            <summary>显示MakeThing的调用堆栈。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.ThingMakerMakeThingPostfix(Verse.Thing)">
-            <summary>显示MakeThing的调用堆栈。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.GenRecipePostProcessProductPostfix(Verse.Thing,Verse.Thing,Verse.RecipeDef,Verse.Pawn)">
-            <summary>将被制作出来的三射弓添加到追踪中。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.FactionGiftUtilityGetBaseGoodwillChangePostfix(System.Single@,Verse.Thing,System.Int32,System.Single,RimWorld.Faction)">
-            <summary>降低故障三射弓的好感度加成。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.InspirationHandlerGetRandomAvailableInspirationDefPostfix(RimWorld.InspirationHandler,RimWorld.InspirationDef@)">
-            <summary>移除半人马随机好心情灵感。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.DamageInfoCtorPrefix(Verse.ThingDef@)">
-            <summary>设置三射弓伤害源为满级三射弓。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.BattleLogEntry_ExplosionImpactCtorPrefix(Verse.ThingDef@)">
-            <summary>设置日志中三射弓伤害源为满级三射弓。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.HealthCardUtilityGetListPriorityPostfix(System.Single@,Verse.BodyPartRecord)">
-            <summary>修正健康面板中的身体部位排序。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.TendUtilityCalculateBaseTendQualityPrefix(Verse.Pawn,Verse.Pawn,System.Single@,System.Single@)">
-            <summary>移除半人马自我治疗的70%效果惩罚。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.QuestPartDropPodsSetThingsPostfix(System.Collections.Generic.IEnumerable{Verse.Thing})">
-            <summary>检测任务奖励中的橙冰。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.ResearchProjectDefCanStartNowPostfix(Verse.ResearchProjectDef,System.Boolean@)">
-            <summary>阻止特定项目被研究。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.RaceRestrictionSettingsCanWearPostfix(Verse.ThingDef,Verse.ThingDef,System.Boolean@)">
-            <summary>自动判断服装是否适合半人马。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.BuildingTurretGunIsMortarOrProjectileFliesOverheadPostfix(RimWorld.Building_TurretGun,System.Boolean@)">
-            <summary>使自动弩机炮台无视屋顶限制。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.BuildingTurretGunCanSetForcedTargetPostfix(RimWorld.Building_TurretGun,System.Boolean@)">
-            <summary>使自动弩机炮台可以手动选择目标。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.BuildingTurretGunTryStartShootSomethingTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction})">
-            <summary>使自动弩机炮台无视屋顶限制而开火。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PawnCapacityUtilityCalculateCapacityLevelPrefix(System.Nullable{System.Single}@,Verse.HediffSet,Verse.PawnCapacityDef@,System.Collections.Generic.List{Verse.PawnCapacityUtility.CapacityImpactor}@,System.Boolean)">
-            <summary>干预半人马健康能力计算预处理。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PawnCapacityUtilityCalculateCapacityLevelPostfix(System.Single@,System.Nullable{System.Single}@,Verse.HediffSet,Verse.PawnCapacityDef@,System.Collections.Generic.List{Verse.PawnCapacityUtility.CapacityImpactor}@,System.Boolean)">
-            <summary>干预半人马健康能力计算后期处理。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.ProjectileImpactSomethingTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>干涉弹射物命中屋顶的效果。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.TestShieldSpotValidator(Verse.IntVec3,Verse.Map)">
-            <summary>检查护盾物体。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.ExplosionCellsToHitBlockOverrider(Verse.IntVec3,Verse.IntVec3,Verse.Map)">
-            <summary>设置爆炸物不能穿透何种物体。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.ExplosionCellsToHitInsideOverrider(Verse.IntVec3,Verse.Map)">
-            <summary>设置爆炸物不能覆盖何种物体。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.ExplosionCellsToHitEverythingOverrider(Verse.DamageWorker)">
-            <summary>设置爆炸物无视一切物体。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.DamageWorkerExplosionCellsToHitTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>改变爆炸效果选择的覆盖范围。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.AlienRaceHarmonyPatchesChooseStyleItemPrefix(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>临时函数。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.IdeoUtilityIsMemeAllowedForPostfix(RimWorld.MemeDef,RimWorld.FactionDef,System.Boolean@)">
-            <summary>更改阵营能够使用的模因。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.IdeoUtilityCanAddPostfix(RimWorld.MemeDef,System.Collections.Generic.List{RimWorld.MemeDef},RimWorld.FactionDef,System.Boolean@)">
-            <summary>更改模因能够兼容的模因。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PawnWoundDrawerRenderOverBodyPrefix(RimWorld.PawnWoundDrawer@)">
-            <summary>禁止伤害渲染。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.IdeoSymbolPartDefCanBeChosenForIdeoPostfix(RimWorld.Ideo,RimWorld.IdeoSymbolPartDef@,System.Boolean@)">
-            <summary>更改阵营能够使用的图标。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.ThoughtWorkerWearingColorCurrentStateInternalTranspilerB(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>使服装颜色想法进行对<see cref = "T:Verse.CompColorable" />的非空检查，方案2。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.DialogStylingStationDrawApparelColorTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>使梳妆台服装颜色选单进行对<see cref = "T:RimWorld.Dialog_StylingStation" />的非空检查。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.RitualBehaviorWorkerCanStartRitualNowTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator,System.String)">
-            <summary>使仪式可用性进行对<see cref = "T:System.Collections.Generic.List`1" />的合法性检查。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.RitualBehaviorWorkerCanStartRitualNowTranspiler_Speech(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>使仪式可用性进行对<see cref = "T:System.Collections.Generic.List`1" />的合法性检查。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.RitualBehaviorWorkerCanStartRitualNowTranspiler_Conversion(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>使仪式可用性进行对<see cref = "T:System.Collections.Generic.List`1" />的合法性检查。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.IdeoFoundationRandomizeCultureTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>禁止无预设文化阵营随机选择阵营限定文化。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PageConfigureIdeoPostOpenTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>为文化选择界面先生成文化。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.DialogChooseMemesPlayerNHiddenOffTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>特定阵营存在时，锁定文化选项。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.IdeoUIUtilityFactionForRandomizationTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>防止隐藏阵营随机为特殊玩家阵营。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.StrangeMethodFinderTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>寻找一个奇怪的方法。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.IdeoUIUtility_MT_LT_c__DisplayClass59_0__MT_DoName_LT_g____CultureAllowed_1_Transpiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>特定阵营存在时，锁定文化选项。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PageConfigureIdeoCanDoNextTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>阻止半人马和Sayers阵营选择其他文化。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.StatWorkerGetValueUnfinalizedTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>改变心灵敏感度对半人马心灵熵阈值的影响。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.StatWorkerGetExplanationUnfinalizedTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>改变心灵敏感度对半人马心灵熵阈值的影响的数值显示。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.ThoughtWorkerPreceptHasUncoveredPrefix(Verse.Pawn,System.Boolean@)">
-            <summary>使半人马和Sayers不被判断为裸体。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.RoyalTitleDefGetBedroomRequirementsPostfix(Verse.Pawn,RimWorld.RoyalTitleDef,System.Collections.Generic.IEnumerable{RimWorld.RoomRequirement}@)">
-            <summary>使半人马的头衔建筑物需求使用半人马床而非其他床铺。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.ApparelRequirementIsMetPostfix(Verse.Pawn,RimWorld.ApparelRequirement,System.Boolean@)">
-            <summary>使半人马的头衔服装需求需要半人马衣物，使Sayers的头衔服装需求不需要衣物。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.IdeoApparelColorPrefix(RimWorld.Ideo,UnityEngine.Color@)">
-            <summary>锁定文化代表颜色。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PageChooseIdeoPresetPostOpenTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>跳过文化预设。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.GenLabelNewThingLabelTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>增加特殊标签的显示。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.GenLabelThingLabelTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>特殊标签禁止使用缓存机制。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
-            <summary>对人物渲染器的补丁。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.GeneratePawnPostfix(Verse.Pawn@,Verse.PawnGenerationRequest)">
-            <summary>
-            对人物生成器的补丁。
-            </summary>
-        </member>
         <member name="T:Explorite.CompProperties_PassiveMeditationFocusGain">
             <summary>为<see cref = "T:Explorite.CompPassiveMeditationFocusGain" />接收参数。</summary>
         </member>
@@ -741,6 +756,20 @@
             <param name="tDef">需要被检测的特征。</param>
             <param name="degree">需要被检测的特征程度。</param>
             <returns>该特征是否为半人马特征。</returns>
+        </member>
+        <member name="M:Explorite.ExploriteCore.IsSayersIdeo(RimWorld.Ideo)">
+            <summary>
+            检测文化是否为Sayers文化。
+            </summary>
+            <param name="ideo">需要被检测的文化。</param>
+            <returns>文化是否为Sayers文化。</returns>
+        </member>
+        <member name="M:Explorite.ExploriteCore.IsCentaursIdeo(RimWorld.Ideo)">
+            <summary>
+            检测文化是否为半人马文化。
+            </summary>
+            <param name="ideo">需要被检测的文化。</param>
+            <returns>文化是否为半人马文化。</returns>
         </member>
         <member name="M:Explorite.ExploriteDebugActions.ClearAllFogClickPlace">
             <summary>清除所有迷雾。</summary>

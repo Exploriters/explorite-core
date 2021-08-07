@@ -403,12 +403,10 @@ namespace Explorite
 				});
 			}
 			List<Thing> list3 = new List<Thing>();
-			/*
 			foreach (ScenPart allPart in Find.Scenario.AllParts)
 			{
 				list3.AddRange(allPart.PlayerStartingThings());
 			}
-			*/
 			int num = 0;
 			foreach (Thing item in list3)
 			{

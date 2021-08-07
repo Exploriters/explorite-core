@@ -130,7 +130,7 @@ namespace Explorite
 		//static Building_TriBattery() { }
 	}
 
-	[StaticConstructorOnStartup]
+	//[StaticConstructorOnStartup]
 	public class Building_TriBattery_SecretTrishot : Building_TriBattery, ISecretTrishot
 	{
 		private bool includingBrokenTrishot = false;
