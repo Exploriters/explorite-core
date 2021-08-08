@@ -66,44 +66,6 @@ namespace Explorite
 			//__result.story.traits.GainTrait(new Trait(TraitDefOf.Asexual, 0, forced: true));
 
 			pawn.story.favoriteColor = null;
-
-<<<<<<< HEAD
-            pawn.EnsureSubsystemExist();
-            return true;
-        }
-        internal static bool GenerateSayersPostprocess(ref Pawn pawn, PawnGenerationRequest request, ref bool matchError)
-        {
-            if (!InstelledMods.Sayers)
-            {
-                return false;
-            }
-            if (matchError)
-            {
-                return false;
-            }
-            if (pawn.def != AlienSayersDef)
-            {
-                return false;
-            }
-            if (pawn.kindDef.race != AlienSayersDef)
-            {
-                matchError = true;
-                return false;
-            }
-            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            if (pawn.ageTracker.AgeBiologicalTicks / 10 >= 3600000 * 10)
-            {
-                pawn.ageTracker.AgeBiologicalTicks = 3600000 * 10;
-            }
-            else
-            {
-                pawn.ageTracker.AgeBiologicalTicks = Math.Max(0, pawn.ageTracker.AgeBiologicalTicks / 10);
-            }
-            pawn.ageTracker.AgeChronologicalTicks = pawn.ageTracker.AgeBiologicalTicks;
-            pawn.relations.ClearAllRelations();
-            // 在这里写后期处理
-            //Bruh... I'm a fool :( -- Abrel
-=======
 			foreach (SkillRecord sr in pawn.skills.skills)
 			{
 				sr.Level =
@@ -142,10 +104,18 @@ namespace Explorite
 				return false;
 			}
 			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
->>>>>>> 983e1c22d864a778a96bf38ceea681a8f473bf22
-
 			// 在这里写后期处理
-
+			//Bruh... I'm a fool :( -- Abrel
+			if (pawn.ageTracker.AgeBiologicalTicks / 10 >= 3600000 * 10)
+			{
+				pawn.ageTracker.AgeBiologicalTicks = 3600000 * 10;
+			}
+			else
+			{
+				pawn.ageTracker.AgeBiologicalTicks = Math.Max(0, pawn.ageTracker.AgeBiologicalTicks / 10);
+			}
+			pawn.ageTracker.AgeChronologicalTicks = pawn.ageTracker.AgeBiologicalTicks;
+			pawn.relations.ClearAllRelations();
 			if (pawn.Name is NameTriple name)
 			{
 				//__result.Name = new NameTriple(name.Last, name.Last, null);
