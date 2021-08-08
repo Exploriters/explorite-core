@@ -68,7 +68,7 @@ namespace Explorite
 					postfix: new HarmonyMethod(patchType, nameof(VerbLaunchProjectileHighlightFieldRadiusAroundTargetPostfix)));
 
 
-				Patch(typeof(PawnRenderer).GetMethod(nameof(PawnRenderer.DrawEquipmentAiming)),
+				Patch(AccessTools.Method(typeof(PawnRenderer),nameof(PawnRenderer.DrawEquipmentAiming)),
 					prefix: new HarmonyMethod(patchType, nameof(DrawEquipmentAimingPrefix)));
 				Patch(AccessTools.Method(typeof(Thing), "get_DefaultGraphic"),
 					postfix: new HarmonyMethod(patchType, nameof(get_Graphic_PostFix)));
@@ -309,7 +309,14 @@ namespace Explorite
 
 				Patch(AccessTools.Method(typeof(Page_ConfigureIdeo), nameof(Page_ConfigureIdeo.PostOpen)),
 					transpiler: new HarmonyMethod(patchType, nameof(PageConfigureIdeoPostOpenTranspiler)));
-
+				Patch(AccessTools.Method(typeof(Page_ConfigureIdeo), "CanDoNext"),
+					transpiler: new HarmonyMethod(patchType, nameof(PageConfigureIdeoCanDoNextTranspiler)));
+				Patch(AccessTools.Constructor(typeof(Dialog_ChooseMemes), new Type[] { typeof(Ideo), typeof(MemeCategory), typeof(bool), typeof(Action) }),
+					transpiler: new HarmonyMethod(patchType, nameof(DialogChooseMemesAnyMemeTranspiler)));
+				Patch(AccessTools.Method(typeof(Dialog_ChooseMemes), "DoAcceptChanges"),
+					transpiler: new HarmonyMethod(patchType, nameof(DialogChooseMemesAnyMemeTranspiler)));
+				Patch(AccessTools.Method(typeof(Page_ConfigureIdeo), nameof(Page_ConfigureIdeo.Notify_ClosedChooseMemesDialog)),
+					transpiler: new HarmonyMethod(patchType, nameof(DialogChooseMemesAnyMemeTranspiler)));
 				Patch(AccessTools.Method(typeof(Dialog_ChooseMemes), "CanUseMeme"),
 					transpiler: new HarmonyMethod(patchType, nameof(DialogChooseMemesPlayerNHiddenOffTranspiler)));
 				Patch(AccessTools.Method(typeof(Dialog_ChooseMemes), "CanRemoveMeme"),
@@ -332,8 +339,6 @@ namespace Explorite
 				//Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.IdeoUIUtility.<>c__DisplayClass59_0"), "<DoName>g__CultureAllowed|1"),
 				//	transpiler: nameof(PrinterTranspiler));
 
-				Patch(AccessTools.Method(typeof(Page_ConfigureIdeo), "CanDoNext"),
-					transpiler: new HarmonyMethod(patchType, nameof(PageConfigureIdeoCanDoNextTranspiler)));
 
 				Patch(AccessTools.Method(typeof(StatWorker), nameof(StatWorker.GetValueUnfinalized)),
 					transpiler: new HarmonyMethod(patchType, nameof(StatWorkerGetValueUnfinalizedTranspiler)));
@@ -387,26 +392,23 @@ namespace Explorite
 			{
 				ExplortiePatchActionRecord last = records.Last();
 				Log.Error(string.Concat(
-					"[Explorite]Patch sequence crashed, last patch were ",
-					$"{last.original.FullDescription()}, ",
-					last.prefix != null ? "prefix: " + last.prefix + ", " : "",
-					last.postfix != null ? "postfix: " + last.postfix + ", " : "",
-					last.transpiler != null ? "transpiler: " + last.transpiler + ", " : "",
-					last.finalizer != null ? "finalizer: " + last.finalizer + ", " : "",
-					", ",
-					$"an exception ({e.GetType().Name}) occurred.\n",
+					$"[Explorite]Patch sequence crashed, an exception ({e.GetType().Name}) occurred. Last patch was ",
+					last,
+					$"\n",
 					$"Message:\n   {e.Message}\n",
 					$"Stack Trace:\n{e.StackTrace}\n"
 					));
 			}
 			stopwatch.Stop();
 			Log.Message($"[Explorite]Patch sequence complete, solved total {records.Count()} patches, " +
-				$"{records.Count(d=>d.state == ExplortiePatchActionRecordState.Success)} success, " +
-				$"{records.Count(d=>d.state == ExplortiePatchActionRecordState.Failed)} failed, " +
-				$"{records.Count(d=>d.state == ExplortiePatchActionRecordState.Unresolved)} unresolved, " +
-				$"in {stopwatch.ElapsedMilliseconds}ms.\n"+ PrintPatches());
+				$"{records.Count(d => d.state == ExplortiePatchActionRecordState.Success)} success, " +
+				$"{records.Count(d => d.state == ExplortiePatchActionRecordState.Failed)} failed, " +
+				$"{records.Count(d => d.state == ExplortiePatchActionRecordState.Unresolved)} unresolved, " +
+				$"in {stopwatch.ElapsedMilliseconds}ms.\n" +
+				$"Printing patch records below...\n" +
+				PrintPatches());
 			Log.Message($"[Explorite]All patch targets:\n" +
-				string.Join("\n", records.Where(s => s.original != null).OrderBy(r => r.original == null ? "!!!" : $"{r.original.Name}({ r.original.GetParameters().Join(p => $"{p.ParameterType.FullDescription()} {p.Name}")})").Select(r=> r.original?.FullDescription()).Distinct())
+				string.Join("\n", records.Where(s => s.original != null).OrderBy(s => s.SortValue).Select(r => r.original?.FullDescription()).Distinct())
 				);
 		}
 		/*
@@ -462,7 +464,7 @@ namespace Explorite
 			yield return new CodeInstruction(OpCodes.Ldarg_0);
 			yield return new CodeInstruction(OpCodes.Ldfld, pawnInfo);
 			yield return new CodeInstruction(OpCodes.Ldfld, thingDefInfo);
-			yield return new CodeInstruction(OpCodes.Ldsfld, typeof(ExploriteCore).GetField(nameof(AlienCentaurDef)));
+			yield return new CodeInstruction(OpCodes.Ldsfld, typeof(ExploriteCore).GetField(nameof(AlienCentaurDef), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static));
 			yield return new CodeInstruction(OpCodes.Bne_Un, label1);
 			yield return new CodeInstruction(OpCodes.Ldc_R4, 0f);
 			yield return new CodeInstruction(OpCodes.Br_S, label2);
@@ -486,6 +488,7 @@ namespace Explorite
 				}
 				continue;
 			}
+			TranspilerStageCheckout(patchActionStage, 2);
 			yield break;
 		}
 		///<summary>移除半人马每日技能训练上限。</summary>
@@ -872,6 +875,7 @@ namespace Explorite
 					continue;
 				}
 			}
+			TranspilerStageCheckout(patchActionStage, 1);
 			yield break;
 		}
 		///<summary>使半人马与他人同时被添加至同一个床时被移除绑定。</summary>
@@ -1582,6 +1586,7 @@ namespace Explorite
 					yield return ins;
 				}
 			}
+			TranspilerStageCheckout(patchActionStage, 1);
 			yield break;
 		}
 
@@ -1733,6 +1738,7 @@ namespace Explorite
 				}
 			}
 			//Log.Message("[Explorite]instr result:\n"+stringBuilder.ToString());
+			TranspilerStageCheckout(patchActionStage, 3);
 			yield break;
 		}
 
@@ -1879,6 +1885,8 @@ namespace Explorite
 				Log.Error($"[Explorite]instr patch 2 stage error!({patchActionStage2})");
 			}
 			*/
+			TranspilerStageCheckout(patchActionStage1, 3, "stage1");
+			TranspilerStageCheckout(patchActionStage2, 3, "stage2");
 			yield break;
 		}
 
@@ -2181,6 +2189,7 @@ namespace Explorite
 				}
 			}
 			Log.Message($"[Explorite]instr result ({patchActionStage}):\n" + stringBuilder.ToString());
+			TranspilerStageCheckout(patchActionStage, 8);
 			yield break;
 		}
 		*/
@@ -2233,6 +2242,7 @@ namespace Explorite
 					continue;
 				}
 			}
+			TranspilerStageCheckout(patchActionStage, 4);
 			yield break;
 		}
 		public static IEnumerable<Apparel> PawnNonColorableApparels(IEnumerable<Apparel> apparels)
@@ -2259,6 +2269,7 @@ namespace Explorite
 					continue;
 				}
 			}
+			TranspilerStageCheckout(patchActionStage, 1);
 			yield break;
 		}
 		public static bool NoRitualIdeo(Precept_Ritual ritual, PreceptDef precept)
@@ -2271,12 +2282,12 @@ namespace Explorite
 			Label label = ilg.DefineLabel();
 			byte patchActionStage = 0;
 			yield return new CodeInstruction(OpCodes.Ldarg_2);
-			yield return new CodeInstruction(OpCodes.Ldsfld, typeof(PreceptDefOf).GetField(preceptDefName));
+			yield return new CodeInstruction(OpCodes.Ldsfld, typeof(PreceptDefOf).GetField(preceptDefName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static));
 			yield return new CodeInstruction(OpCodes.Call, ((Func<Precept_Ritual, PreceptDef, bool>)NoRitualIdeo).GetMethodInfo());
 			yield return new CodeInstruction(OpCodes.Brfalse_S, label);
 			yield return new CodeInstruction(OpCodes.Ldstr, "CantStartRitualNoConvertee");
-			yield return new CodeInstruction(OpCodes.Ldsfld, typeof(PreceptDefOf).GetField(preceptDefName));
-			yield return new CodeInstruction(OpCodes.Ldfld, typeof(Def).GetField("label"));
+			yield return new CodeInstruction(OpCodes.Ldsfld, typeof(PreceptDefOf).GetField(preceptDefName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static));
+			yield return new CodeInstruction(OpCodes.Ldfld, typeof(Def).GetField(nameof(Def.label), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance));
 			yield return new CodeInstruction(OpCodes.Call, typeof(NamedArgument).GetMethod("op_Implicit", new Type[] { typeof(String) }));
 			yield return new CodeInstruction(OpCodes.Call, ((Func<string, NamedArgument, TaggedString>)TranslatorFormattedStringExtensions.Translate).GetMethodInfo());
 			yield return new CodeInstruction(OpCodes.Call, typeof(TaggedString).GetMethod("op_Implicit", new Type[] { typeof(TaggedString) }));
@@ -2291,6 +2302,7 @@ namespace Explorite
 				yield return ins;
 				continue;
 			}
+			TranspilerStageCheckout(patchActionStage, 1);
 			yield break;
 		}
 		///<summary>使仪式可用性进行对<see cref = "List&#60;Precept_Role&#62;" />的合法性检查。</summary>
@@ -2330,6 +2342,7 @@ namespace Explorite
 					continue;
 				}
 			}
+			TranspilerStageCheckout(patchActionStage, 1);
 			yield break;
 		}
 		public static void GenIdeoBeforePlayerAction(Page_ConfigureIdeo page, Ideo ideo)
@@ -2372,7 +2385,7 @@ namespace Explorite
 					patchActionStage++;
 					yield return new CodeInstruction(OpCodes.Ldarg_0) { labels = ins.labels.ToList() };
 					yield return new CodeInstruction(OpCodes.Ldarg_0);
-					yield return new CodeInstruction(OpCodes.Ldfld, typeof(Page_ConfigureIdeo).GetField("ideo"));
+					yield return new CodeInstruction(OpCodes.Ldfld, typeof(Page_ConfigureIdeo).GetField(nameof(Page_ConfigureIdeo.ideo), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance));
 					yield return new CodeInstruction(OpCodes.Call, ((Action<Page_ConfigureIdeo, Ideo>)GenIdeoBeforePlayerAction).GetMethodInfo());
 					ins.labels.Clear();
 					yield return ins;
@@ -2384,6 +2397,7 @@ namespace Explorite
 					continue;
 				}
 			}
+			TranspilerStageCheckout(patchActionStage, 1);
 			yield break;
 		}
 		public static bool SpecPFacInGame()
@@ -2440,6 +2454,7 @@ namespace Explorite
 				}
 			}
 			//Log.Message($"[Explorite]instr result:\n" + sb.ToString());
+			TranspilerStageCheckout(patchActionStage, 6);
 			yield break;
 		}
 		///<summary>防止隐藏阵营随机为特殊玩家阵营。</summary>
@@ -2482,6 +2497,7 @@ namespace Explorite
 					continue;
 				}
 			}
+			TranspilerStageCheckout(patchActionStage, 3);
 			yield break;
 		}
 
@@ -2554,6 +2570,7 @@ namespace Explorite
 					continue;
 				}
 			}
+			TranspilerStageCheckout(patchActionStage, 5);
 			yield break;
 		}
 		/*
@@ -2598,6 +2615,7 @@ namespace Explorite
 					continue;
 				}
 			}
+			TranspilerStageCheckout(patchActionStage, 2);
 			yield break;
 		}
 		*/
@@ -2623,14 +2641,78 @@ namespace Explorite
 			return true;
 		}
 		*/
+
+		public static bool SpecStructMemePredicate(MemeDef meme)
+		{
+			return meme is MemeDef_Ex meex && meex.category == MemeCategory.Structure && meex.countForNonStructureGroup;
+		}
 		///<summary>使特殊结构模因被计数。</summary>
 		[HarmonyPostfix]public static void DialogChooseMemesGetMemeCountPostfix(MemeCategory category, List<MemeDef> ___newMemes, Dialog_ChooseMemes __instance, ref int __result)
 		{
 			if (category == MemeCategory.Normal
 			 && ___newMemes != null)
 			{
-				__result += ___newMemes.Count(meme => meme is MemeDef_Ex meex && meex.category == MemeCategory.Structure && meex.countForNonStructureGroup);
+				__result += ___newMemes.Count(SpecStructMemePredicate);
 			}
+		}
+		/*
+		///<summary>使特殊结构模因被计数。</summary>
+		[HarmonyTranspiler]public static IEnumerable<CodeInstruction> DialogChooseMemesc___Transpiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+		{
+			foreach (CodeInstruction ins in instr)
+			{
+				if (ins.opcode == OpCodes.Ret)
+				{
+					yield return new CodeInstruction(OpCodes.Ldarg_1);
+					yield return new CodeInstruction(OpCodes.Call, ((Predicate<MemeDef>)SpecStructMemePredicate).GetMethodInfo());
+					yield return new CodeInstruction(OpCodes.Or);
+					yield return ins;
+					continue;
+				}
+				else
+				{
+					yield return ins;
+					continue;
+				}
+			}
+			yield break;
+		}
+		*/
+		public static bool SpecStructMemeInDialogPredicate(object instance)
+		{
+			return instance.GetType().GetField("ideo", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).GetValue(instance) is Ideo ideo && ideo.memes.Any(SpecStructMemePredicate);
+		}
+		///<summary>使特殊结构模因被计数。</summary>
+		[HarmonyTranspiler]public static IEnumerable<CodeInstruction> DialogChooseMemesAnyMemeTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+		{
+			byte patchActionStage = 0;
+			//MethodInfo AnyMemeInfo = AccessTools.Method(typeof(GenCollection), nameof(GenCollection.Any), new Type[] { typeof(List<MemeDef>), typeof(Predicate<MemeDef>) }, new Type[] { typeof(MemeDef) });
+			//MethodInfo AnyMemeInfo = typeof(GenCollection).GetMethod(nameof(GenCollection.Any), new Type[] { typeof(List<MemeDef>), typeof(Predicate<MemeDef>) }).MakeGenericMethod(typeof(MemeDef));
+			//MethodInfo AnyMemeInfo = typeof(GenCollection).GetMethods().First(m => m.Name == nameof(GenCollection.Any) && m. == new Type[] { typeof(List<object>), typeof(Predicate<object>) }).MakeGenericMethod(typeof(MemeDef));
+
+			foreach (CodeInstruction ins in instr)
+			{
+				if (patchActionStage == 0 && ins.opcode == OpCodes.Call && ins.operand is MethodInfo method
+				 && method.DeclaringType == typeof(GenCollection)
+				 && method.Name == nameof(GenCollection.Any)
+				 && method.GetParameters().Any(p => p.ParameterType == typeof(Predicate<MemeDef>))
+					)
+				{
+					patchActionStage++;
+					yield return ins;
+					yield return new CodeInstruction(OpCodes.Ldarg_0);
+					yield return new CodeInstruction(OpCodes.Call, ((Predicate<object>)SpecStructMemeInDialogPredicate).GetMethodInfo());
+					yield return new CodeInstruction(OpCodes.Or);
+					continue;
+				}
+				else
+				{
+					yield return ins;
+					continue;
+				}
+			}
+			TranspilerStageCheckout(patchActionStage, 1);
+			yield break;
 		}
 
 		public static bool PageConfigureIdeoCanDoNextPatch(Page_ConfigureIdeo page)
@@ -2670,6 +2752,7 @@ namespace Explorite
 					continue;
 				}
 			}
+			TranspilerStageCheckout(patchActionStage, 1);
 			yield break;
 		}
 		public static float PostProcessStatFactor(float value, StatWorker instance, Thing thing, StatDef factorDef)
@@ -2702,7 +2785,7 @@ namespace Explorite
 
 			Queue<CodeInstruction> ins4 = new Queue<CodeInstruction>();
 
-			FieldInfo StatFactorsInfo = typeof(StatDef).GetField("statFactors");
+			FieldInfo StatFactorsInfo = typeof(StatDef).GetField(nameof(StatDef.statFactors), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 			MethodInfo StatExtensionGetStatValueInfo = AccessTools.Method(typeof(StatExtension), "GetStatValue");
 			MethodInfo StatRequestGetThingInfo = AccessTools.Method(typeof(StatRequest), "get_Thing");
 
@@ -2746,6 +2829,7 @@ namespace Explorite
 					continue;
 				}
 			}
+			TranspilerStageCheckout(patchActionStage, 1);
 			yield break;
 		}
 		///<summary>改变心灵敏感度对半人马心灵熵阈值的影响的数值显示。</summary>
@@ -2754,7 +2838,7 @@ namespace Explorite
 			byte patchActionStage = 0;
 			byte proximityStat = 0;
 
-			FieldInfo StatFactorsInfo = typeof(StatDef).GetField("statFactors");
+			FieldInfo StatFactorsInfo = typeof(StatDef).GetField(nameof(StatDef.statFactors), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 			MethodInfo StatWorkerGetValueInfo = AccessTools.Method(typeof(StatWorker), "GetValue", new Type[] { typeof(StatRequest), typeof(bool) });
 			MethodInfo StatRequestGetThingInfo = AccessTools.Method(typeof(StatRequest), "get_Thing");
 
@@ -2796,6 +2880,7 @@ namespace Explorite
 					continue;
 				}
 			}
+			TranspilerStageCheckout(patchActionStage, 2);
 			yield break;
 		}
 
@@ -2861,8 +2946,8 @@ namespace Explorite
 			byte patchActionStage = 0;
 			MethodInfo WindowPostOpenInfo = AccessTools.Method(typeof(Window), "PostOpen");
 			MethodInfo PageChooseIdeoPresetDoCustomizeInfo = AccessTools.Method(typeof(Page_ChooseIdeoPreset), "DoCustomize");
-			FieldInfo next = typeof(Page).GetField(nameof(Page.next));
-			FieldInfo prev = typeof(Page).GetField(nameof(Page.prev));
+			FieldInfo next = typeof(Page).GetField(nameof(Page.next), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+			FieldInfo prev = typeof(Page).GetField(nameof(Page.prev), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 			Label label = ilg.DefineLabel();
 			foreach (CodeInstruction ins in instr)
 			{
@@ -2902,6 +2987,7 @@ namespace Explorite
 					continue;
 				}
 			}
+			TranspilerStageCheckout(patchActionStage, 2);
 			yield break;
 		}
 
@@ -2991,6 +3077,7 @@ namespace Explorite
 					lastOr = ins.opcode == OpCodes.Or;
 				}
 			}
+			TranspilerStageCheckout(patchActionStage, 6);
 			yield break;
 		}
 
@@ -3022,6 +3109,7 @@ namespace Explorite
 					yield return ins;
 				}
 			}
+			TranspilerStageCheckout(patchActionStage, 1);
 			yield break;
 		}
 

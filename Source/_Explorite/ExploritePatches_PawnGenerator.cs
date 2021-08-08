@@ -9,6 +9,7 @@ using Verse;
 using static Explorite.ExploriteCore;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Explorite
 {
@@ -106,9 +107,25 @@ namespace Explorite
 			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			// 在这里写后期处理
 			//Bruh... I'm a fool :( -- Abrel
+			/*
 			pawn.ageTracker.AgeBiologicalTicks = Clamp(pawn.ageTracker.AgeBiologicalTicks / 10, 0, 3600000);
 			pawn.ageTracker.AgeChronologicalTicks = pawn.ageTracker.AgeBiologicalTicks;
+			*/
+
 			pawn.relations.ClearAllRelations();
+
+			/*
+			Type AlienCompType = AccessTools.TypeByName("AlienRace.AlienPartGenerator.AlienComp");
+			if (AccessTools.TypeByName("AlienRace.AlienPartGenerator.ExposableValueTuple")?.MakeGenericType(typeof(Color), typeof(Color))?.GetField("second")?.GetValue(AlienCompType.GetMethod("GetChannel")?.Invoke(pawn.AllComps.Find(c => AlienCompType.IsAssignableFrom(c.GetType())), new object[] { "skin" })) is Color color)
+			{
+				pawn.story.favoriteColor = color;
+			}
+			*/
+			if (pawn.GetAlienRaceCompColor("skin", out _ , out Color? second))
+			{
+				pawn.story.favoriteColor = second.Value;
+			}
+
 			if (pawn.Name is NameTriple name)
 			{
 				//__result.Name = new NameTriple(name.Last, name.Last, null);

@@ -459,5 +459,22 @@ namespace Explorite
 		{
 			return ideo.memes.Contains(CentaurStructureMemeDef);
 		}
+
+		public delegate bool GetAlienRaceCompColorDelegate(Thing thing, string channel, out Color? first, out Color? second);
+		public static GetAlienRaceCompColorDelegate GetAlienRaceCompColorFunc = (Thing _1, string _2, out Color? _3, out Color? _4) => { _3 = null; _4 = null; return false; };
+		/**
+		 * <summary>
+		 * 获取物体的HAR颜色通道颜色。
+		 * </summary>
+		 * <param name="thing">需要获取颜色的物体。</param>
+		 * <param name="channel">需要获取的颜色通道。</param>
+		 * <param name="first">第一个颜色结果。</param>
+		 * <param name="second">第二个颜色结果。</param>
+		 * <returns>是否取得到了颜色。</returns>
+		 */
+		public static bool GetAlienRaceCompColor(this Thing thing, string channel, out Color? first, out Color? second)
+		{
+			return GetAlienRaceCompColorFunc(thing, channel, out first, out second);
+		}
 	}
 }

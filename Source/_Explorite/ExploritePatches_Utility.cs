@@ -22,6 +22,20 @@ namespace Explorite
 {
 	internal static partial class ExploritePatches
 	{
+		public class MalPatchStatusException : Exception
+		{
+			public int expectedStage;
+			public int accuStage;
+			public string stageName;
+			public override string Message => $"Patch did not exit correctly and encountered {stageName ?? "stage"} {accuStage}/{expectedStage}.";
+
+			public MalPatchStatusException(int stage, int targetStage, string stageName = null)
+			{
+				accuStage = stage;
+				expectedStage = targetStage;
+				this.stageName = stageName;
+			}
+		}
 		public enum ExplortiePatchActionRecordState : byte
 		{
 			Unresolved = 0,
@@ -48,9 +62,9 @@ namespace Explorite
 			}
 			public MethodInfo Patch()
 			{
-				state = ExplortiePatchActionRecordState.Success;
 				try
 				{
+					state = ExplortiePatchActionRecordState.Success;
 					return harmonyInstance.Patch(
 						original: original,
 						prefix: prefix,
@@ -61,38 +75,46 @@ namespace Explorite
 				}
 				catch (Exception e)
 				{
+					state = ExplortiePatchActionRecordState.Failed;
 					Log.Error(string.Concat(
-						"[Explorite]Patch sequence failare at ",
-						original != null ? original.FullDescription() : "NULL-TARGET-METHOD",
-						prefix != null ? "prefix: " + prefix.method.FullDescription() + ", " : "",
-						postfix != null ? "postfix: " + postfix.method.FullDescription() + ", " : "",
-						transpiler != null ? "transpiler: " + transpiler.method.FullDescription() + ", " : "",
-						finalizer != null ? "finalizer: " + finalizer.method.FullDescription() + ", " : "",
-						", ",
-						$"an exception ({e.GetType().Name}) occurred.\n",
+						$"[Explorite]Patch sequence failare, an exception ({e.GetType().Name}) occurred. The malfunctioning patch was ",
+						ToString(),
+						$"\n",
 						$"Message:\n   {e.Message}\n",
 						$"Stack Trace:\n{e.StackTrace}\n"
 						));
+					return null;
 				}
-				state = ExplortiePatchActionRecordState.Failed;
-				return null;
+			}
+			public override string ToString()
+			{
+				return string.Concat(
+					original != null ? original.FullDescription() : "NULL-TARGET-METHOD",
+					prefix != null ? $"\n - status: {state}" : "",
+					prefix != null ? $"\n - prefix: {prefix.method.FullDescription()}" : "",
+					postfix != null ? $"\n - postfix: {postfix.method.FullDescription()}" : "",
+					transpiler != null ? $"\n - transpiler: {transpiler.method.FullDescription()}" : "",
+					finalizer != null ? $"\n - finalizer: {finalizer.method.FullDescription()}" : ""
+					);
+			}
+            public string SortValue => original == null ? "!!!" : $"{original.Name}({ original.GetParameters().Join(p => $"{p.ParameterType.FullDescription()} {p.Name}")})";
+        }
+		internal static readonly List<ExplortiePatchActionRecord> records = new List<ExplortiePatchActionRecord>();
+		internal static readonly Type exPatchType = typeof(ExploritePatches);
+
+		static void TranspilerStageCheckout(int stage, int targetStage, string stageName = null)
+		{
+			if (stage != targetStage)
+			{
+				throw new MalPatchStatusException(stage, targetStage, stageName);
 			}
 		}
-		internal static readonly List<ExplortiePatchActionRecord> records = new List<ExplortiePatchActionRecord>();
-		//internal static readonly Type patchType = typeof(ExploritePatches);
-
 		static string PrintPatches()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			foreach (ExplortiePatchActionRecord record in records)
 			{
-				stringBuilder.AppendLine(string.Concat(
-					record.original != null ? record.original.FullDescription() : "NULL-TARGET-METHOD",
-					record.prefix != null ? $"\n - prefix: {record.prefix.method.FullDescription()}" : "",
-					record.postfix != null ? $"\n - postfix: {record.postfix.method.FullDescription()}" : "",
-					record.transpiler != null ? $"\n - transpiler: {record.transpiler.method.FullDescription()}" : "",
-					record.finalizer != null ? $"\n - finalizer: {record.finalizer.method.FullDescription()}" : ""
-					));
+				stringBuilder.AppendLine(record.ToString());
 			}
 			return stringBuilder.ToString();
 		}

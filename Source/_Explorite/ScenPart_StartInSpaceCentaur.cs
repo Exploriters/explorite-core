@@ -156,15 +156,16 @@ namespace Explorite
 						 || thing.def == DefDatabase<ThingDef>.GetNamed("MultiAnalyzer")
 						 || thing.def == ThingDefOf.BiosculpterPod
 						 || thing.def == ThingDefOf.NeuralSupercharger
+						 || thing.def == DefDatabase<ThingDef>.GetNamed("ShipCombatShieldGenerator")
 							)
 						)
 					{
 						compFlickable.SwitchIsOn = false;
-						typeof(CompFlickable).GetField("wantSwitchOn").SetValue(compFlickable, false);
+						typeof(CompFlickable).GetField("wantSwitchOn", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).SetValue(compFlickable, false);
 					}
 					if (thing?.TryGetComp<CompRechargeable>() is CompRechargeable compRechargeable)
 					{
-						typeof(CompRechargeable).GetField("ticksUntilCharged").SetValue(compRechargeable, 0);
+						typeof(CompRechargeable).GetField("ticksUntilCharged", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).SetValue(compRechargeable, 0);
 					}
 					if (thing?.TryGetComp<CompRoofMe>() is CompRoofMe compRoofMe)
 					{
@@ -206,7 +207,6 @@ namespace Explorite
 					}
 					if (thing.def == DefDatabase<ThingDef>.GetNamed("ShipCombatShieldGenerator"))
 					{
-						thing.TryGetComp<CompFlickable>().SwitchIsOn = false;
 						thing.TryGetComp<CompBreakdownable>()?.DoBreakdown();
 					}
 					if (thing.def == DefDatabase<ThingDef>.GetNamed("ShipTurret_Laser"))
@@ -227,14 +227,13 @@ namespace Explorite
 							}
 						}
 					}*/
-					if (
-							thing.def == DefDatabase<ThingDef>.GetNamed("ComponentIndustrial") ||
-							thing.def == DefDatabase<ThingDef>.GetNamed("ShipTorpedo_HighExplosive") ||
-							thing.def == DefDatabase<ThingDef>.GetNamed("ShipTorpedo_EMP") ||
-							thing.def == DefDatabase<ThingDef>.GetNamed("Chemfuel") ||
-							thing.def == DefDatabase<ThingDef>.GetNamed("ShuttleFuelPods") ||
-							thing.def == DefDatabase<ThingDef>.GetNamed("WoodLog") ||
-							thing.def == DefDatabase<ThingDef>.GetNamed("Shell_EMP")
+					if (thing.def == DefDatabase<ThingDef>.GetNamed("ComponentIndustrial")
+					 || thing.def == DefDatabase<ThingDef>.GetNamed("ShipTorpedo_HighExplosive")
+					 || thing.def == DefDatabase<ThingDef>.GetNamed("ShipTorpedo_EMP")
+					 || thing.def == DefDatabase<ThingDef>.GetNamed("Chemfuel")
+					 || thing.def == DefDatabase<ThingDef>.GetNamed("ShuttleFuelPods")
+					 || thing.def == DefDatabase<ThingDef>.GetNamed("WoodLog")
+					 || thing.def == DefDatabase<ThingDef>.GetNamed("Shell_EMP")
 						)
 					{
 						//Log.Message("[Explorite]Patching stack.");
@@ -277,9 +276,9 @@ namespace Explorite
 						if (!thing.DestroyedOrNull())
 							thing.Destroy();
 					}
-					if (thing?.TryGetComp<CompPower>() is CompPower compPower)
+					if (thing?.TryGetComp<CompPower>() is CompPower compPower && !compPower.Props.transmitsPower)
 					{
-						typeof(CompPower).GetMethod("TryManualReconnect").Invoke(compPower, new object[] { });
+						typeof(CompPower).GetMethod("TryManualReconnect", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).Invoke(compPower, new object[] { });
 					}
 					foreach (IntVec3 cell in thing.OccupiedRect().Cells)
 					{
@@ -447,7 +446,7 @@ namespace Explorite
 			spaceMap.regionAndRoomUpdater.RebuildAllRegionsAndRooms();
 			foreach (Room r in spaceMap.regionGrid.allRooms)
 				r.Temperature = 19;
-			AccessExtensions.Utility.GetType().GetMethod("RecacheSpaceMaps").Invoke(AccessExtensions.Utility, new object[] { });
+			AccessExtensions.Utility.GetType().GetMethod("RecacheSpaceMaps", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).Invoke(AccessExtensions.Utility, new object[] { });
 
 			CentaurAlphaShipPostProcess(spaceMap);
 		}
