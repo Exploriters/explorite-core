@@ -62,42 +62,45 @@ namespace Explorite
 				count++;
 			}
 		}
+		public static bool TargetingSourceToCompVerbSaveable(ITargetingSource targetingSource, out Comp_VerbSaveable compVerbSave, out Verb verb)
+		{
+			if (targetingSource is Verb verbT
+			 && verbT?.verbTracker?.directOwner != null
+			 && verbT.DirectOwner is CompEquippable equippable
+			 && equippable.parent.GetComp<Comp_VerbSaveable>() is Comp_VerbSaveable comp)
+			{
+				compVerbSave = comp;
+				verb = verbT;
+				return true;
+			}
+			compVerbSave = null;
+			verb = null;
+			return false;
+		}
 		public static void BeginTargetingPrefix(ITargetingSource source)
 		{
-			if (source is Verb verb && verb?.verbTracker?.directOwner != null && verb.DirectOwner is CompEquippable equippable)
+			if (TargetingSourceToCompVerbSaveable(source, out Comp_VerbSaveable compVerbSave, out Verb verb))
 			{
-				if (equippable.parent.GetComp<Comp_VerbSaveable>() is Comp_VerbSaveable compVerbSave)
-				{
-					compVerbSave.tempVerb = verb;
-				}
+				compVerbSave.tempVerb = verb;
 			}
 		}
 		public static void OrderPawnForceTargetPostfix(Targeter __instance, ITargetingSource targetingSource)
 		{
-			if (targetingSource is Verb verb && verb?.verbTracker?.directOwner != null && verb.DirectOwner is CompEquippable equippable)
+			if (TargetingSourceToCompVerbSaveable(targetingSource, out Comp_VerbSaveable compVerbSave, out Verb verb))
 			{
-				if (equippable.parent.GetComp<Comp_VerbSaveable>() is Comp_VerbSaveable compVerbSave)
+				if (!Traverse.Create(__instance).Method("CurrentTargetUnderMouse", true).GetValue<LocalTargetInfo>().IsValid)
 				{
-					if (!Traverse.Create(__instance).Method("CurrentTargetUnderMouse", true).GetValue<LocalTargetInfo>().IsValid)
-					{
-						return;
-					}
-					compVerbSave.currentVerb = verb;
+					return;
 				}
+				compVerbSave.currentVerb = verb;
 			}
 
 		}
 		public static void StopTargetingPrefix(Verb ___targetingSource)
 		{
-			if (___targetingSource is Verb verb && verb?.verbTracker?.directOwner != null)
+			if (TargetingSourceToCompVerbSaveable(___targetingSource, out Comp_VerbSaveable compVerbSave, out _))
 			{
-				if (verb.DirectOwner is CompEquippable compEquip && compEquip.parent != null)
-				{
-					if (compEquip.parent.GetComp<Comp_VerbSaveable>() is Comp_VerbSaveable compVerbSave)
-					{
-						compVerbSave.tempVerb = null;
-					}
-				}
+				compVerbSave.tempVerb = null;
 			}
 		}
 

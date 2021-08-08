@@ -406,7 +406,7 @@ namespace Explorite
 				$"{records.Count(d=>d.state == ExplortiePatchActionRecordState.Unresolved)} unresolved, " +
 				$"in {stopwatch.ElapsedMilliseconds}ms.\n"+ PrintPatches());
 			Log.Message($"[Explorite]All patch targets:\n" +
-				string.Join("\n", records.OrderBy(r => $"{r.original.Name}({ r.original.GetParameters().Join(p => $"{p.ParameterType.FullDescription()} {p.Name}")})").Select(r=> r.original.FullDescription()).Distinct())
+				string.Join("\n", records.Where(s => s.original != null).OrderBy(r => r.original == null ? "!!!" : $"{r.original.Name}({ r.original.GetParameters().Join(p => $"{p.ParameterType.FullDescription()} {p.Name}")})").Select(r=> r.original?.FullDescription()).Distinct())
 				);
 		}
 		/*
@@ -2917,66 +2917,65 @@ namespace Explorite
 			bool lastOr = false;
 			Queue<LocalBuilder> localBools = new Queue<LocalBuilder>();
 
-			StringBuilder sb = new StringBuilder();
 			foreach (CodeInstruction ins in instr)
 			{
 				if (patchActionStage == 0 && ins.opcode == OpCodes.Stloc_S && ((LocalBuilder)ins.operand).LocalIndex == 8)
 				{
 					patchActionStage++;
-					yield return ins.Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Ldarg_0).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Call, ((Func<Thing, bool>)ItemStageUtility.AnyItemStageLabels).GetMethodInfo()).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Stloc_S, localBool).Appsb(sb);
+					yield return ins;
+					yield return new CodeInstruction(OpCodes.Ldarg_0);
+					yield return new CodeInstruction(OpCodes.Call, ((Func<Thing, bool>)ItemStageUtility.AnyItemStageLabels).GetMethodInfo());
+					yield return new CodeInstruction(OpCodes.Stloc_S, localBool);
 				}
 				else if (patchActionStage == 1 && lastOr && (ins.opcode == OpCodes.Brfalse || ins.opcode == OpCodes.Brfalse_S))
 				{
 					patchActionStage++;
-					yield return new CodeInstruction(OpCodes.Ldloc_S, localBool).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Or).Appsb(sb);
-					yield return ins.Appsb(sb);
+					yield return new CodeInstruction(OpCodes.Ldloc_S, localBool);
+					yield return new CodeInstruction(OpCodes.Or);
+					yield return ins;
 				}
 				else if (patchActionStage == 2 && ins.opcode == OpCodes.Ldstr && ins.operand == " (" as object)
 				{
 					patchActionStage++;
-					yield return ins.Appsb(sb);
+					yield return ins;
 				}
 				else if (patchActionStage == 3 && ins.opcode == OpCodes.Call && ins.operand == StringConcatInfo as object)
 				{
 					patchActionStage++;
-					yield return ins.Appsb(sb);
+					yield return ins;
 				}
 				else if (patchActionStage == 4 && ins.opcode == OpCodes.Stloc_0)
 				{
 					patchActionStage++;
-					yield return ins.Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Ldloc_S, localBool).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Brfalse_S, label1).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Ldloc_0).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Ldarg_0).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Call, ((Func<Thing, string>)ItemStageUtility.AllStateLabels).GetMethodInfo()).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Call, StringConcatInfo).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Stloc_0).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Ldloc_3).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Ldloc_S, localBools.Dequeue()).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Or).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Ldloc_S, localBools.Dequeue()).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Or).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Brfalse_S, label2).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Ldloc_0).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Ldstr, " ").Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Call, StringConcatInfo).Appsb(sb);
-					yield return new CodeInstruction(OpCodes.Stloc_0).Appsb(sb);
+					yield return ins;
+					yield return new CodeInstruction(OpCodes.Ldloc_S, localBool);
+					yield return new CodeInstruction(OpCodes.Brfalse_S, label1);
+					yield return new CodeInstruction(OpCodes.Ldloc_0);
+					yield return new CodeInstruction(OpCodes.Ldarg_0);
+					yield return new CodeInstruction(OpCodes.Call, ((Func<Thing, string>)ItemStageUtility.AllStateLabels).GetMethodInfo());
+					yield return new CodeInstruction(OpCodes.Call, StringConcatInfo);
+					yield return new CodeInstruction(OpCodes.Stloc_0);
+					yield return new CodeInstruction(OpCodes.Ldloc_3);
+					yield return new CodeInstruction(OpCodes.Ldloc_S, localBools.Dequeue());
+					yield return new CodeInstruction(OpCodes.Or);
+					yield return new CodeInstruction(OpCodes.Ldloc_S, localBools.Dequeue());
+					yield return new CodeInstruction(OpCodes.Or);
+					yield return new CodeInstruction(OpCodes.Brfalse_S, label2);
+					yield return new CodeInstruction(OpCodes.Ldloc_0);
+					yield return new CodeInstruction(OpCodes.Ldstr, " ");
+					yield return new CodeInstruction(OpCodes.Call, StringConcatInfo);
+					yield return new CodeInstruction(OpCodes.Stloc_0);
 				}
 				else if (patchActionStage == 5)
 				{
 					patchActionStage++;
 					ins.labels.Add(label1);
 					ins.labels.Add(label2);
-					yield return ins.Appsb(sb);
+					yield return ins;
 				}
 				else
 				{
-					yield return ins.Appsb(sb);
+					yield return ins;
 				}
 
 				if (patchActionStage <= 1)
@@ -2992,7 +2991,6 @@ namespace Explorite
 					lastOr = ins.opcode == OpCodes.Or;
 				}
 			}
-			Log.Message($"[Explorite]instr result:\n" + sb.ToString());
 			yield break;
 		}
 

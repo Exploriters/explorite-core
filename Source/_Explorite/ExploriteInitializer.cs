@@ -41,7 +41,7 @@ namespace Explorite
 						mods.Add(method.Name.StartsWith("get_") ? method.Name.Substring("get_".Length) : method.Name);
 					}
 				}
-				Log.Message($"[Explorite]Acticed mods:{string.Join(" ", mods)}.");
+				Log.Message($"[Explorite]Acticed mods: {string.Join(" ", mods)}.");
 			}
 			catch (Exception e)
 			{
