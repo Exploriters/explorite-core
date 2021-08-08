@@ -7,71 +7,71 @@ using Verse;
 
 namespace Explorite
 {
-    /**
-     * <summary>
-     * 使物品的生命值随着时间逐渐恢复，该实现使用了浮点数。<br />
-     * 另请参阅: <seealso cref = "CompSelfHealOvertime1" />，完全基于整型的实现。
-     * </summary>
-     */
-    public class CompSelfHealOvertime2 : CompSelfHealOvertime
-    {
-        public double detlaHpPerTick => detlaHpPerSec / 60;
-        //public int detlaHpPerTickInteger => (int)Math.Floor(detlaHpPerTick);
-        //public double detlaHpPerTickDecimal => detlaHpPerTick - detlaHpPerTickInteger;
+	/**
+	 * <summary>
+	 * 使物品的生命值随着时间逐渐恢复，该实现使用了浮点数。<br />
+	 * 另请参阅: <seealso cref = "CompSelfHealOvertime1" />，完全基于整型的实现。
+	 * </summary>
+	 */
+	public class CompSelfHealOvertime2 : CompSelfHealOvertime
+	{
+		public double detlaHpPerTick => detlaHpPerSec / 60;
+		//public int detlaHpPerTickInteger => (int)Math.Floor(detlaHpPerTick);
+		//public double detlaHpPerTickDecimal => detlaHpPerTick - detlaHpPerTickInteger;
 
 
-        public double exceedHealth = 0;
+		public double exceedHealth = 0;
 
-        public override void PostExposeData()
-        {
-            base.PostExposeData();
+		public override void PostExposeData()
+		{
+			base.PostExposeData();
 
-            Scribe_Values.Look(ref exceedHealth, "exceedHealth", 0D);
-        }
-        public virtual void RunHeal(float factor = 1f)
-        {
-            if (Invalid)
-                return;
+			Scribe_Values.Look(ref exceedHealth, "exceedHealth", 0D);
+		}
+		public virtual void RunHeal(float factor = 1f)
+		{
+			if (Invalid)
+				return;
 
-            double detlaHpThisTick = detlaHpPerTick * factor;
-            int detlaHpPerTickInteger = (int)Math.Floor(detlaHpThisTick);
-            double detlaHpPerTickDecimal = detlaHpThisTick - detlaHpPerTickInteger;
+			double detlaHpThisTick = detlaHpPerTick * factor;
+			int detlaHpPerTickInteger = (int)Math.Floor(detlaHpThisTick);
+			double detlaHpPerTickDecimal = detlaHpThisTick - detlaHpPerTickInteger;
 
-            if (parent.HitPoints < parent.MaxHitPoints)
-            {
-                exceedHealth += detlaHpPerTickDecimal;
+			if (parent.HitPoints < parent.MaxHitPoints)
+			{
+				exceedHealth += detlaHpPerTickDecimal;
 
-                int exceedHealthInteger = (int)Math.Floor(exceedHealth);
+				int exceedHealthInteger = (int)Math.Floor(exceedHealth);
 
-                parent.HitPoints = Math.Min(
-                    parent.MaxHitPoints,
-                    parent.HitPoints + detlaHpPerTickInteger + exceedHealthInteger
-                    );
+				parent.HitPoints = Math.Min(
+					parent.MaxHitPoints,
+					parent.HitPoints + detlaHpPerTickInteger + exceedHealthInteger
+					);
 
-                exceedHealth -= exceedHealthInteger;
+				exceedHealth -= exceedHealthInteger;
 
-                if (parent.HitPoints <= 0)
-                    parent.Destroy(DestroyMode.KillFinalize);
-            }
-            else
-            {
-                exceedHealth = 0D;
-            }
-        }
-        public override void CompTick()
-        {
-            base.CompTick();
-            RunHeal();
-        }
-        public override void CompTickRare()
-        {
-            base.CompTick();
-            RunHeal(250);
-        }
-        public override void CompTickLong()
-        {
-            base.CompTick();
-            RunHeal(2000);
-        }
-    }
+				if (parent.HitPoints <= 0)
+					parent.Destroy(DestroyMode.KillFinalize);
+			}
+			else
+			{
+				exceedHealth = 0D;
+			}
+		}
+		public override void CompTick()
+		{
+			base.CompTick();
+			RunHeal();
+		}
+		public override void CompTickRare()
+		{
+			base.CompTick();
+			RunHeal(250);
+		}
+		public override void CompTickLong()
+		{
+			base.CompTick();
+			RunHeal(2000);
+		}
+	}
 }

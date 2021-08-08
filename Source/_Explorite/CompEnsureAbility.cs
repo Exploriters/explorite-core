@@ -9,39 +9,39 @@ using Verse;
 
 namespace Explorite
 {
-    ///<summary>为<see cref = "CompEnsureAbility" />接收参数。</summary>
-    public class CompProperties_EnsureAbility : CompProperties
-    {
-        public List<AbilityDef> abilities = new List<AbilityDef>();
-        public CompProperties_EnsureAbility()
-        {
-            compClass = typeof(CompEnsureAbility);
-        }
-    }
-    ///<summary>确保人物具有指定技能。</summary>
-    public class CompEnsureAbility : ThingComp
-    {
-        CompProperties_EnsureAbility Props => (CompProperties_EnsureAbility)props;
-        public List<AbilityDef> Abilities => Props.abilities;
-        public override void CompTick()
-        {
-            base.CompTick();
-            ApplayAbilities();
-        }
-        public virtual void ApplayAbilities()
-        {
-            if (
-                Abilities.Count >= 1
-                && parent is Pawn pawn)
-            {
-                foreach (AbilityDef abilityDef in Abilities)
-                {
-                    if (pawn.abilities.GetAbility(abilityDef) == null)
-                    {
-                        pawn.abilities.GainAbility(abilityDef);
-                    }
-                }
-            }
-        }
-    }
+	///<summary>为<see cref = "CompEnsureAbility" />接收参数。</summary>
+	public class CompProperties_EnsureAbility : CompProperties
+	{
+		public List<AbilityDef> abilities = new List<AbilityDef>();
+		public CompProperties_EnsureAbility()
+		{
+			compClass = typeof(CompEnsureAbility);
+		}
+	}
+	///<summary>确保人物具有指定技能。</summary>
+	public class CompEnsureAbility : ThingComp
+	{
+		CompProperties_EnsureAbility Props => (CompProperties_EnsureAbility)props;
+		public List<AbilityDef> Abilities => Props.abilities;
+		public override void CompTick()
+		{
+			base.CompTick();
+			ApplayAbilities();
+		}
+		public virtual void ApplayAbilities()
+		{
+			if (
+				Abilities.Count >= 1
+				&& parent is Pawn pawn)
+			{
+				foreach (AbilityDef abilityDef in Abilities)
+				{
+					if (pawn.abilities.GetAbility(abilityDef) == null)
+					{
+						pawn.abilities.GainAbility(abilityDef);
+					}
+				}
+			}
+		}
+	}
 }

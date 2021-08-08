@@ -9,21 +9,21 @@ using Verse;
 
 namespace Explorite
 {
-    ///<summary>为<see cref = "HediffComp_SpawnThingOnDeath" />接收参数。</summary>
-    public class HediffCompProperties_DisappearsOnSourceApparelLost : HediffCompProperties
-    {
-        public HediffCompProperties_DisappearsOnSourceApparelLost()
-        {
-            compClass = typeof(HediffComp_DisappearsOnSourceApparelLost);
-        }
-    }
-    ///<summary>来源衣物不存在后移除hediff。</summary>
-    public class HediffComp_DisappearsOnSourceApparelLost : HediffComp
-    {
-        public List<Apparel> sources = null;
-        //base.Pawn.health.RemoveHediff(this.parent);
-        public override bool CompShouldRemove => base.CompShouldRemove || CheckSources();
-        private bool CheckSources()
+	///<summary>为<see cref = "HediffComp_SpawnThingOnDeath" />接收参数。</summary>
+	public class HediffCompProperties_DisappearsOnSourceApparelLost : HediffCompProperties
+	{
+		public HediffCompProperties_DisappearsOnSourceApparelLost()
+		{
+			compClass = typeof(HediffComp_DisappearsOnSourceApparelLost);
+		}
+	}
+	///<summary>来源衣物不存在后移除hediff。</summary>
+	public class HediffComp_DisappearsOnSourceApparelLost : HediffComp
+	{
+		public List<Apparel> sources = null;
+		//base.Pawn.health.RemoveHediff(this.parent);
+		public override bool CompShouldRemove => base.CompShouldRemove || CheckSources();
+		private bool CheckSources()
 		{
 			if (sources == null)
 				return false;
@@ -35,7 +35,7 @@ namespace Explorite
 			if (sources == null)
 				sources = new List<Apparel>();
 			if (!sources.Contains(source))
-                sources.Add(source);
+				sources.Add(source);
 		}
 		public override void CompPostMerged(Hediff other)
 		{

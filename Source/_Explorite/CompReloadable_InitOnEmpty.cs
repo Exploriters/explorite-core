@@ -7,17 +7,17 @@ using System.Reflection;
 
 namespace Explorite
 {
-    ///<summary>初始化装填数量为0的<see cref = "CompReloadable" />。</summary>
-    public class CompReloadable_InitOnEmpty : CompReloadable
-    {
-        public override void PostPostMake()
-        {
-            /*
-            base.PostPostMake();
-            //remainingCharges = MaxCharges;
-            GetType().GetField("remainingCharges", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(this, 0);
-            */
-        }
-    }
+	///<summary>初始化装填数量为0的<see cref = "CompReloadable" />。</summary>
+	public class CompReloadable_InitOnEmpty : CompReloadable
+	{
+		public override void PostPostMake()
+		{
+			/*
+			base.PostPostMake();
+			//remainingCharges = MaxCharges;
+			GetType().GetField("remainingCharges", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(this, 0);
+			*/
+		}
+	}
 
 }

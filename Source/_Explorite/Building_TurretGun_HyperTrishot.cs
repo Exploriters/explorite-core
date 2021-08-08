@@ -6,8 +6,8 @@ using RimWorld;
 
 namespace Explorite
 {
-    public class Building_TurretGun_HyperTrishot : Building_TurretGun
-    {
+	public class Building_TurretGun_HyperTrishot : Building_TurretGun
+	{
 
-    }
+	}
 }
