@@ -13,6 +13,7 @@
     <li>1.3/CORE-LIB</li>
     <li IfModActive="erdelf.HumanoidAlienRaces">1.3/HAR-LIB</li>
     <li IfModActive="kentington.saveourship2">1.3/SOS2-LIB</li>
+    <li IfModActive="CETeam.CombatExtended">1.3/CE-LIB</li>
   </v1.3>
 
 </loadFolders>

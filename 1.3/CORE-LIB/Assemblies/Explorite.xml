@@ -980,14 +980,11 @@
         <member name="T:Explorite.Bullet_Direct">
             <summary>发射后直接命中目标的子弹。</summary>
         </member>
-        <member name="T:Explorite.Projectile_Explosive_Teleshot">
-            <summary>该弹射物会将发射者传送至爆炸位置。</summary>
-        </member>
         <member name="T:Explorite.Projectile_Explosive_Spotshot">
             <summary>该弹射物会探查目的地区域。</summary>
         </member>
-        <member name="T:Explorite.Projectile_Explosive_Waggingshot">
-            <summary>该弹射物会在空中随机加速或减速，大量发射时之间会错开。</summary>
+        <member name="T:Explorite.Projectile_Explosive_Teleshot">
+            <summary>该弹射物会将发射者传送至爆炸位置。</summary>
         </member>
         <member name="T:Explorite.ResearchProjectDef_Trishot">
             <summary>三射弓研究项目，阻止其在特定情况下被研究。<br />未实现。</summary>

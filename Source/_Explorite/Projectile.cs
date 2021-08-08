@@ -9,8 +9,13 @@ using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
+	public interface IBullet_Direct
+	{
+	
+	}
+
 	///<summary>发射后直接命中目标的子弹。</summary>
-	public class Bullet_Direct : Bullet
+	public class Bullet_Direct : Bullet, IBullet_Direct
 	{
 		public override void Tick()
 		{
@@ -26,12 +31,27 @@ namespace Explorite
 			//if (!Destroyed) Destroy();
 		}
 	}
+
+	///<summary>该弹射物会探查目的地区域。</summary>
+	public class Projectile_Explosive_Spotshot : Projectile_Explosive
+	{
+		protected override void Impact(Thing hitThing)
+		{
+			if (launcher.Faction.IsPlayer)
+			{
+				Map.fogGrid.RevealFogCluster(Position);
+			}
+
+			base.Impact(hitThing);
+		}
+	}
+
 	///<summary>该弹射物会将发射者传送至爆炸位置。</summary>
 	public class Projectile_Explosive_Teleshot : Projectile_Explosive
 	{
 		// TO-NOMORE-DO: 需要修复传送失败问题。
 		// 问题已修复
-		protected override void Explode()
+		protected override void Impact(Thing hitThing)
 		{
 			if (launcher.Faction.IsPlayer)
 			{
@@ -48,7 +68,7 @@ namespace Explorite
 				}
 				Map.fogGrid.RevealFogCluster(Position);
 			}
-			base.Explode();
+			base.Impact(hitThing);
 		}
 		/*public override void Tick()
 		{
@@ -73,21 +93,10 @@ namespace Explorite
 			}
 		}*/
 	}
-	///<summary>该弹射物会探查目的地区域。</summary>
-	public class Projectile_Explosive_Spotshot : Projectile_Explosive
-	{
-		protected override void Explode()
-		{
-			if (launcher.Faction.IsPlayer)
-			{
-				Map.fogGrid.RevealFogCluster(Position);
-			}
-
-			base.Explode();
-		}
-	}
+	
+	/*
 	///<summary>该弹射物会在空中随机加速或减速，大量发射时之间会错开。</summary>
-	public class Projectile_Explosive_Waggingshot : Projectile_Explosive
+	[Obsolete]public class Projectile_Explosive_Waggingshot : Projectile_Explosive
 	{
 		public override void Tick()
 		{
@@ -98,5 +107,6 @@ namespace Explorite
 			}
 		}
 	}
+	*/
 
 }

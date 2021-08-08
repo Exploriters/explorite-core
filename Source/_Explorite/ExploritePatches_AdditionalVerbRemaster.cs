@@ -107,7 +107,7 @@ namespace Explorite
 			if (__result != null && verb.verbProps is IVerbPropertiesCustom verbProps)
 			{
 				Comp_VerbSaveable comp_VerbSaveable = ownerThing.TryGetComp<Comp_VerbSaveable>();
-				Verb_Shoot_Cooldown verb_with_cooldown = verb as Verb_Shoot_Cooldown;
+				IVerb_Shoot_Cooldown verb_with_cooldown = verb as IVerb_Shoot_Cooldown;
 
 				if (verb.verbProps.label != null)
 					__result.defaultLabel = verb.verbProps.label;
@@ -177,7 +177,7 @@ namespace Explorite
 
 		public static bool IsPerfectionProjectile(ThingDef thingDef)
 		{
-			return typeof(Bullet_Direct).IsAssignableFrom(thingDef?.thingClass);
+			return typeof(IBullet_Direct).IsAssignableFrom(thingDef?.thingClass);
 		}
 
 		public static Verb ReplaceVerbToTempSav(Verb pass, Thing target)

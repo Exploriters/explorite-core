@@ -23,42 +23,50 @@ namespace Explorite
 		}
 	}
 
-	///<summary>具有冷却时间的verb。</summary>
-	public class Verb_Shoot_Cooldown : Verb_Shoot
+	public interface IVerb_Shoot_Cooldown
 	{
-		public int CooldownTick => ((VerbProperties_Custom)verbProps).ExVerbProp().cooldownTick;
+		public int TickSinceLastFire(int? currentTime = null);
+		public bool CanFire(int? currentTime = null);
+		public int RemainingTickBeforeFire(int? currentTime = null);
+		public float RemainingProgressBeforeFire(int? currentTime = null);
+	}
+
+	///<summary>具有冷却时间的verb。</summary>
+	public class Verb_Shoot_Cooldown : Verb_Shoot, IVerb_Shoot_Cooldown
+	{
+		public int CooldownTick => (verbProps as IVerbPropertiesCustom)?.ExVerbProp()?.cooldownTick ?? 0;
 		public bool CooldownTickValid => CooldownTick > 0;
-		public int TickSinceLastFire(int currentTime = -1)
+		public int TickSinceLastFire(int? currentTime = null)
 		{
 			if (!CooldownTickValid || lastShotTick == -1)
 				return -1;
-			if (currentTime < 0)
+			if (currentTime == null)
 			{
 				currentTime = InGameTick;
 			}
-			return currentTime - lastShotTick;
+			return currentTime.Value - lastShotTick;
 		}
-		public bool CanFire(int currentTime = -1)
+		public bool CanFire(int? currentTime = null)
 		{
 			if (!CooldownTickValid)
 				return true;
-			if (currentTime < 0)
+			if (currentTime == null)
 			{
 				currentTime = InGameTick;
 			}
-			return lastShotTick == -1 || currentTime - lastShotTick > CooldownTick;
+			return lastShotTick == -1 || currentTime.Value - lastShotTick > CooldownTick;
 		}
-		public int RemainingTickBeforeFire(int currentTime = -1)
+		public int RemainingTickBeforeFire(int? currentTime = null)
 		{
-			if (currentTime < 0)
+			if (currentTime == null)
 			{
 				currentTime = InGameTick;
 			}
 			if (lastShotTick == -1)
 				return 0;
-			return Math.Max(0, CooldownTick - (currentTime - lastShotTick));
+			return Math.Max(0, CooldownTick - (currentTime.Value - lastShotTick));
 		}
-		public float RemainingProgressBeforeFire(int currentTime = -1) => CooldownTickValid ? RemainingTickBeforeFire(currentTime) / ((float)CooldownTick) : 0;
+		public float RemainingProgressBeforeFire(int? currentTime = null) => CooldownTickValid ? RemainingTickBeforeFire(currentTime) / ((float)CooldownTick) : 0;
 
 		public override void ExposeData()
 		{
@@ -66,10 +74,8 @@ namespace Explorite
 		}
 		protected override bool TryCastShot()
 		{
-			if (!CooldownTickValid)
-				return base.TryCastShot();
 			bool result = false;
-			if (CanFire(InGameTick))
+			if (!CooldownTickValid || CanFire(InGameTick))
 			{
 				result = base.TryCastShot();
 			}
@@ -96,7 +102,7 @@ namespace Explorite
 	public class Verb_Shoot_OvertickShotgun : Verb_Shoot
 	{
 		protected override int ShotsPerBurst => 1;
-		protected int ShotsPerBurstAccture => ((VerbProperties)verbProps).burstShotCount;
+		protected int ShotsPerBurstAccture => verbProps.burstShotCount;
 
 		protected override bool TryCastShot()
 		{
@@ -112,7 +118,7 @@ namespace Explorite
 	///<summary>设置首发和后续发射不一致。</summary>
 	public class Verb_Shoot_Rainbow2 : Verb_Shoot
 	{
-		public ThingDef SecondaryProjectile => ((VerbProperties_Custom)verbProps).ExVerbProp().secondaryProjectile;
+		public ThingDef SecondaryProjectile => (verbProps as IVerbPropertiesCustom)?.ExVerbProp()?.secondaryProjectile;
 
 		public override ThingDef Projectile
 		{
