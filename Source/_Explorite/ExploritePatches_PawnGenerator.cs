@@ -100,8 +100,18 @@ namespace Explorite
                 return false;
             }
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+            if (pawn.ageTracker.AgeBiologicalTicks / 10 >= 3600000 * 10)
+            {
+                pawn.ageTracker.AgeBiologicalTicks = 3600000 * 10;
+            }
+            else
+            {
+                pawn.ageTracker.AgeBiologicalTicks = Math.Max(0, pawn.ageTracker.AgeBiologicalTicks / 10);
+            }
+            pawn.ageTracker.AgeChronologicalTicks = pawn.ageTracker.AgeBiologicalTicks;
+            pawn.relations.ClearAllRelations();
             // 在这里写后期处理
+            //Bruh... I'm a fool :( -- Abrel
 
             return true;
         }

@@ -504,5 +504,10 @@ namespace Explorite
                 return false;
             }
         }
+        ///<summary>I put this here :D -- Abrel</summary>
+        public static bool IsSayersIdeo(this Ideo ideo)
+        {
+            return ideo.memes.Contains(SayersMeme1Def);
+        }
     }
 }

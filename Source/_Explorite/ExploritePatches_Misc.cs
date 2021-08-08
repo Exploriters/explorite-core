@@ -311,6 +311,9 @@ namespace Explorite
                 Patch(AccessTools.Method(typeof(Ideo), "get_ApparelColor"),
                     prefix: nameof(IdeoApparelColorPrefix));
 
+                Patch(AccessTools.Method(typeof(WorkGiver_ExtractSkull), nameof(WorkGiver_ExtractSkull.CanExtractSkull)),
+                    postfix: nameof(WorkGiverExtractSkullCanExtractSkullPostfix));
+
                 if (InstelledMods.HAR)
                 {
                     // 依赖 类 AlienRace.RaceRestrictionSettings
@@ -2829,6 +2832,15 @@ namespace Explorite
                 return false;
             }
             return true;
+        }
+
+        ///<summary>Damn it's sooooooo long here D: -- Abrel</summary>
+        [HarmonyPostfix]public static void WorkGiverExtractSkullCanExtractSkullPostfix(Ideo ideo, ref bool __result)
+        {
+            if (!__result && ideo.IsSayersIdeo())
+            {
+                __result = true;
+            }
         }
     }
 }
