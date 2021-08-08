@@ -20,9 +20,30 @@ namespace Explorite
 			public static bool RimCentaurs => ModLister.GetActiveModWithIdentifier("Exploriters.siiftun1857.CentaurTheMagnuassembly") != null;
 			public static bool Sayers => ModLister.GetActiveModWithIdentifier("Exploriters.Abrel.Sayers") != null;
 			public static bool GuoGuo => ModLister.GetActiveModWithIdentifier("Exploriters.AndoRingo.GuoGuo") != null;
+			public static bool Core => ModLister.GetActiveModWithIdentifier("Ludeon.RimWorld") != null;
 			public static bool Royalty => ModLister.GetActiveModWithIdentifier("Ludeon.RimWorld.Royalty") != null;
+			public static bool Ideology => ModLister.GetActiveModWithIdentifier("Ludeon.RimWorld.Ideology") != null;
 			public static bool SoS2 => ModLister.GetActiveModWithIdentifier("kentington.saveourship2") != null;
 			public static bool HAR => ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null;
+			public static bool CE => ModLister.GetActiveModWithIdentifier("CETeam.CombatExtended") != null;
+		}
+
+		/**
+		 * <summary>
+		 * 限制值的取值范围。
+		 * </summary>
+		 * <param name="value">需要被限制在范围内的值。</param>
+		 * <param name="min">最小值。</param>
+		 * <param name="max">最大值。</param>
+		 * <returns>处理后的值。</returns>
+		 */
+		public static T Clamp<T>(T value, T min, T max) where T : IComparable<T>
+		{
+			if (value.CompareTo(max) > 0)
+				return max;
+			if (value.CompareTo(min) < 0)
+				return min;
+			return value;
 		}
 
 		/*

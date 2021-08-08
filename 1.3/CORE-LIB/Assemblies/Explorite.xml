@@ -740,6 +740,15 @@
         <member name="T:Explorite.ExploriteCore">
             <summary>Explorite Core核心函数集。</summary>
         </member>
+        <member name="M:Explorite.ExploriteCore.Clamp``1(``0,``0,``0)">
+            <summary>
+            限制值的取值范围。
+            </summary>
+            <param name="value">需要被限制在范围内的值。</param>
+            <param name="min">最小值。</param>
+            <param name="max">最大值。</param>
+            <returns>处理后的值。</returns>
+        </member>
         <member name="M:Explorite.ExploriteCore.FormattingTickTimeDiv(System.Double,System.String,System.String)">
             <summary>
             将一个游戏刻格式化为速率值的字符串。
