@@ -415,8 +415,6 @@ namespace Explorite
 			  || allDef2.apparel?.layers.Contains(ApparelLayerDefOf.Belt) == true
 				)
 			)*/
-
-<<<<<<< HEAD
         /**
          * <summary>
          * 检测特征是否为半人马特征。
@@ -464,13 +462,6 @@ namespace Explorite
                 return false;
             }
         }
-        ///<summary>I put this here :D -- Abrel</summary>
-        public static bool IsSayersIdeo(this Ideo ideo)
-        {
-            return ideo.memes.Contains(SayersMeme1Def);
-        }
-    }
-=======
 		/**
 		 * <summary>
 		 * 检测文化是否为Sayers文化。
@@ -494,5 +485,4 @@ namespace Explorite
 			return ideo.memes.Contains(CentaurMemeDef);
 		}
 	}
->>>>>>> 983e1c22d864a778a96bf38ceea681a8f473bf22
 }
