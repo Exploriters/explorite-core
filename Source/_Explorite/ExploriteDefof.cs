@@ -100,7 +100,7 @@ namespace Explorite
 		public static readonly ResearchProjectDef CentaurStoryProjectStep1Def = GetModDef<ResearchProjectDef>(InstelledMods.RimCentaurs, "CentaurStoryStep1st");
 		public static readonly ResearchProjectDef CentaurStoryProjectStep2Def = GetModDef<ResearchProjectDef>(InstelledMods.RimCentaurs, "CentaurStoryStep2nd");
 		public static readonly ResearchProjectDef CentaurStoryProjectStep3Def = GetModDef<ResearchProjectDef>(InstelledMods.RimCentaurs, "CentaurStoryStep3rd");
-		public static readonly MemeDef CentaurMemeDef = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "Centaur");
+		//public static readonly MemeDef CentaurMemeDef = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "Centaur");
 		public static readonly MemeDef CentaurStructureMemeDef = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "Structure_Centaur");
 		public static readonly IdeoIconDef CentaurIdeoIconDef = GetModDef<IdeoIconDef>(InstelledMods.RimCentaurs, "Exploriter");
 		//public static readonly ColorDef CentaurBlueDef = GetModDef<ColorDef>(InstelledMods.RimCentaurs, "CentaurBlue");

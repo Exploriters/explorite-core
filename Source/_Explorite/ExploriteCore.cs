@@ -436,7 +436,7 @@ namespace Explorite
 		 */
 		public static bool IsCentaursIdeo(this Ideo ideo)
 		{
-			return ideo.memes.Contains(CentaurMemeDef);
+			return ideo.memes.Contains(CentaurStructureMemeDef);
 		}
 	}
 }

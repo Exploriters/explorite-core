@@ -13,6 +13,7 @@ namespace Explorite
 	{
 		[NoTranslate]
 		public string islocateGroup;
+		public bool countForNonStructureGroup;
 		public List<FactionDef> exclusiveTo;
 		public bool lockAccuIdeoColor = false;
 	}

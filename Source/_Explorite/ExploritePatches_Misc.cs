@@ -314,6 +314,12 @@ namespace Explorite
 					transpiler: new HarmonyMethod(patchType, nameof(DialogChooseMemesPlayerNHiddenOffTranspiler)));
 				Patch(AccessTools.Method(typeof(Dialog_ChooseMemes), "CanRemoveMeme"),
 					transpiler: new HarmonyMethod(patchType, nameof(DialogChooseMemesPlayerNHiddenOffTranspiler)));
+				//Patch(AccessTools.Method(typeof(Dialog_ChooseMemes), "TryAccept"),
+				//	transpiler: new HarmonyMethod(patchType, nameof(DialogChooseMemesSpecStructCountinTranspiler)));
+				//Patch(AccessTools.Method(typeof(Dialog_ChooseMemes), nameof(Dialog_ChooseMemes.DoWindowContents)),
+				//	transpiler: new HarmonyMethod(patchType, nameof(DialogChooseMemesSpecStructCountinTranspiler)));
+				Patch(AccessTools.Method(typeof(Dialog_ChooseMemes), "GetMemeCount"),
+					postfix: new HarmonyMethod(patchType, nameof(DialogChooseMemesGetMemeCountPostfix)));
 
 				Patch(AccessTools.Method(typeof(IdeoUIUtility), nameof(IdeoUIUtility.FactionForRandomization)),
 					transpiler: new HarmonyMethod(patchType, nameof(IdeoUIUtilityFactionForRandomizationTranspiler)));
@@ -2436,7 +2442,6 @@ namespace Explorite
 			//Log.Message($"[Explorite]instr result:\n" + sb.ToString());
 			yield break;
 		}
-
 		///<summary>防止隐藏阵营随机为特殊玩家阵营。</summary>
 		[HarmonyTranspiler]public static IEnumerable<CodeInstruction> IdeoUIUtilityFactionForRandomizationTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
 		{
@@ -2552,6 +2557,52 @@ namespace Explorite
 			yield break;
 		}
 		/*
+		public static int MinMemePostfix(int value, Dialog_ChooseMemes dialog)
+		{
+			if (dialog.GetType().GetField("ideo").GetValue(dialog) is Ideo ideo)
+			{
+			
+			}
+			return value;
+		}
+		///<summary>特定结构模因存在时，移除模因数量下限。</summary>
+		[HarmonyTranspiler]public static IEnumerable<CodeInstruction> DialogChooseMemesSpecStructCountinTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+		{
+			byte patchActionStage = 0;
+			FieldInfo MemeCountRangeAbsoluteInfo = AccessTools.Field(typeof(IdeoFoundation), nameof(IdeoFoundation.MemeCountRangeAbsolute));
+			FieldInfo IntRangeMinInfo = AccessTools.Field(typeof(IntRange), nameof(IntRange.min));
+
+			Label label = ilg.DefineLabel();
+			foreach (CodeInstruction ins in instr)
+			{
+				if (patchActionStage == 0 && ins.opcode == OpCodes.Ldsflda && ins.operand == MemeCountRangeAbsoluteInfo as object)
+				{
+					patchActionStage++;
+					yield return ins;
+					continue;
+				}
+				else if (patchActionStage == 1)
+				{
+					patchActionStage--;
+					yield return ins;
+					if (ins.opcode == OpCodes.Ldfld && ins.operand == IntRangeMinInfo as object)
+					{
+						yield return new CodeInstruction(OpCodes.Ldarg_0);
+						yield return new CodeInstruction(OpCodes.Call, ((Func<bool>)SpecPFacInGame).GetMethodInfo());
+					}
+					continue;
+				}
+				else
+				{
+					yield return ins;
+					continue;
+				}
+			}
+			yield break;
+		}
+		*/
+
+		/*
 		static bool DoName_g__CultureAllowed_1(CultureDef cultureDef)
 		{
 			if (IdeoUIUtility.devEditMode)
@@ -2572,6 +2623,15 @@ namespace Explorite
 			return true;
 		}
 		*/
+		///<summary>使特殊结构模因被计数。</summary>
+		[HarmonyPostfix]public static void DialogChooseMemesGetMemeCountPostfix(MemeCategory category, List<MemeDef> ___newMemes, Dialog_ChooseMemes __instance, ref int __result)
+		{
+			if (category == MemeCategory.Normal
+			 && ___newMemes != null)
+			{
+				__result += ___newMemes.Count(meme => meme is MemeDef_Ex meex && meex.category == MemeCategory.Structure && meex.countForNonStructureGroup);
+			}
+		}
 
 		public static bool PageConfigureIdeoCanDoNextPatch(Page_ConfigureIdeo page)
 		{

@@ -308,6 +308,9 @@
         <member name="M:Explorite.ExploritePatches.IdeoUIUtility_MT_LT_c__DisplayClass59_0__MT_DoName_LT_g____CultureAllowed_1_Transpiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>特定阵营存在时，锁定文化选项。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.DialogChooseMemesGetMemeCountPostfix(RimWorld.MemeCategory,System.Collections.Generic.List{RimWorld.MemeDef},RimWorld.Dialog_ChooseMemes,System.Int32@)">
+            <summary>使特殊结构模因被计数。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PageConfigureIdeoCanDoNextTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>阻止半人马和Sayers阵营选择其他文化。</summary>
         </member>
