@@ -350,6 +350,12 @@
         <member name="M:Explorite.ExploritePatches.FoodUtilityGetFoodPoisonChanceFactorPrefix(Verse.Pawn,System.Single@)">
             <summary>禁止种族食物中毒。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.SkillUIDrawSkillTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>禁止半人马技能页显示兴趣度图标。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.CompNeuralSuperchargerCanAutoUseTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>允许半人马自动使用神经超频。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>
@@ -829,6 +835,9 @@
         </member>
         <member name="M:Explorite.ExploriteDebugActions.ClearAllFog">
             <summary>清除所有迷雾。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.WipeFilthAndMote">
+            <summary>清除污渍。</summary>
         </member>
         <member name="M:Explorite.ExploriteDebugActions.SnowWholeMap">
             <summary>完全积雪。</summary>

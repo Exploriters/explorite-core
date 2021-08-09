@@ -68,7 +68,7 @@ namespace Explorite
 					postfix: new HarmonyMethod(patchType, nameof(VerbLaunchProjectileHighlightFieldRadiusAroundTargetPostfix)));
 
 
-				Patch(AccessTools.Method(typeof(PawnRenderer),nameof(PawnRenderer.DrawEquipmentAiming)),
+				Patch(AccessTools.Method(typeof(PawnRenderer), nameof(PawnRenderer.DrawEquipmentAiming)),
 					prefix: new HarmonyMethod(patchType, nameof(DrawEquipmentAimingPrefix)));
 				Patch(AccessTools.Method(typeof(Thing), "get_DefaultGraphic"),
 					postfix: new HarmonyMethod(patchType, nameof(get_Graphic_PostFix)));
@@ -370,6 +370,12 @@ namespace Explorite
 
 				Patch(AccessTools.Method(typeof(WorkGiver_ExtractSkull), nameof(WorkGiver_ExtractSkull.CanExtractSkull)),
 					postfix: new HarmonyMethod(patchType, nameof(WorkGiverExtractSkullCanExtractSkullPostfix)));
+
+				Patch(AccessTools.Method(typeof(SkillUI), nameof(SkillUI.DrawSkill), new Type[] { typeof(SkillRecord), typeof(Rect), typeof(SkillUI.SkillDrawMode), typeof(string) }),
+					transpiler: new HarmonyMethod(patchType, nameof(SkillUIDrawSkillTranspiler)));
+
+				Patch(AccessTools.Method(typeof(CompNeuralSupercharger), nameof(CompNeuralSupercharger.CanAutoUse)),
+					transpiler: new HarmonyMethod(patchType, nameof(CompNeuralSuperchargerCanAutoUseTranspiler)));
 
 
 				// 依赖 类 AlienRace.RaceRestrictionSettings
@@ -2652,7 +2658,7 @@ namespace Explorite
 			if (category == MemeCategory.Normal
 			 && ___newMemes != null)
 			{
-				__result += ___newMemes.Count(SpecStructMemePredicate);
+				__result += ___newMemes.Count(SpecStructMemePredicate) * 4;
 			}
 		}
 		/*
@@ -3131,6 +3137,102 @@ namespace Explorite
 				return false;
 			}
 			return true;
+		}
+
+		public static bool DisablePassionDrawPawn(Pawn pawn)
+		{
+			return pawn.def == AlienCentaurDef;
+		}
+		///<summary>禁止半人马技能页显示兴趣度图标。</summary>
+		[HarmonyTranspiler]public static IEnumerable<CodeInstruction> SkillUIDrawSkillTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+		{
+			byte patchActionStage = 0;
+			FieldInfo SkillRecordPassionInfo = typeof(SkillRecord).GetField(nameof(SkillRecord.passion), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+			MethodInfo SkillRecordPawnInfo = typeof(SkillRecord).GetMethod("get_Pawn", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+			foreach (CodeInstruction ins in instr)
+			{
+				if (patchActionStage == 0 && ins.opcode == OpCodes.Ldarg_0)
+				{
+					patchActionStage++;
+					yield return ins;
+				}
+				else if (patchActionStage == 1)
+				{
+					yield return ins;
+					if (ins.opcode == OpCodes.Ldfld && ins.operand == SkillRecordPassionInfo as object)
+						patchActionStage++;
+					else
+						patchActionStage = 0;
+				}
+				else if (patchActionStage == 2)
+				{
+					yield return ins;
+					if (ins.opcode == OpCodes.Ldc_I4_0)
+						patchActionStage++;
+					else
+						patchActionStage = 0;
+				}
+				else if (patchActionStage == 3)
+				{
+					yield return ins;
+					if (ins.opcode == OpCodes.Ble_S)
+					{
+						patchActionStage++;
+						yield return new CodeInstruction(OpCodes.Ldarg_0);
+						yield return new CodeInstruction(OpCodes.Callvirt, SkillRecordPawnInfo);
+						yield return new CodeInstruction(OpCodes.Call, ((Predicate<Pawn>)DisablePassionDrawPawn).Method);
+						yield return new CodeInstruction(OpCodes.Brtrue_S, ins.operand);
+					}
+					else
+					{
+						patchActionStage = 0;
+					}
+				}
+				else
+				{
+					yield return ins;
+				}
+			}
+			TranspilerStageCheckout(patchActionStage, 4);
+			yield break;
+		}
+		public static bool CanAutouseNeuralSuperchargerExtra(Pawn pawn)
+		{
+			return pawn?.def == AlienCentaurDef || (pawn?.ideo?.Ideo?.memes?.Contains(CentaurStructureMemeDef) ?? false);
+		}
+		///<summary>允许半人马自动使用神经超频。</summary>
+		[HarmonyTranspiler]public static IEnumerable<CodeInstruction> CompNeuralSuperchargerCanAutoUseTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+		{
+			byte patchActionStage = 0;
+			MethodInfo IdeoHasPreceptInfo = AccessTools.Method(typeof(Ideo), nameof(Ideo.HasPrecept));
+			FieldInfo NeuralSuperchargePreferredPreceptInfo = typeof(PreceptDefOf).GetField(nameof(PreceptDefOf.NeuralSupercharge_Preferred), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+
+			foreach (CodeInstruction ins in instr)
+			{
+				if (patchActionStage == 0 && ins.opcode == OpCodes.Ldsfld && ins.operand == NeuralSuperchargePreferredPreceptInfo as object)
+				{
+					patchActionStage++;
+					yield return ins;
+					continue;
+				}
+				if (patchActionStage == 1 && ins.opcode == OpCodes.Callvirt && ins.operand == IdeoHasPreceptInfo as object)
+				{
+					patchActionStage++;
+					yield return ins;
+					yield return new CodeInstruction(OpCodes.Ldarg_1);
+					yield return new CodeInstruction(OpCodes.Call, ((Predicate<Pawn>)CanAutouseNeuralSuperchargerExtra).GetMethodInfo());
+					yield return new CodeInstruction(OpCodes.Or);
+					continue;
+				}
+				else
+				{
+					yield return ins;
+					continue;
+				}
+			}
+			TranspilerStageCheckout(patchActionStage, 2);
+			yield break;
 		}
 	}
 }

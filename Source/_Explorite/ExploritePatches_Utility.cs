@@ -158,6 +158,10 @@ namespace Explorite
 			Log.Message("[Explorite]instr result:\n" + stringBuilder.ToString());
 			yield break;
 		}
+		public static IEnumerable<CodeInstruction> PrinterTranspilerX(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+		{
+			return instr;
+		}
 		static MethodInfo Patch(MethodBase original, HarmonyMethod prefix = null, HarmonyMethod postfix = null, HarmonyMethod transpiler = null, HarmonyMethod finalizer = null, bool willResolve = true)
 		{
 			ExplortiePatchActionRecord record = new ExplortiePatchActionRecord(original, prefix, postfix, transpiler, finalizer);

@@ -74,6 +74,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Building_ShipTurretTorpedo.cs" />
+    <Compile Include="CompShipHeatPurgeGolden.cs" />
+    <Compile Include="ExploriteDebugActions_SoS2.cs" />
     <Compile Include="ScenPart_StartInSpaceCentaur.cs" />
     <Compile Include="SoS2Reflection.cs" />
     <Compile Include="_AssemblyInfo.cs" />

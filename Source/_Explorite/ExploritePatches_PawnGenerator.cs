@@ -10,6 +10,7 @@ using static Explorite.ExploriteCore;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System.Reflection;
 
 namespace Explorite
 {
@@ -60,6 +61,9 @@ namespace Explorite
 			pawn.ageTracker.AgeChronologicalTicks = Math.Max(pawn.ageTracker.AgeChronologicalTicks, (long)Math.Floor(pawn.ageTracker.AgeBiologicalTicks / 0.95f));
 
 			pawn.story.traits.allTraits.Clear();
+
+			pawn.ideo?.OffsetCertainty(1f);
+			typeof(Pawn_AgeTracker).GetField("ageReversalDemandedAtAgeTicks", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).SetValue(pawn.ageTracker, long.MaxValue);
 			/* if (pawn.story.hairDef == DefDatabase<HairDef>.GetNamed("Mohawk"))
 			{
 				pawn.story.hairDef = DefDatabase<HairDef>.GetNamed("Flowy");
@@ -72,6 +76,8 @@ namespace Explorite
 				sr.Level =
 					(pawn?.story?.childhood?.skillGainsResolved?.TryGetValue(sr.def) ?? 0) +
 					(pawn?.story?.adulthood?.skillGainsResolved?.TryGetValue(sr.def) ?? 0) + 9;
+				sr.passion = Passion.Major;
+				/*
 				sr.passion = sr.passion switch
 				{
 					Passion.None => Passion.Minor,
@@ -79,6 +85,7 @@ namespace Explorite
 					Passion.Major => Passion.Major,
 					_ => Passion.Minor,
 				};
+				*/
 				sr.xpSinceLastLevel = 0f; //sr.XpRequiredForLevelUp / 2f;
 			}
 

@@ -94,6 +94,11 @@ namespace Explorite
 			}
 			*/
 
+			ThingDef ShipHullTile = DefDatabase<ThingDef>.GetNamed("ShipHullTile");
+			ThingDef ShipHullTileArchotech = DefDatabase<ThingDef>.GetNamed("ShipHullTileArchotech");
+			ThingDef ShipHullTileMech = DefDatabase<ThingDef>.GetNamed("ShipHullTileMech");
+			ThingDef ShipHullTileWrecked = DefDatabase<ThingDef>.GetNamed("ShipHullTileWrecked");
+
 			//Thing targetTorpedo = null;
 			//IntVec3 torpedoToLocation = new IntVec3(0, 0, 0);
 			IntVec3? sunLampLocation = null;
@@ -149,8 +154,7 @@ namespace Explorite
 					if (thing?.TryGetComp<CompBreakdownable>() is CompBreakdownable compBreakdownable)
 					{
 					}
-					if (
-						thing?.TryGetComp<CompFlickable>() is CompFlickable compFlickable
+					if (thing?.TryGetComp<CompFlickable>() is CompFlickable compFlickable
 						&& (
 							(thing?.def?.building?.buildingTags?.Contains("Production") == true && thing.def != DefDatabase<ThingDef>.GetNamed("HydroponicsBasin"))
 						 || thing.def == DefDatabase<ThingDef>.GetNamed("MultiAnalyzer")
@@ -165,26 +169,30 @@ namespace Explorite
 					}
 					if (thing?.TryGetComp<CompRechargeable>() is CompRechargeable compRechargeable)
 					{
-						typeof(CompRechargeable).GetField("ticksUntilCharged", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).SetValue(compRechargeable, 0);
+						typeof(CompRechargeable).GetField("ticksUntilCharged", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).SetValue(compRechargeable, 1);
 					}
-					if (thing?.TryGetComp<CompRoofMe>() is CompRoofMe compRoofMe)
+					if (thing.def != ShipHullTile
+					 && thing.def != ShipHullTileArchotech
+					 && thing.def != ShipHullTileMech
+					 && thing.def != ShipHullTileWrecked
+					 && thing?.TryGetComp<CompRoofMe>() is CompRoofMe compRoofMe)
 					{
 						ThingDef oofType = null;
 						if (compRoofMe.Props.archotech)
 						{
-							oofType = DefDatabase<ThingDef>.GetNamed("ShipHullTileArchotech");
+							oofType = ShipHullTileArchotech;
 						}
 						else if (compRoofMe.Props.mechanoid)
 						{
-							oofType = DefDatabase<ThingDef>.GetNamed("ShipHullTileMech");
+							oofType = ShipHullTileMech;
 						}
 						else if (compRoofMe.Props.wreckage)
 						{
-							oofType = DefDatabase<ThingDef>.GetNamed("ShipHullTileWrecked");
+							oofType = ShipHullTileWrecked;
 						}
 						else
 						{
-							oofType = DefDatabase<ThingDef>.GetNamed("ShipHullTile");
+							oofType = ShipHullTile;
 						}
 						foreach (IntVec3 cell in thing.OccupiedRect().Cells)
 						{
@@ -193,29 +201,44 @@ namespace Explorite
 								Thing hullTile = ThingMaker.MakeThing(oofType);
 								GenSpawn.Spawn(hullTile, cell, spaceMap, WipeMode.Vanish);
 								hullTile.SetFaction(Faction.OfPlayer);
+
 							}
 						}
 					}
-					if (thing.def == DefDatabase<ThingDef>.GetNamed("HydroponicsBasin"))
+					if (thing.def == DefDatabase<ThingDef>.GetNamed("HydroponicsBasin") && thing is Building_PlantGrower plantGrower)
 					{
-						((Building_PlantGrower)thing)?.SetPlantDefToGrow(ThingDefOf.Plant_Potato);
+						plantGrower.SetPlantDefToGrow(ThingDefOf.Plant_Potato);
 						thing.TryGetComp<CompForbiddable>().Forbidden = true;
+						foreach (IntVec3 cell in plantGrower.OccupiedRect())
+						{
+							Plant potato = ThingMaker.MakeThing(ThingDefOf.Plant_Potato) as Plant;
+							potato.Growth = 0.85f;
+							GenSpawn.Spawn(potato, cell, plantGrower.Map, WipeMode.Vanish);
+							potato.SetFaction(Faction.OfPlayer);
+
+							Blight blight = ThingMaker.MakeThing(ThingDefOf.Blight) as Blight;
+							blight.Severity = 0.05f;
+							GenSpawn.Spawn(blight, cell, plantGrower.Map, WipeMode.Vanish);
+							potato.SetFaction(Faction.OfPlayer);
+						}
 					}
-					if (thing.def == ThingDefOf.Blight)
+					/*
+					if (thing.def == DefDatabase<ThingDef>.GetNamed("Plant_Potato") && thing is Plant plant)
 					{
-						((Blight)thing).Severity = 0.05f;
+						plant.Growth = 0.85f;
 					}
+					if (thing.def == ThingDefOf.Blight && thing is Blight blight)
+					{
+						blight.Severity = 0.05f;
+					}
+					*/
 					if (thing.def == DefDatabase<ThingDef>.GetNamed("ShipCombatShieldGenerator"))
 					{
 						thing.TryGetComp<CompBreakdownable>()?.DoBreakdown();
 					}
-					if (thing.def == DefDatabase<ThingDef>.GetNamed("ShipTurret_Laser"))
+					if (thing.def == DefDatabase<ThingDef>.GetNamed("ShipTurret_Laser") && thing is Building_ShipTurret shipTurret)
 					{
-						((Building_ShipTurret)thing).PointDefenseMode = true;
-					}
-					if (thing.def == DefDatabase<ThingDef>.GetNamed("Plant_Potato"))
-					{
-						(thing as Plant).Growth = 0.85f;
+						shipTurret.PointDefenseMode = true;
 					}
 					/*if (thing.def == DefDatabase<ThingDef>.GetNamed("ShipTorpedoOne"))
 					{
@@ -240,10 +263,10 @@ namespace Explorite
 						thing.stackCount = thing.def.stackLimit;
 						foreach (Thing thingInGrid in spaceMap.thingGrid.ThingsAt(thing.Position))
 						{
-							if (thingInGrid.def == DefDatabase<ThingDef>.GetNamed("Shelf"))
+							if (thingInGrid.def == DefDatabase<ThingDef>.GetNamed("Shelf") && thingInGrid is Building_Storage storge)
 							{
-								(thingInGrid as Building_Storage).settings.filter.SetDisallowAll();
-								(thingInGrid as Building_Storage).settings.filter.SetAllow(thing.def, true);
+								storge.settings.filter.SetDisallowAll();
+								storge.settings.filter.SetAllow(thing.def, true);
 							}
 
 						}
@@ -461,5 +484,4 @@ namespace Explorite
 			return toReturn;
 		}
 	}
-
 }

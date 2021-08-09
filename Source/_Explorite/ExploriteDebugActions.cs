@@ -17,9 +17,9 @@ using static Explorite.ExploriteCore;
 namespace Explorite
 {
 #pragma warning disable IDE0051 // 删除未使用的私有成员
-	static partial class ExploriteDebugActions
+	public static partial class ExploriteDebugActions
 	{
-		private static IEnumerable<DebugMenuOption> KeepOutOption(Action action, int fallbackCount = 9)
+		public static IEnumerable<DebugMenuOption> KeepOutOption(Action action, int fallbackCount = 9)
 		{
 			DebugMenuOption fallback = new DebugMenuOption("Cancel", DebugMenuOptionMode.Action, delegate () { });
 			DebugMenuOption todo = new DebugMenuOption("--- Confirm ---", DebugMenuOptionMode.Action, action);
@@ -31,7 +31,7 @@ namespace Explorite
 			}
 			return result.InRandomOrder();
 		}
-		private static void FalseOption(Action action, int depth)
+		public static void FalseOption(Action action, int depth)
 		{
 			if (depth <= 0)
 			{
@@ -66,6 +66,28 @@ namespace Explorite
 		private static void ClearAllFog()
 		{
 			Find.CurrentMap.fogGrid.ClearAllFog();
+		}
+		///<summary>清除污渍。</summary>
+		[DebugAction(category: "Explorite", name: "Wipe filth and mote", allowedGameStates = AllowedGameStates.PlayingOnMap,
+			actionType = DebugActionType.Action)]
+		private static void WipeFilthAndMote()
+		{
+			List<DebugMenuOption> list = new List<DebugMenuOption>();
+			Find.WindowStack.Add(new Dialog_DebugOptionListLister(KeepOutOption(delegate ()
+			{
+
+				foreach (Thing thing in Find.CurrentMap.listerThings.AllThings.ToList())
+				{
+					if (thing is Filth || thing is Mote)
+					{
+						thing.DeSpawn();
+						thing.Destroy();
+					}
+				}
+
+				Find.CurrentMap.mapDrawer.WholeMapChanged((MapMeshFlag)1023);
+				Find.CurrentMap.pathing.RecalculateAllPerceivedPathCosts();
+			})));
 		}
 		///<summary>完全积雪。</summary>
 		[DebugAction(category: "Explorite", name: "Add snow to whole map", allowedGameStates = AllowedGameStates.PlayingOnMap,
