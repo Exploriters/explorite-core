@@ -44,7 +44,22 @@ namespace Explorite
 				return false;
 			}
 			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			
+			/*
+			if (Current.ProgramState != ProgramState.Playing)
+			{
+				if (Faction.OfPlayer?.ideos?.GetPrecept(PreceptDefOf.IdeoRole_Leader) is Precept_RoleSingle role)
+				{
+					foreach (Pawn pawnC in role.ChosenPawns())
+					{
+						role.Unassign(pawnC, false);
+						//role.Notify_PawnUnassigned(pawnC);
+					}
+					role.Assign(pawn, false);
+					//role.Notify_PawnAssigned(pawn);
+				}
+			}
+			*/
+
 			pawn.relations.ClearAllRelations();
 
 			pawn.story.bodyType = pawn.gender == Gender.Female ?

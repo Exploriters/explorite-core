@@ -44,6 +44,7 @@ namespace Explorite
 			ThingDef WoodLog = DefDatabase<ThingDef>.GetNamed("WoodLog");
 			ThingDef Shell_EMP = DefDatabase<ThingDef>.GetNamed("Shell_EMP");
 			ThingDef Shelf = DefDatabase<ThingDef>.GetNamed("Shelf");
+			ThingDef Ship_LifeSupport = DefDatabase<ThingDef>.GetNamed("Ship_LifeSupport");
 
 			/*foreach (Letter letter in Find.LetterStack.LettersListForReading)
 			{
@@ -335,6 +336,7 @@ namespace Explorite
 				 || thing.def == ThingDefOf.BiosculpterPod
 				 || thing.def == HydroponicsBasin
 				 || thing.def == ShipPilotSeatMini
+				 || thing.def == Ship_LifeSupport
 					)
 					)
 				{
