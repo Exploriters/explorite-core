@@ -17,7 +17,7 @@ using static Explorite.ExploriteDebugActions;
 namespace Explorite
 {
 #pragma warning disable IDE0051 // 删除未使用的私有成员
-    public static partial class ExploriteDebugActions_SoS2
+	public static partial class ExploriteDebugActions_SoS2
 	{
 		///<summary>清除所有自动舰船屋顶上的屋顶。</summary>
 		[DebugAction(category: "Explorite", name: "Wipe roofed roofme", allowedGameStates = AllowedGameStates.PlayingOnMap,

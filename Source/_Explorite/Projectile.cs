@@ -11,7 +11,7 @@ namespace Explorite
 {
 	public interface IBullet_Direct
 	{
-	
+
 	}
 
 	///<summary>发射后直接命中目标的子弹。</summary>
@@ -93,7 +93,7 @@ namespace Explorite
 			}
 		}*/
 	}
-	
+
 	/*
 	///<summary>该弹射物会在空中随机加速或减速，大量发射时之间会错开。</summary>
 	[Obsolete]public class Projectile_Explosive_Waggingshot : Projectile_Explosive

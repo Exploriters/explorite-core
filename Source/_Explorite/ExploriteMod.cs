@@ -2,6 +2,10 @@
  * Explorite模组信息类。
  * --siiftun1857
  */
+using HarmonyLib;
+using System;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using Verse;
 
@@ -12,11 +16,12 @@ namespace Explorite
 	{
 		public static ExploriteSettings settings;
 
-		public override string SettingsCategory() => "Alien Race";
+		public override string SettingsCategory() => "Explorite Core";
 
 		public ExploriteMod(ModContentPack content) : base(content)
 		{
 			settings = GetSettings<ExploriteSettings>();
+			Log.Message($"Explorite Core {Assembly.GetExecutingAssembly().GetName().Version}");
 		}
 
 		public override void DoSettingsWindowContents(Rect inRect)

@@ -10,10 +10,6 @@ using Verse.AI;
 
 namespace Explorite
 {
-	public class CompProperties_AssignableToPawn_NoPostLoadSpecial : CompProperties_AssignableToPawn
-	{
-		public override void PostLoadSpecial(ThingDef parent) { }
-	}
 	///<summary>具有额外限制条件的人型生物亲昵配置。</summary>
 	public class JobGiver_Nuzzle_Humanoid : JobGiver_Nuzzle
 	{

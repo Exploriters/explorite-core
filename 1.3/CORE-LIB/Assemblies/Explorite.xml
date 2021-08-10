@@ -13,6 +13,9 @@
         <member name="T:Explorite.AdditionalAbility">
             <summary>被种族技能使用自定义Ability类。</summary>
         </member>
+        <member name="T:Explorite.MethodForceInvoker">
+            <summary>方法强制调用器。</summary>
+        </member>
         <member name="T:Explorite.ExploritePatches">
             <summary>包含多个补丁的合集类。</summary>
         </member>
@@ -148,9 +151,6 @@
         </member>
         <member name="M:Explorite.ExploritePatches.MinifiedThingDestroyPrefix(RimWorld.MinifiedThing)">
             <summary>使被收纳的秘密三射弓物体掉落故障三射弓。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.AlertNeedBatteriesPostfix(RimWorld.Alert_NeedBatteries,System.Boolean@,Verse.Map)">
-            <summary>使三联电池同样被视为<see cref = "T:RimWorld.Alert_NeedBatteries" />可接受的电池类型。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.GetFoodTryGiveJobPostfix(RimWorld.JobGiver_GetFood,Verse.AI.Job@,Verse.Pawn)">
             <summary>使Sayers优先选择尸体作为食物。</summary>
@@ -384,8 +384,11 @@
         <member name="T:Explorite.ISecretTrishot">
             <summary>秘密三射弓物体。</summary>
         </member>
+        <member name="T:Explorite.Building_AbstractBattery">
+            <summary>继承自<seealso cref = "T:RimWorld.Building_Battery" />但移除其所有独有方法。</summary>
+        </member>
         <member name="T:Explorite.Building_TriBattery">
-            <summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />不继承自<seealso cref = "T:RimWorld.Building_Battery" />，因该类并未有独有方法，且部分行为不可被覆盖。<br />实现了<seealso cref = "T:Explorite.ISecretTrishot" />，可在开局被指定具有三射弓。</summary>
+            <summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />实现了<seealso cref = "T:Explorite.ISecretTrishot" />，可在开局被指定具有三射弓。</summary>
         </member>
         <member name="T:Explorite.ExploritePawnApparelPredicate">
             <summary>自动衣物规划。</summary>
@@ -537,6 +540,9 @@
         </member>
         <member name="T:Explorite.CompAssignableToPawn_Bed_Guoguo">
             <summary>果果床的类型，只有果果人可以使用。</summary>
+        </member>
+        <member name="T:Explorite.CompAssignableToPawn_Bed_Centaur">
+            <summary>半人马床的类型，只有半人马可以使用。</summary>
         </member>
         <member name="T:Explorite.CompProperties_Command">
             <summary>为<see cref = "T:Explorite.Verb_RemoteActivator" />接收参数。</summary>
@@ -845,6 +851,9 @@
         <member name="M:Explorite.ExploriteDebugActions.FrozenWholeMapWater">
             <summary>将整个地图的所有水体都变成冰。</summary>
         </member>
+        <member name="M:Explorite.ExploriteDebugActions.BurnWholeMap">
+            <summary>点燃整个地图。</summary>
+        </member>
         <member name="M:Explorite.ExploriteDebugActions.FinishHyperManipulatorInstell(Verse.Pawn)">
             <summary>完成半人马身体部件极其漫长的整备时间。</summary>
         </member>
@@ -862,6 +871,9 @@
         </member>
         <member name="M:Explorite.ExploriteDebugActions.RuinThis">
             <summary>。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.Award10RoyalFavor">
+            <summary>提升人物荣耀到65。</summary>
         </member>
         <member name="T:Explorite.ExploriteMod">
             <summary>Explorite模组信息类。</summary>

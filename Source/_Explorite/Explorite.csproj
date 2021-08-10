@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="Ability_MassPsychicDeafCentaur.cs" />
     <Compile Include="AdditionalAbility.cs" />
+    <Compile Include="ExploriteMethodInvoker.cs" />
     <Compile Include="ExploritePatches_AdditionalVerbRemaster.cs" />
     <Compile Include="Alert_HypothermiaAbsorptionDepletedColonists.cs" />
     <Compile Include="BackstoryCracker.cs" />

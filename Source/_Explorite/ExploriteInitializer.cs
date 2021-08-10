@@ -16,7 +16,7 @@ namespace Explorite
 	{
 		static ExploriteCore()
 		{
-			Log.Message("[Explorite]Is it working? Did you see me? OuO");
+			Log.Message("[Explorite]Is it working? Did you see me? OuO -- Abrel");
 
 			/*
 			Log.Message($"[Explorite]Acticed mods:"

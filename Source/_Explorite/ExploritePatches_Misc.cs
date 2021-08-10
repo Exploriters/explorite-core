@@ -153,8 +153,8 @@ namespace Explorite
 				Patch(AccessTools.Method(typeof(MinifiedThing), nameof(MinifiedThing.Destroy)),
 					prefix: new HarmonyMethod(patchType, nameof(MinifiedThingDestroyPrefix)));
 
-				Patch(AccessTools.Method(typeof(Alert_NeedBatteries), "NeedBatteries"),
-					postfix: new HarmonyMethod(patchType, nameof(AlertNeedBatteriesPostfix)));
+				//Patch(AccessTools.Method(typeof(Alert_NeedBatteries), "NeedBatteries"),
+				//	postfix: new HarmonyMethod(patchType, nameof(AlertNeedBatteriesPostfix)));
 
 				Patch(AccessTools.Method(typeof(JobGiver_GetFood), "TryGiveJob"),
 					postfix: new HarmonyMethod(patchType, nameof(GetFoodTryGiveJobPostfix)));
@@ -977,7 +977,7 @@ namespace Explorite
 				trishotOwner.LeaveTrishot();
 			}
 		}
-
+		/*
 		///<summary>使三联电池同样被视为<see cref = "Alert_NeedBatteries" />可接受的电池类型。</summary>
 		[HarmonyPostfix]public static void AlertNeedBatteriesPostfix(Alert_NeedBatteries __instance, ref bool __result, Map map)
 		{
@@ -987,7 +987,7 @@ namespace Explorite
 				__result = false;
 			}
 		}
-
+		*/
 		///<summary>使Sayers优先选择尸体作为食物。</summary>
 		[HarmonyPostfix]public static void GetFoodTryGiveJobPostfix(JobGiver_GetFood __instance, ref Job __result, Pawn pawn)
 		{
@@ -2906,7 +2906,7 @@ namespace Explorite
 		{
 			if (p.def == AlienCentaurDef)//__instance.tags.Contains("EmpireTitle") && 
 			{
-				foreach (RoomRequirement roomRequirement in __result)
+				foreach (RoomRequirement roomRequirement in __result ?? Enumerable.Empty<RoomRequirement>())
 				{
 					if (roomRequirement is RoomRequirement_ThingAnyOf thingsRequirement && thingsRequirement.things.Any(tdef => tdef.HasComp(typeof(CompAssignableToPawn_Bed))) && !thingsRequirement.things.Contains(CentaurBedDef))
 					{

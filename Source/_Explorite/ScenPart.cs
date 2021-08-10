@@ -87,7 +87,7 @@ namespace Explorite
 			try
 			{
 				battery?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
-				if (battery is Building_TriBattery_SecretTrishot secretBattery && !GameComponentCentaurStory.Any())
+				if (battery is Building_TriBattery secretBattery && secretBattery.CanEverHaveTrishot() && !GameComponentCentaurStory.Any())
 				{
 					secretBattery.SetSecret(true);
 					GameComponentCentaurStory.TryAdd(secretBattery);
@@ -299,7 +299,7 @@ namespace Explorite
 			{
 				compPowerBattery.AddEnergy(float.PositiveInfinity);
 			}
-			if (thing is Building_TriBattery_SecretTrishot secretBattery)
+			if (thing is Building_TriBattery secretBattery && secretBattery.CanEverHaveTrishot())
 			{
 				GameComponentCentaurStory.ClearSecret();
 				secretBattery.SetSecret(true);

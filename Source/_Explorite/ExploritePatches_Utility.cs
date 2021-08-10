@@ -162,7 +162,7 @@ namespace Explorite
 		{
 			return instr;
 		}
-		static MethodInfo Patch(MethodBase original, HarmonyMethod prefix = null, HarmonyMethod postfix = null, HarmonyMethod transpiler = null, HarmonyMethod finalizer = null, bool willResolve = true)
+		internal static MethodInfo Patch(MethodBase original, HarmonyMethod prefix = null, HarmonyMethod postfix = null, HarmonyMethod transpiler = null, HarmonyMethod finalizer = null, bool willResolve = true)
 		{
 			ExplortiePatchActionRecord record = new ExplortiePatchActionRecord(original, prefix, postfix, transpiler, finalizer);
 			records.Add(record);

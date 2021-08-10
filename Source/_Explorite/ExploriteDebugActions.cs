@@ -49,7 +49,6 @@ namespace Explorite
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(result2));
 		}
 
-
 		///<summary>清除所有迷雾。</summary>
 		[DebugAction(category: "Explorite", name: "Clear fog at...", allowedGameStates = AllowedGameStates.PlayingOnMap,
 			actionType = DebugActionType.ToolMap)]
@@ -126,6 +125,40 @@ namespace Explorite
 				}
 				Find.CurrentMap.mapDrawer.WholeMapChanged(MapMeshFlag.Terrain);
 				//Find.CurrentMap.pathGrid.RecalculateAllPerceivedPathCosts();
+				Find.CurrentMap.pathing.RecalculateAllPerceivedPathCosts();
+			})));
+		}
+		///<summary>点燃整个地图。</summary>
+		[DebugAction(category: "Explorite", name: "Burn Whole map", allowedGameStates = AllowedGameStates.PlayingOnMap,
+			actionType = DebugActionType.Action)]
+		private static void BurnWholeMap()
+		{
+			List<DebugMenuOption> list = new List<DebugMenuOption>();
+			Find.WindowStack.Add(new Dialog_DebugOptionListLister(KeepOutOption(delegate ()
+			{
+				Map map = Find.CurrentMap;
+				foreach (IntVec3 cell in map.AllCells)
+				{
+					if (!(map.thingGrid.ThingsAt(cell).FirstOrFallback(x => x is Fire) is Fire fire))
+					{
+						if (map.thingGrid.ThingsAt(cell).Any(thing => thing.CanEverAttachFire())
+						 || FireUtility.TerrainFlammableNow(cell, map)
+						)
+						{
+							fire = (Fire)ThingMaker.MakeThing(ThingDefOf.Fire);
+							GenSpawn.Spawn(fire, cell, map, WipeMode.Vanish);
+						}
+						else
+						{
+							fire = null;
+						}
+					}
+					if (fire != null)
+					{
+						fire.fireSize = 1.75f;
+					}
+				}
+				Find.CurrentMap.mapDrawer.WholeMapChanged(MapMeshFlag.Things);
 				Find.CurrentMap.pathing.RecalculateAllPerceivedPathCosts();
 			})));
 		}
@@ -233,6 +266,40 @@ namespace Explorite
 				}
 
 			}, 3);
+		}
+
+		///<summary>提升人物荣耀到65。</summary>
+		[DebugAction("Explorite", "Award until 65 honor", false, false, allowedGameStates = AllowedGameStates.PlayingOnMap, requiresRoyalty = true)]
+		private static void Award10RoyalFavor()
+		{
+			if (!(bool)typeof(DebugActionsRoyalty).GetMethod("CheckAnyFactionWithRoyalTitles", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, null))
+			{
+				return;
+			}
+			List<DebugMenuOption> list = (
+				from Faction localFaction2 in (IEnumerable<Faction>)typeof(DebugActionsRoyalty).GetMethod("get_FactionsWithRoyalTitles", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, null)
+				let localFaction = localFaction2
+				select new DebugMenuOption(localFaction.Name, DebugMenuOptionMode.Tool, delegate ()
+				{
+					Pawn firstPawn = UI.MouseCell().GetFirstPawn(Find.CurrentMap);
+					if (firstPawn != null)
+					{
+						int delta = 65 - firstPawn.royalty.GetFavor(localFaction);
+						RoyalTitleDef tmpTitle = firstPawn.royalty.GetCurrentTitleInFaction(localFaction)?.def;
+						while (tmpTitle != null)
+						{
+							delta -= tmpTitle.favorCost;
+							tmpTitle = tmpTitle.GetPreviousTitle_IncludeNonRewardable(localFaction);
+						}
+
+						if (delta > 0)
+						{
+							firstPawn.royalty.GainFavor(localFaction, delta);
+						}
+					}
+				})
+				).ToList();
+			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 	}
 #pragma warning restore IDE0051 // 删除未使用的私有成员

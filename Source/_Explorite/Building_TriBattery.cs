@@ -3,6 +3,9 @@
  * --siiftun1857
  */
 using RimWorld;
+using System;
+using System.Reflection;
+using System.Reflection.Emit;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
@@ -13,13 +16,42 @@ namespace Explorite
 	///<summary>秘密三射弓物体。</summary>
 	public interface ISecretTrishot
 	{
+		public bool CanEverHaveTrishot();
 		public bool GetSecret();
 		public bool SetSecret(bool boolen);
 		public bool LeaveTrishot();
 	}
-	///<summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />不继承自<seealso cref = "Building_Battery" />，因该类并未有独有方法，且部分行为不可被覆盖。<br />实现了<seealso cref = "ISecretTrishot" />，可在开局被指定具有三射弓。</summary>
+	///<summary>继承自<seealso cref = "Building_Battery" />但移除其所有独有方法。</summary>
+	public abstract class Building_AbstractBattery : Building_Battery
+	{
+		private static readonly MethodInfo baseBaseExposeData = typeof(Building).GetMethod(nameof(Building.ExposeData));
+		public override void ExposeData()
+		{
+			baseBaseExposeData.InvokeForce(new object[] { this });
+		}
+
+		private static readonly MethodInfo baseBaseDraw = typeof(Building).GetMethod(nameof(Building.Draw));
+		public override void Draw()
+		{
+			baseBaseDraw.InvokeForce(new object[] { this });
+		}
+
+		private static readonly MethodInfo baseBaseTick = typeof(Building).GetMethod(nameof(Building.Tick));
+		public override void Tick()
+		{
+			baseBaseTick.InvokeForce(new object[] { this });
+		}
+
+		private static readonly MethodInfo baseBasePostApplyDamage = typeof(Building).GetMethod(nameof(Building.PostApplyDamage));
+		public override void PostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
+		{
+			baseBaseTick.InvokeForce(new object[] { this, dinfo, totalDamageDealt });
+		}
+	}
+
+	///<summary>三联电池使用的建筑物类，负责处理视觉效果和爆炸性。<br />实现了<seealso cref = "ISecretTrishot" />，可在开局被指定具有三射弓。</summary>
 	[StaticConstructorOnStartup]
-	public class Building_TriBattery : Building/*_Battery*/
+	public class Building_TriBattery : Building_AbstractBattery, ISecretTrishot
 	{
 		private int ticksToExplode;
 
@@ -45,6 +77,7 @@ namespace Explorite
 		{
 			base.ExposeData();
 			Scribe_Values.Look(ref ticksToExplode, "ticksToExplode", 0, false);
+			Scribe_Values.Look(ref includingBrokenTrishot, "isSecretBattery", false);
 		}
 
 		public override void Draw()
@@ -128,22 +161,29 @@ namespace Explorite
 
 		// Note: this type is marked as 'beforefieldinit'.
 		//static Building_TriBattery() { }
-	}
 
-	//[StaticConstructorOnStartup]
-	public class Building_TriBattery_SecretTrishot : Building_TriBattery, ISecretTrishot
-	{
+
 		private bool includingBrokenTrishot = false;
+		public bool CanEverHaveTrishot()
+		{
+			return def.defName == "TriBatteryGolden";
+		}
 		public bool GetSecret()
 		{
+			if (!CanEverHaveTrishot())
+				return false;
 			return includingBrokenTrishot;
 		}
 		public bool SetSecret(bool boolen)
 		{
+			if (!CanEverHaveTrishot())
+				return false;
 			return includingBrokenTrishot = boolen;
 		}
 		public bool LeaveTrishot()
 		{
+			if (!CanEverHaveTrishot())
+				return false;
 			Thing final = this.FinalSpawnedParent();
 			if (final != null && SpawnedOrAnyParentSpawned && includingBrokenTrishot)
 			{
@@ -165,11 +205,5 @@ namespace Explorite
 			LeaveTrishot();
 			base.Destroy(mode);
 		}
-		public override void ExposeData()
-		{
-			base.ExposeData();
-			Scribe_Values.Look(ref includingBrokenTrishot, "isSecretBattery", false);
-		}
-
 	}
 }

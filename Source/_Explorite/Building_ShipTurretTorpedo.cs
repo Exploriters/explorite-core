@@ -33,12 +33,14 @@ namespace Explorite
 
 		public static Dictionary<Map, List<Building_ShipTurretTorpedoSpinal>> allTubesOnMap = new Dictionary<Map, List<Building_ShipTurretTorpedoSpinal>>();
 
+		/*
 		protected override void SetDefaultPowerDistribution(int basePower)
 		{
 			SegmentPower[0] = basePower;
 			SegmentPower[1] = basePower;
 			SegmentPower[2] = basePower;
 		}
+		*/
 
 		public override void Draw()
 		{
@@ -75,7 +77,7 @@ namespace Explorite
 		public override void Tick()
 		{
 			base.Tick();
-			if (ShipCombatManager.InCombat)
+			if (SoS2Reflection.sos2scm.GetField("InCombat", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) == true as object)
 			{
 				if (ticksSinceOpen < TicksToOpenNow)
 					ticksSinceOpen++;

@@ -20,38 +20,41 @@ namespace Explorite
 		private void CentaurAlphaShipPostProcess(Map spaceMap)
 		{
 			IntVec3 center = spaceMap.Center;
-			ThingDef engineDef = DefDatabase<ThingDef>.GetNamed("Ship_Engine_Interplanetary");
 			EnemyShipDef shipDef = DefDatabase<EnemyShipDef>.GetNamed("CentaursScenarioRetroCruise");
+
+			ThingDef Ship_Engine_Interplanetary = DefDatabase<ThingDef>.GetNamed("Ship_Engine_Interplanetary");
+			ThingDef ShipHullTile = DefDatabase<ThingDef>.GetNamed("ShipHullTile");
+			ThingDef ShipHullTileArchotech = DefDatabase<ThingDef>.GetNamed("ShipHullTileArchotech");
+			ThingDef ShipHullTileMech = DefDatabase<ThingDef>.GetNamed("ShipHullTileMech");
+			ThingDef ShipHullTileWrecked = DefDatabase<ThingDef>.GetNamed("ShipHullTileWrecked");
+			ThingDef ShipCombatShieldGenerator = DefDatabase<ThingDef>.GetNamed("ShipCombatShieldGenerator");
+			ThingDef MultiAnalyzer = DefDatabase<ThingDef>.GetNamed("MultiAnalyzer");
+			ThingDef HydroponicsBasin = DefDatabase<ThingDef>.GetNamed("HydroponicsBasin");
+			ThingDef ShipPilotSeatMini = DefDatabase<ThingDef>.GetNamed("ShipPilotSeatMini");
+			ThingDef ShipShuttleBay = DefDatabase<ThingDef>.GetNamed("ShipShuttleBay");
+			ThingDef ShipHeatManifoldLarge_Ex = DefDatabase<ThingDef>.GetNamed("ShipHeatManifoldLarge_Ex");
+			ThingDef ShipTurret_Laser = DefDatabase<ThingDef>.GetNamed("ShipTurret_Laser");
+			ThingDef ShipCapacitor = DefDatabase<ThingDef>.GetNamed("ShipCapacitor");
+			ThingDef SunLamp = DefDatabase<ThingDef>.GetNamed("SunLamp");
+			ThingDef ComponentIndustrial = DefDatabase<ThingDef>.GetNamed("ComponentIndustrial");
+			ThingDef ShipTorpedo_HighExplosive = DefDatabase<ThingDef>.GetNamed("ShipTorpedo_HighExplosive");
+			ThingDef ShipTorpedo_EMP = DefDatabase<ThingDef>.GetNamed("ShipTorpedo_EMP");
+			ThingDef Chemfuel = DefDatabase<ThingDef>.GetNamed("Chemfuel");
+			ThingDef ShuttleFuelPods = DefDatabase<ThingDef>.GetNamed("ShuttleFuelPods");
+			ThingDef WoodLog = DefDatabase<ThingDef>.GetNamed("WoodLog");
+			ThingDef Shell_EMP = DefDatabase<ThingDef>.GetNamed("Shell_EMP");
+			ThingDef Shelf = DefDatabase<ThingDef>.GetNamed("Shelf");
 
 			/*foreach (Letter letter in Find.LetterStack.LettersListForReading)
 			{
 				Find.LetterStack.RemoveLetter(letter);
 			}*/
 
-			//GenSpawn.Spawn(ThingMaker.MakeThing(DefDatabase<ThingDef>.GetNamed("Ship_Engine_Interplanetary")), spaceMap.Center + new IntVec3(shape.x, 0, shape.z), spaceMap, shape.rot);
-
-			/*
-			if (sunLampLocation.HasValue)
-			{
-				IntVec3 leftEngine = new IntVec3(sunLampLocation.Value.ToVector3()) + new IntVec3(-18, 0, -17);
-				IntVec3 rightEngine = new IntVec3(sunLampLocation.Value.ToVector3()) + new IntVec3(18, 0, -17);
-
-				Thing InterplanetaryEngineL = ThingMaker.MakeThing(engineDef);
-				GenSpawn.Spawn(InterplanetaryEngineL, leftEngine, spaceMap);
-				InterplanetaryEngineL.SetFaction(Faction.OfPlayer);
-				InterplanetaryEngineL.TryGetComp<CompPowerTrader>().PowerOn = true;
-
-				Thing InterplanetaryEngineR = ThingMaker.MakeThing(engineDef);
-				GenSpawn.Spawn(InterplanetaryEngineR, rightEngine, spaceMap);
-				InterplanetaryEngineR.SetFaction(Faction.OfPlayer);
-				InterplanetaryEngineR.TryGetComp<CompPowerTrader>().PowerOn = true;
-			}
-			*/
 			foreach (ShipShape shape in shipDef.parts)
 			{
 				if (shape.shapeOrDef == "Ship_Engine_Interplanetary")
 				{
-					Thing InterplanetaryEngine = ThingMaker.MakeThing(engineDef);
+					Thing InterplanetaryEngine = ThingMaker.MakeThing(Ship_Engine_Interplanetary);
 					GenSpawn.Spawn(InterplanetaryEngine, center + new IntVec3(shape.x, 0, shape.z), spaceMap, shape.rot, WipeMode.Vanish);
 					InterplanetaryEngine.SetFaction(Faction.OfPlayer);
 					InterplanetaryEngine.TryGetComp<CompPowerTrader>().PowerOn = true;
@@ -94,18 +97,11 @@ namespace Explorite
 			}
 			*/
 
-			ThingDef ShipHullTile = DefDatabase<ThingDef>.GetNamed("ShipHullTile");
-			ThingDef ShipHullTileArchotech = DefDatabase<ThingDef>.GetNamed("ShipHullTileArchotech");
-			ThingDef ShipHullTileMech = DefDatabase<ThingDef>.GetNamed("ShipHullTileMech");
-			ThingDef ShipHullTileWrecked = DefDatabase<ThingDef>.GetNamed("ShipHullTileWrecked");
-
-			//Thing targetTorpedo = null;
-			//IntVec3 torpedoToLocation = new IntVec3(0, 0, 0);
-			IntVec3? sunLampLocation = null;
 			foreach (Thing thing in spaceMap.listerThings.AllThings.ToList())
 			{
 				try
 				{
+					thing.stackCount = thing.def.stackLimit;
 					if (thing.def == ThingDefOf.MinifiedThing)
 					{
 						Thing thingInside = ((MinifiedThing)thing).InnerThing;
@@ -114,23 +110,35 @@ namespace Explorite
 							thingInside?.TryGetComp<CompPowerBattery>()?.AddEnergy(float.PositiveInfinity);
 						}
 					}
-					if (sunLampLocation == null && thing.def == DefDatabase<ThingDef>.GetNamed("SunLamp"))
+					if (thing.def == SunLamp)
 					{
-						sunLampLocation = thing.Position;
+						CameraJumper.TryJump(thing.Position, spaceMap);
 					}
-					if (thing?.TryGetComp<CompForbiddable>() is CompForbiddable compForbiddable)
+					if (thing.TryGetComp<CompForbiddable>() is CompForbiddable compForbiddable)
 					{
-						compForbiddable.Forbidden = thing.def == ThingDefOf.ComponentIndustrial;
+						compForbiddable.Forbidden = (
+							thing.def == ThingDefOf.ComponentIndustrial
+						 || thing.def == ThingDefOf.GroundPenetratingScanner
+						 || thing.def == ThingDefOf.LongRangeMineralScanner
+						 || thing.def == HydroponicsBasin
+							);
 					}
-					if (thing?.TryGetComp<CompQuality>() is CompQuality compQuality)
+					if (thing.TryGetComp<CompQuality>() is CompQuality compQuality)
 					{
 						compQuality.SetQuality(QualityCategory.Legendary, ArtGenerationContext.Colony);
 					}
-					if (thing?.TryGetComp<CompArt>() is CompArt compArt)
+					if (thing.TryGetComp<CompArt>() is CompArt compArt)
 					{
-						compArt.JustCreatedBy(Find.GameInitData.startingAndOptionalPawns.RandomElement());
+						if (thing.def == CentaurBedDef)
+						{
+							compArt.JustCreatedBy(Find.GameInitData.startingAndOptionalPawns.RandomElement());
+						}
+						else
+						{
+							compArt.Clear();
+						}
 					}
-					if (thing?.TryGetComp<CompStyleable>() is CompStyleable compStyleable)
+					if (thing.TryGetComp<CompStyleable>() is CompStyleable compStyleable)
 					{
 						try
 						{
@@ -140,34 +148,45 @@ namespace Explorite
 						{
 						}
 					}
-					if (thing?.TryGetComp<CompRefuelable>() is CompRefuelable compRefuelable)
+					if (thing.TryGetComp<CompRefuelable>() is CompRefuelable compRefuelable)
 					{
-						//thing.def == DefDatabase<ThingDef>.GetNamed("Ship_Engine_Small") ||
-						//thing.def == DefDatabase<ThingDef>.GetNamed("Ship_Engine") ||
-						//thing.def == DefDatabase<ThingDef>.GetNamed("Ship_Engine_Large") 
-						compRefuelable.Refuel(compRefuelable.Props.fuelCapacity);
+						if (thing.TryGetComp<CompShipHeatPurgeGolden>() != null)
+							compRefuelable.ConsumeFuel(compRefuelable.Props.fuelCapacity);
+						else
+							compRefuelable.Refuel(compRefuelable.Props.fuelCapacity);
 					}
-					if (thing?.TryGetComp<CompTempControl>() is CompTempControl compTempControl)
+					if (thing.TryGetComp<CompTempControl>() is CompTempControl compTempControl)
 					{
 						compTempControl.targetTemperature = 19f;
 					}
-					if (thing?.TryGetComp<CompBreakdownable>() is CompBreakdownable compBreakdownable)
+					if (thing is Building_ShipVent shipVent)
 					{
+						shipVent.heatWithPower = false;
 					}
-					if (thing?.TryGetComp<CompFlickable>() is CompFlickable compFlickable
+					if (thing.TryGetComp<CompBreakdownable>() is CompBreakdownable compBreakdownable
+						&& (thing.def == ThingDefOf.GroundPenetratingScanner
+						 || thing.def == ThingDefOf.LongRangeMineralScanner
+						 || thing.def == ShipCombatShieldGenerator
+						 ))
+					{
+						compBreakdownable.DoBreakdown();
+					}
+					if (thing.TryGetComp<CompFlickable>() is CompFlickable compFlickable
 						&& (
-							(thing?.def?.building?.buildingTags?.Contains("Production") == true && thing.def != DefDatabase<ThingDef>.GetNamed("HydroponicsBasin"))
-						 || thing.def == DefDatabase<ThingDef>.GetNamed("MultiAnalyzer")
+							(thing?.def?.building?.buildingTags?.Contains("Production") == true && thing.def != HydroponicsBasin)
+						 || thing.def == MultiAnalyzer
 						 || thing.def == ThingDefOf.BiosculpterPod
 						 || thing.def == ThingDefOf.NeuralSupercharger
-						 || thing.def == DefDatabase<ThingDef>.GetNamed("ShipCombatShieldGenerator")
+						 || thing.def == ThingDefOf.GroundPenetratingScanner
+						 || thing.def == ThingDefOf.LongRangeMineralScanner
+						 || thing.def == ShipCombatShieldGenerator
 							)
 						)
 					{
 						compFlickable.SwitchIsOn = false;
 						typeof(CompFlickable).GetField("wantSwitchOn", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).SetValue(compFlickable, false);
 					}
-					if (thing?.TryGetComp<CompRechargeable>() is CompRechargeable compRechargeable)
+					if (thing.TryGetComp<CompRechargeable>() is CompRechargeable compRechargeable)
 					{
 						typeof(CompRechargeable).GetField("ticksUntilCharged", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).SetValue(compRechargeable, 1);
 					}
@@ -175,7 +194,7 @@ namespace Explorite
 					 && thing.def != ShipHullTileArchotech
 					 && thing.def != ShipHullTileMech
 					 && thing.def != ShipHullTileWrecked
-					 && thing?.TryGetComp<CompRoofMe>() is CompRoofMe compRoofMe)
+					 && thing.TryGetComp<CompRoofMe>() is CompRoofMe compRoofMe)
 					{
 						ThingDef oofType = null;
 						if (compRoofMe.Props.archotech)
@@ -205,25 +224,22 @@ namespace Explorite
 							}
 						}
 					}
-					if (thing.def == DefDatabase<ThingDef>.GetNamed("HydroponicsBasin") && thing is Building_PlantGrower plantGrower)
+					if (thing.def == HydroponicsBasin && thing is Building_PlantGrower plantGrower)
 					{
 						plantGrower.SetPlantDefToGrow(ThingDefOf.Plant_Potato);
-						thing.TryGetComp<CompForbiddable>().Forbidden = true;
 						foreach (IntVec3 cell in plantGrower.OccupiedRect())
 						{
 							Plant potato = ThingMaker.MakeThing(ThingDefOf.Plant_Potato) as Plant;
 							potato.Growth = 0.85f;
 							GenSpawn.Spawn(potato, cell, plantGrower.Map, WipeMode.Vanish);
-							potato.SetFaction(Faction.OfPlayer);
 
 							Blight blight = ThingMaker.MakeThing(ThingDefOf.Blight) as Blight;
 							blight.Severity = 0.05f;
 							GenSpawn.Spawn(blight, cell, plantGrower.Map, WipeMode.Vanish);
-							potato.SetFaction(Faction.OfPlayer);
 						}
 					}
 					/*
-					if (thing.def == DefDatabase<ThingDef>.GetNamed("Plant_Potato") && thing is Plant plant)
+					if (thing.def == ThingDefOf.Plant_Potato && thing is Plant plant)
 					{
 						plant.Growth = 0.85f;
 					}
@@ -232,74 +248,58 @@ namespace Explorite
 						blight.Severity = 0.05f;
 					}
 					*/
-					if (thing.def == DefDatabase<ThingDef>.GetNamed("ShipCombatShieldGenerator"))
-					{
-						thing.TryGetComp<CompBreakdownable>()?.DoBreakdown();
-					}
-					if (thing.def == DefDatabase<ThingDef>.GetNamed("ShipTurret_Laser") && thing is Building_ShipTurret shipTurret)
+					if (thing.def == ShipTurret_Laser && thing is Building_ShipTurret shipTurret)
 					{
 						shipTurret.PointDefenseMode = true;
 					}
-					/*if (thing.def == DefDatabase<ThingDef>.GetNamed("ShipTorpedoOne"))
+					/*if (thing.def == ShipTorpedoOne)
 					{
 						foreach (Thing thingInside in ((Building_ShipTurretTorpedo)thing).Contents.innerContainer)
 						{
-							if (thing.def == DefDatabase<ThingDef>.GetNamed("ShipTorpedo_HighExplosive"))
+							if (thing.def == ShipTorpedo_HighExplosive)
 							{
-								thing.def = DefDatabase<ThingDef>.GetNamed("ShipTorpedo_EMP");
+								thing.def = ShipTorpedo_EMP;
 							}
 						}
 					}*/
-					if (thing.def == DefDatabase<ThingDef>.GetNamed("ComponentIndustrial")
-					 || thing.def == DefDatabase<ThingDef>.GetNamed("ShipTorpedo_HighExplosive")
-					 || thing.def == DefDatabase<ThingDef>.GetNamed("ShipTorpedo_EMP")
-					 || thing.def == DefDatabase<ThingDef>.GetNamed("Chemfuel")
-					 || thing.def == DefDatabase<ThingDef>.GetNamed("ShuttleFuelPods")
-					 || thing.def == DefDatabase<ThingDef>.GetNamed("WoodLog")
-					 || thing.def == DefDatabase<ThingDef>.GetNamed("Shell_EMP")
+					/*
+					if (thing.def == ComponentIndustrial
+					 || thing.def == ShipTorpedo_HighExplosive
+					 || thing.def == ShipTorpedo_EMP
+					 || thing.def == Chemfuel
+					 || thing.def == ShuttleFuelPods
+					 || thing.def == WoodLog
+					 || thing.def == Shell_EMP
 						)
 					{
-						//Log.Message("[Explorite]Patching stack.");
 						thing.stackCount = thing.def.stackLimit;
 						foreach (Thing thingInGrid in spaceMap.thingGrid.ThingsAt(thing.Position))
 						{
-							if (thingInGrid.def == DefDatabase<ThingDef>.GetNamed("Shelf") && thingInGrid is Building_Storage storge)
+							if (thingInGrid.def == Shelf && thingInGrid is Building_Storage storge)
 							{
-								storge.settings.filter.SetDisallowAll();
-								storge.settings.filter.SetAllow(thing.def, true);
+								if (storge.settings.filter.AllowedDefCount > 1)
+								{
+								}
 							}
-
 						}
 					}
-					/*if (thing.def == DefDatabase<ThingDef>.GetNamed("ShipTorpedo_HighExplosive"))
+					*/
+					if (thing.def == Shelf && thing is Building_Storage storge)
 					{
-						//Log.Message("[Explorite]Patching HE.");
-						thing.stackCount = 1;
-						//thing.def = DefDatabase<ThingDef>.GetNamed("ShipTorpedo_EMP");
-					}*/
-					if (thing.def == DefDatabase<ThingDef>.GetNamed("Shelf"))
-					{
-						//torpedoToLocation.z = Math.Max(thing.Position.z, torpedoToLocation.z);
+						storge.settings.filter.SetDisallowAll();
+						foreach (ThingDef thingDef in storge.OccupiedRect().SelectMany(x => spaceMap.thingGrid.ThingsAt(x).Select(d => d.def)).Distinct().Where(x => x.category == ThingCategory.Item))
+						{
+							storge.settings.filter.SetAllow(thingDef, true);
+						}
 					}
-					if (thing.def == DefDatabase<ThingDef>.GetNamed("ShipTorpedo_HighExplosive"))
+					if (thing.def == ShipTorpedo_HighExplosive)
 					{
-						/*
-						torpedoToLocation.x = Math.Max(thing.Position.x, torpedoToLocation.x);
-						if (targetTorpedo == null)
-						{
-							targetTorpedo = thing;
-						}
-						else if (thing.Position.z > targetTorpedo.Position.z)
-						{
-							targetTorpedo = thing;
-						}
-						*/
 						if (thing.Spawned)
 							thing.DeSpawn();
 						if (!thing.DestroyedOrNull())
 							thing.Destroy();
 					}
-					if (thing?.TryGetComp<CompPower>() is CompPower compPower && !compPower.Props.transmitsPower)
+					if (thing.TryGetComp<CompPower>() is CompPower compPower && !compPower.Props.transmitsPower)
 					{
 						typeof(CompPower).GetMethod("TryManualReconnect", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).Invoke(compPower, new object[] { });
 					}
@@ -316,47 +316,70 @@ namespace Explorite
 				}
 				catch { }
 			}
-			//targetTorpedo.Position = torpedoToLocation;
-
-
-			/*
-			Thing InterplanetaryEngineL = ThingMaker.MakeThing(ThingDef.Named("Ship_Engine_Interplanetary"));
-			InterplanetaryEngineL.SetFaction(Faction.OfPlayer);
-			GenSpawn.Spawn(InterplanetaryEngineL, new IntVec3(-18,0,-28), spaceMap);
-			Thing InterplanetaryEngineR = ThingMaker.MakeThing(ThingDef.Named("Ship_Engine_Interplanetary"));
-			InterplanetaryEngineR.SetFaction(Faction.OfPlayer);
-			GenSpawn.Spawn(InterplanetaryEngineR, new IntVec3(18,0,-28), spaceMap);
-				//((Blueprint_Build)InterplanetaryEngineL).;
-			*/
-
-
-
-			/*
-			List<Building> thingsRocket = spaceMap.listerBuildings.allBuildingsColonist;
-			foreach (Building thing in thingsBatteryIn)
+			foreach (Room room in spaceMap.regionGrid.allRooms)
 			{
-				try
+				float ctrlTemp = -50;
+				bool heatUp = false;
+
+				if (room.ContainsThing(ThingDefOf.OrbitalTradeBeacon))
 				{
-					if (
-						thing?.TryGetComp<CompRefuelable>() != null
-						//thing.def == DefDatabase<ThingDef>.GetNamed("Ship_Engine_Small") ||
-						//thing.def == DefDatabase<ThingDef>.GetNamed("Ship_Engine") ||
-						//thing.def == DefDatabase<ThingDef>.GetNamed("Ship_Engine_Large")                    
-						)
+					room.Temperature = -50;
+					Designator des = DesignatorUtility.FindAllowedDesignator<Designator_ZoneAddStockpile_Resources>();
+					des.DesignateMultiCell(room.Cells);
+					ctrlTemp = -50;
+					heatUp = false;
+				}
+				else if (
+					room.ContainedAndAdjacentThings.Any(thing =>
+					thing.def == ThingDefOf.Drape
+				 || thing.def == ThingDefOf.BiosculpterPod
+				 || thing.def == HydroponicsBasin
+				 || thing.def == ShipPilotSeatMini
+					)
+					)
+				{
+					room.Temperature = 19;
+					ctrlTemp = 19;
+					heatUp = true;
+				}
+				else if (
+					room.ContainedAndAdjacentThings.Any(thing =>
+					thing.def == ShipHeatManifoldLarge_Ex
+				 || thing.def == ShipShuttleBay
+				 || thing.def == ShipTurret_Laser
+				 || thing.def == ShipCapacitor
+					)
+					)
+				{
+					room.Temperature = 19;
+					ctrlTemp = 19;
+					heatUp = false;
+				}
+				else
+				{
+					room.Temperature = -50;
+				}
+
+				foreach (Thing thing in room.ContainedAndAdjacentThings.Where(thing => !(thing is Building_ShipVent shipVent) || room.Cells.Contains(thing.Position + IntVec3.North.RotatedBy(thing.Rotation))))
+				{
+					if (thing is Building_ShipVent shipVent)
 					{
-						CompRefuelable fuelTarget = thing?.TryGetComp<CompRefuelable>();
-						fuelTarget.ConsumeFuel(
-							fuelTarget.Fuel -
-							fuelTarget.Props.fuelCapacity
-							);
+						shipVent.heatWithPower = heatUp;
+					}
+					if (thing.TryGetComp<CompTempControl>() is CompTempControl compTempControl)
+					{
+						compTempControl.targetTemperature = ctrlTemp;
 					}
 				}
-				catch { }
-			}*/
-			if (sunLampLocation != null)
-			{
-				CameraJumper.TryJump(sunLampLocation.Value, spaceMap);
 			}
+			spaceMap.autoBuildRoofAreaSetter.AutoBuildRoofAreaSetterTick_First();
+
+			foreach (IntVec3 cell in spaceMap.AllCells)
+			{
+				spaceMap.areaManager.BuildRoof[cell] = false;
+				spaceMap.areaManager.NoRoof[cell] = false;
+			}
+			Find.Selector.ClearSelection();
 			spaceMap.fogGrid.ClearAllFog();
 		}
 
@@ -369,10 +392,10 @@ namespace Explorite
 				return;
 
 			EnemyShipDef shipDef = DefDatabase<EnemyShipDef>.GetNamed("CentaursScenarioRetroCruise");
-			ShipCombatManager.CanSalvageEnemyShip = false;
-			ShipCombatManager.ShouldSalvageEnemyShip = false;
-			ShipCombatManager.InCombat = false;
-			ShipCombatManager.InEncounter = false;
+			SoS2Reflection.sos2scm.GetField("CanSalvageEnemyShip", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, false);
+			SoS2Reflection.sos2scm.GetField("ShouldSalvageEnemyShip", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, false);
+			SoS2Reflection.sos2scm.GetField("InCombat", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, false);
+			SoS2Reflection.sos2scm.GetField("InEncounter", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, false);
 			List<Pawn> startingPawns = Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer);
 			int newTile = -1;
 			for (int i = 0; i < 420; i++)
@@ -467,8 +490,10 @@ namespace Explorite
 			spaceMap.Parent.SetFaction(Faction.OfPlayer);
 			Find.MapUI.Notify_SwitchedMap();
 			spaceMap.regionAndRoomUpdater.RebuildAllRegionsAndRooms();
-			foreach (Room r in spaceMap.regionGrid.allRooms)
-				r.Temperature = 19;
+			foreach (Room room in spaceMap.regionGrid.allRooms)
+			{
+				room.Temperature = 19;
+			}
 			AccessExtensions.Utility.GetType().GetMethod("RecacheSpaceMaps", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).Invoke(AccessExtensions.Utility, new object[] { });
 
 			CentaurAlphaShipPostProcess(spaceMap);
