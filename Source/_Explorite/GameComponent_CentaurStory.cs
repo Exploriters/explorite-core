@@ -141,7 +141,7 @@ namespace Explorite
 			}
 		}
 		///<summary>显示追踪器状态。</summary>
-		[DebugAction(category: "Explorite", name: "Print trishot tracer state", allowedGameStates = AllowedGameStates.WorldRenderedNow,
+		[DebugAction(category: "Explorite", name: "Print trishot tracer state", allowedGameStates = AllowedGameStates.Entry | AllowedGameStates.Playing,
 			actionType = DebugActionType.Action)]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage(null, "IDE0051")]
 		private static void PrintTrishotTracerState()

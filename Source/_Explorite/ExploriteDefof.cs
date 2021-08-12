@@ -82,7 +82,6 @@ namespace Explorite
 		public static readonly ThingDef HyperTrishotTurretBuildingDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Turret_HyperTrishot");
 		public static readonly ThingDef CentaurBedDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "CentaurBed");
 		public static readonly HediffDef HyperManipulatorHediffDef = GetModDef<HediffDef>(InstelledMods.RimCentaurs, "HyperManipulator");
-		public static readonly HediffDef PsychicDeafHediffDef = GetModDef<HediffDef>(InstelledMods.RimCentaurs, "PsychicDeafCentaur");
 		public static readonly HediffDef SubsystemBlankHediffDef = GetModDef<HediffDef>(InstelledMods.RimCentaurs, "CentaurSubsystem_BlankBlank");
 		public static readonly BodyDef CentaurBodyDef = GetModDef<BodyDef>(InstelledMods.RimCentaurs, "Centaur");
 		public static readonly BodyPartDef CentaurScapularDef = GetModDef<BodyPartDef>(InstelledMods.RimCentaurs, "CentaurScapular");
@@ -100,9 +99,11 @@ namespace Explorite
 		public static readonly ResearchProjectDef CentaurStoryProjectStep1Def = GetModDef<ResearchProjectDef>(InstelledMods.RimCentaurs, "CentaurStoryStep1st");
 		public static readonly ResearchProjectDef CentaurStoryProjectStep2Def = GetModDef<ResearchProjectDef>(InstelledMods.RimCentaurs, "CentaurStoryStep2nd");
 		public static readonly ResearchProjectDef CentaurStoryProjectStep3Def = GetModDef<ResearchProjectDef>(InstelledMods.RimCentaurs, "CentaurStoryStep3rd");
-		//public static readonly MemeDef CentaurMemeDef = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "Centaur");
-		public static readonly MemeDef CentaurStructureMemeDef = GetModDef<MemeDef>(InstelledMods.RimCentaurs, "Structure_Centaur");
-		public static readonly IdeoIconDef CentaurIdeoIconDef = GetModDef<IdeoIconDef>(InstelledMods.RimCentaurs, "Exploriter");
+
+		public static readonly HediffDef PsychicDeafHediffDef = GetModDef<HediffDef>(InstelledMods.RimCentaurs && InstelledMods.Royalty, "PsychicDeafCentaur");
+		//public static readonly MemeDef CentaurMemeDef = GetModDef<MemeDef>(InstelledMods.RimCentaurs && InstelledMods.Ideology, "Centaur");
+		public static readonly MemeDef CentaurStructureMemeDef = GetModDef<MemeDef>(InstelledMods.RimCentaurs && InstelledMods.Ideology, "Structure_Centaur");
+		public static readonly IdeoIconDef CentaurIdeoIconDef = GetModDef<IdeoIconDef>(InstelledMods.RimCentaurs && InstelledMods.Ideology, "Exploriter");
 		//public static readonly ColorDef CentaurBlueDef = GetModDef<ColorDef>(InstelledMods.RimCentaurs, "CentaurBlue");
 		//public static readonly ColorDef ExploriteBlueDef = GetModDef<ColorDef>(InstelledMods.RimCentaurs, "ExploriteBlue");
 		//public static readonly ColorDef ExploriteOrangeDef = GetModDef<ColorDef>(InstelledMods.RimCentaurs, "ExploriteOrange");
@@ -122,11 +123,11 @@ namespace Explorite
 		public static readonly FactionDef SayersPlayerColonyDef = GetModDef<FactionDef>(InstelledMods.Sayers, "SayersClan");
 		public static readonly FactionDef SayersPlayerColonySingleDef = GetModDef<FactionDef>(InstelledMods.Sayers);
 		public static readonly BodyDef SayersBodyDef = GetModDef<BodyDef>(InstelledMods.Sayers, "Body_Sayers");
-		public static readonly MemeDef SayersMeme1Def = GetModDef<MemeDef>(InstelledMods.Sayers, "Experimental_SayersMeme");
-		public static readonly MemeDef SayersMeme2Def = GetModDef<MemeDef>(InstelledMods.Sayers, "CarnivorousAnimal_SayersMeme");
 		public static readonly ThoughtDef SayersAbandonedSadnessThoughtDef = GetModDef<ThoughtDef>(InstelledMods.Sayers, "SayersAbandonedSadness");
 		public static readonly ThoughtDef SayersFeelLonelyThoughtDef = GetModDef<ThoughtDef>(InstelledMods.Sayers, "SayersWillFeelLonely");
-		public static readonly MemeDef SayersStructureMemeDef = GetModDef<MemeDef>(InstelledMods.Sayers, "Structure_Sayers");
+		public static readonly MemeDef SayersMeme1Def = GetModDef<MemeDef>(InstelledMods.Sayers && InstelledMods.Ideology, "Experimental_SayersMeme");
+		public static readonly MemeDef SayersMeme2Def = GetModDef<MemeDef>(InstelledMods.Sayers && InstelledMods.Ideology, "CarnivorousAnimal_SayersMeme");
+		public static readonly MemeDef SayersStructureMemeDef = GetModDef<MemeDef>(InstelledMods.Sayers && InstelledMods.Ideology, "Structure_Sayers");
 
 		public static readonly ThingDef AlienGuoguoDef = GetModDef<ThingDef>(InstelledMods.GuoGuo, "Alien_Guoguo");
 		public static readonly FactionDef GuoguoPlayerColonyDef = GetModDef<FactionDef>(InstelledMods.GuoGuo, "GuoguoPlayerColony");
