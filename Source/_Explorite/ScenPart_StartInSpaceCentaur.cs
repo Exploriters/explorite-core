@@ -17,7 +17,7 @@ namespace Explorite
 	///<summary>使半人马开局在其巡洋舰中。</summary>
 	public class ScenPart_StartInSpaceCentaur : ScenPart
 	{
-		private void CentaurAlphaShipPostProcess(Map spaceMap)
+		private static void CentaurAlphaShipPostProcess(Map spaceMap)
 		{
 			IntVec3 center = spaceMap.Center;
 			EnemyShipDef shipDef = DefDatabase<EnemyShipDef>.GetNamed("CentaursScenarioRetroCruise");
@@ -387,6 +387,10 @@ namespace Explorite
 
 		public override void PostGameStart()
 		{
+			PostGameStartEffect();
+		}
+		public static void PostGameStartEffect()
+		{
 			if (SoS2Reflection.inaccessible)
 				return;
 
@@ -501,7 +505,7 @@ namespace Explorite
 			CentaurAlphaShipPostProcess(spaceMap);
 		}
 
-		List<IntVec3> GetAllCryptoCells(Map spaceMap)
+		private static List<IntVec3> GetAllCryptoCells(Map spaceMap)
 		{
 			List<IntVec3> toReturn = new List<IntVec3>();
 			foreach (Building b in spaceMap.listerBuildings.allBuildingsColonist.Where(b => b is Building_CryptosleepCasket))

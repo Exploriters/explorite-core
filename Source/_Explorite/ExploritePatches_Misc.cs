@@ -368,8 +368,8 @@ namespace Explorite
 				Patch(AccessTools.Method(typeof(WorkGiver_ExtractSkull), nameof(WorkGiver_ExtractSkull.CanExtractSkull)),
 					postfix: new HarmonyMethod(patchType, nameof(WorkGiverExtractSkullCanExtractSkullPostfix)));
 
-				Patch(AccessTools.Method(typeof(WorkGiver_ExtractSkull), nameof(WorkGiver_ExtractSkull.CanExtractSkull)),
-					postfix: new HarmonyMethod(patchType, nameof(WorkGiverExtractSkullCanExtractSkullPostfix)));
+				Patch(AccessTools.Method(typeof(FoodUtility), nameof(FoodUtility.GetFoodPoisonChanceFactor)),
+					prefix: new HarmonyMethod(patchType, nameof(FoodUtilityGetFoodPoisonChanceFactorPrefix)));
 
 				Patch(AccessTools.Method(typeof(SkillUI), nameof(SkillUI.DrawSkill), new Type[] { typeof(SkillRecord), typeof(Rect), typeof(SkillUI.SkillDrawMode), typeof(string) }),
 					transpiler: new HarmonyMethod(patchType, nameof(SkillUIDrawSkillTranspiler)));
@@ -729,10 +729,12 @@ namespace Explorite
 		{
 			if (
 				p.def == AlienCentaurDef && __result.Active &&
-				(__result.StageIndex == 1 || __result.StageIndex == 3)
+				__instance.def.stages.ToArray()[__result.StageIndex].baseMoodEffect < 0f
+				//(__result.StageIndex == 1 || __result.StageIndex == 3)
 				)
 			{
-				__result = ThoughtState.ActiveAtStage(__result.StageIndex - 1);
+				//__result = ThoughtState.ActiveAtStage(__result.StageIndex - 1);
+				__result = ThoughtState.Inactive;
 			}
 		}
 
@@ -2507,7 +2509,7 @@ namespace Explorite
 			yield break;
 		}
 
-		static MethodInfo strangeMethod = null;
+		private static MethodInfo strangeMethod = null;
 		///<summary>寻找一个奇怪的方法。</summary>
 		[HarmonyTranspiler]public static IEnumerable<CodeInstruction> StrangeMethodFinderTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
 		{

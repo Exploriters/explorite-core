@@ -22,7 +22,7 @@ namespace Explorite
 	///<summary>远程效果设备，响应<see cref = "Verb_RemoteActivator" />。</summary>
 	public abstract class HediffComp_RemoteActivationEffect : HediffComp, IRemoteActivationEffect
 	{
-		HediffCompProperties_RemoteActivationEffect Props => props as HediffCompProperties_RemoteActivationEffect;
+		private HediffCompProperties_RemoteActivationEffect Props => props as HediffCompProperties_RemoteActivationEffect;
 		public virtual bool CanActiveNow(IEnumerable<string> tags)
 		{
 			foreach (string tag in tags)

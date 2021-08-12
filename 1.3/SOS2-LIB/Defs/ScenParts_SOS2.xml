@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ScenPartDef>
+    <defName>StartInSpaceCentaurs</defName>
+    <label>start in centaurs cruiser</label>
+    <category>Misc</category>
+    <scenPartClass>Explorite.ScenPart_StartInSpaceCentaur</scenPartClass>
+    <maxUses>1</maxUses>
+  </ScenPartDef>
+</Defs>

@@ -27,9 +27,8 @@ namespace Explorite
 		public static Mesh doorTwo = MeshMakerPlanes.NewPlaneMesh(new Vector2(5, 7.35f), true, false, false);
 		public float ticksSinceOpen = 0;
 		public float TicksToOpenNow = 60;
-
-		int timesFired = 0;
-		static readonly Vector3[] TubePos = { new Vector3(-1, 0, -1.5f), new Vector3(1, 0, -1.5f), new Vector3(-1, 0, 0), new Vector3(1, 0, 0), new Vector3(-1, 0, 1.5f), new Vector3(1, 0, 1.5f) };
+		private int timesFired = 0;
+		private static readonly Vector3[] TubePos = { new Vector3(-1, 0, -1.5f), new Vector3(1, 0, -1.5f), new Vector3(-1, 0, 0), new Vector3(1, 0, 0), new Vector3(-1, 0, 1.5f), new Vector3(1, 0, 1.5f) };
 
 		public static Dictionary<Map, List<Building_ShipTurretTorpedoSpinal>> allTubesOnMap = new Dictionary<Map, List<Building_ShipTurretTorpedoSpinal>>();
 

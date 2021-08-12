@@ -23,7 +23,7 @@ namespace Explorite
 	///<summary>远程效果激活设备，激活<see cref = "CompRemoteActivationEffect" />。</summary>
 	public class Verb_RemoteActivator : Verb_CastBase
 	{
-		VerbProperties_RemoteActivator VerbProps => verbProps as VerbProperties_RemoteActivator;
+		private VerbProperties_RemoteActivator VerbProps => verbProps as VerbProperties_RemoteActivator;
 		public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
 		{
 			if (!base.ValidateTarget(target, showMessages))
@@ -71,7 +71,7 @@ namespace Explorite
 	///<summary>远程效果激活设备，激活<see cref = "CompRemoteActivationEffect" />。</summary>
 	public class Verb_RemoteActivator_Area : Verb_CastBase
 	{
-		VerbProperties_RemoteActivator_Area VerbProps => verbProps as VerbProperties_RemoteActivator_Area;
+		private VerbProperties_RemoteActivator_Area VerbProps => verbProps as VerbProperties_RemoteActivator_Area;
 		public override float HighlightFieldRadiusAroundTarget(out bool needLOSToCenter)
 		{
 			needLOSToCenter = VerbProps.needLOSToCenter;

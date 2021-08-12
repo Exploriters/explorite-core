@@ -21,7 +21,7 @@ namespace Explorite
 			PostprocessCentaurCorpse();
 		}
 
-		static void PostprocessCentaurRecipe()
+		private static void PostprocessCentaurRecipe()
 		{
 			//if (AlienCentaurDef == null)
 			if (!InstelledMods.RimCentaurs)
@@ -42,7 +42,7 @@ namespace Explorite
 			}
 		}
 
-		static void PostprocessCentaurCorpse()
+		private static void PostprocessCentaurCorpse()
 		{
 			if (!AlienCentaurCorpseDef.IsNonMal())
 			{

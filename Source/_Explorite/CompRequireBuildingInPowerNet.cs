@@ -26,7 +26,7 @@ namespace Explorite
 	///<summary>检测电网中是否存在指定的建筑物。</summary>
 	public class CompRequireBuildingInPowerNet : ThingComp
 	{
-		CompProperties_RequireBuildingInPowerNet Props => props as CompProperties_RequireBuildingInPowerNet;
+		private CompProperties_RequireBuildingInPowerNet Props => props as CompProperties_RequireBuildingInPowerNet;
 		public CheckOutList<ThingDef> RequiredBuildings => Props.requiredBuildings;
 		public virtual bool BuildingsRequirementMeet
 		{

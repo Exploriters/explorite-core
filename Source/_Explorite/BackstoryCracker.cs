@@ -208,7 +208,7 @@ namespace Explorite
 
 		}
 
-		static bool inctested = false;
+		private static bool inctested = false;
 		///<summary>测试潜在的非法背景故事，覆盖半人马的童年期故事。</summary>
 		public static void TestforIncorrectChildhood()
 		{

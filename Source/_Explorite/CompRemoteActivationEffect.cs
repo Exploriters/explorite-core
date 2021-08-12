@@ -27,7 +27,7 @@ namespace Explorite
 	///<summary>远程效果设备，响应<see cref = "Verb_RemoteActivator" />。</summary>
 	public abstract class CompRemoteActivationEffect : ThingComp, IRemoteActivationEffect
 	{
-		CompProperties_RemoteActivationEffect Props => props as CompProperties_RemoteActivationEffect;
+		private CompProperties_RemoteActivationEffect Props => props as CompProperties_RemoteActivationEffect;
 		public virtual bool CanActiveNow(IEnumerable<string> tags)
 		{
 			foreach (string tag in tags)
@@ -67,7 +67,7 @@ namespace Explorite
 	///<summary>响应效果时为穿戴者施加hediff。</summary>
 	public class CompRemoteActivationEffect_Apparel_ApplyHediff : CompRemoteActivationEffect_Apparel
 	{
-		CompProperties_RemoteActivationEffect_Apparel_ApplyHediff Props => props as CompProperties_RemoteActivationEffect_Apparel_ApplyHediff;
+		private CompProperties_RemoteActivationEffect_Apparel_ApplyHediff Props => props as CompProperties_RemoteActivationEffect_Apparel_ApplyHediff;
 		public override bool ActiveEffect()
 		{
 			if (Props.hediff.HasComp(typeof(HediffComp_DisappearsOnDeath)) && Wearer.Dead)
@@ -104,7 +104,7 @@ namespace Explorite
 	///<summary>响应效果时为穿戴者施加伤害。</summary>
 	public class CompRemoteActivationEffect_Apparel_ApplyDamage : CompRemoteActivationEffect_Apparel
 	{
-		CompProperties_RemoteActivationEffect_Apparel_ApplyDamage Props => props as CompProperties_RemoteActivationEffect_Apparel_ApplyDamage;
+		private CompProperties_RemoteActivationEffect_Apparel_ApplyDamage Props => props as CompProperties_RemoteActivationEffect_Apparel_ApplyDamage;
 		public override bool ActiveEffect()
 		{
 			IEnumerable<BodyPartRecord> partrecs = Props.part == null ? new List<BodyPartRecord>() { null } : Wearer.def.race.body.AllParts.Where(p => p.def == Props.part).InRandomOrder();
@@ -146,7 +146,7 @@ namespace Explorite
 	///<summary>响应效果时发出声音以及效果。</summary>
 	public class CompRemoteActivationEffect_PlayEffects : CompRemoteActivationEffect
 	{
-		CompProperties_RemoteActivationEffect_PlayEffects Props => props as CompProperties_RemoteActivationEffect_PlayEffects;
+		private CompProperties_RemoteActivationEffect_PlayEffects Props => props as CompProperties_RemoteActivationEffect_PlayEffects;
 		public override bool ActiveEffect()
 		{
 			Thing finalParent = parent.FinalSpawnedParent();
@@ -207,7 +207,7 @@ namespace Explorite
 	///<summary>响应效果时自毁。</summary>
 	public class CompRemoteActivationEffect_Destroy : CompRemoteActivationEffect
 	{
-		CompProperties_RemoteActivationEffect_Destroy Props => props as CompProperties_RemoteActivationEffect_Destroy;
+		private CompProperties_RemoteActivationEffect_Destroy Props => props as CompProperties_RemoteActivationEffect_Destroy;
 		public override bool ActiveEffect()
 		{
 			if (!parent.Destroyed)
@@ -286,7 +286,7 @@ namespace Explorite
 	///<summary>响应效果时爆炸。</summary>
 	public class CompRemoteActivationEffect_Explode : CompRemoteActivationEffect
 	{
-		CompProperties_RemoteActivationEffect_Explode Props => props as CompProperties_RemoteActivationEffect_Explode;
+		private CompProperties_RemoteActivationEffect_Explode Props => props as CompProperties_RemoteActivationEffect_Explode;
 		public override bool ActiveEffect()
 		{
 			Detonate();

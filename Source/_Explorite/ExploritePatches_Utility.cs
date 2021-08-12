@@ -102,14 +102,15 @@ namespace Explorite
 		internal static readonly List<ExplortiePatchActionRecord> records = new List<ExplortiePatchActionRecord>();
 		internal static readonly Type exPatchType = typeof(ExploritePatches);
 
-		static void TranspilerStageCheckout(int stage, int targetStage, string stageName = null)
+		private static void TranspilerStageCheckout(int stage, int targetStage, string stageName = null)
 		{
 			if (stage != targetStage)
 			{
 				throw new MalPatchStatusException(stage, targetStage, stageName);
 			}
 		}
-		static string PrintPatches()
+
+		private static string PrintPatches()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			foreach (ExplortiePatchActionRecord record in records)

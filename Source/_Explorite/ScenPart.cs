@@ -46,6 +46,11 @@ namespace Explorite
 		public override void PostGameStart()
 		{
 			base.PostGameStart();
+			PostGameStartEffect();
+		}
+
+		public static void PostGameStartEffect()
+		{
 			List<Thing> Things = Find.CurrentMap.listerThings.AllThings.Where(thing => thing is DropPodIncoming).ToList();
 			foreach (Thing thing in Things)
 			{
@@ -68,6 +73,11 @@ namespace Explorite
 		public override void PostGameStart()
 		{
 			base.PostGameStart();
+			PostGameStartEffect();
+		}
+
+		public static void PostGameStartEffect()
+		{
 			foreach (List<Thought_Memory> memories in Find.GameInitData.startingAndOptionalPawns.Where(pawn => pawn.def == AlienSayersDef).Select(pawn => pawn.needs.mood.thoughts.memories.Memories))
 			{
 				memories.RemoveAll(memory => memory.def == ThoughtDefOf.NewColonyOptimism);
@@ -100,6 +110,12 @@ namespace Explorite
 		public override void PostGameStart()
 		{
 			base.PostGameStart();
+			PostGameStartEffect();
+			return;
+		}
+
+		public static void PostGameStartEffect()
+		{
 			List<Thing> things = Find.CurrentMap.listerThings.AllThings.Where(thing => thing is DropPodIncoming || thing is MinifiedThing).ToList();
 			foreach (Thing thing in things)
 			{
@@ -145,7 +161,6 @@ namespace Explorite
 			{
 				Find.LetterStack.RemoveLetter(letter);
 			}*/
-			return;
 		}
 	}
 	///<summary>阻止空投舱产生钢渣块。</summary>
@@ -178,6 +193,11 @@ namespace Explorite
 		public override void PostGameStart()
 		{
 			base.PostGameStart();
+			PostGameStartEffect();
+		}
+
+		public static void PostGameStartEffect()
+		{
 			foreach (Thing thing in Find.CurrentMap.listerThings.AllThings.Where(thing => thing is DropPodIncoming))
 			{
 				if (thing is DropPodIncoming droppod)
@@ -214,6 +234,11 @@ namespace Explorite
 		public override void PostGameStart()
 		{
 			base.PostGameStart();
+			PostGameStartEffect();
+		}
+
+		public static void PostGameStartEffect()
+		{
 			List<ThingAndOwner> queuedThings = new List<ThingAndOwner>();
 			Pawn target = null;
 
