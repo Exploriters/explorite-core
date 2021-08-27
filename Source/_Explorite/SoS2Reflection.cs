@@ -15,7 +15,7 @@ namespace Explorite
 	[StaticConstructorOnStartup]
 	internal static class SoS2Reflection
 	{
-		public static void GenerateShip(Def shipDef, Map map, TradeShip tradeShip, Faction fac, Lord lord, out Building core)
+		public static void GenerateShip(Def shipDef, Map map, TradeShip tradeShip, Faction fac, Lord lord, out Building core, bool clearArea = false, bool wreckEverything = false)
 		{
 			core = null;
 			if (inaccessible || methodGenerateShip == null)
@@ -24,7 +24,7 @@ namespace Explorite
 			}
 			//core = (Building)
 			methodGenerateShip.Invoke(null, new object[] {
-				shipDef, map, tradeShip, fac, lord, core
+				shipDef, map, tradeShip, fac, lord, core, clearArea, wreckEverything
 			});
 		}
 

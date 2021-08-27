@@ -133,15 +133,27 @@ namespace Explorite
 			actionType = DebugActionType.Action)]
 		private static void BurnWholeMap()
 		{
+
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(KeepOutOption(delegate ()
 			{
 				Map map = Find.CurrentMap;
+				foreach (Thing thing in map.spawnedThings)
+				{
+					if (thing.GetAttachment(ThingDefOf.Fire) is Fire fire)
+					{
+						fire.fireSize = 1.75f;
+					}
+					else
+					{
+						thing.TryAttachFire(1.75f);
+					}
+				}
 				foreach (IntVec3 cell in map.AllCells)
 				{
-					if (!(map.thingGrid.ThingsAt(cell).FirstOrFallback(x => x is Fire) is Fire fire))
+					if (!(map.thingGrid.ThingsAt(cell).FirstOrFallback(x => x is Fire fire) is Fire fire))
 					{
-						if (map.thingGrid.ThingsAt(cell).Any(thing => thing.CanEverAttachFire())
+						if (map.thingGrid.ThingsAt(cell).Any(thing => !thing.DestroyedOrNull() && thing.FlammableNow)
 						 || FireUtility.TerrainFlammableNow(cell, map)
 						)
 						{
@@ -215,6 +227,168 @@ namespace Explorite
 		private static void MoveLeft()
 		{
 			MoveSomewhere(new IntVec3(-1, 0, 0));
+		}
+
+		///<summary>更改物品的品质。</summary>
+		[DebugAction(category: "Explorite", name: "Set quality of selected things", allowedGameStates = AllowedGameStates.PlayingOnMap,
+			actionType = DebugActionType.Action)]
+		private static void SetSelectedThingsQuality()
+		{
+			static void SetQuality(QualityCategory q)
+			{
+				foreach (object obj in Find.Selector.SelectedObjects)
+				{
+					if (obj is ThingWithComps thing && thing.TryGetComp<CompQuality>() is CompQuality comp)
+					{
+						comp.SetQuality(q, ArtGenerationContext.Colony);
+					}
+					if (obj is Pawn pawn && pawn.apparel is Pawn_ApparelTracker apparelTracker)
+					{
+						foreach (Thing apparel in apparelTracker.GetDirectlyHeldThings())
+						{
+							if (apparel.TryGetComp<CompQuality>() is CompQuality compA)
+							{
+								compA.SetQuality(q, ArtGenerationContext.Colony);
+							}
+						}
+					}
+				}
+			}
+
+			List<DebugMenuOption> list = new List<DebugMenuOption>();
+			foreach (QualityCategory qualityValue in Enum.GetValues(typeof(QualityCategory)))
+			{
+				string QualityName = Enum.GetName(typeof(QualityCategory), qualityValue);
+				list.Add(new DebugMenuOption(QualityName, DebugMenuOptionMode.Action, delegate ()
+				{
+					SetQuality(qualityValue);
+				}));
+			}
+			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
+		}
+
+		///<summary>更改物品的材料。</summary>
+		[DebugAction(category: "Explorite", name: "Set stuff of selected things", allowedGameStates = AllowedGameStates.PlayingOnMap,
+			actionType = DebugActionType.Action)]
+		private static void SetSelectedThingsStuff()
+		{
+			static void SetStuff(ThingDef stuffDef)
+			{
+				foreach (object obj in Find.Selector.SelectedObjects)
+				{
+					if (obj is Thing thing && thing.def.MadeFromStuff)
+					{
+						thing.SetStuffDirect(stuffDef);
+					}
+					if (obj is Pawn pawn && pawn.apparel is Pawn_ApparelTracker apparelTracker)
+					{
+						foreach (Thing apparel in apparelTracker.GetDirectlyHeldThings())
+						{
+							if (apparel.def.MadeFromStuff)
+							{
+								apparel.SetStuffDirect(stuffDef);
+							}
+						}
+					}
+				}
+			}
+
+			List<DebugMenuOption> list = new List<DebugMenuOption>();
+			foreach (ThingDef stuffDef in DefDatabase<ThingDef>.AllDefs.Where(d => d.IsStuff))
+			{
+				list.Add(new DebugMenuOption(stuffDef.LabelAsStuff, DebugMenuOptionMode.Action, delegate ()
+				{
+					SetStuff(stuffDef);
+				}));
+			}
+			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
+		}
+
+		///<summary>更改物品的颜色。</summary>
+		[DebugAction(category: "Explorite", name: "Set color of selected things", allowedGameStates = AllowedGameStates.PlayingOnMap,
+			actionType = DebugActionType.Action)]
+		private static void SetSelectedThingsColor()
+		{
+			static void SetColor(Color c)
+			{
+				foreach (object obj in Find.Selector.SelectedObjects)
+				{
+					if (obj is ThingWithComps thing && thing.TryGetComp<CompColorable>() is CompColorable comp)
+					{
+						comp.SetColor(c);
+					}
+					if (obj is Pawn pawn && pawn.apparel is Pawn_ApparelTracker apparelTracker)
+					{
+						foreach (Thing apparel in apparelTracker.GetDirectlyHeldThings())
+						{
+							if (apparel.TryGetComp<CompColorable>() is CompColorable compA)
+							{
+								compA.SetColor(c);
+							}
+						}
+					}
+				}
+			}
+
+			List<DebugMenuOption> list = new List<DebugMenuOption>();
+			foreach (ColorDef colorDef in DefDatabase<ColorDef>.AllDefs)
+			{
+				list.Add(new DebugMenuOption(colorDef.defName, DebugMenuOptionMode.Action, delegate ()
+				{
+					SetColor(colorDef.color);
+				}));
+			}
+			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
+		}
+
+		///<summary>修复物品。</summary>
+		[DebugAction(category: "Explorite", name: "Fix things", allowedGameStates = AllowedGameStates.PlayingOnMap,
+			actionType = DebugActionType.Action)]
+		private static void FixSelectedThings()
+		{
+			foreach (Thing thing in Find.Selector.SelectedObjects.NullOrEmpty() ? Find.Selector.SelectedObjects.Where(obj => obj is Thing thing).Select(obj => obj as Thing) : Find.CurrentMap.listerThings.AllThings)
+			{
+				if (thing.def.useHitPoints)
+				{
+					thing.HitPoints = thing.MaxHitPoints;
+				}
+				if (thing is Pawn pawn && pawn.apparel is Pawn_ApparelTracker apparelTracker)
+				{
+					foreach (Thing apparel in apparelTracker.GetDirectlyHeldThings())
+					{
+						if (apparel.def.useHitPoints)
+						{
+							apparel.HitPoints = apparel.MaxHitPoints;
+						}
+					}
+				}
+			}
+		}
+		///<summary>增加流动文化的发展点数。</summary>
+		[DebugAction(category: "Explorite", name: "Points to fluid ideo", allowedGameStates = AllowedGameStates.Playing,
+			actionType = DebugActionType.Action)]
+		private static void IncreaseIdeoFluidPoint()
+		{
+			List<DebugMenuOption> list = new List<DebugMenuOption>();
+			foreach (Ideo ideo in Find.IdeoManager.IdeosListForReading.Where(ideo => ideo.Fluid))
+			{
+				list.Add(new DebugMenuOption(ideo.name, DebugMenuOptionMode.Action, delegate ()
+				{
+					List<DebugMenuOption> list2 = new List<DebugMenuOption>();
+					for (int i = -20; i <= 20; i++)
+					{
+						if (i != 0)
+						{
+							list2.Add(new DebugMenuOption($"{(i >= 0 ? "+" : string.Empty)}{i}", DebugMenuOptionMode.Action, delegate ()
+							{
+								ideo.development.points += i;
+							}));
+						}
+					}
+					Find.WindowStack.Add(new Dialog_DebugOptionListLister(list2));
+				}));
+			}
+			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
 		///<summary>。</summary>

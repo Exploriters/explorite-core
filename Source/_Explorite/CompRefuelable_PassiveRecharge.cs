@@ -3,6 +3,9 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
 using RimWorld;
 using Verse;
 using static Explorite.ExploriteCore;
@@ -16,26 +19,49 @@ namespace Explorite
 		{
 			compClass = typeof(CompRefuelable_PassiveRecharge);
 		}
+		private static readonly MethodInfo baseBaseSpecialDisplayStats = typeof(CompProperties).GetMethod(nameof(CompProperties.SpecialDisplayStats));
+		public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
+		{
+			foreach (StatDrawEntry statDrawEntry in baseBaseSpecialDisplayStats.InvokeForce(new object[] { this, req }) as IEnumerable<StatDrawEntry>)
+			{
+				yield return statDrawEntry;
+			}
+			yield break;
+		}
 
 		public float fuelGenFragment;
 		public float displayFragment;
 		public int fuelGenFragmentTicks;
+		public bool requirePower;
+		public float? powerWhenNotSpike;
 	}
 	///<summary>高速恢复燃料的<see cref = "CompRefuelable" />变种。</summary>
 	public class CompRefuelable_PassiveRecharge : CompRefuelable
 	{
+		public new CompProperties_Refuelable_PassiveRecharge Props => props as CompProperties_Refuelable_PassiveRecharge;
+
 		public bool messageSignal = false;
 
+		[Unsaved(false)]
+		public bool? operatingAtHighPower;
+
 		public int ticksWithoutFuel = 0;
-		public float fuelGenFragment => ((CompProperties_Refuelable_PassiveRecharge)Props).fuelGenFragment;
-		public float displayFragment => ((CompProperties_Refuelable_PassiveRecharge)Props).displayFragment;
-		public int fuelGenFragmentTicks => ((CompProperties_Refuelable_PassiveRecharge)Props).fuelGenFragmentTicks;
-		public float fuelCapacity => ((CompProperties_Refuelable_PassiveRecharge)Props).fuelCapacity;
-		public float fuelWithFragment => Fuel + (ticksWithoutFuel * fuelGenFragment / fuelGenFragmentTicks);
-		public float fuelPreSec => fuelGenFragment / (fuelGenFragmentTicks / 60f);
+		public float FuelGenFragment => Props.fuelGenFragment;
+		public float DisplayFragment => Props.displayFragment;
+		public int FuelGenFragmentTicks => Props.fuelGenFragmentTicks;
+		public float FuelCapacity => Props.fuelCapacity;
+		public float FuelWithFragment => Fuel + (ticksWithoutFuel * FuelGenFragment / FuelGenFragmentTicks);
+		public float FuelPreSec => FuelGenFragment / (FuelGenFragmentTicks / 60f);
+		public float? PowerWhenNotSpike => Props.powerWhenNotSpike;
+		public bool RequirePower => Props.requirePower;
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats()
 		{
-			return new List<StatDrawEntry>();
+			return Enumerable.Empty<StatDrawEntry>();
+		}
+		public override void PostSpawnSetup(bool respawningAfterLoad)
+		{
+			base.PostSpawnSetup(respawningAfterLoad);
+			operatingAtHighPower = null;
 		}
 		public override void PostExposeData()
 		{
@@ -45,36 +71,78 @@ namespace Explorite
 		}
 		public override string CompInspectStringExtra()
 		{
-			return
-				$"{"ChargesRemaining".Translate()}: {Math.Floor(fuelWithFragment / displayFragment)} / {Math.Floor(fuelCapacity / displayFragment)}"
+			StringBuilder sb = new StringBuilder();
+
+			/*
+			string baseInspectString = base.CompInspectStringExtra();
+			if (!baseInspectString.NullOrEmpty())
+			{
+				sb.AppendLine(baseInspectString);
+			}
+			*/
+			sb.AppendLine(
+				$"{"ChargesRemaining".Translate()}: {Math.Floor(FuelWithFragment / DisplayFragment)} / {Math.Floor(FuelCapacity / DisplayFragment)}"
 				+ "\n" +
-				$"{"CanFireIn".Translate()}: {FormattingTickTime((fuelCapacity - fuelWithFragment) / fuelPreSec)}"
-				;
+				$"{"CanFireIn".Translate()}: {FormattingTickTime((FuelCapacity - FuelWithFragment) / FuelPreSec)}"
+				);
+
+			if (PowerWhenNotSpike.HasValue)
+			{
+				sb.AppendLine("PowerConsumptionMode".Translate() + ": " + (operatingAtHighPower switch
+				{
+					true => "PowerConsumptionHigh",
+					false => "PowerConsumptionLow",
+					_ => "PowerConsumptionHigh",
+				}).Translate().CapitalizeFirst());
+			}
+			return sb.ToString().TrimEndNewlines();
+
 		}
 		public override void CompTick()
 		{
 			base.CompTick();
+			bool wantOperatingAtHighPower = true;
 
-			if (fuelWithFragment < displayFragment && !messageSignal)
+			CompPowerTrader comp = parent.TryGetComp<CompPowerTrader>();
+			if (!RequirePower || comp == null || comp.PowerOn)
 			{
-				messageSignal = true;
-			}
+				if (Fuel >= FuelCapacity)
+				{
+					wantOperatingAtHighPower = false;
+				}
+				if (FuelWithFragment < DisplayFragment && !messageSignal)
+				{
+					messageSignal = true;
+				}
 
-			ticksWithoutFuel++;
-			if (
-				ticksWithoutFuel >= fuelGenFragmentTicks
-				|| fuelWithFragment >= fuelCapacity
-			)
-			{
-				Refuel(fuelGenFragment);
-				ticksWithoutFuel = 0;
-			}
+				ticksWithoutFuel++;
+				if (
+					ticksWithoutFuel >= FuelGenFragmentTicks
+					|| FuelWithFragment >= FuelCapacity
+				)
+				{
+					Refuel(FuelGenFragment);
+					ticksWithoutFuel = 0;
+				}
 
-			if (fuelWithFragment >= fuelCapacity && messageSignal)
-			{
-				messageSignal = false;
-				Messages.Message("Magnuassembly_CompRefuelable_PassiveRecharge_ChargeCompleted".Translate(parent.GetCustomLabelNoCount()), parent, MessageTypeDefOf.PositiveEvent);
+				if (FuelWithFragment >= FuelCapacity && messageSignal)
+				{
+					messageSignal = false;
+					Messages.Message("Magnuassembly_CompRefuelable_PassiveRecharge_ChargeCompleted".Translate(parent.GetCustomLabelNoCount()), parent, MessageTypeDefOf.PositiveEvent);
+				}
 			}
+			//if (PowerWhenNotSpike.HasValue && comp != null && operatingAtHighPower != wantOperatingAtHighPower)
+			//{
+				operatingAtHighPower = wantOperatingAtHighPower;
+				if (wantOperatingAtHighPower)
+				{
+					comp.PowerOutput = -comp.Props.basePowerConsumption;
+				}
+				else
+				{
+					comp.PowerOutput = -PowerWhenNotSpike.Value;
+				}
+			//}
 		}
 	}
 }

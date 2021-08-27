@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <ExThingdjustingDesignation.label>指派调整</ExThingdjustingDesignation.label>
+  <ExThingdjustingDesignation.helpText>注意：这仅仅只是指定一个物体需要殖民者进行操作。\n\n在殖民者过来并手动操作物体前，不会有任何变化。</ExThingdjustingDesignation.helpText>
+
+</LanguageData>

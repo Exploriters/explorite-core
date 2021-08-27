@@ -44,7 +44,7 @@ namespace Explorite
 		public override void Draw()
 		{
 			base.Draw();
-			float num = -3.5f * Mathf.Clamp01((float)ticksSinceOpen / (float)TicksToOpenNow);
+			float num = -3.5f * Mathf.Clamp01(ticksSinceOpen / TicksToOpenNow);
 			float d = 0f + (0f * num);
 			for (int i = 0; i < 2; i++)
 			{

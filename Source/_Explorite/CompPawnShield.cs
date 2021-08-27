@@ -307,7 +307,7 @@ namespace Explorite
 				int num2 = Find.TickManager.TicksGame - lastAbsorbDamageTick;
 				if (num2 < 8)
 				{
-					float num3 = (float)(8 - num2) / 8f * 0.05f;
+					float num3 = (8 - num2) / 8f * 0.05f;
 					drawPos += impactAngleVect * num3;
 					num -= num3;
 				}

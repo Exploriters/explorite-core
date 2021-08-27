@@ -105,6 +105,9 @@ namespace Explorite
 			}
 
 			pawn.EnsureSubsystemExist();
+
+			pawn.playerSettings.selfTend = true;
+
 			return true;
 		}
 		internal static bool GenerateSayersPostprocess(ref Pawn pawn, PawnGenerationRequest request, ref bool matchError)

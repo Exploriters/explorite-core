@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <JobDef>
+    <defName>ExMaunalActionObjectAdjusting</defName>
+    <driverClass>Explorite.JobDriver_TakeMaunalActionOnWanterThing</driverClass>
+    <reportString>adjusting TargetA.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+  
+  <DesignationDef>
+    <defName>ExMaunalActionObjectAdjust</defName>
+    <texturePath>Designations/Flick</texturePath>
+    <targetType>Thing</targetType>
+    <designateCancelable>true</designateCancelable>
+  </DesignationDef>
+
+  <RecordDef>
+    <defName>ExThingAdjusted</defName>
+    <label>things adjusting</label>
+    <description>The number of mirrors I have adjusted.</description>
+    <type>Int</type>
+  </RecordDef>
+
+  <ConceptDef>
+    <defName>ExThingdjustingDesignation</defName>
+    <label>Adjust designations only designate</label>
+    <priority>-1000</priority>
+    <helpText>Note: This only designates that a colonist should adjusted the thing.\n\nNothing will actually happen until a colonist comes and adjusts the thing by hand.</helpText>
+  </ConceptDef>
+
+  <WorkGiverDef>
+    <defName>ExMaunalActionObjectAdjusting</defName>
+    <label>adjust things</label>
+    <giverClass>Explorite.WorkGiver_TakeMaunalActionOnWanterThing</giverClass>
+    <workType>BasicWorker</workType>
+    <verb>adjust thing</verb>
+    <gerund>adjusting thing</gerund>
+    <canBeDoneWhileDrafted>true</canBeDoneWhileDrafted>
+    <priorityInType>500</priorityInType>
+  </WorkGiverDef>
+
+</Defs>

@@ -81,4 +81,44 @@ namespace Explorite
 			return false;
 		}
 	}
+	/*
+	///<summary>具有燃料需求的verb。</summary>
+	public class Verb_ShootCE_Refuelable : Verb_ShootCE
+	{
+		public bool ValidRefuelable => verbProps.consumeFuelPerShot > 0f && RefuelableComp != null;
+		public CompRefuelable RefuelableComp => caster.TryGetComp<CompRefuelable>();
+		public float FuelPerShot => Math.Max(0f, verbProps.consumeFuelPerShot);
+		public bool CanFire => !ValidRefuelable || RefuelableComp.Fuel >= FuelPerShot;
+
+		public override void ExposeData()
+		{
+			base.ExposeData();
+		}
+		public override bool TryCastShot()
+		{
+			bool result = false;
+			if (!ValidRefuelable || CanFire)
+			{
+				result = base.TryCastShot();
+			}
+			RefuelableComp?.ConsumeFuel(FuelPerShot);
+			return result;
+		}
+		public override void WarmupComplete()
+		{
+			if (CanFire)
+			{
+				base.WarmupComplete();
+			}
+		}
+		public override bool Available()
+		{
+			if (CanFire)
+			{
+				return base.Available();
+			}
+			return false;
+		}
+	}
+	*/
 }

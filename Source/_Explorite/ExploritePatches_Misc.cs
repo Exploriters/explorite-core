@@ -38,6 +38,9 @@ namespace Explorite
 				Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new[] { typeof(PawnGenerationRequest) }),
 					postfix: new HarmonyMethod(patchType, nameof(GeneratePawnPostfix)));
 
+				Patch(AccessTools.Method(typeof(Designation), "Notify_Removing"),
+					postfix: new HarmonyMethod(patchType, nameof(DesignationNotifyRemovingPostfix)));
+
 
 				Patch(AccessTools.Method(typeof(Pawn_EquipmentTracker), nameof(Pawn_EquipmentTracker.GetGizmos)),
 					postfix: new HarmonyMethod(patchType, nameof(GetGizmosPostfix)));
@@ -311,7 +314,7 @@ namespace Explorite
 					transpiler: new HarmonyMethod(patchType, nameof(PageConfigureIdeoPostOpenTranspiler)));
 				Patch(AccessTools.Method(typeof(Page_ConfigureIdeo), "CanDoNext"),
 					transpiler: new HarmonyMethod(patchType, nameof(PageConfigureIdeoCanDoNextTranspiler)));
-				Patch(AccessTools.Constructor(typeof(Dialog_ChooseMemes), new Type[] { typeof(Ideo), typeof(MemeCategory), typeof(bool), typeof(Action) }),
+				Patch(AccessTools.Constructor(typeof(Dialog_ChooseMemes), new Type[] { typeof(Ideo), typeof(MemeCategory), typeof(bool), typeof(Action), typeof(List<MemeDef>), typeof(bool) }),
 					transpiler: new HarmonyMethod(patchType, nameof(DialogChooseMemesAnyMemeTranspiler)));
 				Patch(AccessTools.Method(typeof(Dialog_ChooseMemes), "DoAcceptChanges"),
 					transpiler: new HarmonyMethod(patchType, nameof(DialogChooseMemesAnyMemeTranspiler)));
@@ -331,10 +334,10 @@ namespace Explorite
 				Patch(AccessTools.Method(typeof(IdeoUIUtility), nameof(IdeoUIUtility.FactionForRandomization)),
 					transpiler: new HarmonyMethod(patchType, nameof(IdeoUIUtilityFactionForRandomizationTranspiler)));
 
-				Patch(AccessTools.Method(typeof(IdeoUIUtility), "DoName"),
-					transpiler: new HarmonyMethod(patchType, nameof(StrangeMethodFinderTranspiler)));
-				Patch(strangeMethod,
-					transpiler: new HarmonyMethod(patchType, nameof(IdeoUIUtility_MT_LT_c__DisplayClass59_0__MT_DoName_LT_g____CultureAllowed_1_Transpiler)));
+				//Patch(AccessTools.Method(typeof(IdeoUIUtility), "DoName"),
+				//	transpiler: new HarmonyMethod(patchType, nameof(StrangeMethodFinderTranspiler)));
+				//Patch(strangeMethod,
+				//	transpiler: new HarmonyMethod(patchType, nameof(IdeoUIUtility_MT_LT_c__DisplayClass59_0__MT_DoName_LT_g____CultureAllowed_1_Transpiler)));
 
 				//Patch(AccessTools.Method(AccessTools.TypeByName("RimWorld.IdeoUIUtility.<>c__DisplayClass59_0"), "<DoName>g__CultureAllowed|1"),
 				//	transpiler: nameof(PrinterTranspiler));
@@ -376,6 +379,9 @@ namespace Explorite
 
 				Patch(AccessTools.Method(typeof(CompNeuralSupercharger), nameof(CompNeuralSupercharger.CanAutoUse)),
 					transpiler: new HarmonyMethod(patchType, nameof(CompNeuralSuperchargerCanAutoUseTranspiler)));
+
+				Patch(AccessTools.Method(typeof(Hediff_Psylink), nameof(Hediff_Psylink.TryGiveAbilityOfLevel)),
+					transpiler: new HarmonyMethod(patchType, nameof(HediffPsylinkTryGiveAbilityOfLevelTranspiler)));
 
 
 				// 依赖 类 AlienRace.RaceRestrictionSettings
@@ -1903,7 +1909,7 @@ namespace Explorite
 		{
 			foreach (CodeInstruction ins in instr)
 			{
-				if (ins.operand == HairDefOf.Shaved as object)
+				if (ins.operand == HairDefOf.Shaved)
 				{
 					ins.operand = DefDatabase<HairDef>.GetNamed("Flowy");
 					yield return ins;
@@ -2412,6 +2418,11 @@ namespace Explorite
 		{
 			return Find.FactionManager.AllFactions.Any(fac => fac.def == CentaurPlayerColonyDef || fac.def == SayersPlayerColonyDef);
 		}
+		///<summary>检测阵营限定模因。</summary>
+		[HarmonyPostfix] public static bool IsMemeExclusiveToFaction(MemeDef meme)
+		{
+			return meme is MemeDef_Ex memeEx && (memeEx.exclusiveTo?.Any() ?? false);
+		}
 		///<summary>特定阵营存在时，锁定文化选项。</summary>
 		[HarmonyTranspiler]public static IEnumerable<CodeInstruction> DialogChooseMemesPlayerNHiddenOffTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
 		{
@@ -2433,6 +2444,9 @@ namespace Explorite
 					patchActionStage++;
 					yield return ins;
 					yield return new CodeInstruction(OpCodes.Call, ((Func<bool>)SpecPFacInGame).GetMethodInfo());
+					yield return new CodeInstruction(OpCodes.Brtrue_S, label);
+					yield return new CodeInstruction(OpCodes.Ldarg_1);
+					yield return new CodeInstruction(OpCodes.Call, ((Predicate<MemeDef>)IsMemeExclusiveToFaction).GetMethodInfo());
 					yield return new CodeInstruction(OpCodes.Brtrue_S, label);
 					continue;
 				}
@@ -2509,9 +2523,10 @@ namespace Explorite
 			yield break;
 		}
 
+		/*
 		private static MethodInfo strangeMethod = null;
 		///<summary>寻找一个奇怪的方法。</summary>
-		[HarmonyTranspiler]public static IEnumerable<CodeInstruction> StrangeMethodFinderTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+		[Obsolete][HarmonyTranspiler]public static IEnumerable<CodeInstruction> StrangeMethodFinderTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
 		{
 			MethodInfo method = null;
 			bool find = false;
@@ -2531,7 +2546,7 @@ namespace Explorite
 			yield break;
 		}
 		///<summary>特定阵营存在时，锁定文化选项。</summary>
-		[HarmonyTranspiler]public static IEnumerable<CodeInstruction> IdeoUIUtility_MT_LT_c__DisplayClass59_0__MT_DoName_LT_g____CultureAllowed_1_Transpiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+		[Obsolete][HarmonyTranspiler]public static IEnumerable<CodeInstruction> IdeoUIUtility_MT_LT_c__DisplayClass59_0__MT_DoName_LT_g____CultureAllowed_1_Transpiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
 		{
 			byte patchActionStage = 0;
 			MethodInfo EnumeratorCurrentInfo = AccessTools.Method(typeof(IEnumerator<Faction>), "get_Current");
@@ -2581,6 +2596,7 @@ namespace Explorite
 			TranspilerStageCheckout(patchActionStage, 5);
 			yield break;
 		}
+		*/
 		/*
 		public static int MinMemePostfix(int value, Dialog_ChooseMemes dialog)
 		{
@@ -2966,6 +2982,7 @@ namespace Explorite
 					yield return new CodeInstruction(OpCodes.Call, ((Func<bool>)SpecPFacInGame).GetMethodInfo());
 					yield return new CodeInstruction(OpCodes.Brfalse_S, label);
 					yield return new CodeInstruction(OpCodes.Ldarg_0);
+					yield return new CodeInstruction(OpCodes.Ldc_I4_0);
 					yield return new CodeInstruction(OpCodes.Call, PageChooseIdeoPresetDoCustomizeInfo);
 					yield return new CodeInstruction(OpCodes.Ldarg_0);
 					yield return new CodeInstruction(OpCodes.Ldfld, prev);
@@ -3234,6 +3251,43 @@ namespace Explorite
 				}
 			}
 			TranspilerStageCheckout(patchActionStage, 2);
+			yield break;
+		}
+
+		public static bool DoPreventAbilityGainFrom(Pawn pawn)
+		{
+			return pawn?.def == AlienCentaurDef;
+		}
+		///<summary>禁止半人马灵能升级时获得灵能技能。</summary>
+		[HarmonyTranspiler]public static IEnumerable<CodeInstruction> HediffPsylinkTryGiveAbilityOfLevelTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
+		{
+			byte patchActionStage = 0;
+			MethodInfo IdeoHasPreceptInfo = AccessTools.Method(typeof(Ideo), nameof(Ideo.HasPrecept));
+			FieldInfo HediffPawnInfo = typeof(Hediff).GetField(nameof(Hediff.pawn), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+			foreach (CodeInstruction ins in instr)
+			{
+				if (patchActionStage == 0 && ins.opcode == OpCodes.Call && ins.operand is MethodInfo method
+				 && method.DeclaringType == typeof(GenCollection)
+				 && method.Name == nameof(GenCollection.Any)
+				 && method.GetParameters().Any(p => p.ParameterType == typeof(Predicate<Ability>))
+					)
+				{
+					patchActionStage++;
+					yield return ins;
+					yield return new CodeInstruction(OpCodes.Ldarg_0);
+					yield return new CodeInstruction(OpCodes.Ldfld, HediffPawnInfo);
+					yield return new CodeInstruction(OpCodes.Call, ((Predicate<Pawn>)DoPreventAbilityGainFrom).GetMethodInfo());
+					yield return new CodeInstruction(OpCodes.Or);
+					continue;
+				}
+				else
+				{
+					yield return ins;
+					continue;
+				}
+			}
+			TranspilerStageCheckout(patchActionStage, 1);
 			yield break;
 		}
 	}

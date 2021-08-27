@@ -476,5 +476,41 @@ namespace Explorite
 		{
 			return GetAlienRaceCompColorFunc(thing, channel, out first, out second);
 		}
+
+		public static MinifiedThing MakeMinifiedForced(this Thing thing, ThingDef minifiedThingDef)
+		{
+			if (minifiedThingDef == null)
+			{
+				return thing.MakeMinified();
+			}
+			if (thing.Spawned)
+			{
+				thing.DeSpawn(DestroyMode.Vanish);
+			}
+			if (thing.holdingOwner != null)
+			{
+				Log.Warning("Can't minify thing which is in a ThingOwner because we don't know how to handle it. Remove it from the container first. holder=" + thing.ParentHolder);
+				return null;
+			}
+			MinifiedThing minifiedThing = (MinifiedThing)ThingMaker.MakeThing(minifiedThingDef ?? thing.def.minifiedDef, null);
+			minifiedThing.InnerThing = thing;
+			if (InstallBlueprintUtility.ExistingBlueprintFor(thing) is Blueprint_Install blueprint_Install)
+			{
+				typeof(Blueprint_Install).GetMethod("SetThingToInstallFromMinified", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).Invoke(blueprint_Install, new object[] { minifiedThing });
+			}
+			if (minifiedThing.InnerThing.stackCount > 1)
+			{
+				Log.Warning(string.Concat(new object[]
+				{
+					"Tried to minify ",
+					thing.LabelCap,
+					" with stack count ",
+					minifiedThing.InnerThing.stackCount,
+					". Clamped stack count to 1."
+				}));
+				minifiedThing.InnerThing.stackCount = 1;
+			}
+			return minifiedThing;
+		}
 	}
 }

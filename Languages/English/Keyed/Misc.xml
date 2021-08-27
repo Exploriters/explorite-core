@@ -59,4 +59,15 @@
   <Magnuassembly_CompRequireBuildingInPowerNet_StatLabel>structure requirement</Magnuassembly_CompRequireBuildingInPowerNet_StatLabel>
   <Magnuassembly_CompRequireBuildingInPowerNet_StatTitle>This facility requires these following powered facilities in the same power net to be used.</Magnuassembly_CompRequireBuildingInPowerNet_StatTitle>
   
+  <MessageWarningTargetWanterTargetingOutOfBounds>Warning: target spot is out of bounds.</MessageWarningTargetWanterTargetingOutOfBounds>
+  
+  <CommandSetLocationTarget>Set target</CommandSetLocationTarget>
+  <CommandSetLocationTargetDesc>Sets a target that this building will aiming.</CommandSetLocationTargetDesc>
+  <CommandTargetSolarPowerHeightSelectorLabel>Target</CommandTargetSolarPowerHeightSelectorLabel>
+  <CommandTargetSolarPowerHeightSelectorDesc>Select target to aim, or select an invalid target to disable it.</CommandTargetSolarPowerHeightSelectorDesc>
+  <CommandTargetSolarPowerHeightSelectorDisabledToNow>Targeted</CommandTargetSolarPowerHeightSelectorDisabledToNow>
+  <CommandTargetSolarPowerHeightSelectorDisabledToWant>Selected</CommandTargetSolarPowerHeightSelectorDisabledToWant>
+  
+  <ExSolarPowerOutput>Solar power output</ExSolarPowerOutput>
+  
 </LanguageData>

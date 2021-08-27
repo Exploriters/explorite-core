@@ -87,6 +87,11 @@
   <ItemGroup>
     <Compile Include="Ability_MassPsychicDeafCentaur.cs" />
     <Compile Include="AdditionalAbility.cs" />
+    <Compile Include="Building_ReflectionMirror.cs" />
+    <Compile Include="Building_Targeter.cs" />
+    <Compile Include="CompPowerPlantConcentratedSolarPower.cs" />
+    <Compile Include="CompTargetEffect_AnimaAmplifier.cs" />
+    <Compile Include="ConcentratedSolarPowerUtility.cs" />
     <Compile Include="ExploriteMethodInvoker.cs" />
     <Compile Include="ExploritePatches_AdditionalVerbRemaster.cs" />
     <Compile Include="Alert_HypothermiaAbsorptionDepletedColonists.cs" />
@@ -96,6 +101,7 @@
     <Compile Include="CompItemStage.cs" />
     <Compile Include="ExploritePatches_PawnApparelPredicate.cs" />
     <Compile Include="ExploritePatches_PawnTraitOverrider.cs" />
+    <Compile Include="MaunalActionUtility.cs" />
     <Compile Include="ThoughtWorker_SayersWillFeelLonely.cs" />
     <Compile Include="CheckOutList.cs" />
     <Compile Include="ColorGenerator.cs" />

@@ -59,4 +59,18 @@
   <Magnuassembly_CompRequireBuildingInPowerNet_StatLabel>设施需求</Magnuassembly_CompRequireBuildingInPowerNet_StatLabel>
   <Magnuassembly_CompRequireBuildingInPowerNet_StatTitle>这个设施需要电网中包含以下开启的设施才能使用。</Magnuassembly_CompRequireBuildingInPowerNet_StatTitle>
   
+  <MessageWarningTargetWanterTargetingOutOfBounds>警告：目标点超出边界。</MessageWarningTargetWanterTargetingOutOfBounds>
+  
+  <CommandSetLocationTarget>设置目标</CommandSetLocationTarget>
+  <CommandSetLocationTargetDesc>选择此设备将要瞄准的目标。</CommandSetLocationTargetDesc>
+  
+  <CommandSetReflectHeightToLow>瞄准地面目标</CommandSetReflectHeightToLow>
+  <CommandSetReflectHeightToLowDesc>启用以瞄准地面目标，关闭则瞄准默认的高度</CommandSetReflectHeightToLowDesc>
+  <CommandTargetSolarPowerHeightSelectorLabel>目标</CommandTargetSolarPowerHeightSelectorLabel>
+  <CommandTargetSolarPowerHeightSelectorDesc>选择瞄准的目标，或将反射镜调整至无效角度以将其停用。</CommandTargetSolarPowerHeightSelectorDesc>
+  <CommandTargetSolarPowerHeightSelectorDisabledToNow>已瞄准</CommandTargetSolarPowerHeightSelectorDisabledToNow>
+  <CommandTargetSolarPowerHeightSelectorDisabledToWant>已选择</CommandTargetSolarPowerHeightSelectorDisabledToWant>
+  
+  <ExSolarPowerOutput>太阳能输出</ExSolarPowerOutput>
+  
 </LanguageData>

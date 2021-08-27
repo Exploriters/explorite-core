@@ -27,10 +27,9 @@ namespace Explorite
 
 			Type[] argTypes = method.GetParameters().Select(p => p.ParameterType).ToArray();
 			int argc = argTypes.Length + (method.IsStatic ? 0 : 1);
-			Log.Message($"[Explorite] argc {argc}, ret {method.ReturnType} : {method.FullDescription()}");
-			DynamicMethod dynamicMethod = new DynamicMethod("",
-				method.ReturnType == typeof(void) ? null : method.ReturnType,
-				(method.IsStatic ? new Type[0] : new Type[] { method.DeclaringType }).Concat(argTypes).ToArray()
+			//Log.Message($"[Explorite] argc {argc}, ret {method.ReturnType} : {method.FullDescription()}");
+			DynamicMethod dynamicMethod = new DynamicMethod(string.Empty, method.ReturnType,
+				(method.IsStatic ? Array.Empty<Type>() : new Type[] { method.DeclaringType }).Concat(argTypes).ToArray()
 				);
 			ILGenerator iLGenerator = dynamicMethod.GetILGenerator();
 			for (int i = 0; i < argc; i++)
@@ -50,7 +49,7 @@ namespace Explorite
 						iLGenerator.Emit(OpCodes.Ldarg_3);
 						break;
 					default:
-						iLGenerator.Emit(OpCodes.Ldarg, i);
+						iLGenerator.Emit(i <= byte.MaxValue ? OpCodes.Ldarg_S : OpCodes.Ldarg, i);
 						break;
 				}
 			}

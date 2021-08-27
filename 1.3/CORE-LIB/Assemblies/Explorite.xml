@@ -13,6 +13,24 @@
         <member name="T:Explorite.AdditionalAbility">
             <summary>被种族技能使用自定义Ability类。</summary>
         </member>
+        <member name="T:Explorite.ITargetWanter">
+            <summary>需要一个目标位置的接口。</summary>
+        </member>
+        <member name="T:Explorite.Building_Targeter">
+            <summary>包含一个可选目标位置参数的建筑物。</summary>
+        </member>
+        <member name="T:Explorite.Designator_TargetWanterTarget">
+            <summary>生成目标选择器建筑物的gizmo。</summary>
+        </member>
+        <member name="T:Explorite.CompTargetEffect_AnimaAmplifier">
+            <summary>仙树生长仙草的效果。</summary>
+        </member>
+        <member name="T:Explorite.SolarRefectionAimingTypeDef">
+            <summary>反射高度。</summary>
+        </member>
+        <member name="T:Explorite.SolarRefectionAimingTypeDefOf">
+            <summary>反射高度预设。</summary>
+        </member>
         <member name="T:Explorite.MethodForceInvoker">
             <summary>方法强制调用器。</summary>
         </member>
@@ -296,17 +314,14 @@
         <member name="M:Explorite.ExploritePatches.PageConfigureIdeoPostOpenTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>为文化选择界面先生成文化。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.IsMemeExclusiveToFaction(RimWorld.MemeDef)">
+            <summary>检测阵营限定模因。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.DialogChooseMemesPlayerNHiddenOffTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>特定阵营存在时，锁定文化选项。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.IdeoUIUtilityFactionForRandomizationTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>防止隐藏阵营随机为特殊玩家阵营。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.StrangeMethodFinderTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>寻找一个奇怪的方法。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.IdeoUIUtility_MT_LT_c__DisplayClass59_0__MT_DoName_LT_g____CultureAllowed_1_Transpiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
-            <summary>特定阵营存在时，锁定文化选项。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.DialogChooseMemesGetMemeCountPostfix(RimWorld.MemeCategory,System.Collections.Generic.List{RimWorld.MemeDef},RimWorld.Dialog_ChooseMemes,System.Int32@)">
             <summary>使特殊结构模因被计数。</summary>
@@ -355,6 +370,9 @@
         </member>
         <member name="M:Explorite.ExploritePatches.CompNeuralSuperchargerCanAutoUseTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>允许半人马自动使用神经超频。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.HediffPsylinkTryGiveAbilityOfLevelTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
+            <summary>禁止半人马灵能升级时获得灵能技能。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
@@ -437,6 +455,9 @@
             <param name="tDef">需要被检测的特征。</param>
             <param name="degree">需要被检测的特征程度。</param>
             <returns>该特征是否为强制特征。</returns>
+        </member>
+        <member name="T:Explorite.INeedMaunalAction">
+            <summary>可以执行人工操作的物体接口。</summary>
         </member>
         <member name="T:Explorite.ThoughtWorker_SayersWillFeelLonely">
             <summary>Sayers在独自一人时会感觉孤独(来自Abrel，她摸索的时候不小心一头撞在了墙壁上)</summary>
@@ -868,6 +889,21 @@
         </member>
         <member name="M:Explorite.ExploriteDebugActions.MoveLeft">
             <summary>向左移动选中的物体。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.SetSelectedThingsQuality">
+            <summary>更改物品的品质。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.SetSelectedThingsStuff">
+            <summary>更改物品的材料。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.SetSelectedThingsColor">
+            <summary>更改物品的颜色。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.FixSelectedThings">
+            <summary>修复物品。</summary>
+        </member>
+        <member name="M:Explorite.ExploriteDebugActions.IncreaseIdeoFluidPoint">
+            <summary>增加流动文化的发展点数。</summary>
         </member>
         <member name="M:Explorite.ExploriteDebugActions.RuinThis">
             <summary>。</summary>

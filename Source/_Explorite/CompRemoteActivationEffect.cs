@@ -299,7 +299,7 @@ namespace Explorite
 				float explosiveRadius = Props.explosiveRadius;
 				if (parent.stackCount > 1 && Props.explosiveExpandPerStackcount > 0f)
 				{
-					explosiveRadius += Mathf.Sqrt((float)(parent.stackCount - 1) * Props.explosiveExpandPerStackcount);
+					explosiveRadius += Mathf.Sqrt((parent.stackCount - 1) * Props.explosiveExpandPerStackcount);
 				}
 				if (Props.explosiveExpandPerFuel > 0f && parent.GetComp<CompRefuelable>() != null)
 				{

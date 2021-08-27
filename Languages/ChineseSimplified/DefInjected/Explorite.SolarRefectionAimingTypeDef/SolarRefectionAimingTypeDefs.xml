@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <SkyHigh.label>天空</SkyHigh.label>
+  <SkyHigh.description>天空。</SkyHigh.description>
+
+  <HighGrid.label>高塔</HighGrid.label>
+  <HighGrid.description>高塔。</HighGrid.description>
+
+  <LowGrid.label>地面</LowGrid.label>
+  <LowGrid.description>地面。</LowGrid.description>
+
+  <Perpendicular.label>停用</Perpendicular.label>
+  <Perpendicular.description>停用。</Perpendicular.description>
+
+</LanguageData>

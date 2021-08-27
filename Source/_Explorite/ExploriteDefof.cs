@@ -66,9 +66,13 @@ namespace Explorite
 
 		public static readonly Harmony harmonyInstance = new Harmony(id: "Explorite.rimworld.mod.HarmonyPatches");
 
-		public static readonly StatDef PawnShieldEnergyMaxDef = DefDatabase<StatDef>.GetNamed("PawnShieldEnergyMax");
-		public static readonly StatDef PawnShieldRechargeRateDef = DefDatabase<StatDef>.GetNamed("PawnShieldRechargeRate");
+		public static readonly StatDef PawnShieldEnergyMaxDef = GetModDef<StatDef>(true, "PawnShieldEnergyMax");
+		public static readonly StatDef PawnShieldRechargeRateDef = GetModDef<StatDef>(true, "PawnShieldRechargeRate");
 
+		public static readonly JobDef MaunalActionObjectAdjustingJob = GetModDef<JobDef>(true, "ExMaunalActionObjectAdjusting");
+		public static readonly DesignationDef MaunalActionObjectAdjustDesignation = GetModDef<DesignationDef>(true, "ExMaunalActionObjectAdjust");
+		public static readonly ConceptDef ThingdjustingDesignationConcept = GetModDef<ConceptDef>(true, "ExThingdjustingDesignation");
+		public static readonly RecordDef ThingAdjustedRecord = GetModDef<RecordDef>(true, "ExThingAdjusted");
 
 		public static readonly ThingDef AlienCentaurDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Alien_Centaur");
 		public static readonly ThingDef AlienCentaurCorpseDef = GetModDef<ThingDef>(InstelledMods.RimCentaurs, "Corpse_Alien_Centaur");

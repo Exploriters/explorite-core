@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <Explorite.SolarRefectionAimingTypeDef>
+    <defName>SkyHigh</defName>
+    <label>sky</label>
+    <description>Towards sky.</description>
+    <height>Infinity</height>
+    <willTrace>false</willTrace>
+    <gizmoTexturePath>Things/Building/SolarPower/PanelMenuIcon</gizmoTexturePath>
+  </Explorite.SolarRefectionAimingTypeDef>
+
+  <Explorite.SolarRefectionAimingTypeDef>
+    <defName>HighGrid</defName>
+    <label>tower</label>
+    <description>Aim standard tower height.</description>
+    <height>7.0</height>
+    <willTrace>true</willTrace>
+    <gizmoTexturePath>Things/Building/SolarPower/PanelMenuIcon</gizmoTexturePath>
+  </Explorite.SolarRefectionAimingTypeDef>
+
+  <Explorite.SolarRefectionAimingTypeDef>
+    <defName>LowGrid</defName>
+    <label>ground</label>
+    <description>Aim ground.</description>
+    <height>0.0</height>
+    <willTrace>true</willTrace>
+    <gizmoTexturePath>Things/Building/SolarPower/PanelMenuIcon</gizmoTexturePath>
+  </Explorite.SolarRefectionAimingTypeDef>
+
+  <Explorite.SolarRefectionAimingTypeDef>
+    <defName>Perpendicular</defName>
+    <label>disable</label>
+    <description>Disable.</description>
+    <height>-Infinity</height>
+    <willTrace>false</willTrace>
+    <gizmoTexturePath>Things/Building/SolarPower/PanelMenuIcon</gizmoTexturePath>
+  </Explorite.SolarRefectionAimingTypeDef>
+
+</Defs>

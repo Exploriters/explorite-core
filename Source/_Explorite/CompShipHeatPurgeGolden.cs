@@ -83,12 +83,12 @@ namespace Explorite
             return giz;
             */
 
+			foreach (Gizmo gizmo in base.CompGetGizmosExtra())
+			{
+				yield return gizmo;
+			}
 			if (Prefs.DevMode)
 			{
-				foreach (Gizmo gizmo in base.CompGetGizmosExtra())
-				{
-					yield return gizmo;
-				}
 				yield return new Command_Action
 				{
 					defaultLabel = "Debug: Set heat to 0",
