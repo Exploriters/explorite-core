@@ -208,7 +208,32 @@ namespace Explorite
 
 			return true;
 		}
-		
+		internal static bool GenerateDeerfoxPostprocess(ref Pawn pawn, PawnGenerationRequest request, ref bool matchError)
+		{
+			if (!InstelledMods.DeerFox)
+			{
+				return false;
+			}
+			if (matchError)
+			{
+				return false;
+			}
+			if (pawn.def != AlienDeerFoxDef)
+			{
+				return false;
+			}
+			if (pawn.kindDef.race != AlienDeerFoxDef)
+			{
+				matchError = true;
+				return false;
+			}
+			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			
+
+
+			return true;
+		}
+
 		internal static bool FinalPostprocess(ref Pawn pawn, PawnGenerationRequest request)
 		{
 			if (pawn == null)
@@ -269,6 +294,7 @@ namespace Explorite
 			GenerateCentaurPostprocess(ref __result, request, ref matchError);
 			GenerateSayersPostprocess(ref __result, request, ref matchError);
 			GenerateGuoguoPostprocess(ref __result, request, ref matchError);
+			GenerateDeerfoxPostprocess(ref __result, request, ref matchError);
 
 			if (matchError)
 			{

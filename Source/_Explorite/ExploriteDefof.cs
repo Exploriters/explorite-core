@@ -136,6 +136,8 @@ namespace Explorite
 		public static readonly ThingDef AlienGuoguoDef = GetModDef<ThingDef>(InstelledMods.GuoGuo, "Alien_Guoguo");
 		public static readonly FactionDef GuoguoPlayerColonyDef = GetModDef<FactionDef>(InstelledMods.GuoGuo, "GuoguoPlayerColony");
 
+		public static readonly ThingDef AlienDeerFoxDef = GetModDef<ThingDef>(InstelledMods.DeerFox, "Alien_DeerFox");
+
 		//public static readonly readonly Def CentaursScenarioRetroCruiseDef = GetModDef<EnemyShipDef>(InstelledMods.SoS2 && InstelledMods.RimCentaurs, "CentaursScenarioRetroCruise");
 
 		//public static readonly readonly AbilityDef AbilityTrishot_TrishotDef = DefDatabase<AbilityDef>.GetNamed("AbilityTrishot_Trishot");

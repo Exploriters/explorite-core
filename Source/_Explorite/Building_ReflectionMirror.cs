@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using Verse;
+using static Explorite.ExploriteCore;
 
 namespace Explorite
 {
@@ -125,8 +126,8 @@ namespace Explorite
 	[StaticConstructorOnStartup]
 	public class Building_ReflectionMirror : Building_SolarPowerReflector
 	{
-		private static readonly Material panelFoldMat = MaterialPool.MatFrom("Things/Building/SolarPower/PanelFold");
-		private static readonly Material panelPlateMat = MaterialPool.MatFrom("Things/Building/SolarPower/PanelPlate");
+		private static readonly Material panelFoldMat = InstelledMods.ConcentratedSolarPower ? MaterialPool.MatFrom("Things/Building/SolarPower/PanelFold") : BaseContent.BadMat;
+		private static readonly Material panelPlateMat = InstelledMods.ConcentratedSolarPower ? MaterialPool.MatFrom("Things/Building/SolarPower/PanelPlate") : BaseContent.BadMat;
 		private static readonly Material panelBlackMat = SolidColorMaterials.SimpleSolidColorMaterial(Color.black, false);
 
 
