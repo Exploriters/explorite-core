@@ -55,10 +55,11 @@
         <member name="M:Explorite.ExploritePatches.ApparelPropertiesGetCoveredOuterPartsStringPostfix(RimWorld.ApparelProperties,Verse.BodyDef@)">
             <summary>使半人马服装正确显示覆盖的部位。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.GenerateIdeoPostfix(RimWorld.Ideo@,RimWorld.IdeoGenerationParms)">
-            <summary>
-            对人物生成器的补丁。
-            </summary>
+        <member name="M:Explorite.ExploritePatches.IdeoFoundationRandomizePreceptsPostfix(RimWorld.Ideo,System.Boolean,RimWorld.IdeoGenerationParms)">
+            <summary>对文化戒律初始化的补丁。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PreceptRoleGenerateNewApparelRequirementsPrefix(System.Collections.Generic.List{RimWorld.PreceptApparelRequirement}@,RimWorld.FactionDef)">
+            <summary>对职位服装预设的补丁。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.TraitSetDegreeOfTraitPostfix(RimWorld.TraitSet,System.Int32@,RimWorld.TraitDef)">
             <summary>使强制特征物种始终被视为具有特征等级。</summary>

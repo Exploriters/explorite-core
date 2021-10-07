@@ -38,8 +38,12 @@ namespace Explorite
 				Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new[] { typeof(PawnGenerationRequest) }),
 					postfix: new HarmonyMethod(patchType, nameof(GeneratePawnPostfix)));
 
-				Patch(AccessTools.Method(typeof(IdeoGenerator), nameof(IdeoGenerator.GenerateIdeo), new[] { typeof(IdeoGenerationParms) }),
-					postfix: new HarmonyMethod(patchType, nameof(GenerateIdeoPostfix)));
+				//Patch(AccessTools.Method(typeof(IdeoGenerator), nameof(IdeoGenerator.GenerateIdeo)),
+				//	postfix: new HarmonyMethod(patchType, nameof(GenerateIdeoPostfix)));
+				Patch(AccessTools.Method(typeof(IdeoFoundation), nameof(IdeoFoundation.RandomizePrecepts)),
+					postfix: new HarmonyMethod(patchType, nameof(IdeoFoundationRandomizePreceptsPostfix)));
+				Patch(AccessTools.Method(typeof(Precept_Role), nameof(Precept_Role.GenerateNewApparelRequirements)),
+					prefix: new HarmonyMethod(patchType, nameof(PreceptRoleGenerateNewApparelRequirementsPrefix)));
 
 				Patch(AccessTools.Method(typeof(Designation), "Notify_Removing"),
 					postfix: new HarmonyMethod(patchType, nameof(DesignationNotifyRemovingPostfix)));
@@ -2364,7 +2368,7 @@ namespace Explorite
 		}
 		public static void GenIdeoBeforePlayerAction(Page_ConfigureIdeo page, Ideo ideo)
 		{
-			if (Faction.OfPlayer.def == CentaurPlayerColonyDef || Faction.OfPlayer.def == SayersPlayerColonyDef)
+			if (SpecPFacInGame())
 			{
 				if (Find.IdeoManager.IdeosListForReading.Any(ideo => Faction.OfPlayer.ideos.AllIdeos.Contains(ideo)))
 				{
@@ -2416,10 +2420,6 @@ namespace Explorite
 			}
 			TranspilerStageCheckout(patchActionStage, 1);
 			yield break;
-		}
-		public static bool SpecPFacInGame()
-		{
-			return Find.FactionManager.AllFactions.Any(fac => fac.def == CentaurPlayerColonyDef || fac.def == SayersPlayerColonyDef);
 		}
 		///<summary>检测阵营限定模因。</summary>
 		[HarmonyPostfix] public static bool IsMemeExclusiveToFaction(MemeDef meme)
@@ -2745,7 +2745,7 @@ namespace Explorite
 		public static bool PageConfigureIdeoCanDoNextPatch(Page_ConfigureIdeo page)
 		{
 			Faction player = Find.FactionManager.OfPlayer;
-			if ((player.def == CentaurPlayerColonyDef || player.def == SayersPlayerColonyDef)
+			if (IsSpecFac(player.def)
 			  && page.ideo != player.ideos.PrimaryIdeo)
 			{
 				Messages.Message("MessageIdeoForcedIdeoNotSelected".Translate(player.Name).CapitalizeFirst(), MessageTypeDefOf.RejectInput, false);
@@ -3144,7 +3144,7 @@ namespace Explorite
 		///<summary>允许特定文化摘取头颅。</summary>
 		[HarmonyPostfix]public static void WorkGiverExtractSkullCanExtractSkullPostfix(Ideo ideo, ref bool __result)
 		{
-			if (!__result && ideo.IsSayersIdeo())
+			if (!__result && ideo.PreceptsListForReading.Any(p => p.def.defName == "Skullspike_Doubt_Sayers"))//ideo.IsSayersIdeo())
 			{
 				__result = true;
 			}

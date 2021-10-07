@@ -228,8 +228,28 @@ namespace Explorite
 				return false;
 			}
 			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			
 
+
+			foreach (SkillRecord sr in pawn.skills.skills)
+			{
+				sr.Level -= (pawn?.story?.childhood?.skillGainsResolved?.TryGetValue(sr.def) ?? 0);
+				sr.Level -= (pawn?.story?.adulthood?.skillGainsResolved?.TryGetValue(sr.def) ?? 0);
+				sr.passion = Passion.Minor;
+				sr.xpSinceLastLevel = sr.XpRequiredForLevelUp / 2f;
+			}
+			if (pawn.GetAlienRaceCompColor("skin", out _, out Color? second))
+			{
+				pawn.story.favoriteColor = second.Value;
+			}
+
+			try
+			{
+				pawn.story.childhood = null;
+				pawn.story.adulthood = null;
+			}
+			catch (NullReferenceException)
+			{
+			}
 
 			return true;
 		}

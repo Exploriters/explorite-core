@@ -99,6 +99,7 @@
     <Compile Include="Building_TriBattery.cs" />
     <Compile Include="Building_TurretGun_HyperTrishot.cs" />
     <Compile Include="CompItemStage.cs" />
+    <Compile Include="ExploritePatches_IdeoConfigOverrider.cs" />
     <Compile Include="ExploritePatches_PawnApparelPredicate.cs" />
     <Compile Include="ExploritePatches_IdeoGenerator.cs" />
     <Compile Include="ExploritePatches_PawnTraitOverrider.cs" />
