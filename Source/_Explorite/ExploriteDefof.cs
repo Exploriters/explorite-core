@@ -147,6 +147,7 @@ namespace Explorite
 
 		public static readonly Backstory CentaurCivilRetro = BackstoryDatabase.allBackstories.TryGetValue("CentaurCivil_Retro");
 		public static readonly Backstory CentaurCivilMayinas = BackstoryDatabase.allBackstories.TryGetValue("Backstory_Mayinas_Exploriter");
+		public static readonly Backstory DeerFoxStory = BackstoryDatabase.allBackstories.TryGetValue("DeerFox_Backstory");
 
 
 	}

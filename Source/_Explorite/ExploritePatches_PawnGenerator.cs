@@ -244,7 +244,7 @@ namespace Explorite
 
 			try
 			{
-				pawn.story.childhood = null;
+				pawn.story.childhood = DeerFoxStory;
 				pawn.story.adulthood = null;
 			}
 			catch (NullReferenceException)
