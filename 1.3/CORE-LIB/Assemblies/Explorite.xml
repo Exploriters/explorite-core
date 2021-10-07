@@ -22,6 +22,12 @@
         <member name="T:Explorite.Designator_TargetWanterTarget">
             <summary>生成目标选择器建筑物的gizmo。</summary>
         </member>
+        <member name="T:Explorite.CompProperties_Ability_NeedImpact">
+            <summary>为<see cref = "T:Explorite.CompAbilityEffect_NeedImpact" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.CompAbilityEffect_NeedImpact">
+            <summary>鹿狐的群体冬眠的主要功能实现。</summary>
+        </member>
         <member name="T:Explorite.CompTargetEffect_AnimaAmplifier">
             <summary>仙树生长仙草的效果。</summary>
         </member>

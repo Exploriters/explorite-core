@@ -89,6 +89,7 @@
     <Compile Include="AdditionalAbility.cs" />
     <Compile Include="Building_ReflectionMirror.cs" />
     <Compile Include="Building_Targeter.cs" />
+    <Compile Include="CompAbilityEffect_SleepMist.cs" />
     <Compile Include="CompPowerPlantConcentratedSolarPower.cs" />
     <Compile Include="CompTargetEffect_AnimaAmplifier.cs" />
     <Compile Include="ConcentratedSolarPowerUtility.cs" />
