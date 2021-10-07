@@ -55,6 +55,11 @@
         <member name="M:Explorite.ExploritePatches.ApparelPropertiesGetCoveredOuterPartsStringPostfix(RimWorld.ApparelProperties,Verse.BodyDef@)">
             <summary>使半人马服装正确显示覆盖的部位。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.GenerateIdeoPostfix(RimWorld.Ideo@,RimWorld.IdeoGenerationParms)">
+            <summary>
+            对人物生成器的补丁。
+            </summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.TraitSetDegreeOfTraitPostfix(RimWorld.TraitSet,System.Int32@,RimWorld.TraitDef)">
             <summary>使强制特征物种始终被视为具有特征等级。</summary>
         </member>

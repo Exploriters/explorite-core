@@ -234,7 +234,7 @@ namespace Explorite
 			return true;
 		}
 
-		internal static bool FinalPostprocess(ref Pawn pawn, PawnGenerationRequest request)
+		internal static bool GeneratePawnFinalPostprocess(ref Pawn pawn, PawnGenerationRequest request)
 		{
 			if (pawn == null)
 			{
@@ -375,7 +375,7 @@ namespace Explorite
 				matchError = false;
 			}
 
-			FinalPostprocess(ref __result, request);
+			GeneratePawnFinalPostprocess(ref __result, request);
 		}
 	}
 

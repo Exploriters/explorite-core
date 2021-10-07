@@ -38,6 +38,9 @@ namespace Explorite
 				Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new[] { typeof(PawnGenerationRequest) }),
 					postfix: new HarmonyMethod(patchType, nameof(GeneratePawnPostfix)));
 
+				Patch(AccessTools.Method(typeof(IdeoGenerator), nameof(IdeoGenerator.GenerateIdeo), new[] { typeof(IdeoGenerationParms) }),
+					postfix: new HarmonyMethod(patchType, nameof(GenerateIdeoPostfix)));
+
 				Patch(AccessTools.Method(typeof(Designation), "Notify_Removing"),
 					postfix: new HarmonyMethod(patchType, nameof(DesignationNotifyRemovingPostfix)));
 
