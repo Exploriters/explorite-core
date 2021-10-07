@@ -2112,16 +2112,19 @@ namespace Explorite
 		{
 			if (__result)
 			{
-				MemeDef[] memes = { CentaurStructureMemeDef, SayersStructureMemeDef };
-				foreach (MemeDef meme in memes)
+				List<MemeDef> mlist = ideo.memes.Concat(new[] { ideo.StructureMeme }).Where(m => m is MemeDef_Ex meEx && meEx.exclusiveTo.Any()).ToList();
+				if (mlist.Any())
 				{
-					if (((ideo.memes?.Contains(meme) ?? false) || ideo.StructureMeme == meme)
-					  && !(__instance.memes?.Contains(meme) ?? false)
-						)
+					foreach (MemeDef meme in mlist)
 					{
-						__result = false;
-						return;
+						if (__instance.memes?.Contains(meme) ?? false)
+						{
+							__result = true;
+							return;
+						}
 					}
+					__result = false;
+					return;
 				}
 			}
 		}

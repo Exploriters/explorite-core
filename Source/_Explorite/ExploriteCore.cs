@@ -461,6 +461,17 @@ namespace Explorite
 		{
 			return ideo.memes.Contains(CentaurStructureMemeDef);
 		}
+		/**
+		 * <summary>
+		 * 检测文化是否为鹿狐文化。
+		 * </summary>
+		 * <param name="ideo">需要被检测的文化。</param>
+		 * <returns>文化是否为鹿狐文化。</returns>
+		 */
+		public static bool IsDeerFoxIdeo(this Ideo ideo)
+		{
+			return false;
+		}
 
 		public delegate bool GetAlienRaceCompColorDelegate(Thing thing, string channel, out Color? first, out Color? second);
 		public static GetAlienRaceCompColorDelegate GetAlienRaceCompColorFunc = (Thing _1, string _2, out Color? _3, out Color? _4) => { _3 = null; _4 = null; return false; };

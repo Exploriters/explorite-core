@@ -853,6 +853,13 @@
             <param name="ideo">需要被检测的文化。</param>
             <returns>文化是否为半人马文化。</returns>
         </member>
+        <member name="M:Explorite.ExploriteCore.IsDeerFoxIdeo(RimWorld.Ideo)">
+            <summary>
+            检测文化是否为鹿狐文化。
+            </summary>
+            <param name="ideo">需要被检测的文化。</param>
+            <returns>文化是否为鹿狐文化。</returns>
+        </member>
         <member name="M:Explorite.ExploriteCore.GetAlienRaceCompColor(Verse.Thing,System.String,System.Nullable{UnityEngine.Color}@,System.Nullable{UnityEngine.Color}@)">
             <summary>
             获取物体的HAR颜色通道颜色。

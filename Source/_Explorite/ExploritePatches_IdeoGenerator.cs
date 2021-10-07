@@ -19,7 +19,7 @@ namespace Explorite
 		///<summary>对文化戒律初始化的补丁。</summary>
 		[HarmonyPostfix]public static void IdeoFoundationRandomizePreceptsPostfix(Ideo ___ideo, bool init, IdeoGenerationParms parms)
 		{
-			if (___ideo.memes.Contains(CentaurStructureMemeDef) || ___ideo.memes.Contains(SayersStructureMemeDef))
+			if (___ideo.IsCentaursIdeo() || ___ideo.IsSayersIdeo() || ___ideo.IsDeerFoxIdeo())
 			{
 				foreach (Precept precept in ___ideo.PreceptsListForReading.ToList())
 				{
