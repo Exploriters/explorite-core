@@ -60,6 +60,13 @@ namespace Explorite
 						)
 				);*/
 			}
+			foreach (Hediff hediff in Pawn.health.hediffSet.hediffs)
+			{
+				if (hediff is Hediff_MissingPart hediffMissingPart)
+				{
+					hediffMissingPart.lastInjury = InjectionHediffDef;
+				}
+			}
 			if (rott != null &&
 				rott.RotProgress < rott.PropsRot.TicksToDessicated)
 			{

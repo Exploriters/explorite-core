@@ -16,6 +16,6 @@ namespace Explorite
 		public bool overrdieIcon;
 		public bool countForNonStructureGroup;
 		public List<FactionDef> exclusiveTo;
-		public bool lockAccuIdeoColor = false;
+		public bool lockAccuIdeoColor;
 	}
 }

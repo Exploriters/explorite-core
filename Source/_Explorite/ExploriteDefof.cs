@@ -138,6 +138,7 @@ namespace Explorite
 
 		public static readonly ThingDef AlienDeerFoxDef = GetModDef<ThingDef>(InstelledMods.DeerFox, "Alien_DeerFox");
 		public static readonly FactionDef DeerFoxPlayerColonyDef = GetModDef<FactionDef>(InstelledMods.DeerFox, "PlayerColony_DeerFox");
+		public static readonly MemeDef CentaurDeerFoxMemeDef = GetModDef<MemeDef>(InstelledMods.DeerFox && InstelledMods.Ideology, "Structure_DeerFox");
 
 		//public static readonly readonly Def CentaursScenarioRetroCruiseDef = GetModDef<EnemyShipDef>(InstelledMods.SoS2 && InstelledMods.RimCentaurs, "CentaursScenarioRetroCruise");
 

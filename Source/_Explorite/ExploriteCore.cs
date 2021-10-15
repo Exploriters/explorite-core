@@ -448,7 +448,7 @@ namespace Explorite
 		 */
 		public static bool IsSayersIdeo(this Ideo ideo)
 		{
-			return ideo.memes.Contains(SayersMeme1Def);
+			return ideo.memes.Contains(SayersStructureMemeDef);
 		}
 		/**
 		 * <summary>
@@ -470,7 +470,7 @@ namespace Explorite
 		 */
 		public static bool IsDeerFoxIdeo(this Ideo ideo)
 		{
-			return false;
+			return ideo.memes.Contains(CentaurDeerFoxMemeDef);
 		}
 
 		public delegate bool GetAlienRaceCompColorDelegate(Thing thing, string channel, out Color? first, out Color? second);

@@ -251,6 +251,12 @@ namespace Explorite
 			{
 			}
 
+			if (pawn.Name is NameTriple name)
+			{
+				//__result.Name = new NameTriple(name.Last, name.Last, null);
+				string nameFirst = PawnNameDatabaseShuffled.BankOf(PawnNameCategory.HumanStandard).GetName(PawnNameSlot.First, Rand.Bool ? Gender.Female : Gender.Male);
+				pawn.Name = new NameTriple(nameFirst, nameFirst, "Sayers");
+			}
 			return true;
 		}
 

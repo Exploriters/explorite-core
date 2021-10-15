@@ -32,6 +32,7 @@ namespace Explorite
 					 || precept is Precept_RitualSeat
 					 || precept is Precept_Building
 					 || precept is Precept_Weapon
+					 || precept is Precept_Animal
 					 )
 					{
 						___ideo.RemovePrecept(precept);
@@ -40,6 +41,23 @@ namespace Explorite
 					{
 						preceptRole.ApparelRequirements.Clear();
 					}
+				}
+			}
+			if (___ideo.IsDeerFoxIdeo())
+			{
+				List<ThingDef> thingDefs = new List<ThingDef>{ 
+					DefDatabase<ThingDef>.GetNamed("Fox_Fennec"),
+					DefDatabase<ThingDef>.GetNamed("Fox_Red"),
+					DefDatabase<ThingDef>.GetNamed("Fox_Arctic"),
+					DefDatabase<ThingDef>.GetNamed("Deer"),
+					DefDatabase<ThingDef>.GetNamed("Caribou"),
+					DefDatabase<ThingDef>.GetNamed("Elk"),
+				};
+				foreach (ThingDef thingDef in thingDefs)
+				{
+					Precept_Animal precept = PreceptMaker.MakePrecept(PreceptDefOf.AnimalVenerated) as Precept_Animal;
+					___ideo.AddPrecept(precept);
+					precept.ThingDef = thingDef;
 				}
 			}
 		}
