@@ -129,7 +129,7 @@ namespace Explorite
 			})));
 		}
 		///<summary>点燃整个地图。</summary>
-		[DebugAction(category: "Explorite", name: "Burn Whole map", allowedGameStates = AllowedGameStates.PlayingOnMap,
+		[DebugAction(category: "Explorite", name: "Burn whole map", allowedGameStates = AllowedGameStates.PlayingOnMap,
 			actionType = DebugActionType.Action)]
 		private static void BurnWholeMap()
 		{

@@ -107,6 +107,7 @@
     <Compile Include="ExploritePatches_IdeoGenerator.cs" />
     <Compile Include="ExploritePatches_PawnTraitOverrider.cs" />
     <Compile Include="MaunalActionUtility.cs" />
+    <Compile Include="SpecialThingFilterWorker_TrishotStage.cs" />
     <Compile Include="ThoughtWorker_SayersWillFeelLonely.cs" />
     <Compile Include="CheckOutList.cs" />
     <Compile Include="ColorGenerator.cs" />
