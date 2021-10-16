@@ -42,6 +42,8 @@ namespace Explorite
 				//	postfix: new HarmonyMethod(patchType, nameof(GenerateIdeoPostfix)));
 				Patch(AccessTools.Method(typeof(IdeoFoundation), nameof(IdeoFoundation.RandomizePrecepts)),
 					postfix: new HarmonyMethod(patchType, nameof(IdeoFoundationRandomizePreceptsPostfix)));
+				Patch(AccessTools.Method(typeof(IdeoFoundation_Deity), "FillDeity"),
+					postfix: new HarmonyMethod(patchType, nameof(IdeoFoundationDeityFillDeityPostfix)));
 				Patch(AccessTools.Method(typeof(Precept_Role), nameof(Precept_Role.GenerateNewApparelRequirements)),
 					prefix: new HarmonyMethod(patchType, nameof(PreceptRoleGenerateNewApparelRequirementsPrefix)));
 

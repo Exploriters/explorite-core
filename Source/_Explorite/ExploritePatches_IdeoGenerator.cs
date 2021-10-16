@@ -61,6 +61,16 @@ namespace Explorite
 				}
 			}
 		}
+
+		///<summary>对文化神明初始化的补丁。</summary>
+		[HarmonyPostfix]public static void IdeoFoundationDeityFillDeityPostfix(Ideo ___ideo, IdeoFoundation_Deity.Deity deity)
+		{
+			if (___ideo.StructureMeme is MemeDef_Ex meEx && meEx.deityGenderForced is Gender gender)
+			{
+				deity.gender = gender;
+			}
+		}
+
 		///<summary>对职位服装预设的补丁。</summary>
 		[HarmonyPrefix]public static bool PreceptRoleGenerateNewApparelRequirementsPrefix(ref List<PreceptApparelRequirement> __result, FactionDef generatingFor)
 		{

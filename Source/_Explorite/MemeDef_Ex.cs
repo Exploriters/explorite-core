@@ -17,5 +17,6 @@ namespace Explorite
 		public bool countForNonStructureGroup;
 		public List<FactionDef> exclusiveTo;
 		public bool lockAccuIdeoColor;
+		public Gender? deityGenderForced;
 	}
 }
