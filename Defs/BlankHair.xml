@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <HairDef>
+    <defName>NoHair_Ex</defName>
+    <label>none</label>
+    <styleGender>Any</styleGender>
+    <texPath>Things/Mote/Transparent</texPath> <!-- Invisible -->
+    <iconPath>Things/Mote/Transparent</iconPath> <!-- Invisible -->
+    <category>Minimal</category>
+    <styleTags>
+      <li>NoHair_Ex</li>
+    </styleTags>
+  </HairDef>
+
+</Defs>
