@@ -395,6 +395,9 @@
         <member name="M:Explorite.ExploritePatches.HediffPsylinkTryGiveAbilityOfLevelTranspiler(System.Collections.Generic.IEnumerable{HarmonyLib.CodeInstruction},System.Reflection.Emit.ILGenerator)">
             <summary>禁止半人马灵能升级时获得灵能技能。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.PawnInteractionsTrackerSocialFightPossiblePrefix(RimWorld.Pawn_InteractionsTracker,System.Boolean@,Verse.Pawn)">
+            <summary>禁止半人马发动打架。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>
         </member>

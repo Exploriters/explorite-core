@@ -392,6 +392,9 @@ namespace Explorite
 				Patch(AccessTools.Method(typeof(Hediff_Psylink), nameof(Hediff_Psylink.TryGiveAbilityOfLevel)),
 					transpiler: new HarmonyMethod(patchType, nameof(HediffPsylinkTryGiveAbilityOfLevelTranspiler)));
 
+				Patch(AccessTools.Method(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.SocialFightPossible)),
+					prefix: new HarmonyMethod(patchType, nameof(PawnInteractionsTrackerSocialFightPossiblePrefix)));
+
 
 				// 依赖 类 AlienRace.RaceRestrictionSettings
 				//Patch(AccessTools.Method(AccessTools.TypeByName("AlienRace.HarmonyPatches"), "ChooseStyleItemPrefix"),
@@ -3297,6 +3300,20 @@ namespace Explorite
 			}
 			TranspilerStageCheckout(patchActionStage, 1);
 			yield break;
+		}
+
+		///<summary>禁止半人马发动打架。</summary>
+		[HarmonyPrefix]public static bool PawnInteractionsTrackerSocialFightPossiblePrefix(Pawn_InteractionsTracker __instance, ref bool __result, Pawn otherPawn)
+		{
+			if (
+				__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
+				&& pawn.def == AlienCentaurDef
+				)
+			{
+				__result = false;
+				return false;
+			}
+			return true;
 		}
 	}
 }
