@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+  <Excluded>
+    <exclude>.git</exclude>
+    <exclude>Stashed</exclude>
+    <exclude>Source\_Explorite\.vs</exclude>
+    <exclude>Source\_Explorite\obj</exclude>
+  </Excluded>
+</Configuration>

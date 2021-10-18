@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Manifest>
-  <version>0.5.3</version>
+  <version>0.6.0</version>
   <manifestUri>https://raw.githubusercontent.com/Exploriters/explorite-core/master/About/Manifest.xml</manifestUri>
   <downloadUri>https://github.com/Exploriters/explorite-core</downloadUri>
 </Manifest>
