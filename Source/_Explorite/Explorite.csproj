@@ -92,6 +92,7 @@
     <Compile Include="Building_Targeter.cs" />
     <Compile Include="CompAbilityEffect_JobInterrupt.cs" />
     <Compile Include="CompAbilityEffect_SleepMist.cs" />
+    <Compile Include="CompDeerFoxChocolateHorn.cs" />
     <Compile Include="CompPowerPlantConcentratedSolarPower.cs" />
     <Compile Include="CompTargetEffect_AnimaAmplifier.cs" />
     <Compile Include="ConcentratedSolarPowerUtility.cs" />

@@ -36,7 +36,7 @@
   <Reward_CentaurStoryProgress_Start_Label>Centaur story chain</Reward_CentaurStoryProgress_Start_Label>
   <Reward_CentaurStoryProgress_Start>Complete this quest will start centaur story chain.</Reward_CentaurStoryProgress_Start>
   <Reward_CentaurStoryProgress_Label>Story chain progress</Reward_CentaurStoryProgress_Label>
-  <Reward_CentaurStoryProgress>Complete this quest will start centaur story chain.。</Reward_CentaurStoryProgress>
+  <Reward_CentaurStoryProgress>Complete this quest will start centaur story chain.</Reward_CentaurStoryProgress>
 
   <Magnuassembly_NewTrishotArrived_Label>New trishot arrived</Magnuassembly_NewTrishotArrived_Label>
   <Magnuassembly_NewTrishotArrived_Text>Since your last trishot has been destroyed, a new one has been sent to colony.</Magnuassembly_NewTrishotArrived_Text>
@@ -69,5 +69,7 @@
   <CommandTargetSolarPowerHeightSelectorDisabledToWant>Selected</CommandTargetSolarPowerHeightSelectorDisabledToWant>
   
   <ExSolarPowerOutput>Solar power output</ExSolarPowerOutput>
+
+  <ChocolateHornGrowth>Chocolate horn growth</ChocolateHornGrowth>
   
 </LanguageData>
