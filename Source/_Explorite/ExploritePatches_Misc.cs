@@ -395,6 +395,12 @@ namespace Explorite
 				Patch(AccessTools.Method(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.SocialFightPossible)),
 					prefix: new HarmonyMethod(patchType, nameof(PawnInteractionsTrackerSocialFightPossiblePrefix)));
 
+				Patch(AccessTools.Method(typeof(StatPart_AddedBodyPartsMass), "GetAddedBodyPartsMass"),
+					prefix: new HarmonyMethod(patchType, nameof(StatPartAddedBodyPartsMassGetAddedBodyPartsMassPrefix)));
+
+				Patch(AccessTools.Method(typeof(QualityUtility), nameof(QualityUtility.GenerateQualityCreatedByPawn)),
+					postfix: new HarmonyMethod(patchType, nameof(QualityUtilityGenerateQualityCreatedByPawnPostfix)));
+
 
 				// 依赖 类 AlienRace.RaceRestrictionSettings
 				//Patch(AccessTools.Method(AccessTools.TypeByName("AlienRace.HarmonyPatches"), "ChooseStyleItemPrefix"),
@@ -435,6 +441,79 @@ namespace Explorite
 				string.Join("\n", records.Where(s => s.original != null).OrderBy(s => s.SortValue).Select(r => r.original?.FullDescription()).Distinct())
 				);
 		}
+		public static bool DisableFoodPoisoningPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableFoodPoisoning") ?? false;
+		}
+		public static bool DisableSkillsDegreesPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableSkillsDegrees") ?? false;
+		}
+		public static bool DisableMentalBreakPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableMentalBreak") ?? false;
+		}
+		public static bool DisablePainShockPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisablePainShock") ?? false;
+		}
+		public static bool DisableScarPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableScar") ?? false;
+		}
+		public static bool DisableBrainShockPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableBrainShock") ?? false;
+		}
+		public static bool DisableOutdoorsNeedsPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableOutdoorsNeeds") ?? false;
+		}
+		public static bool DisableDailySkillTrainLimitPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableDailySkillTrainLimit") ?? false;
+		}
+		public static bool DisableEntropyPainBoostPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableEntropyPainBoost") ?? false;
+		}
+		public static bool DisableSelfHealPenaltyPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableSelfHealPenalty") ?? false;
+		}
+		public static bool DisableWoundRenderingPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableWoundRendering") ?? false;
+		}
+		public static bool DisableSocialFightPossiblePredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableSocialFightPossible") ?? false;
+		}
+		public static bool DisableAbilityGainFromPsylinkPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableAbilityGainFromPsylink") ?? false;
+		}
+		public static bool DisablePassionDrawPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisablePassionDraw") ?? false;
+		}
+		public static bool DisableThoughtWorkerPreceptHasUncoveredPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableThoughtWorkerPreceptHasUncovered") ?? false;
+		}
+		public static bool DisableWaistRenderingPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableWaistRendering") ?? false;
+		}
+		public static bool OverrideAddedBodyPartsMassPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExOverrideAddedBodyPartsMass") ?? false;
+		}
+		public static bool QualityIncreasedPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExQualityIncreased") ?? false;
+		}
+
 		/*
 		///<summary>阻止半人马的技能衰退。</summary>
 		[HarmonyPrefix]public static void SkillLearnPrefix(SkillRecord __instance, ref float xp)
@@ -488,8 +567,10 @@ namespace Explorite
 			yield return new CodeInstruction(OpCodes.Ldarg_0);
 			yield return new CodeInstruction(OpCodes.Ldfld, pawnInfo);
 			yield return new CodeInstruction(OpCodes.Ldfld, thingDefInfo);
-			yield return new CodeInstruction(OpCodes.Ldsfld, typeof(ExploriteCore).GetField(nameof(AlienCentaurDef), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static));
-			yield return new CodeInstruction(OpCodes.Bne_Un, label1);
+			yield return new CodeInstruction(OpCodes.Call, ((Predicate<ThingDef>)(DisableSkillsDegreesPredicate)).Method);
+			yield return new CodeInstruction(OpCodes.Brfalse_S, label1);
+			//yield return new CodeInstruction(OpCodes.Ldsfld, typeof(ExploriteCore).GetField(nameof(AlienCentaurDef), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static));
+			//yield return new CodeInstruction(OpCodes.Bne_Un, label1);
 			yield return new CodeInstruction(OpCodes.Ldc_R4, 0f);
 			yield return new CodeInstruction(OpCodes.Br_S, label2);
 			foreach (CodeInstruction ins in instr)
@@ -520,7 +601,7 @@ namespace Explorite
 		{
 			if (__result &&
 				__instance.GetType().GetField("pawn", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-				&& pawn.def == AlienCentaurDef
+				&& DisableDailySkillTrainLimitPredicate(pawn.def)
 				)
 			{
 				__result = false;
@@ -538,20 +619,20 @@ namespace Explorite
 		///<summary>移除半人马的疼痛带来心灵熵消散增益。</summary>
 		[HarmonyPostfix]public static void StatPartPainPainFactorPostfix(Pawn pawn, ref float __result)
 		{
-			if (pawn.def == AlienCentaurDef)
+			if (DisableEntropyPainBoostPredicate(pawn.def))
 				__result = 1f;
 		}
 		///<summary>移除半人马的疼痛带来心灵熵消散增益的描述文本。</summary>
 		[HarmonyPostfix]public static void StatPartPainExplanationPartPostfix(StatRequest req, ref string __result)
 		{
-			if (req.HasThing && req.Thing is Pawn pawn && pawn.def == AlienCentaurDef)
+			if (req.HasThing && req.Thing is Pawn pawn && DisableEntropyPainBoostPredicate(pawn.def))
 				__result = null;
 		}
 		///<summary>移除半人马的心灵熵Gizno的疼痛激励显示。</summary>
 		[HarmonyPostfix]public static void PsychicEntropyGizmoTryGetPainMultiplierPostfix(PsychicEntropyGizmo __instance, ref float painMultiplier, ref bool __result)
 		{
 			if (__instance.GetType().GetField("tracker", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn_PsychicEntropyTracker tracker &&
-				tracker.Pawn.def == AlienCentaurDef)
+				DisableEntropyPainBoostPredicate(tracker.Pawn.def))
 			{
 				painMultiplier = 1f;
 				__result = false;
@@ -592,7 +673,7 @@ namespace Explorite
 		{
 			if (
 				__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-				&& (pawn.def == AlienCentaurDef || pawn.def == AlienSayersDef)
+				&& DisableOutdoorsNeedsPredicate(pawn.def)
 				)
 			{
 				__result = true;
@@ -604,7 +685,7 @@ namespace Explorite
 		{
 			if (
 				__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-				&& pawn.def == AlienCentaurDef
+				&& DisableMentalBreakPredicate(pawn.def)
 				)
 			{
 				__result = __instance.LabelCap + ": " + __instance.CurLevelPercentage.ToStringPercent() + "\n" + __instance.def.description;
@@ -648,7 +729,7 @@ namespace Explorite
 				)
 			{
 				//移除半人马的心情需求显示精神崩溃阈值分隔符
-				if (__instance is Need_Mood && pawn.def == AlienCentaurDef)
+				if (__instance is Need_Mood && DisableMentalBreakPredicate(pawn.def))
 				{
 					threshPercents.Clear();
 
@@ -761,7 +842,7 @@ namespace Explorite
 		{
 			if (
 				__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-				&& pawn.def == AlienCentaurDef
+				&& DisableMentalBreakPredicate(pawn.def)
 				)
 			{
 				__result = Math.Min(__result, -0.15f);
@@ -1077,7 +1158,7 @@ namespace Explorite
 		{
 			if (
 				__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-				&& (pawn.def == AlienCentaurDef || pawn.def == AlienGuoguoDef || pawn.def == AlienMichellesDef))
+				&& DisablePainShockPredicate(pawn.def))
 			{
 				__result = false;
 			}
@@ -1086,8 +1167,7 @@ namespace Explorite
 		///<summary>阻止半人马和Michelles得到任何永久性疤痕。</summary>
 		[HarmonyPrefix]public static void HediffComp_GetsPermanentIsPermanentPrefix(HediffComp_GetsPermanent __instance, ref bool value)
 		{
-			if (__instance.Pawn.def == AlienCentaurDef
-			 || __instance.Pawn.def == AlienMichellesDef)
+			if (DisableScarPredicate(__instance.Pawn.def))
 			{
 				value = false;
 			}
@@ -1105,7 +1185,7 @@ namespace Explorite
 		///<summary>阻止半人马大脑休克。</summary>
 		[HarmonyPrefix]public static void HediffComp_ReactOnDamageNotify_PawnPostApplyDamagePrefix(HediffComp_ReactOnDamage __instance, ref DamageInfo dinfo, float totalDamageDealt)
 		{
-			if (__instance.Pawn.def == AlienCentaurDef
+			if (DisableBrainShockPredicate(__instance.Pawn.def)
 			 && __instance.Props.damageDefIncoming == DamageDefOf.EMP && dinfo.Def == DamageDefOf.EMP)
 			{
 				dinfo.Def = null;
@@ -1185,7 +1265,7 @@ namespace Explorite
 				//__instance.apparelGraphics.Add(NullApparelGraphicRecord(DefDatabase<ThingDef>.GetNamed("Apparel_Gunlink"), new Color(1f,1f,1f)));
 				//__instance.apparelGraphics.Add(NullApparelGraphicRecord(DefDatabase<ThingDef>.GetNamed("Apparel_ArmorHelmetReconPrestige"), new Color(0.5f,0.75f,1f)));
 			}
-			if (__instance.pawn.def == AlienCentaurDef)
+			if (DisableWaistRenderingPredicate(__instance.pawn.def))
 			{
 				__instance.apparelGraphics.RemoveAll(ag =>
 					ag.sourceApparel.def.apparel.bodyPartGroups.Contains(DefDatabase<BodyPartGroupDef>.GetNamed("Waist"))
@@ -1219,11 +1299,15 @@ namespace Explorite
 		[HarmonyPostfix]public static void StatWorkerShouldShowForPostfix(StatWorker __instance, ref bool __result, StatRequest req)
 		{
 			if (__result &&
-				req.HasThing && req.Thing is Pawn pawn && pawn.def == AlienCentaurDef &&
-				__instance.GetType().GetField("stat", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is StatDef stat
-				&& (stat == StatDefOf.PainShockThreshold || stat == StatDefOf.MentalBreakThreshold))
+				req.HasThing && req.Thing is Pawn pawn &&
+				__instance.GetType().GetField("stat", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is StatDef stat)
 			{
-				__result = false;
+				if ((DisablePainShockPredicate(pawn.def) && stat == StatDefOf.PainShockThreshold)
+				 || (DisableMentalBreakPredicate(pawn.def) && stat == StatDefOf.MentalBreakThreshold)
+					)
+				{
+					__result = false;
+				}
 			}
 		}
 		///<summary>从截肢手术清单中移除半人马的锁骨和子系统。</summary>
@@ -1360,6 +1444,7 @@ namespace Explorite
 			{ }
 		}
 		*/
+		//TODO : REPLACE WITH TRANSPILER
 		///<summary>使半人马即使携带了物品也会被视为威胁。</summary>
 		[HarmonyPostfix]public static void PawnThreatDisabledPostfix(Pawn __instance, ref bool __result, IAttackTargetSearcher disabledFor)
 		{
@@ -1533,7 +1618,7 @@ namespace Explorite
 		///<summary>移除半人马自我治疗的70%效果惩罚。</summary>
 		[HarmonyPrefix]public static void TendUtilityCalculateBaseTendQualityPrefix(Pawn doctor, Pawn patient, ref float medicinePotency, ref float medicineQualityMax)
 		{
-			if (doctor == patient && doctor?.def == AlienCentaurDef)
+			if (doctor == patient && DisableSelfHealPenaltyPredicate(doctor?.def))
 			{
 				medicinePotency /= 0.7f;
 			}
@@ -2110,7 +2195,7 @@ namespace Explorite
 		[HarmonyPostfix]public static bool PawnWoundDrawerRenderOverBodyPrefix(ref PawnWoundDrawer __instance)
 		{
 			return !(__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn)
-				|| pawn.def != AlienCentaurDef && pawn.def != AlienSayersDef && pawn.def != AlienGuoguoDef;
+				|| !DisableWoundRenderingPredicate(pawn.def);
 		}
 		///<summary>更改阵营能够使用的图标。</summary>
 		[HarmonyPostfix]public static void IdeoSymbolPartDefCanBeChosenForIdeoPostfix(Ideo ideo, ref IdeoSymbolPartDef __instance, ref bool __result)
@@ -2922,7 +3007,7 @@ namespace Explorite
 		///<summary>使半人马和Sayers不被判断为裸体。</summary>
 		[HarmonyPrefix]public static bool ThoughtWorkerPreceptHasUncoveredPrefix(Pawn p, ref bool __result)
 		{
-			if (p.def == AlienCentaurDef || p.def == AlienSayersDef)
+			if (DisableThoughtWorkerPreceptHasUncoveredPredicate(p.def))
 			{
 				__result = false;
 				return false;
@@ -3161,7 +3246,7 @@ namespace Explorite
 		///<summary>禁止种族食物中毒。</summary>
 		[HarmonyPrefix]public static bool FoodUtilityGetFoodPoisonChanceFactorPrefix(Pawn ingester, ref float __result)
 		{
-			if (ingester.def?.tradeTags?.Contains("ExImmuneToFoodPoisoning") ?? false)
+			if (DisableFoodPoisoningPredicate(ingester.def))
 			{
 				__result = 0f;
 				return false;
@@ -3171,7 +3256,7 @@ namespace Explorite
 
 		public static bool DisablePassionDrawPawn(Pawn pawn)
 		{
-			return pawn.def == AlienCentaurDef;
+			return DisablePassionDrawPredicate(pawn.def);
 		}
 		///<summary>禁止半人马技能页显示兴趣度图标。</summary>
 		[HarmonyTranspiler]public static IEnumerable<CodeInstruction> SkillUIDrawSkillTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
@@ -3265,9 +3350,9 @@ namespace Explorite
 			yield break;
 		}
 
-		public static bool DoPreventAbilityGainFrom(Pawn pawn)
+		public static bool DoPreventAbilityGainFromPsylink(Pawn pawn)
 		{
-			return pawn?.def == AlienCentaurDef;
+			return DisableAbilityGainFromPsylinkPredicate(pawn?.def);
 		}
 		///<summary>禁止半人马灵能升级时获得灵能技能。</summary>
 		[HarmonyTranspiler]public static IEnumerable<CodeInstruction> HediffPsylinkTryGiveAbilityOfLevelTranspiler(IEnumerable<CodeInstruction> instr, ILGenerator ilg)
@@ -3288,7 +3373,7 @@ namespace Explorite
 					yield return ins;
 					yield return new CodeInstruction(OpCodes.Ldarg_0);
 					yield return new CodeInstruction(OpCodes.Ldfld, HediffPawnInfo);
-					yield return new CodeInstruction(OpCodes.Call, ((Predicate<Pawn>)DoPreventAbilityGainFrom).GetMethodInfo());
+					yield return new CodeInstruction(OpCodes.Call, ((Predicate<Pawn>)DoPreventAbilityGainFromPsylink).GetMethodInfo());
 					yield return new CodeInstruction(OpCodes.Or);
 					continue;
 				}
@@ -3307,13 +3392,53 @@ namespace Explorite
 		{
 			if (
 				__instance.GetType().GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) is Pawn pawn
-				&& pawn.def == AlienCentaurDef
+				&& DisableSocialFightPossiblePredicate(pawn.def)
 				)
 			{
 				__result = false;
 				return false;
 			}
 			return true;
+		}
+
+		///<summary>覆盖身体部件尺寸计算。</summary>
+		[HarmonyPrefix]public static bool StatPartAddedBodyPartsMassGetAddedBodyPartsMassPrefix(Pawn p, ref float __result)
+		{
+			if (OverrideAddedBodyPartsMassPredicate(p.def))
+			{
+				__result = 0f;
+				List<Hediff> hediffs = p.health.hediffSet.hediffs;
+				foreach (Hediff hediff in hediffs)
+				{
+					if (hediff is Hediff_AddedPart hediff_AddedPart)
+					{
+						__result += hediff_AddedPart.Part.coverageAbs * p.def.GetStatValueAbstract(StatDefOf.Mass) * p.BodySize / p.def.race.baseBodySize;
+						/*
+						if (hediff_AddedPart.def.spawnThingOnRemoved != null)
+						{
+							__result += hediff_AddedPart.def.spawnThingOnRemoved.GetStatValueAbstract(StatDefOf.Mass, null) * 0.9f;
+						}
+						*/
+					}
+				}
+				return false;
+			}
+			return true;
+		}
+
+		private static readonly MethodInfo AddLevels = typeof(QualityUtility).GetMethod("AddLevels", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+
+		///<summary>增加人物制造的物品的品质。</summary>
+		[HarmonyPostfix]public static void QualityUtilityGenerateQualityCreatedByPawnPostfix(Pawn pawn, SkillDef relevantSkill, ref QualityCategory __result)
+		{
+			if (QualityIncreasedPredicate(pawn.def))
+			{
+				__result = (QualityCategory)AddLevels.Invoke(null, new object[] { __result, 1 });
+			}
+			while (__result < QualityCategory.Legendary && pawn.needs?.TryGetNeed<Need_CentaurCreativityInspiration>()?.TryConsume() == true)
+			{
+				__result = (QualityCategory)AddLevels.Invoke(null, new object[] { __result, 1 });
+			}
 		}
 	}
 }

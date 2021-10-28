@@ -475,6 +475,19 @@ namespace Explorite
 				).ToList();
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
+
+		private static MethodInfo EndInspirationMethod = typeof(Inspiration).GetMethod("End", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+		///<summary>移除人物激励。</summary>
+		[DebugAction(category: "Explorite", name: "End inspiration", allowedGameStates = AllowedGameStates.PlayingOnMap,
+			actionType = DebugActionType.ToolMapForPawns)]
+		private static void EndInspiration(Pawn p)
+		{
+			if (p?.Inspiration is Inspiration inspiration)
+			{
+				EndInspirationMethod.Invoke(inspiration, new object[] { });
+			}
+		}
 	}
 #pragma warning restore IDE0051 // 删除未使用的私有成员
 }

@@ -19,10 +19,10 @@ namespace Explorite
 			threshPercents = new List<float>();
 		}
 		private float lastEffectiveDelta = 0f;
-		private float DeltaPerIntervalBase => 0.0025f;
+		private float DeltaPerIntervalBase => 0.005f;
 		private float DeltaPerInterval => InHappiness ? DeltaPerIntervalBase : 0f;
 		public override int GUIChangeArrow => IsFrozen ? 0 : Math.Sign(lastEffectiveDelta);
-		public override float MaxLevel => 2f;
+		public override float MaxLevel => 10f;
 		//protected override bool IsFrozen => false;
 		public override bool ShowOnNeedList => false; //!Disabled && pawn.IsColonist;
 		public bool ShouldShow => !Disabled;
@@ -36,6 +36,7 @@ namespace Explorite
 			string result = $"{LabelCap}: {CurLevel.ToStringPercent()} / {MaxLevel.ToStringPercent()} ({FormattingTickTime(NextInspirationIn, "0.0")})\n{def.description}";
 			return result;
 		}
+		/*
 		private bool TryStartInspiration()
 		{
 			InspirationHandler ih = pawn.mindState.inspirationHandler;
@@ -44,6 +45,16 @@ namespace Explorite
 				return false;
 			}
 			return ih.TryStartInspiration(InspirationDefOf.Inspired_Creativity, "LetterInspirationBeginThanksToHighMoodPart".Translate());
+		}
+		*/
+		public bool TryConsume()
+		{
+			if (CurLevel >= 1f)
+			{
+				CurLevel -= 1f;
+				return false;
+			}
+			return false;
 		}
 
 		public override void NeedInterval()
@@ -57,8 +68,8 @@ namespace Explorite
 				float curLevel = CurLevel;
 				float targetLevel = CurLevel + DeltaPerInterval;
 
-				if (targetLevel >= 1f && TryStartInspiration())
-					targetLevel -= 1f;
+				//if (targetLevel >= 1f && TryStartInspiration())
+				//	targetLevel -= 1f;
 
 				CurLevel = Mathf.Min(Mathf.Max(targetLevel, 0f), MaxLevel);
 				lastEffectiveDelta = CurLevel - curLevel;
