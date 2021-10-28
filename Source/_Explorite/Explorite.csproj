@@ -97,6 +97,7 @@
     <Compile Include="CompTargetEffect_AnimaAmplifier.cs" />
     <Compile Include="ConcentratedSolarPowerUtility.cs" />
     <Compile Include="ExploriteMethodInvoker.cs" />
+    <Compile Include="ExploritePatches_PathingOverrider.cs" />
     <Compile Include="ExploritePatches_AdditionalVerbRemaster.cs" />
     <Compile Include="Alert_HypothermiaAbsorptionDepletedColonists.cs" />
     <Compile Include="BackstoryCracker.cs" />

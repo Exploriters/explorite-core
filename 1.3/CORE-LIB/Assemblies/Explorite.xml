@@ -49,6 +49,21 @@
         <member name="T:Explorite.ExploritePatches">
             <summary>包含多个补丁的合集类。</summary>
         </member>
+        <member name="M:Explorite.ExploritePatches.PathGridCalculatedCostAtPrefix(Verse.IntVec3,System.Boolean,Verse.IntVec3,Verse.Map,System.Boolean,Verse.AI.PathGrid,System.Int32@)">
+            <summary>覆盖基础寻路计算。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PathingForTraverseParmsPrefix(Verse.AI.PathingContext@,Verse.AI.Pathing,Verse.TraverseParms)">
+            <summary>覆盖基础寻路计算。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PathingForPawnPrefix(Verse.AI.PathingContext@,Verse.AI.Pathing,Verse.Pawn)">
+            <summary>覆盖基础寻路计算。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PathingRecalculateAllPerceivedPathCostsPosfix(Verse.AI.Pathing)">
+            <summary>覆盖基础寻路计算。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.PathingRecalculatePerceivedPathCostAtPosfix(Verse.AI.Pathing,Verse.IntVec3)">
+            <summary>覆盖基础寻路计算。</summary>
+        </member>
         <member name="M:Explorite.ExploritePatches.CreateVerbTargetCommandPostfix(Verse.Command_VerbTarget@,Verse.Thing,Verse.Verb)">
             <summary>更改创建的Verb的Command。</summary>
         </member>
@@ -110,10 +125,10 @@
         <member name="M:Explorite.ExploritePatches.SkillRecordLearningSaturatedTodayPostfix(RimWorld.SkillRecord,System.Boolean@)">
             <summary>移除半人马每日技能训练上限。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.StatPartPainPainFactorPostfix(Verse.Pawn,System.Single@)">
+        <member name="M:Explorite.ExploritePatches.StatPartPainPainFactorPrefix(Verse.Pawn,System.Single@)">
             <summary>移除半人马的疼痛带来心灵熵消散增益。</summary>
         </member>
-        <member name="M:Explorite.ExploritePatches.StatPartPainExplanationPartPostfix(RimWorld.StatRequest,System.String@)">
+        <member name="M:Explorite.ExploritePatches.StatPartPainExplanationPartPrefix(RimWorld.StatRequest,System.String@)">
             <summary>移除半人马的疼痛带来心灵熵消散增益的描述文本。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PsychicEntropyGizmoTryGetPainMultiplierPostfix(RimWorld.PsychicEntropyGizmo,System.Single@,System.Boolean@)">
@@ -403,6 +418,12 @@
         </member>
         <member name="M:Explorite.ExploritePatches.QualityUtilityGenerateQualityCreatedByPawnPostfix(Verse.Pawn,RimWorld.SkillDef,RimWorld.QualityCategory@)">
             <summary>增加人物制造的物品的品质。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.StatPartGlowActiveForPrefix(Verse.Thing,System.Boolean@)">
+            <summary>移除亮度对人物属性的影响。</summary>
+        </member>
+        <member name="M:Explorite.ExploritePatches.StatPartPsychicSenstivityOffsetTryGetPsychicOffsetPrefix(Verse.Thing,System.Single@,System.Boolean@)">
+            <summary>移除视觉能力对人物心灵敏感度的影响。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.PawnRendererInternalPostfix(Verse.PawnRenderer,UnityEngine.Vector3,System.Single,System.Boolean,Verse.Rot4,Verse.Rot4,Verse.RotDrawMode,System.Boolean,System.Boolean,System.Boolean)">
             <summary>对人物渲染器的补丁。</summary>

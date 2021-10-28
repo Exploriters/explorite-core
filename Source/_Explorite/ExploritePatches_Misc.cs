@@ -85,6 +85,23 @@ namespace Explorite
 				Patch(AccessTools.Method(typeof(Thing), "get_DefaultGraphic"),
 					postfix: new HarmonyMethod(patchType, nameof(get_Graphic_PostFix)));
 
+
+				//Patch(AccessTools.Constructor(typeof(Pathing),
+				//	parameters: new Type[] { typeof(Map) }),
+				//	postfix: new HarmonyMethod(patchType, nameof(PathingCtorPostfix)));
+				Patch(AccessTools.Method(typeof(PathGrid), nameof(PathGrid.CalculatedCostAt)),
+					prefix: new HarmonyMethod(patchType, nameof(PathGridCalculatedCostAtPrefix)));
+				Patch(AccessTools.Method(typeof(Pathing), nameof(Pathing.For), new Type[] { typeof(TraverseParms) }),
+					prefix: new HarmonyMethod(patchType, nameof(PathingForTraverseParmsPrefix)));
+				Patch(AccessTools.Method(typeof(Pathing), nameof(Pathing.For), new Type[] { typeof(Pawn) }),
+					prefix: new HarmonyMethod(patchType, nameof(PathingForPawnPrefix)));
+				Patch(AccessTools.Method(typeof(Pathing), nameof(Pathing.RecalculateAllPerceivedPathCosts)),
+					postfix: new HarmonyMethod(patchType, nameof(PathingRecalculateAllPerceivedPathCostsPosfix)));
+				Patch(AccessTools.Method(typeof(Pathing), nameof(Pathing.RecalculatePerceivedPathCostAt)),
+					postfix: new HarmonyMethod(patchType, nameof(PathingRecalculatePerceivedPathCostAtPosfix)));
+
+				////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 				//Patch(AccessTools.Method(typeof(SkillRecord), nameof(SkillRecord.Learn)),
 				//	prefix: nameof(SkillLearnPrefix));
 				//	postfix: nameof(SkillIntervalPostfix));
@@ -98,9 +115,9 @@ namespace Explorite
 				//Patch(AccessTools.Method(typeof(Pawn_PsychicEntropyTracker), "get_PainMultiplier"),
 				//	postfix: nameof(NoPainBounsForCentaursPostfix));
 				Patch(AccessTools.Method(typeof(StatPart_Pain), nameof(StatPart_Pain.PainFactor)),
-					postfix: new HarmonyMethod(patchType, nameof(StatPartPainPainFactorPostfix)));
+					prefix: new HarmonyMethod(patchType, nameof(StatPartPainPainFactorPrefix)));
 				Patch(AccessTools.Method(typeof(StatPart_Pain), nameof(StatPart_Pain.ExplanationPart)),
-					postfix: new HarmonyMethod(patchType, nameof(StatPartPainExplanationPartPostfix)));
+					prefix: new HarmonyMethod(patchType, nameof(StatPartPainExplanationPartPrefix)));
 				Patch(AccessTools.Method(typeof(PsychicEntropyGizmo), "TryGetPainMultiplier"),
 					postfix: new HarmonyMethod(patchType, nameof(PsychicEntropyGizmoTryGetPainMultiplierPostfix)));
 
@@ -398,8 +415,15 @@ namespace Explorite
 				Patch(AccessTools.Method(typeof(StatPart_AddedBodyPartsMass), "GetAddedBodyPartsMass"),
 					prefix: new HarmonyMethod(patchType, nameof(StatPartAddedBodyPartsMassGetAddedBodyPartsMassPrefix)));
 
-				Patch(AccessTools.Method(typeof(QualityUtility), nameof(QualityUtility.GenerateQualityCreatedByPawn)),
+				Patch(AccessTools.Method(typeof(QualityUtility), nameof(QualityUtility.GenerateQualityCreatedByPawn), new Type[] { typeof(Pawn), typeof(SkillDef)}),
 					postfix: new HarmonyMethod(patchType, nameof(QualityUtilityGenerateQualityCreatedByPawnPostfix)));
+
+				Patch(AccessTools.Method(typeof(StatPart_Glow), "ActiveFor"),
+					prefix: new HarmonyMethod(patchType, nameof(StatPartGlowActiveForPrefix)));
+				Patch(AccessTools.Method(typeof(StatPart_SightPsychicSenstivityOffset), "TryGetPsychicOffset"),
+					prefix: new HarmonyMethod(patchType, nameof(StatPartPsychicSenstivityOffsetTryGetPsychicOffsetPrefix)));
+				Patch(AccessTools.Method(typeof(StatPart_BlindPsychicSensitivityOffset), "TryGetPsychicOffset"),
+					prefix: new HarmonyMethod(patchType, nameof(StatPartPsychicSenstivityOffsetTryGetPsychicOffsetPrefix)));
 
 
 				// 依赖 类 AlienRace.RaceRestrictionSettings
@@ -504,6 +528,14 @@ namespace Explorite
 		public static bool DisableWaistRenderingPredicate(ThingDef def)
 		{
 			return def?.tradeTags?.Contains("ExDisableWaistRendering") ?? false;
+		}
+		public static bool DisableStatFactorGlowPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableStatFactorGlow") ?? false;
+		}
+		public static bool DisableStatFactorSightPsychicSenstivityOffsetPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableStatFactorSightPsychicSenstivityOffset") ?? false;
 		}
 		public static bool OverrideAddedBodyPartsMassPredicate(ThingDef def)
 		{
@@ -617,16 +649,24 @@ namespace Explorite
 		}
 		*/
 		///<summary>移除半人马的疼痛带来心灵熵消散增益。</summary>
-		[HarmonyPostfix]public static void StatPartPainPainFactorPostfix(Pawn pawn, ref float __result)
+		[HarmonyPrefix]public static bool StatPartPainPainFactorPrefix(Pawn pawn, ref float __result)
 		{
 			if (DisableEntropyPainBoostPredicate(pawn.def))
+			{
 				__result = 1f;
+				return false;
+			}
+			return true;
 		}
 		///<summary>移除半人马的疼痛带来心灵熵消散增益的描述文本。</summary>
-		[HarmonyPostfix]public static void StatPartPainExplanationPartPostfix(StatRequest req, ref string __result)
+		[HarmonyPrefix]public static bool StatPartPainExplanationPartPrefix(StatRequest req, ref string __result)
 		{
 			if (req.HasThing && req.Thing is Pawn pawn && DisableEntropyPainBoostPredicate(pawn.def))
+			{
 				__result = null;
+				return false;
+			}
+			return true;
 		}
 		///<summary>移除半人马的心灵熵Gizno的疼痛激励显示。</summary>
 		[HarmonyPostfix]public static void PsychicEntropyGizmoTryGetPainMultiplierPostfix(PsychicEntropyGizmo __instance, ref float painMultiplier, ref bool __result)
@@ -2881,19 +2921,18 @@ namespace Explorite
 			 && thing is  Pawn pawn && pawn.def == AlienCentaurDef
 			 && factorDef == StatDefOf.PsychicSensitivity && stat == StatDefOf.PsychicEntropyMax)
 				{
-				if (value * 3 < 1)
+				if (value * 3f < 1f)
 				{
-					return value * 3;
+					return value * 3f;
 				}
-				else if (value < 3)
+				else if (value < 3f)
 				{
-					return 1;
+					return 1f;
 				}
 				else
 				{
-					return value - 2;
+					return value - 2f;
 				}
-
 			}
 			return value;
 		}
@@ -3439,6 +3478,29 @@ namespace Explorite
 			{
 				__result = (QualityCategory)AddLevels.Invoke(null, new object[] { __result, 1 });
 			}
+		}
+
+		///<summary>移除亮度对人物属性的影响。</summary>
+		[HarmonyPrefix]public static bool StatPartGlowActiveForPrefix(Thing t, ref bool __result)
+		{
+			if (DisableStatFactorGlowPredicate(t.def))
+			{
+				__result = false;
+				return false;
+			}
+			return true;
+		}
+
+		///<summary>移除视觉能力对人物心灵敏感度的影响。</summary>
+		[HarmonyPrefix]public static bool StatPartPsychicSenstivityOffsetTryGetPsychicOffsetPrefix(Thing t, ref float offset, ref bool __result)
+		{
+			if (DisableStatFactorSightPsychicSenstivityOffsetPredicate(t.def))
+			{
+				offset = 0f;
+				__result = false;
+				return false;
+			}
+			return true;
 		}
 	}
 }

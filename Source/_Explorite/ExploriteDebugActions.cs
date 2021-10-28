@@ -98,6 +98,7 @@ namespace Explorite
 				Find.CurrentMap.snowGrid.SetDepth(c, 1f);
 			}
 			Find.CurrentMap.mapDrawer.WholeMapChanged(MapMeshFlag.Snow);
+			Find.CurrentMap.pathing.RecalculateAllPerceivedPathCosts();
 		}
 		///<summary>将整个地图的所有水体都变成冰。</summary>
 		[DebugAction(category: "Explorite", name: "Frozen all water to ice", allowedGameStates = AllowedGameStates.PlayingOnMap,
@@ -238,7 +239,7 @@ namespace Explorite
 			{
 				foreach (object obj in Find.Selector.SelectedObjects)
 				{
-					if (obj is ThingWithComps thing && thing.TryGetComp<CompQuality>() is CompQuality comp)
+					if (obj is ThingWithComps thing && thing.GetInnerIfMinified().TryGetComp<CompQuality>() is CompQuality comp)
 					{
 						comp.SetQuality(q, ArtGenerationContext.Colony);
 					}
@@ -258,7 +259,7 @@ namespace Explorite
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
 			foreach (QualityCategory qualityValue in Enum.GetValues(typeof(QualityCategory)))
 			{
-				string QualityName = Enum.GetName(typeof(QualityCategory), qualityValue);
+				string QualityName = /*Enum.GetName(typeof(QualityCategory), qualityValue)*/ qualityValue.GetLabel().CapitalizeFirst();
 				list.Add(new DebugMenuOption(QualityName, DebugMenuOptionMode.Action, delegate ()
 				{
 					SetQuality(qualityValue);
@@ -276,7 +277,7 @@ namespace Explorite
 			{
 				foreach (object obj in Find.Selector.SelectedObjects)
 				{
-					if (obj is Thing thing && thing.def.MadeFromStuff)
+					if (obj is Thing thingo && thingo.GetInnerIfMinified() is Thing thing && thing.def.MadeFromStuff)
 					{
 						thing.SetStuffDirect(stuffDef);
 					}
@@ -313,7 +314,7 @@ namespace Explorite
 			{
 				foreach (object obj in Find.Selector.SelectedObjects)
 				{
-					if (obj is ThingWithComps thing && thing.TryGetComp<CompColorable>() is CompColorable comp)
+					if (obj is ThingWithComps thing && thing.GetInnerIfMinified().TryGetComp<CompColorable>() is CompColorable comp)
 					{
 						comp.SetColor(c);
 					}
