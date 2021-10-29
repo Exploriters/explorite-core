@@ -133,15 +133,15 @@ namespace Explorite
 			}
 			//if (PowerWhenNotSpike.HasValue && comp != null && operatingAtHighPower != wantOperatingAtHighPower)
 			//{
-				operatingAtHighPower = wantOperatingAtHighPower;
-				if (wantOperatingAtHighPower)
-				{
-					comp.PowerOutput = -comp.Props.basePowerConsumption;
-				}
-				else
-				{
-					comp.PowerOutput = -PowerWhenNotSpike.Value;
-				}
+			operatingAtHighPower = wantOperatingAtHighPower;
+			if (wantOperatingAtHighPower)
+			{
+				comp.PowerOutput = -comp.Props.basePowerConsumption;
+			}
+			else
+			{
+				comp.PowerOutput = -PowerWhenNotSpike.Value;
+			}
 			//}
 		}
 	}

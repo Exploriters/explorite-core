@@ -74,5 +74,7 @@
   <ExSolarPowerOutput>太阳能输出</ExSolarPowerOutput>
 
   <ChocolateHornGrowth>巧克力角生长进度</ChocolateHornGrowth>
+
+  <MessagePawnConditionCauserDespawned>{0}引发的{1}已结束。</MessagePawnConditionCauserDespawned>
   
 </LanguageData>

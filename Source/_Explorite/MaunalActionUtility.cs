@@ -142,13 +142,7 @@ namespace Explorite
 	}
 	public class WorkGiver_TakeMaunalActionOnWanterThing : WorkGiver_Scanner
 	{
-		public override PathEndMode PathEndMode
-		{
-			get
-			{
-				return PathEndMode.Touch;
-			}
-		}
+		public override PathEndMode PathEndMode => PathEndMode.Touch;
 
 		public override Danger MaxPathDanger(Pawn pawn)
 		{

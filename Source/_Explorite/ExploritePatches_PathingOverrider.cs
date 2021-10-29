@@ -10,7 +10,7 @@ using HarmonyLib;
 using UnityEngine;
 using Verse;
 using static Explorite.ExploriteCore;
-using static Explorite.PathingOverrider;
+using static Explorite.PathingOverriderUtility;
 using System.Reflection.Emit;
 using System.Reflection;
 using Verse.AI;
@@ -18,11 +18,12 @@ using System.Linq;
 
 namespace Explorite
 {
+	///<summary>寻路覆盖器的功能集。</summary>
 	[StaticConstructorOnStartup]
-	internal static class PathingOverrider
+	internal static class PathingOverriderUtility
 	{
-		public static List<ISpecialPathingConfig> PathingConfigs = new List<ISpecialPathingConfig>();
-		static PathingOverrider()
+		public static readonly List<ISpecialPathingConfig> PathingConfigs = new List<ISpecialPathingConfig>();
+		static PathingOverriderUtility()
 		{
 			PathingConfigs.Add(new CentaurNormalPathingConfig());
 		}
@@ -50,14 +51,21 @@ namespace Explorite
 			return ((Map)pathGridMapField.GetValue(pathing.Normal.pathGrid)).GetComponent<PathGridOverriderMapComponent>();
 		}
 	}
+	///<summary>寻路配置。</summary>
 	public interface ISpecialPathingConfig
 	{
+		///<summary>是否应当被初始化。</summary>
 		public bool ShouldExecute(Map map);
+		///<summary>是否应当为该人物执行。</summary>
 		public bool ShouldFor(Pawn pawn);
+		///<summary>是否应当为该目标执行。</summary>
 		public bool ShouldFor(TraverseParms parms);
+		///<summary>寻路方案。</summary>
 		public int CalculatedCostAt(IntVec3 c, bool perceivedStatic, IntVec3 prevCell, Map map, bool fenceArePassable);
+		///<summary>初始化时指定是否被栅栏阻挡。</summary>
 		public bool InitFenceBlocked { get; }
 	}
+	///<summary>半人马的寻路配置。</summary>
 	public class CentaurNormalPathingConfig : ISpecialPathingConfig
 	{
 		public bool InitFenceBlocked => false;
@@ -166,9 +174,10 @@ namespace Explorite
 		}
 		public ISpecialPathingConfig config;
 	}
+	///<summary>存储寻路结果。</summary>
 	public sealed class PathGridOverriderMapComponent : MapComponent
 	{
-		public List<SpecialPathingContext> PathingContextList = new List<SpecialPathingContext>();
+		public readonly List<SpecialPathingContext> PathingContextList = new List<SpecialPathingContext>();
 		public ISpecialPathingConfig PathGridConfig(PathGrid pathGrid)
 		{
 			foreach (SpecialPathingContext pathingContext in PathingContextList)

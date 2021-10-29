@@ -25,7 +25,7 @@ namespace Explorite
 				{
 					if ((
 						precept is Precept_Ritual precept_Ritual && precept.def.visible
-						&& (precept_Ritual.isAnytime || precept_Ritual.obligationTriggers.OfType<RitualObligationTrigger_Date>().FirstOrDefault<RitualObligationTrigger_Date>() != null)
+						&& (precept_Ritual.isAnytime || precept_Ritual.obligationTriggers.OfType<RitualObligationTrigger_Date>().FirstOrDefault() != null)
 						)
 					 || precept is Precept_Apparel
 					 || precept is Precept_Relic

@@ -108,6 +108,11 @@
     <Compile Include="ExploritePatches_PawnApparelPredicate.cs" />
     <Compile Include="ExploritePatches_IdeoGenerator.cs" />
     <Compile Include="ExploritePatches_PawnTraitOverrider.cs" />
+    <Compile Include="GameCondition_PsychicDeafness.cs" />
+    <None Include="HediffComp_CauseGameCondition.cs.bak" />
+    <Compile Include="HediffComp_CauseGameCondition.cs" />
+    <Compile Include="HediffComp_CausesCaravanPsychicDeafness.cs" />
+    <Compile Include="HediffComp_PsychicDeafness.cs" />
     <Compile Include="MaunalActionUtility.cs" />
     <Compile Include="SpecialThingFilterWorker_TrishotStage.cs" />
     <Compile Include="ThoughtWorker_SayersWillFeelLonely.cs" />

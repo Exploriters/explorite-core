@@ -46,6 +46,33 @@
         <member name="T:Explorite.MethodForceInvoker">
             <summary>方法强制调用器。</summary>
         </member>
+        <member name="T:Explorite.PathingOverriderUtility">
+            <summary>寻路覆盖器的功能集。</summary>
+        </member>
+        <member name="T:Explorite.ISpecialPathingConfig">
+            <summary>寻路配置。</summary>
+        </member>
+        <member name="M:Explorite.ISpecialPathingConfig.ShouldExecute(Verse.Map)">
+            <summary>是否应当被初始化。</summary>
+        </member>
+        <member name="M:Explorite.ISpecialPathingConfig.ShouldFor(Verse.Pawn)">
+            <summary>是否应当为该人物执行。</summary>
+        </member>
+        <member name="M:Explorite.ISpecialPathingConfig.ShouldFor(Verse.TraverseParms)">
+            <summary>是否应当为该目标执行。</summary>
+        </member>
+        <member name="M:Explorite.ISpecialPathingConfig.CalculatedCostAt(Verse.IntVec3,System.Boolean,Verse.IntVec3,Verse.Map,System.Boolean)">
+            <summary>寻路方案。</summary>
+        </member>
+        <member name="P:Explorite.ISpecialPathingConfig.InitFenceBlocked">
+            <summary>初始化时指定是否被栅栏阻挡。</summary>
+        </member>
+        <member name="T:Explorite.CentaurNormalPathingConfig">
+            <summary>半人马的寻路配置。</summary>
+        </member>
+        <member name="T:Explorite.PathGridOverriderMapComponent">
+            <summary>存储寻路结果。</summary>
+        </member>
         <member name="T:Explorite.ExploritePatches">
             <summary>包含多个补丁的合集类。</summary>
         </member>
@@ -506,6 +533,24 @@
             <param name="tDef">需要被检测的特征。</param>
             <param name="degree">需要被检测的特征程度。</param>
             <returns>该特征是否为强制特征。</returns>
+        </member>
+        <member name="T:Explorite.GameCondition_PsychicDeafness">
+            <summary>造成心灵失聪的游戏状态。</summary>
+        </member>
+        <member name="T:Explorite.HediffCompProperties_CausesGameCondition">
+            <summary>为<see cref = "T:Explorite.HediffComp_CauseGameCondition" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.HediffComp_CauseGameCondition">
+            <summary>造成游戏状态的健康状态。</summary>
+        </member>
+        <member name="T:Explorite.HediffCompProperties_CausesCaravanPsychicDeafness">
+            <summary>为<see cref = "T:Explorite.HediffComp_CausesCaravanPsychicDeafness" />接收参数。</summary>
+        </member>
+        <member name="T:Explorite.HediffComp_CausesCaravanPsychicDeafness">
+            <summary>对远行队成员造成心灵失聪。</summary>
+        </member>
+        <member name="T:Explorite.HediffComp_PsychicDeafness">
+            <summary>检查心灵失聪合法性的Comp。</summary>
         </member>
         <member name="T:Explorite.INeedMaunalAction">
             <summary>可以执行人工操作的物体接口。</summary>

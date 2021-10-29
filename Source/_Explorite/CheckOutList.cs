@@ -226,7 +226,7 @@ namespace Explorite
 							if (typeof(Def).IsAssignableFrom(typeof(T)))
 							{
 								XmlAttribute xmlAttribute = node.Attributes["MayRequire"];
-								Verse.DirectXmlCrossRefLoader.RegisterListWantsCrossRef<T>(objects, node.InnerText, xmlRoot.Name, xmlAttribute?.Value);
+								Verse.DirectXmlCrossRefLoader.RegisterListWantsCrossRef(objects, node.InnerText, xmlRoot.Name, xmlAttribute?.Value);
 							}
 							else
 							{

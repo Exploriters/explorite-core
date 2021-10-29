@@ -13,7 +13,7 @@ namespace Explorite
 		public abstract string StageName { get; }
 		public override bool Matches(Thing t)
 		{
-			return CanEverMatch(t.def) && t.GetItemStageComps().FirstOrFallback(comp=>comp.Group == "Trishot")?.StageName == StageName;
+			return CanEverMatch(t.def) && t.GetItemStageComps().FirstOrFallback(comp => comp.Group == "Trishot")?.StageName == StageName;
 		}
 		public override bool CanEverMatch(ThingDef def)
 		{

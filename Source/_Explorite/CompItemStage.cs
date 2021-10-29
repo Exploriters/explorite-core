@@ -51,7 +51,7 @@ namespace Explorite
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<string>(ref stageNameInt, $"state_{Group}", null, false);
+			Scribe_Values.Look(ref stageNameInt, $"state_{Group}", null, false);
 		}
 
 		public override void PostPostMake()

@@ -171,7 +171,7 @@ namespace Explorite
 		private List<SolarPowerCell> listCells = new List<SolarPowerCell>();
 		public Dictionary<SolarPowerLocation, SolarPowerCell> Database => ListCells.ToDictionary(c => c.Location);
 		public Thing AutoTarget { get => autoTarget; set => autoTarget = value; }
-		public List<SolarPowerCell> ListCells { get => listCells; }
+		public List<SolarPowerCell> ListCells => listCells;
 
 		public IntVec3? AutoTargetCell => !AutoTarget.DestroyedOrNull() && AutoTarget.FinalSpawnedParent() is Thing thing ? (IntVec3?)thing.Position : null;
 		public void ResolveAllThings()

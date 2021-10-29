@@ -28,13 +28,7 @@ namespace Explorite
 	{
 		private CompProperties_RequireBuildingInPowerNet Props => props as CompProperties_RequireBuildingInPowerNet;
 		public CheckOutList<ThingDef> RequiredBuildings => Props.requiredBuildings;
-		public virtual bool BuildingsRequirementMeet
-		{
-			get
-			{
-				return RequiredBuildings.CheckOut(parent?.TryGetComp<CompPower>()?.PowerNet?.powerComps?.Where(comp => comp.PowerOn)?.Select(comp => comp.parent.def) ?? Enumerable.Empty<ThingDef>());
-			}
-		}
+		public virtual bool BuildingsRequirementMeet => RequiredBuildings.CheckOut(parent?.TryGetComp<CompPower>()?.PowerNet?.powerComps?.Where(comp => comp.PowerOn)?.Select(comp => comp.parent.def) ?? Enumerable.Empty<ThingDef>());
 		public override string CompInspectStringExtra()
 		{
 			return BuildingsRequirementMeet ? null : Props.errorReportString;

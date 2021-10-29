@@ -71,5 +71,7 @@
   <ExSolarPowerOutput>Solar power output</ExSolarPowerOutput>
 
   <ChocolateHornGrowth>Chocolate horn growth</ChocolateHornGrowth>
+
+  <MessagePawnConditionCauserDespawned>{1} caused by {0} is ending.</MessagePawnConditionCauserDespawned>
   
 </LanguageData>

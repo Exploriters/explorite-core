@@ -35,12 +35,13 @@ namespace Explorite
 				where !p.NonHumanlikeOrWildMan()
 				   && p != pawn
 				   && pawn.relations.OpinionOf(p) > -20
+				   && !pawn.story.traits.HasTrait(TraitDefOf.Psychopath)
 				   && p.Position.InHorDistOf(pawn.Position, MaxNuzzleDistance)
 				   && pawn.GetRoom() == p.GetRoom()
 				   && !p.Position.IsForbidden(pawn)
 				   && p.CanCasuallyInteractNow()
 				select p)
-				.TryRandomElement(out Pawn result))
+				.TryRandomElementByWeight(p => pawn.relations.OpinionOf(p) + 40, out Pawn result))
 			{
 				return null;
 			}

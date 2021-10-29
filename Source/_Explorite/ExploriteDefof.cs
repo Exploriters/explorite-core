@@ -105,6 +105,8 @@ namespace Explorite
 		public static readonly ResearchProjectDef CentaurStoryProjectStep3Def = GetModDef<ResearchProjectDef>(InstelledMods.RimCentaurs, "CentaurStoryStep3rd");
 
 		public static readonly HediffDef PsychicDeafHediffDef = GetModDef<HediffDef>(InstelledMods.RimCentaurs && InstelledMods.Royalty, "PsychicDeafCentaur");
+		public static readonly HediffDef PsychicDeafSourceHediffDef = GetModDef<HediffDef>(InstelledMods.RimCentaurs && InstelledMods.Royalty, "PsychicDeafSourceCentaur");
+		public static readonly GameConditionDef PsychicDeafnessConditionDef = GetModDef<GameConditionDef>(InstelledMods.RimCentaurs && InstelledMods.Royalty, "PsychicDeafness");
 		//public static readonly MemeDef CentaurMemeDef = GetModDef<MemeDef>(InstelledMods.RimCentaurs && InstelledMods.Ideology, "Centaur");
 		public static readonly MemeDef CentaurStructureMemeDef = GetModDef<MemeDef>(InstelledMods.RimCentaurs && InstelledMods.Ideology, "Structure_Centaur");
 		public static readonly IdeoIconDef CentaurIdeoIconDef = GetModDef<IdeoIconDef>(InstelledMods.RimCentaurs && InstelledMods.Ideology, "Exploriter");

@@ -29,7 +29,7 @@ namespace Explorite
 	{
 		public CompProperties_DeerFoxChocolateHorn()
 		{
-			this.compClass = typeof(CompDeerFoxChocolateHorn);
+			compClass = typeof(CompDeerFoxChocolateHorn);
 		}
 
 		public int gatherResourcesIntervalDays;
