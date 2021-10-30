@@ -267,13 +267,13 @@ namespace Explorite
 				Patch(AccessTools.Method(typeof(InspirationHandler), nameof(InspirationHandler.GetRandomAvailableInspirationDef)),
 					postfix: new HarmonyMethod(patchType, nameof(InspirationHandlerGetRandomAvailableInspirationDefPostfix)));
 
-				Patch(AccessTools.Constructor(typeof(DamageInfo),
-					parameters: new Type[] { typeof(DamageDef), typeof(float), typeof(float), typeof(float), typeof(Thing), typeof(BodyPartRecord), typeof(ThingDef), typeof(SourceCategory), typeof(Thing), typeof(bool), typeof(bool) }),
-					prefix: new HarmonyMethod(patchType, nameof(DamageInfoCtorPrefix)));
+				//Patch(AccessTools.Constructor(typeof(DamageInfo),
+				//	parameters: new Type[] { typeof(DamageDef), typeof(float), typeof(float), typeof(float), typeof(Thing), typeof(BodyPartRecord), typeof(ThingDef), typeof(SourceCategory), typeof(Thing), typeof(bool), typeof(bool) }),
+				//	prefix: new HarmonyMethod(patchType, nameof(DamageInfoCtorPrefix)));
 
-				Patch(AccessTools.Constructor(typeof(BattleLogEntry_ExplosionImpact),
-					parameters: new Type[] { typeof(Thing), typeof(Thing), typeof(ThingDef), typeof(ThingDef), typeof(DamageDef) }),
-					prefix: new HarmonyMethod(patchType, nameof(BattleLogEntry_ExplosionImpactCtorPrefix)));
+				//Patch(AccessTools.Constructor(typeof(BattleLogEntry_ExplosionImpact),
+				//	parameters: new Type[] { typeof(Thing), typeof(Thing), typeof(ThingDef), typeof(ThingDef), typeof(DamageDef) }),
+				//	prefix: new HarmonyMethod(patchType, nameof(BattleLogEntry_ExplosionImpactCtorPrefix)));
 
 				//Patch(AccessTools.Method(typeof(Projectile), nameof(Projectile.Launch),
 				//	parameters: new Type[] { typeof(Thing), typeof(Vector3), typeof(LocalTargetInfo), typeof(LocalTargetInfo), typeof(ProjectileHitFlags), typeof(Thing), typeof(ThingDef)}),
@@ -536,6 +536,10 @@ namespace Explorite
 		public static bool DisableStatFactorSightPsychicSenstivityOffsetPredicate(ThingDef def)
 		{
 			return def?.tradeTags?.Contains("ExDisableStatFactorSightPsychicSenstivityOffset") ?? false;
+		}
+		public static bool DisableRandomInspirationPredicate(ThingDef def)
+		{
+			return def?.tradeTags?.Contains("ExDisableRandomInspiration") ?? false;
 		}
 		public static bool OverrideAddedBodyPartsMassPredicate(ThingDef def)
 		{
@@ -1583,7 +1587,7 @@ namespace Explorite
 			}
 			catch { }
 		}
-		///<summary>降低故障三射弓的好感度加成。</summary>
+		///<summary>移除赠送三射弓的好感度加成。</summary>
 		[HarmonyPostfix]public static void FactionGiftUtilityGetBaseGoodwillChangePostfix(ref float __result, Thing anyThing, int count, float singlePrice, Faction theirFaction)
 		{
 			if (anyThing?.def?.weaponTags?.Contains("CentaurTracedTrishot") == true)
@@ -1599,11 +1603,12 @@ namespace Explorite
 		///<summary>移除半人马随机好心情灵感。</summary>
 		[HarmonyPostfix]public static void InspirationHandlerGetRandomAvailableInspirationDefPostfix(InspirationHandler __instance, ref InspirationDef __result)
 		{
-			if (__instance.pawn.def == AlienCentaurDef)
+			if (DisableRandomInspirationPredicate(__instance.pawn.def))
 			{
 				__result = null;
 			}
 		}
+		/*
 		///<summary>设置三射弓伤害源为满级三射弓。</summary>
 		[HarmonyPrefix]public static void DamageInfoCtorPrefix(ref ThingDef weapon)
 		{
@@ -1620,7 +1625,6 @@ namespace Explorite
 				weaponDef = TrishotThingDef;
 			}
 		}
-		/*
 		///<summary>设置三射弓弹射物伤害来源为满级三射弓。</summary>
 		[HarmonyPostfix]public static void ProjectileLaunchPostfix(Projectile __instance)
 		{

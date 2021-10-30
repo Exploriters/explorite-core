@@ -18,7 +18,8 @@ namespace Explorite
 	{
 		public static bool IsSpecFac(FactionDef factionDef)
 		{
-			return factionDef == CentaurPlayerColonyDef || factionDef == SayersPlayerColonyDef || factionDef == DeerFoxPlayerColonyDef;
+			//return factionDef == CentaurPlayerColonyDef || factionDef == SayersPlayerColonyDef || factionDef == DeerFoxPlayerColonyDef;
+			return ((factionDef?.structureMemeWeights?.Where(k => k.selectionWeight > 0f).Select(k => k.meme)) ?? Enumerable.Empty<MemeDef>()).Concat(factionDef?.requiredMemes ?? Enumerable.Empty<MemeDef>()).Any(m => m is MemeDef_Ex meEx && meEx.exclusiveTo.Contains(factionDef));
 		}
 		public static bool SpecPFacInGame()
 		{

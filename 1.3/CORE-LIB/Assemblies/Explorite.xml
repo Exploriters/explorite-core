@@ -282,16 +282,10 @@
             <summary>将被制作出来的三射弓添加到追踪中。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.FactionGiftUtilityGetBaseGoodwillChangePostfix(System.Single@,Verse.Thing,System.Int32,System.Single,RimWorld.Faction)">
-            <summary>降低故障三射弓的好感度加成。</summary>
+            <summary>移除赠送三射弓的好感度加成。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.InspirationHandlerGetRandomAvailableInspirationDefPostfix(RimWorld.InspirationHandler,RimWorld.InspirationDef@)">
             <summary>移除半人马随机好心情灵感。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.DamageInfoCtorPrefix(Verse.ThingDef@)">
-            <summary>设置三射弓伤害源为满级三射弓。</summary>
-        </member>
-        <member name="M:Explorite.ExploritePatches.BattleLogEntry_ExplosionImpactCtorPrefix(Verse.ThingDef@)">
-            <summary>设置日志中三射弓伤害源为满级三射弓。</summary>
         </member>
         <member name="M:Explorite.ExploritePatches.HealthCardUtilityGetListPriorityPostfix(System.Single@,Verse.BodyPartRecord)">
             <summary>修正健康面板中的身体部位排序。</summary>
