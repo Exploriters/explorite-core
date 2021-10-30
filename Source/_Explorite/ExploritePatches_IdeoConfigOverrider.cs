@@ -23,7 +23,8 @@ namespace Explorite
 		}
 		public static bool SpecPFacInGame()
 		{
-			return Find.FactionManager.AllFactions.Any(fac => IsSpecFac(fac.def));
+			//return Find.FactionManager.AllFactions.Any(fac => IsSpecFac(fac.def));
+			return IsSpecFac(Find.FactionManager.OfPlayer.def);
 		}
 	}
 }
